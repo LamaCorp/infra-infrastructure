@@ -1,0 +1,13 @@
+---
+
+nft_define_host:
+  ospf interfaces:
+    name: ospf_interfaces
+    value: ens3
+
+nft_redis_ports: "{{ redis_instances | d([]) | map(attribute='port') | join(',') }}"
+
+nft_input_host_rules:
+  500 redis:
+    - "ip saddr {$subnet_internal_4} tcp dport {{ '{' + nft_redis_ports + '}' }} accept"
+    - "ip6 saddr {$subnet_internal_6} tcp dport {{ '{' + nft_redis_ports + '}' }} accept"

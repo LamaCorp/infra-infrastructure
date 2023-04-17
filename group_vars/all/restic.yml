@@ -1,0 +1,38 @@
+---
+
+backup_restic_use_systemd_timers: true
+backup_restic_default_compression_level: max
+backup_restic_prune_host: secure-services.fsn.lama.tel
+backup_restic_default_s3_host: s3.eu-central-1.wasabisys.com
+
+backup_restic_default_backup_data_integrity_check: "simple"
+# Means that all of our data gets checked every month
+backup_restic_default_prune_data_integrity_check: "1/30"
+
+backup_restic_alerting_node_default: true
+backup_restic_prune_alerting_node_default: true
+backup_restic_alerting_node_default_dir: "{{ node_exporter_textfile_dir }}"
+
+backup_restic_creds_user_root: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/user_root') }}"
+backup_restic_list_user_root:
+  - name: user_root
+    enabled: true
+    repo_password: "{{ backup_restic_creds_user_root['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_user_root['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_user_root['backup_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_user_root['backup_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_user_root['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_user_root['prune_secret_key'] }}"
+    to_include:
+      - /root
+    backup_cron:
+      minute: 20
+      hour: 02
+    prune_cron:
+      minute: 05
+      hour: 12
+
+backup_restic_list_raw: []
+backup_restic_list: "{{ backup_restic_list_raw + backup_restic_list_user_root }}"

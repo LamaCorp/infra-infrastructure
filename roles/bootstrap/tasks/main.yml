@@ -1,0 +1,6 @@
+---
+
+- name: Install Ansible prerequisites
+  ansible.builtin.script: ansible_prerequisites.sh
+  args:
+    creates: /var/.ansible_prerequisites_installed

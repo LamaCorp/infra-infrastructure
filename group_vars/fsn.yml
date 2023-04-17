@@ -1,0 +1,18 @@
+---
+
+network_nameservers:
+  - 2001:67c:17fc:ffff::1
+  - 172.28.254.1
+
+bird2_bgp_region_id: 276  # Germany
+bird2_bgp_site_id: 1
+
+chrony_ntp_servers:
+  - server: nucleus.fsn.lama.tel
+    options:
+      - option: iburst
+      - option: minpoll
+        val: 8
+
+
+snmpd_syslocation: FSN-DC8, Hetzner, Falkenstein, Germany [50.478393, 12.335408]

@@ -1,0 +1,26 @@
+---
+
+hedgedoc_domain: md.lama-corp.space
+hedgedoc_extra_domains:
+  - md.risson.space
+  - md.marcerisson.space
+  - md.risson.me
+  - md.risson.rocks
+  - md.risson.tech
+
+hedgedoc_postgresql_database: hedgedoc
+hedgedoc_postgresql_user: hedgedoc
+hedgedoc_postgresql_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/hedgedoc')['password'] }}"
+
+hedgedoc_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/hedgedoc/secret-key')['key'] }}"
+
+hedgedoc_s3_bucket: hedgedoc
+hedgedoc_s3_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 's3/data/users/hedgedoc')['access_key'] }}"
+hedgedoc_s3_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 's3/data/users/hedgedoc')['secret_key'] }}"
+
+hedgedoc_oauth_provider_name: Lama Corp.
+hedgedoc_oauth_token_url: https://auth.lama-corp.space/application/o/token/
+hedgedoc_oauth_authorization_url: https://auth.lama-corp.space/application/o/authorize/
+hedgedoc_oauth_user_profile_url: https://auth.lama-corp.space/application/o/userinfo/
+hedgedoc_oauth_client_id: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/apps/hedgedoc/oidc')['client_id'] }}"
+hedgedoc_oauth_client_secret: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/apps/hedgedoc/oidc')['secret_id'] }}"

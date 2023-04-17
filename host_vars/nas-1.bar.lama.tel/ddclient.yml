@@ -1,0 +1,16 @@
+---
+
+nsupdate_credentials_bar: "{{ lookup('community.hashi_vault.hashi_vault', 'infra/data/nsupdate/credentials/bar') }}"
+
+ddclient_config: |
+  daemon=300
+  syslog=yes
+  pid=/var/run/ddclient/ddclient.pid
+  ssl=yes
+
+  protocol=dyndns2 \
+  use=web, web=https://ipv4.nsupdate.info/myip \
+  server=ipv4.nsupdate.info \
+  login={{ nsupdate_credentials_bar['username'] }} \
+  password='{{ nsupdate_credentials_bar['password'] }}' \
+  bar.nsupdate.info

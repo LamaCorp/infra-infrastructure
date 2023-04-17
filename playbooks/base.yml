@@ -1,0 +1,16 @@
+---
+
+- name: Bootstrap node for Ansible usage
+  hosts: all
+  roles:
+    - role: bootstrap
+      when: ansible_facts == {}
+  tags:
+    - always
+
+- name: Gather facts
+  hosts: all
+  gather_facts: true
+  tags:
+    - always
+    - gather_facts

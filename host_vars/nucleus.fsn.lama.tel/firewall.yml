@@ -1,0 +1,19 @@
+---
+
+nft_define_host:
+  bgp neighbors 4:
+    name: bgp_neighbors_4
+    value: "{172.28.254.3, 172.28.254.4}"
+  bgp neighbors 6:
+    name: bgp_neighbors_6
+    value: "{2001:67c:17fc:ffff::/64}"
+
+  ospf interfaces:
+    name: ospf_interfaces
+    value: "{tinc-lama, br-svc}"
+
+
+nft__nat_host_postrouting_rules:
+  100 external connectivity:
+    - meta oif enp7s0 ip saddr 172.28.0.0/16 ip saddr != {136.243.102.29, 148.251.148.232/29} snat to 148.251.148.239
+    - meta oif enp7s0 ip saddr != {136.243.102.29, 148.251.148.232/29} snat to 136.243.102.29

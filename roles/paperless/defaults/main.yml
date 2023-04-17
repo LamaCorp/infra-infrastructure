@@ -1,0 +1,67 @@
+---
+
+paperless_project_name: paperless
+
+
+paperless_docker_repository: ghcr.io/paperless-ngx/paperless-ngx
+paperless_docker_tag: 1.13.0
+
+paperless_gotenberg_docker_repository: gotenberg/gotenberg
+paperless_gotenberg_docker_tag: 7.8.1
+
+paperless_tika_docker_repository: ghcr.io/paperless-ngx/tika
+paperless_tika_docker_tag: 2.5.0-full
+
+
+# paperless_domain: "CHANGEME"
+
+paperless_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ paperless_domain }}`)"
+  service:
+    port: 8000
+
+paperless_reverse_proxy: {}
+paperless_reverse_proxy_computed: "{{ paperless_default_reverse_proxy | combine(paperless_reverse_proxy, recursive=True) }}"
+
+
+paperless_postgresql_host: "{{ services_db_host }}"
+# paperless_postgresql_user: ""
+# paperless_postgresql_database: ""
+# paperless_postgresql_password: ""
+
+paperless_redis_host: "{{ services_redis_host }}"
+# paperless_redis_port: ""
+
+# paperless_secret_key: ""
+
+# paperless_admin_user: ""
+# paperless_admin_password: ""
+
+
+paperless_default_environment:
+  PAPERLESS_URL: "https://{{ paperless_domain }}"
+  PAPERLESS_SECRET_KEY: "{{ paperless_secret_key }}"
+  PAPERLESS_TIME_ZONE: Europe/Paris
+  PAPERLESS_OCR_LANGUAGE: fra+eng
+  PAPERLESS_ADMIN_USER: "{{ paperless_admin_user }}"
+  PAPERLESS_ADMIN_PASSWORD: "{{ paperless_admin_password }}"
+  PAPERLESS_WEBSERVER_WORKERS: 2
+  PAPERLESS_TASK_WORKERS: 2
+  PAPERLESS_ENABLE_COMPRESSION: 0
+  PAPERLESS_CONSUMER_ENABLE_BARCODES: 1
+  PAPERLESS_CONSUMER_BARCODE_TIFF_SUPPORT: 1
+  PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE: 1
+  PAPERLESS_DBENGINE: postgresql
+  PAPERLESS_DBHOST: "{{ paperless_postgresql_host }}"
+  PAPERLESS_DBNAME: "{{ paperless_postgresql_database }}"
+  PAPERLESS_DBUSER: "{{ paperless_postgresql_user }}"
+  PAPERLESS_DBPASS: "{{ paperless_postgresql_password }}"
+  PAPERLESS_REDIS: "redis://{{ paperless_redis_host }}:{{ paperless_redis_port }}"
+  PAPERLESS_TIKA_ENABLED: 1
+  PAPERLESS_TIKA_GOTENBERG_ENDPOINT: "http://{{ paperless_project_name }}_gotenberg:3000"
+  PAPERLESS_TIKA_ENDPOINT: "http://{{ paperless_project_name }}_tika:9998"
+
+paperless_environment: {}
+paperless_environment_computed: "{{ paperless_default_environment | combine(paperless_environment) }}"

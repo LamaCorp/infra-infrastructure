@@ -1,0 +1,28 @@
+---
+
+exclude_paths:
+  - .cache/
+  # for the CI
+  - ../../../../../root/.cache
+
+  - roles/buluma.snmpd
+  - roles/cloudalchemy.node_exporter
+  - roles/cri.gitlab_runner
+  - roles/cri.nftables
+  - roles/cri.restic
+  - roles/geerlingguy.docker
+  - roles/geerlingguy.pip
+  - roles/ipr-cnrs.nftables
+  - roles/matrix-docker-ansible-deploy
+  - roles/mrlesmithjr.chrony
+  - roles/mrlesmithjr.netplan
+  - roles/ome.haproxy
+  - roles/patrickjahns.promtail
+  - roles/stackhpc.libvirt-host
+  - roles/stackhpc.libvirt-vm
+  - roles/stackhpc.systemd_networkd
+  - roles/timorunge.sssd
+
+use_default_rules: true
+
+offline: false

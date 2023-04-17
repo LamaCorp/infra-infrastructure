@@ -1,0 +1,91 @@
+---
+
+- name: Compute ak ldap outpost service definition
+  set_fact:
+    mail_ak_ldap_outpost_service:
+      image: "{{ mail_ak_ldap_outpost_docker_repository }}:{{ mail_ak_ldap_outpost_docker_tag }}"
+      environment:
+        AUTHENTIK_HOST: "{{ mail_ak_ldap_outpost_authentik_host }}"
+        AUTHENTIK_INSECURE: "false"
+        AUTHENTIK_TOKEN: "{{ mail_ak_ldap_outpost_token }}"
+      network_mode: host
+  when: mail_ak_ldap_outpost_enable
+
+- name: Compute mailman services definition
+  set_fact:
+    mail_mailman_core_service:
+      image: "{{ mail_mailman_core_docker_repository }}:{{ mail_mailman_core_docker_tag }}"
+      environment:
+        DATABASE_TYPE: postgres
+        DATABASE_CLASS: mailman.database.postgresql.PostgreSQLDatabase
+        DATABASE_URL: "postgresql://{{ mail_mailman_postgresql_user }}:{{ mail_mailman_postgresql_password }}@{{ mail_mailman_postgresql_host }}/{{ mail_mailman_postgresql_database }}"
+        HYPERKITTY_URL: http://localhost:8000/hyperkitty/
+        HYPERKITTY_API_KEY: "{{ mail_mailman_hyperkitty_api_key }}"
+        MM_HOSTNAME: 0.0.0.0
+        MTA: postfix
+        SMTP_HOST: localhost
+      extra_hosts:
+        mailman-core: 127.0.0.1
+        mailman-web: 127.0.0.1
+      volumes:
+        - mailman_core:/opt/mailman
+      stop_grace_period: 30s
+      network_mode: host
+    mail_mailman_web_service:
+      image: "{{ mail_mailman_web_docker_repository }}:{{ mail_mailman_web_docker_tag }}"
+      environment:
+        DATABASE_TYPE: postgres
+        DATABASE_URL: "postgresql://{{ mail_mailman_postgresql_user }}:{{ mail_mailman_postgresql_password }}@{{ mail_mailman_postgresql_host }}/{{ mail_mailman_postgresql_database }}"
+        HYPERKITTY_API_KEY: "{{ mail_mailman_hyperkitty_api_key }}"
+        MAILMAN_ADMIN_USER: "{{ mail_mailman_admin_user }}"
+        MAILMAN_ADMIN_EMAIL: "{{ mail_mailman_admin_email }}"
+        SECRET_KEY: "{{ mail_mailman_web_secret_key }}"
+        SERVE_FROM_DOMAIN: "{{ mail_mailman_serve_from_domain }}"
+        SMTP_HOST: localhost
+        UWSGI_STATIC_MAP: /static=/opt/mailman-web-data/static
+      extra_hosts:
+        mailman-core: 127.0.0.1
+        mailman-web: 127.0.0.1
+      volumes:
+        - mailman_web:/opt/mailman-web-data
+      network_mode: host
+  when: mail_mailman_enable
+
+- name: Deploy mail docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: mail
+
+    docker_compose_services:
+      server:
+        image: "{{ mail_docker_repository }}:{{ mail_docker_tag }}"
+        environment: "{{ mail_environment_computed }}"
+        volumes:
+          - certs:/certs
+          - data:/var/mail
+          - state:/var/mail-state
+          - logs:/var/log/mail
+          - config:/tmp/docker-mailserver
+          - /etc/localtime:/etc/localtime:ro
+          - mailman_core:/opt/mailman/core
+        network_mode: host
+
+      ak_ldap_outpost: "{{ mail_ak_ldap_outpost_service | default(omit) }}"
+
+      mailman_core: "{{ mail_mailman_core_service | default(omit) }}"
+      mailman_web: "{{ mail_mailman_web_service | default(omit) }}"
+
+    docker_compose_volumes_dir_owner: root
+    docker_compose_volumes_dir_group: root
+    docker_compose_volumes_dir_mode: 0755
+
+- name: Ensure extra configurations are up-to-date
+  ansible.builtin.copy:
+    content: "{{ item.value }}"
+    dest: "/srv/mail/volumes/config/{{ item.key }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ mail_extra_configs | dict2items }}"
+  notify: Restart docker-compose

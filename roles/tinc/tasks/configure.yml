@@ -1,0 +1,25 @@
+---
+
+- name: Ensure nets.boot is up-to-date
+  ansible.builtin.copy:
+    content: "{{ tinc_networks.keys() | join('\n') }}"
+    dest: /etc/tinc/nets.boot
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Initialize state variables
+  ansible.builtin.set_fact:
+    tinc_networks_keys: {}
+
+- name: Setup networks main configuration
+  ansible.builtin.include_tasks: configure-main.yml
+  loop: "{{ tinc_networks | dict2items }}"
+  loop_control:
+    loop_var: tinc_network
+
+- name: Setup networks hosts configuration
+  ansible.builtin.include_tasks: configure-hosts.yml
+  loop: "{{ tinc_networks | dict2items }}"
+  loop_control:
+    loop_var: tinc_network

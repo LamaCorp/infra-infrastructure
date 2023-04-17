@@ -1,0 +1,28 @@
+---
+
+
+bird_lg_go_frontend_docker_repository: xddxdd/bird-lg-go
+bird_lg_go_frontend_docker_tag: latest
+
+bird_lg_go_frontend_project_name: bird_lg_go_frontend
+# bird_lg_go_frontend_domain: ""
+
+bird_lg_go_frontend_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ bird_lg_go_frontend_domain }}`)"
+    middlewares: "default@file"
+    tls:
+      options: modern@file
+  service:
+    port: 5000
+
+bird_lg_go_frontend_reverse_proxy: {}
+bird_lg_go_frontend_reverse_proxy_computed: "{{ bird_lg_go_frontend_default_reverse_proxy | combine(bird_lg_go_frontend_reverse_proxy, recursive=True) }}"
+
+
+bird_lg_go_frontend_environment_default:
+  BIRDLG_PROXY_PORT: 8990
+
+bird_lg_go_frontend_environment: {}
+bird_lg_go_frontend_environment_computed: "{{ bird_lg_go_frontend_environment_default | combine(bird_lg_go_frontend_environment) }}"

@@ -1,0 +1,153 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+# yamllint disable
+# Inspired from https://github.com/openafs-contrib/ansible-openafs/blob/master/playbooks/cell.yaml
+# yamllint enable
+
+- name: Install servers
+  hosts: afs_cell
+  collections:
+    - openafs_contrib.openafs
+
+  pre_tasks:
+    - name: Generate /etc/hosts for all of the nodes
+      ansible.builtin.blockinfile:
+        dest: /etc/hosts
+        marker: "# {mark} ANSIBLE GENERATED HOSTS"
+        block: |
+          {% for host in groups['afs_cell'] %}
+          {% set hostnames = [hostvars[host].ansible_facts.nodename, hostvars[host].ansible_facts.hostname] %}
+          {% for ip in hostvars[host].afs_netinfo | sort %}
+          {{ ip }} {{ hostnames | unique | join(' ') }}
+          {% endfor %}
+          {% endfor %}
+
+    - name: Ensure configuration directory exists
+      ansible.builtin.file:
+        path: /usr/local/etc/openafs/server
+        state: directory
+
+    - name: Upload service keytab
+      ansible.builtin.copy:
+        content: "{{ afs_service_keytab }}"
+        dest: "/usr/local/etc/openafs/server/rxkad.keytab"
+        mode: 0600
+        owner: root
+        group: root
+
+  roles:
+    - openafs_krbclient
+    - openafs_server
+  tags:
+    - afs
+
+- name: Install clients
+  hosts: afs_cell,afs_clients
+  collections:
+    - openafs_contrib.openafs
+  roles:
+    - openafs_krbclient
+    - openafs_client
+  tags:
+    - afs
+
+- name: Finish bootstrapping cell
+  hosts: afs_cell
+  collections:
+    - openafs_contrib.openafs
+  tasks:
+    - name: Ensure root volumes exist
+      openafs_contrib.openafs.openafs_volume:
+        state: present
+        volume: "{{ item.name }}"
+        mount: "{{ item.mount }}"
+        acl: "{{ item.acl }}"
+        localauth: true
+      run_once: true
+      loop:
+        - name: root.cell
+          mount: "/afs/{{ afs_cell }}"
+          acl: system:anyuser r
+        - name: resources
+          mount: "/afs/{{ afs_cell }}/resources"
+          acl:
+            - system:authuser read
+            - system:administrators all
+        - name: sgoinfre
+          mount: "/afs/{{ afs_cell }}/sgoinfre"
+          acl:
+            - system:authuser write
+            - system:administrators all
+        - name: user
+          mount: "/afs/{{ afs_cell }}/user"
+          acl:
+            - system:authuser read
+            - system:administrators all
+
+    - name: Ensure media volumes exist
+      openafs_contrib.openafs.openafs_volume:
+        state: present
+        volume: "{{ item.name }}"
+        mount: "{{ item.mount }}"
+        acl:
+          - system:anyuser read
+          - system:authuser write
+          - system:administrators all
+        localauth: true
+      run_once: true
+      loop:
+        - name: media
+          mount: "/afs/{{ afs_cell }}/media"
+
+        - name: media_books
+          mount: "/afs/{{ afs_cell }}/media/books"
+        - name: media_movies
+          mount: "/afs/{{ afs_cell }}/media/movies"
+        - name: media_music
+          mount: "/afs/{{ afs_cell }}/media/music"
+        - name: media_torrents
+          mount: "/afs/{{ afs_cell }}/media/torrents"
+        - name: media_tv
+          mount: "/afs/{{ afs_cell }}/media/tv"
+  tags:
+    - afs
+
+- name: Install and configure sssd
+  hosts: afs_cell
+  roles:
+    - timorunge.sssd
+  tags:
+    - afs
+    - sssd
+
+- name: AFS tools
+  hosts: afs_cell
+  vars:
+    pip_install_packages:
+      - name: afs-tools
+        version: 0.0.2
+        extra_args: --extra-index-url https://gitlab.com/api/v4/groups/prologin/-/packages/pypi/simple
+  pre_tasks:
+    - name: Install python-ldap dependencies
+      ansible.builtin.apt:
+        name:
+          - libssl-dev
+          - libldap2-dev
+          - libsasl2-dev
+  roles:
+    - geerlingguy.pip
+  tags:
+    - afs
+    - afs-tools
+
+- name: AFS tokens
+  hosts: afs_clients
+  roles:
+    - afs_tokens
+  tags:
+    - afs
+    - afs-tokens

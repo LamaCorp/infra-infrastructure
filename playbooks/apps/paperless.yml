@@ -1,0 +1,21 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: ../base.yml
+
+- name: Paperless risson
+  hosts: services.fsn.lama.tel
+  tasks:
+    - name: Set Paperless risson role variables
+      ansible.builtin.set_fact:
+        "{{ item.key }}": "{{ item.value }}"
+      loop: "{{ paperless_risson_vars | dict2items }}"
+      no_log: true
+    - name: Paperless risson
+      ansible.builtin.include_role:
+        name: paperless
+  tags:
+    - apps
+    - paperless
+    - risson

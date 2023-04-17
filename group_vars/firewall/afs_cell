@@ -1,0 +1,5 @@
+---
+
+nft_input_group_rules:
+  550 AFS:
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 7000-7010 accept

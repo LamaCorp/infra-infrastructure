@@ -1,0 +1,73 @@
+---
+
+- name: Ensure pmacct is installed
+  ansible.builtin.apt:
+    name: pmacct
+
+- name: Ensure pmacctd configuration is up-to-date
+  ansible.builtin.copy:
+    content: |
+      {% for k, v in pmacctd_configuration_computed.items() %}
+      {{ k }}: {{ v }}
+      {% endfor %}
+    dest: /etc/pmacct/pmacctd.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart pmacctd
+
+- name: Ensure pcap interfaces map is up-to-date
+  ansible.builtin.copy:
+    content: |
+      {% for interface in pmacctd_pcap_interfaces_map %}
+      ifindex={{ loop.index }}{% for k, v in interface.items() %} {{ k }}={{ v }}{% endfor %}
+
+      {% endfor %}
+    dest: /etc/pmacct/interfaces.map
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart pmacctd
+
+- name: Ensure pre tag map is up-to-date
+  ansible.builtin.copy:
+    content: |
+      {% for tags in pmacctd_pre_tag_map %}
+      {% for k, v in tags.items() %}{{ k }}={{ v }} {% endfor %}
+      {% endfor %}
+    dest: /etc/pmacct/pretag.map
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart pmacctd
+
+- name: Ensure networks are up-to-date
+  ansible.builtin.copy:
+    content: "{{ pmacctd_networks | join('\n') }}"
+    dest: /etc/pmacct/networks.lst
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart pmacctd
+
+- name: Ensure peering agent map is up-to-date
+  ansible.builtin.copy:
+    content: |
+      {% for peering in pmacctd_peering_agent_map %}
+      id={{ loop.index }}{% for k, v in peering.items() %} {{ k }}={{ v }}{% endfor %}
+      {% endfor %}
+    dest: /etc/pmacct/peering_agent.map
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart pmacctd
+  when: "pmacctd_peering_agent_map != []"
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure pmacctd service is enabled and started
+  ansible.builtin.service:
+    name: pmacctd
+    enabled: true
+    state: started

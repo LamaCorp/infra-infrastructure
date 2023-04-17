@@ -1,0 +1,258 @@
+---
+
+gatus_devoups_vars:
+  gatus_project_name: gatus_devoups
+
+  gatus_domain: devou.ps
+
+  gatus_postgresql_database: gatus_devoups
+  gatus_postgresql_user: gatus_devoups
+  gatus_postgresql_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/gatus_devoups')['password'] }}"
+
+  gatus_config:
+    ui:
+      title: devoups.
+      header: CRI external infrastructure monitoring
+      logo: https://s3.cri.epita.fr/cri-intranet/img/logo.png
+      link: https://cri.epita.fr
+
+    alerting:
+      slack:
+        webhook-url: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/gatus/devoups/slack-webhook')['webhook'] }}"
+        default-alert:
+          enabled: true
+          failure-threshold: 3
+          success-threshold: 2
+          send-on-resolved: true
+
+    .defaults: &defaults
+      interval: 30s
+      alerts:
+        - type: slack
+
+    .https-endpoint: &https-endpoint
+      <<: *defaults
+      conditions:
+        - "[STATUS] == 200"
+        - "[RESPONSE_TIME] <= 1000"
+        - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+    .tls-endpoint: &tls-endpoint
+      <<: *defaults
+      conditions:
+        - "[CONNECTED] == true"
+        - "[RESPONSE_TIME] <= 1000"
+        - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+    .tcp-endpoint: &tcp-endpoint
+      <<: *defaults
+      conditions:
+        - "[CONNECTED] == true"
+        - "[RESPONSE_TIME] <= 1000"
+
+    endpoints:
+
+      ###
+      # Critical
+      ###
+
+      - name: Intranet CRI
+        <<: *https-endpoint
+        group: critical
+        url: https://cri.epita.fr/healthz
+
+      - name: LDAP CRI
+        <<: *tls-endpoint
+        group: critical
+        url: tls://ldap.pie.cri.epita.fr:636
+
+      - name: DNS
+        <<: *defaults
+        group: critical
+        url: ns.cri.epita.fr
+        dns:
+          query-name: ns.cri.epita.fr
+          query-type: A
+        conditions:
+          - "[BODY] == 91.243.117.210"
+          - "[DNS_RCODE] == NOERROR"
+
+      - name: GitLab
+        <<: *https-endpoint
+        group: critical
+        url: https://gitlab.cri.epita.fr/-/health
+
+      - name: GitLab registry
+        <<: *https-endpoint
+        group: critical
+        url: https://registry.cri.epita.fr
+
+      - name: Vault
+        <<: *https-endpoint
+        group: critical
+        url: https://vault.cri.epita.fr
+
+      - name: S3
+        <<: *https-endpoint
+        group: critical
+        url: https://s3.cri.epita.fr
+
+      - name: Console Bocal
+        <<: *https-endpoint
+        group: critical
+        url: https://console.bocal.org
+        alerts: []
+
+      ###
+      # PIE SM
+      ###
+
+      - name: Fleet manager
+        <<: *https-endpoint
+        group: PIE SM
+        url: https://fleet.pie.cri.epita.fr/healthz
+
+      - name: Django PXE
+        <<: *https-endpoint
+        group: PIE SM
+        url: https://django-pxe.pie.cri.epita.fr
+
+      - name: iPXE
+        <<: *https-endpoint
+        group: PIE SM
+        url: https://ipxe.pie.cri.epita.fr
+
+      - name: Bttrack
+        <<: *tcp-endpoint
+        group: PIE SM
+        url: tcp://torrent.pie.cri.epita.fr:8000
+
+      ###
+      # Student services
+      ###
+
+      - name: Moodle (cours)
+        <<: *https-endpoint
+        group: Student services
+        url: https://moodle.cri.epita.fr
+
+      - name: Moodle (exams)
+        <<: *https-endpoint
+        group: Student services
+        url: https://moodle-exam.cri.epita.fr
+
+      - name: Moodle (recrutement)
+        <<: *https-endpoint
+        group: Student services
+        url: https://recrutements.cri.epita.fr
+
+      - name: Rocket.Chat
+        <<: *https-endpoint
+        group: Student services
+        url: https://rocketchat.cri.epita.fr
+
+      - name: News
+        <<: *tls-endpoint
+        group: Student services
+        url: tls://news.cri.epita.fr:563
+
+      - name: Git
+        <<: *tcp-endpoint
+        group: Student services
+        url: tcp://git.cri.epita.fr:22
+
+      - name: Wiki prog
+        <<: *https-endpoint
+        group: Student services
+        url: https://wiki-prog.infoprepa.epita.fr
+
+      - name: Intranet Forge
+        <<: *https-endpoint
+        group: Student services
+        url: https://intra.forge.epita.fr/q/health
+
+      - name: Git Forge
+        <<: *tcp-endpoint
+        group: Student services
+        url: tcp://git.forge.epita.fr:22
+
+      ###
+      # Internal services
+      ###
+
+      - name: k8s ArgoCD
+        <<: *https-endpoint
+        group: Internal services
+        url: https://argocd.undercloud.cri.epita.fr
+
+      - name: k8s prod-1 Prometheus
+        <<: *https-endpoint
+        group: Internal services
+        url: https://prometheus.prod-1.k8s.cri.epita.fr
+
+      - name: k8s ops Prometheus
+        <<: *https-endpoint
+        group: Internal services
+        url: https://prometheus.ops.k8s.cri.epita.fr
+
+      - name: k8s ops Grafana
+        <<: *https-endpoint
+        group: Internal services
+        url: https://grafana.ops.k8s.cri.epita.fr
+
+      - name: Bookstack
+        <<: *https-endpoint
+        group: Internal services
+        url: https://bookstack.cri.epita.fr
+
+      - name: Mail
+        <<: *tls-endpoint
+        group: Internal services
+        url: starttls://mail.cri.epita.fr:587
+
+      ###
+      # Kerberos
+      ###
+
+      - name: Kerberos KDC ticket server
+        <<: *tcp-endpoint
+        group: Authentication
+        url: tcp://kerberos.pie.cri.epita.fr:88
+
+      - name: LDAP
+        <<: *tcp-endpoint
+        group: Authentication
+        url: tcp://ldap.pie.cri.epita.fr:389
+
+      - name: LDAPS
+        <<: *tcp-endpoint
+        group: Authentication
+        url: tcp://ldap.pie.cri.epita.fr:636
+
+      ###
+      # Others
+      ###
+
+      - name: MaaS
+        <<: *https-endpoint
+        group: others
+        url: https://maas.cri.epita.fr/q/health
+
+      - name: OIDC redirection
+        interval: 30s
+        group: others
+        url: https://tickets.cri.epita.fr
+        conditions:
+          - "[STATUS] == 401"
+          - "[RESPONSE_TIME] <= 1000"
+          - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+      - name: Blog
+        <<: *https-endpoint
+        group: others
+        url: https://blog.cri.epita.fr
+
+      - name: Documentation
+        <<: *https-endpoint
+        group: others
+        url: https://doc.cri.epita.fr

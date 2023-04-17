@@ -1,0 +1,4 @@
+---
+
+socks5_docker_repository: serjs/go-socks5-proxy
+socks5_docker_tag: latest

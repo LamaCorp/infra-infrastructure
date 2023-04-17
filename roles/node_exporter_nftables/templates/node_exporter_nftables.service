@@ -1,0 +1,9 @@
+[Unit]
+Description=Run the node exporter nftables
+After=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/"{{ node_exporter_nftables_binary_name }}"
+
+[Install]
+WantedBy=multi-user.target

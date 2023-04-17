@@ -1,0 +1,27 @@
+---
+
+haproxy_frontends:
+  - name: http
+    address: "148.251.148.234:80"
+    mode: tcp
+    backend: http
+  - name: https
+    address: "148.251.148.234:443"
+    mode: tcp
+    backend: https
+
+haproxy_backends:
+  - name: http
+    mode: tcp
+    check: false
+    servers:
+      - name: services
+        address: "172.28.1.10:81"
+        extra_opts: send-proxy
+  - name: https
+    mode: tcp
+    check: false
+    servers:
+      - name: services
+        address: "172.28.1.10:444"
+        extra_opts: send-proxy

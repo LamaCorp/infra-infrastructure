@@ -1,0 +1,4 @@
+---
+
+ipxe_docker_repository: registry.gitlab.com/prologin/tech/tools/ipxe/prologin-overlay
+ipxe_docker_tag: 2d79850298deca4263b5e69addd1f8e18420aa7f

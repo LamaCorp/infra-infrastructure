@@ -1,0 +1,13 @@
+---
+
+- name: Install tmux
+  ansible.builtin.apt:
+    name: tmux
+
+- name: Configure tmux
+  ansible.builtin.copy:
+    src: tmux.conf
+    dest: /root/.tmux.conf
+    mode: 0600
+    owner: root
+    group: root

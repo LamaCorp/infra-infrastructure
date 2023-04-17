@@ -1,0 +1,8 @@
+---
+
+bird2_kernel:
+  defaults:
+    merge_paths: true
+    persist: true
+  v4:
+    bgp_export: false

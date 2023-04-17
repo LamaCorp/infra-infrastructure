@@ -1,0 +1,31 @@
+---
+
+haproxy_frontends:
+  - name: http
+    address: "*:80"
+    mode: tcp
+    backend: http
+  - name: https
+    address: "*:443"
+    mode: tcp
+    backend: https
+
+haproxy_backends:
+  - name: http
+    mode: tcp
+    check: false
+    servers:
+      - name: traefik
+        address: "traefik_traefik.ctn.{{ inventory_hostname }}:80"
+        extra_opts: send-proxy resolvers docker
+  - name: https
+    mode: tcp
+    check: false
+    servers:
+      - name: traefik
+        address: "traefik_traefik.ctn.{{ inventory_hostname }}:443"
+        extra_opts: send-proxy resolvers docker
+
+haproxy_additional_configuration: |
+  resolvers docker
+    nameserver dps 127.0.0.1:5354

@@ -1,0 +1,8 @@
+---
+
+gitlab_runners:
+  - name: "lama-corp-nix-{{ inventory_hostname }}"
+    url: https://gitlab.com
+    reg_token: "{{ gitlab_runner_lama_corp_registration_token }}"
+    limit: 8
+    executor: shell

@@ -1,0 +1,21 @@
+---
+
+- name: Restart Kea ctrl-agent service
+  ansible.builtin.service:
+    name: isc-kea-ctrl-agent.service
+    state: restarted
+
+- name: Restart Kea dhcp4 service
+  ansible.builtin.service:
+    name: isc-kea-dhcp4-server.service
+    state: restarted
+
+- name: Restart Kea dhcp6 service
+  ansible.builtin.service:
+    name: isc-kea-dhcp6-server.service
+    state: restarted
+
+- name: Restart Kea dhcp-ddns service
+  ansible.builtin.service:
+    name: isc-kea-dhcp-ddns-server.service
+    state: restarted

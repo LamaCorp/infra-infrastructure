@@ -1,0 +1,21 @@
+---
+
+- name: Deploy dns-proxy-server docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: dns_proxy_server
+
+    docker_compose_services:
+      dps:
+        image: "{{ dns_proxy_server_docker_repository }}:{{ dns_proxy_server_docker_tag }}"
+        command:
+          - --default-dns=false
+          - --register-container-names=true
+          - --server-port=5354
+          - --service=normal
+          - "--domain={{ dns_proxy_server_domain }}"
+        volumes:
+          - /etc/resolv.conf:/etc/resolv.conf:ro
+          - /var/run/docker.sock:/var/run/docker.sock
+        network_mode: host

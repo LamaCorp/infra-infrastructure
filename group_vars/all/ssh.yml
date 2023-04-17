@@ -1,0 +1,11 @@
+---
+
+ssh_keys_diego:
+  - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDIfodpWZtOnijgpZZ2cK/ouTyzrbz1QiHcdxRATQ/CEVcu5niLWb/h4RTbgKZ/eXK8eUtvlAnUuqgX0KM473Zx92sDWp1bcS37yWTpDZukEnOHXjVB0QvYCFi/dvLc80v6ezFA89Rk5UlpvSen0uvJiReEIVBKsSs9hvBgo5gjReoYHEYSRB50ZtugLJnQZXhl7uGYt0mtdqYFc/VuM56QYom3XD8wsZi4qrTA9HEjN6oQFiCgDtn0M5OTTWCHbqXrHRbV3eO2Lp0G/Zmibvcg1x+UXv1UscqVLvtsuqLkdqhbp+xUqY6wYYlwSRSQ2GXsXfpUuz1GUktA7mZk0YPEBKIIdKsfJJngB1N1HyFBLWB4fVQZhlkQdVADu0QMVzDNmAn5LL/x9QGz2aw2fBV4SXVk7LvaSnSeqp4jfgi4h7rSUGZ3pUG1PUdtO5rjCCin6s2qEBWPHvhyWgcrItsTccEiO2Q8hrumQLon4YGcJzS7Y0q/kRHqE/pMHM9yZPBYgxPOigwRYfsoGKerRi0EaX+rvX15R0UE1Ey7mi1FMri74x2QQMTWENUyHyLcILIsYMtAW2GdfBPSguGEs4Uguc5q37XZ/LEEYLPPR9H2MkH0iDuESpY5IIhdRiOR3AGnKLloD3+ZIFWFx2is8C8L5Ob1f2ox3Pv/fxIxp7hy4Q== diego"
+
+ssh_keys_risson:
+  - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIL0pnnKrvi9lrliSm+pf9HNAzs0GYLKiJk5AtSg4hhDq risson@yubikey"
+
+ssh_authorized_keys:
+  - "{{ ssh_keys_diego }}"
+  - "{{ ssh_keys_risson }}"

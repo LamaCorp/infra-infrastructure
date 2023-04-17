@@ -1,0 +1,20 @@
+---
+
+- name: Add a systemd timer to drop virtual memory caches
+  notify: Enable and start timer
+  block:
+    - name: Copy systemd service
+      ansible.builtin.copy:
+        src: drop_caches.service
+        dest: /etc/systemd/system/drop_caches.service
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Template systemd timer
+      ansible.builtin.template:
+        src: drop_caches.timer
+        dest: /etc/systemd/system/drop_caches.timer
+        owner: root
+        group: root
+        mode: 0644

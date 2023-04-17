@@ -1,0 +1,43 @@
+---
+
+nft_define_group:
+  bgp neighbors 4:
+    name: bgp_neighbors_4
+    value: "Override me"
+  bgp neighbors 6:
+    name: bgp_neighbors_6
+    value: "Override me"
+
+  ospf interfaces:
+    name: ospf_interfaces
+    value: tinc-lama
+
+
+nft_input_group_rules:
+  013 icmpv6 redirects:
+    - meta l4proto ipv6-icmp icmpv6 type nd-redirect counter drop
+
+  300 vpn:
+    - tcp dport 655 accept
+    - udp dport 655 accept
+
+  310 bgp:
+    - ip saddr $bgp_neighbors_4 tcp dport 179 counter accept
+    - ip6 saddr $bgp_neighbors_6 tcp dport 179 counter accept
+
+  350 dns:
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 53 accept
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} tcp dport 53 accept
+    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} udp dport 53 accept
+    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} tcp dport 53 accept
+
+  360 ntp:
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 123 accept
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} tcp dport 123 accept
+    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} udp dport 123 accept
+    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} tcp dport 123 accept
+
+
+nft_forward_group_rules:
+  000 policy:
+    - type filter hook forward priority 0; policy accept;

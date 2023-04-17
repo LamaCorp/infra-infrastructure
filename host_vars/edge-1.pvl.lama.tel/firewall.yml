@@ -1,0 +1,19 @@
+---
+
+nft_define_host:
+  bgp neighbors 4:
+    name: bgp_neighbors_4
+    value: "{172.28.254.1, 172.28.254.2, 172.28.254.4, 169.254.169.254}"
+  bgp neighbors 6:
+    name: bgp_neighbors_6
+    value: "{2001:67c:17fc:ffff::/64, 2001:19f0:ffff::1, fd3c:c1c4:bbff:9a64::/64, 2a0c:2f07:9459::b12}"
+
+
+nft_input_host_rules:
+  550 wg-cri:
+    - udp dport 51821 accept
+
+
+nft__nat_host_postrouting_rules:
+  100 external connectivity:
+    - meta oif enp1s0 ip saddr != 108.61.208.236 snat to 108.61.208.236

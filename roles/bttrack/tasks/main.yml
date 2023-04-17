@@ -1,0 +1,11 @@
+---
+
+- name: Deploy bttrack docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: bttrack
+    docker_compose_services:
+      bttrack:
+        image: "{{ bttrack_docker_repository }}:{{ bttrack_docker_tag }}"
+        network_mode: host

@@ -1,0 +1,39 @@
+---
+
+pmacctd_configuration_default:
+  daemonize: true
+  pidfile: /var/run/pmacctd.pid
+  syslog: daemon
+
+  pre_tag_map: /etc/pmacct/pretag.map
+
+  pmacctd_as: longest
+  pmacctd_net: longest
+  networks_file: /etc/pmacct/networks.lst
+  networks_file_no_lpm: true
+
+  pcap_interfaces_map: /etc/pmacct/interfaces.map
+  sampling_rate: 1
+  aggregate: src_mac, dst_mac, src_host, dst_host, src_port, dst_port, src_as, dst_as, label, proto
+
+  bgp_agent_map: "{% if pmacctd_peering_agent_map != [] %}/etc/pmacct/peering_agent.map{% else %}{{ omit }}{% endif %}"
+
+pmacctd_configuration: {}
+pmacctd_configuration_computed: "{{ pmacctd_configuration_default | combine(pmacctd_configuration, recursive=True) }}"
+
+
+pmacctd_pcap_interfaces_map:
+  - ifname: lo
+
+
+pmacctd_pre_tag_map:
+  - set_label: "{{ inventory_hostname }}"
+
+
+pmacctd_networks: []
+# - 397143,23.157.160.0/24
+# - 397143,2602:fe2e::/36
+
+pmacctd_peering_agent_map: []
+# - bgp_ip: 23.157.160.1
+#   ip: 0.0.0.0/0

@@ -1,0 +1,87 @@
+---
+
+# Alerts from:
+# - https://monitoring.mixins.dev/loki/
+# - https://awesome-prometheus-alerts.grep.to/rules#loki
+
+prometheus_rules_loki:
+  loki:
+    groups:
+      - name: loki.alerts
+        rules:
+          - alert: LokiProcessTooManyRestarts
+            expr: changes(process_start_time_seconds{job=~"loki"}[15m]) > 2
+            labels:
+              severity: warning
+            annotations:
+              summary: Loki process has too many restarts.
+              description: !unsafe 'A loki process had too many restarts: {{ $labels.instance }}.'
+
+          - alert: LokiRequestErrors
+            expr: |
+              100 * sum(rate(loki_request_duration_seconds_count{status_code=~"5.."}[1m])) by (job, route)
+                /
+              sum(rate(loki_request_duration_seconds_count[1m])) by (job, route)
+                > 10
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: !unsafe '{{ $labels.job }} {{ $labels.route }} is experiencing {{ printf "%.2f" $value }}% errors.'
+
+          - alert: LokiRequestPanics
+            expr: sum(increase(loki_panic_total[10m])) by (job) > 0
+            labels:
+              severity: warning
+            annotations:
+              summary: !unsafe '{{ $labels.job }} is experiencing {{ printf "%.2f" $value }}% increase of panics.'
+
+          - alert: LokiRequestLatency
+            expr: 'job_route:loki_request_duration_seconds:99quantile{route!~"(?i).*tail.*"} > 1'
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: !unsafe '{{ $labels.job }} {{ $labels.route }} is experiencing {{ printf "%.2f" $value }}s 99th percentile latency.'
+
+          - alert: LokiTooManyCompactorsRunning
+            expr: sum(loki_boltdb_shipper_compactor_running) by (job) > 1
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: !unsafe '{{ $labels.job }} has had {{ printf "%.0f" $value }} compactors running for more than 5m. Only one compactor should run at a time.'
+
+
+      - name: loki.rules
+        rules:
+          - expr: histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m]))
+              by (le, job))
+            record: job:loki_request_duration_seconds:99quantile
+          - expr: histogram_quantile(0.50, sum(rate(loki_request_duration_seconds_bucket[1m]))
+              by (le, job))
+            record: job:loki_request_duration_seconds:50quantile
+          - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (job) / sum(rate(loki_request_duration_seconds_count[1m]))
+              by (job)
+            record: job:loki_request_duration_seconds:avg
+          - expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job)
+            record: job:loki_request_duration_seconds_bucket:sum_rate
+          - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (job)
+            record: job:loki_request_duration_seconds_sum:sum_rate
+          - expr: sum(rate(loki_request_duration_seconds_count[1m])) by (job)
+            record: job:loki_request_duration_seconds_count:sum_rate
+          - expr: histogram_quantile(0.99, sum(rate(loki_request_duration_seconds_bucket[1m]))
+              by (le, job, route))
+            record: job_route:loki_request_duration_seconds:99quantile
+          - expr: histogram_quantile(0.50, sum(rate(loki_request_duration_seconds_bucket[1m]))
+              by (le, job, route))
+            record: job_route:loki_request_duration_seconds:50quantile
+          - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (job, route) / sum(rate(loki_request_duration_seconds_count[1m]))
+              by (job, route)
+            record: job_route:loki_request_duration_seconds:avg
+          - expr: sum(rate(loki_request_duration_seconds_bucket[1m])) by (le, job, route)
+            record: job_route:loki_request_duration_seconds_bucket:sum_rate
+          - expr: sum(rate(loki_request_duration_seconds_sum[1m])) by (job, route)
+            record: job_route:loki_request_duration_seconds_sum:sum_rate
+          - expr: sum(rate(loki_request_duration_seconds_count[1m])) by (job, route)
+            record: job_route:loki_request_duration_seconds_count:sum_rate

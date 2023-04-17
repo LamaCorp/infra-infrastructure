@@ -1,0 +1,74 @@
+---
+
+- name: Deploy Netbox docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: netbox
+
+    docker_compose_services:
+      netbox:
+        image: "{{ netbox_docker_repository }}:{{ netbox_docker_tag }}"
+        command:
+          - bash
+          - -c
+          - |
+            set -xeuo pipefail
+            /opt/netbox/venv/bin/pip install netbox-bgp
+            echo 'PLUGINS = ["netbox_bgp"]' > /etc/netbox/config/plugins.py
+            exec /opt/netbox/docker-entrypoint.sh /opt/netbox/launch-netbox.sh
+        environment: "{{ netbox_environment_computed }}"
+        volumes:
+          - media:/opt/netbox/netbox/media
+          - reports:/etc/netbox/reports:ro
+          - scripts:/etc/netbox/scripts:ro
+        reverse_proxy: "{{ netbox_reverse_proxy_computed }}"
+        user: root:root
+
+      worker:
+        image: "{{ netbox_docker_repository }}:{{ netbox_docker_tag }}"
+        command:
+          - bash
+          - -c
+          - |
+            set -xeuo pipefail
+            /opt/netbox/venv/bin/pip install netbox-bgp
+            echo 'PLUGINS = ["netbox_bgp"]' > /etc/netbox/config/plugins.py
+            exec /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py rqworker
+        environment: "{{ netbox_environment_computed }}"
+        volumes:
+          - media:/opt/netbox/netbox/media
+          - reports:/etc/netbox/reports:ro
+          - scripts:/etc/netbox/scripts:ro
+        user: root:root
+
+      housekeeping:
+        image: "{{ netbox_docker_repository }}:{{ netbox_docker_tag }}"
+        command:
+          - bash
+          - -c
+          - |
+            set -xeuo pipefail
+            /opt/netbox/venv/bin/pip install netbox-bgp
+            echo 'PLUGINS = ["netbox_bgp"]' > /etc/netbox/config/plugins.py
+            exec /opt/netbox/housekeeping.sh
+        environment: "{{ netbox_environment_computed }}"
+        volumes:
+          - media:/opt/netbox/netbox/media
+          - reports:/etc/netbox/reports:ro
+          - scripts:/etc/netbox/scripts:ro
+        user: root:root
+
+    docker_compose_volumes_dir_owner: root
+    docker_compose_volumes_dir_group: root
+    docker_compose_volumes_dir_mode: 0755
+
+- name: Create scripts sentinel file
+  ansible.builtin.file:
+    path: /srv/netbox/volumes/scripts/__init__.py
+    state: touch
+    owner: root
+    group: root
+    mode: 0644
+    modification_time: preserve
+    access_time: preserve

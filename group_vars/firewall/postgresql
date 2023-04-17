@@ -1,0 +1,11 @@
+---
+
+nft_define_group:
+  prometheus exporter postgresql:
+    name: prometheus_exporter_postgresql
+    value: 9187
+
+nft_input_group_rules:
+  220 prometheus exporter postgresql:
+    - ip saddr $subnet_internal_4 tcp dport {$prometheus_exporter_postgresql} accept
+    - ip6 saddr $subnet_internal_6 tcp dport {$prometheus_exporter_postgresql} accept

@@ -1,0 +1,88 @@
+---
+
+kea_ctrl_agent_enable: true
+kea_dhcp4_enable: true
+kea_dhcp6_enable: false
+kea_dhcp_ddns_enable: false
+
+kea_ctrl_agent_config:
+  Control-agent:
+    http-port: 8001
+kea_dhcp4_config:
+  Dhcp4:
+    interfaces-config:
+      interfaces:
+        - bond0
+      dhcp-socket-type: raw
+    lease-database:
+      persist: true
+      lfc-interval: 0
+    next-server: 172.28.2.253
+    option-data:
+      - name: domain-name-servers
+        data: "172.28.2.253"
+      - name: domain-name
+        data: "bar.lama.tel"
+      - name: ntp-servers
+        data: 172.28.2.253
+      - name: no-pxedhcp
+        code: 176
+        space: ipxe
+        data: "1"
+        always-send: true
+    client-classes:
+      - name: ipxe_efi_x86
+        test: "option[client-system].hex == 0x0006"
+        boot-file-name: ipxe.efi
+      - name: ipxe_efi_x64
+        test: "option[client-system].hex == 0x0007"
+        boot-file-name: ipxe.efi
+      - name: ipxe_efi_x64_x86
+        test: "option[client-system].hex == 0x0009"
+        boot-file-name: ipxe.efi
+      - name: ipxe_legacy_x64
+        test: "not option[client-system].hex == 0x0006 and not option[client-system].hex == 0x0007 and not option[client-system].hex == 0x0009"
+        boot-file-name: undionly.kpxe
+    option-def:
+      - name: no-pxedhcp
+        code: 176
+        type: uint8
+        array: false
+        record-types: ""
+        space: ipxe
+        encapsulate: ""
+      - name: https
+        code: 20
+        type: uint8
+        array: false
+        record-types: ""
+        space: ipxe
+        encapsulate: ""
+    subnet4:
+      - subnet: 172.28.2.0/24
+        pools:
+          - pool: "172.28.2.100 - 172.28.2.199"
+        option-data:
+          - name: routers
+            data: 172.28.2.254
+          - name: static-routes
+            data: 172.28.0.0,172.28.2.253
+        reservations:
+          - hw-address: 00:09:82:17:1c:c0
+            ip-address: 172.28.2.220
+            hostname: loewe-tv
+          - hw-address: 08:df:1f:08:49:34
+            ip-address: 172.28.2.221
+            hostname: bose-office
+          - hw-address: 48:d6:d5:27:2b:b4
+            ip-address: 172.28.2.222
+            hostname: chromecast-tv
+          - hw-address: 88:51:fb:1b:21:f4
+            ip-address: 172.28.2.230
+            hostname: hp-office
+          - hw-address: 44:fe:3b:1b:ed:3e
+            ip-address: 172.28.2.240
+            hostname: wifi-floor0
+          - hw-address: 00:e0:4c:90:a8:52
+            ip-address: 172.28.2.241
+            hostname: wifi-floor-1

@@ -1,0 +1,39 @@
+---
+
+- name: Deploy Paperless docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: "{{ paperless_project_name }}"
+
+    docker_compose_services:
+      server:
+        image: "{{ paperless_docker_repository }}:{{ paperless_docker_tag }}"
+        environment: "{{ paperless_environment_computed }}"
+        networks:
+          - default
+        volumes:
+          - data:/usr/src/paperless/data
+          - media:/usr/src/paperless/media
+          - export:/usr/src/paperless/export
+          - consume:/usr/src/paperless/consume
+        depends_on:
+          - "{{ paperless_project_name}}_gotenberg"
+          - "{{ paperless_project_name}}_tika"
+        reverse_proxy: "{{ paperless_reverse_proxy_computed }}"
+
+      gotenberg:
+        image: "{{ paperless_gotenberg_docker_repository }}:{{ paperless_gotenberg_docker_tag }}"
+        # The gotenberg chromium route is used to convert .eml files. We do not
+        # want to allow external content like tracking pixels or even javascript.
+        command:
+          - gotenberg
+          - --chromium-disable-javascript=true
+          - --chromium-allow-list=file:///tmp/.*
+
+      tika:
+        image: "{{ paperless_tika_docker_repository }}:{{ paperless_tika_docker_tag }}"
+
+    docker_compose_volumes_dir_owner: 1000
+    docker_compose_volumes_dir_group: 1000
+    docker_compose_volumes_dir_mode: 0755

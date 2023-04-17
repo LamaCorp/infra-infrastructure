@@ -1,0 +1,38 @@
+---
+
+- name: Ensure docker2nftables is up-to-date
+  ansible.builtin.template:
+    src: docker2nftables
+    dest: /usr/local/bin/docker2nftables
+    owner: root
+    group: root
+    mode: 0744
+
+- name: Ensure service is up-to-date
+  ansible.builtin.template:
+    src: docker2nftables.service
+    dest: /etc/systemd/system/docker2nftables.service
+    owner: root
+    group: root
+    mode: 0644
+  notify: Reload systemd
+
+- name: Ensure timer is up-to-date
+  ansible.builtin.template:
+    src: docker2nftables.timer
+    dest: /etc/systemd/system/docker2nftables.timer
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload systemd
+    - Restart timer
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure docker2nftables timer is enabled and started
+  ansible.builtin.systemd:
+    name: docker2nftables.timer
+    enabled: true
+    state: started

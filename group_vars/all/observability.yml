@@ -1,0 +1,113 @@
+---
+
+promtail_loki_server_url: loki.lama.tel
+promtail_system_user: root
+
+promtail_config_clients:
+  - url: "https://{{ promtail_loki_server_url }}/loki/api/v1/push"
+    tenant_id: infra
+    basic_auth:
+      username: "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/loki/basic-auth/infra')['username'] }}"
+      password: "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/loki/basic-auth/infra')['password'] }}"
+    external_labels:
+      hostname: "{{ inventory_hostname }}"
+
+promtail_config_scrape_configs_raw: |
+  - job_name: journal
+    journal:
+      json: true
+      max_age: 12h
+      labels:
+        job: systemd-journal
+    relabel_configs:
+      - source_labels:
+          - __journal__systemd_unit
+        target_label: systemd_unit
+  {% if inventory_hostname in groups['docker'] %}
+  - job_name: containers
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: containers
+          __path__: /var/lib/docker/containers/*/*-json.log
+    pipeline_stages:
+      - json:
+          expressions:
+            log: log
+            stream: stream
+            time: time
+            compose_project: attrs."com.docker.compose.project"
+            compose_service: attrs."com.docker.compose.service"
+      - regex:
+          expression: "^/var/lib/docker/containers/(?P<container_id>.{12}).+/.+-json.log$"
+          source: filename
+      - timestamp:
+          format: RFC3339Nano
+          source: time
+      - labels:
+          stream:
+          container_id:
+          compose_project:
+          compose_service:
+      - output:
+          source: log
+  {% endif %}
+  {% if inventory_hostname in groups['afs_cell'] %}
+  - job_name: openafs
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: openafs
+          __path__: /usr/local/var/openafs/logs/*
+    pipeline_stages:
+      - regex:
+          expression: "^(?P<time>\\w\\s\\w\\s\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\s\\d{4})\\s(?P<output>.*)"
+      - timestamp:
+          format: ANSIC
+          source: time
+      - output:
+          source: output
+  {% endif %}
+
+promtail_config_scrape_configs_extra: []
+
+promtail_config_scrape_configs: "{{ promtail_config_scrape_configs_raw | from_yaml + promtail_config_scrape_configs_extra }}"
+
+
+snmpd_syscontact: Root <root@lama-corp.space>
+
+snmpd_security_names:
+  - name: readonly
+    source: default
+    community: public
+
+snmpd_groups:
+  - name: ROGroup
+    security_model: v2c
+    security_name: readonly
+
+snmpd_views:
+  - name: all
+    type: included
+    subtree: ".1"
+    mask: 80
+
+snmpd_accesses:
+  - group: ROGroup
+    context: ""
+    security_model: any
+    security_level: noauth
+    prefix: exact
+    read: all
+    write: none
+    notif: none
+
+snmpd_processes: []
+snmpd_scripts: []
+snmpd_disks: []
+snmpd_load:
+  one_minute_average: "{{ ansible_processor_vcpus }}"
+  five_minute_average: "{{ ansible_processor_vcpus }}"
+  fifteen_minute_average: "{{ ansible_processor_vcpus }}"

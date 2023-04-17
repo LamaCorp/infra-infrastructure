@@ -1,0 +1,27 @@
+.ansible
+.cache
+__pycache__
+
+.terraform
+
+/restic/secrets/minio.env
+/secrets/vars
+/vault/secrets/vault.json
+
+# Don't forget to add them to .ansible-lint
+/roles/buluma.snmpd
+/roles/cloudalchemy.node_exporter
+/roles/cri.gitlab_runner
+/roles/cri.nftables
+/roles/cri.restic
+/roles/geerlingguy.docker
+/roles/geerlingguy.pip
+/roles/ipr-cnrs.nftables
+/roles/mrlesmithjr.chrony
+/roles/mrlesmithjr.netplan
+/roles/ome.haproxy
+/roles/patrickjahns.promtail
+/roles/stackhpc.libvirt-host
+/roles/stackhpc.libvirt-vm
+/roles/stackhpc.systemd_networkd
+/roles/timorunge.sssd

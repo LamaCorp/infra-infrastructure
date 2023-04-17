@@ -1,0 +1,15 @@
+---
+
+nextcloud_domain: cloud.lama-corp.space
+nextcloud_office_domain: office.lama-corp.space
+
+nextcloud_postgres_database: nextcloud
+nextcloud_postgres_user: nextcloud
+nextcloud_postgres_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/nextcloud')['password'] }}"
+
+nextcloud_redis_port: 6382
+
+nextcloud_email_user: "{{ lookup('community.hashi_vault.hashi_vault', 'infra/data/aws/ses/senders/nextcloud')['username'] }}"
+nextcloud_email_password: "{{ lookup('community.hashi_vault.hashi_vault', 'infra/data/aws/ses/senders/nextcloud')['password'] }}"
+
+nextcloud_admin_password: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/nextcloud/admin')['password'] }}"

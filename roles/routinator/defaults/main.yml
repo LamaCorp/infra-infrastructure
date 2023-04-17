@@ -1,0 +1,20 @@
+---
+
+
+routinator_docker_repository: nlnetlabs/routinator
+routinator_docker_tag: v0.12.1
+
+# routinator_domain: ""
+
+routinator_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ routinator_domain }}`)"
+    middlewares: "default@file"
+    tls:
+      options: modern@file
+  service:
+    port: 8323
+
+routinator_reverse_proxy: {}
+routinator_reverse_proxy_computed: "{{ routinator_default_reverse_proxy | combine(routinator_reverse_proxy, recursive=True) }}"

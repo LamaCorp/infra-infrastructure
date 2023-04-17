@@ -1,0 +1,17 @@
+---
+
+backup_restic_creds_srv: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/srv') }}"
+
+backup_restic_list_raw:
+  - name: srv
+    enabled: true
+    repo_password: "{{ backup_restic_creds_srv['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_srv['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_srv['backup_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_srv['backup_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_srv['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_srv['prune_secret_key'] }}"
+    to_include:
+      - /srv

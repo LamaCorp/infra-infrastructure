@@ -1,0 +1,48 @@
+---
+
+- name: Create required directories
+  ansible.builtin.file:
+    path: "{{ required_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0700
+  loop:
+    - "{{ docker_compose_project_dir }}"
+    - "{{ docker_compose_volumes_dir }}"
+    - "{{ docker_compose_secrets_dir }}"
+  loop_control:
+    loop_var: required_dir
+
+- name: Compute services to be specified in docker-compose.yml
+  ansible.builtin.import_tasks: compute_services.yml
+
+- name: Compute networks to be specified in docker-compose.yml
+  ansible.builtin.import_tasks: compute_networks.yml
+
+- name: Compute volumes to be specified in docker-compose.yml
+  ansible.builtin.import_tasks: compute_volumes.yml
+
+- name: Compute secrets to be specified in docker-compose.yml
+  ansible.builtin.import_tasks: compute_secrets.yml
+
+- name: Define docker-compose.yml content
+  ansible.builtin.set_fact:
+    docker_compose_content:
+      services: "{{ docker_compose_services_computed }}"
+      volumes: "{{ docker_compose_volumes_computed }}"
+      networks: "{{ docker_compose_networks_computed }}"
+      secrets: "{{ docker_compose_secrets_computed }}"
+
+- name: Template docker-compose.yml
+  ansible.builtin.copy:
+    content: "{{ docker_compose_content | to_nice_yaml(indent=2) }}"
+    dest: "{{ docker_compose_project_dir }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: 0600
+  notify: Restart docker-compose
+
+- name: Check that the docker-compose file is valid
+  ansible.builtin.command: docker-compose -f "{{ docker_compose_project_dir }}/docker-compose.yml" config --quiet
+  changed_when: false

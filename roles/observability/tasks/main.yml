@@ -1,0 +1,353 @@
+---
+
+- name: Create monitoring_scrapping Docker network
+  community.docker.docker_network:
+    name: monitoring_scrapping
+
+- name: Find docker GID
+  ansible.builtin.getent:
+    database: group
+
+- name: Deploy Prometheus docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: observability
+
+    docker_compose_services:
+      prometheus:
+        image: "{{ prometheus_docker_repository }}:{{ prometheus_docker_tag }}"
+        command: "{{ prometheus_options_computed }}"
+        volumes:
+          - prometheus_config:/etc/prometheus:ro
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+          - prometheus_rules:/etc/prometheus.rules:ro
+          - prometheus_data:/prometheus
+        networks:
+          - observability
+          - monitoring_scrapping
+        reverse_proxy: "{{ prometheus_reverse_proxy_computed }}"
+        user: "65534:{{ getent_group['docker'].1 }}"
+
+      thanos_sidecar:
+        image: "{{ thanos_docker_repository }}:{{ thanos_docker_tag }}"
+        command:
+          - sidecar
+          - --tsdb.path=/data
+          - --prometheus.url=http://observability_prometheus:9090
+          - --hash-func=SHA256
+          - "--objstore.config={{ thanos_objstore_config | to_json }}"
+        networks:
+          - observability
+        volumes:
+          - prometheus_data:/data
+        monitoring:
+          name: thanos-sidecar
+          port: 10902
+
+      thanos_store:
+        image: "{{ thanos_docker_repository }}:{{ thanos_docker_tag }}"
+        command:
+          - store
+          - "--objstore.config={{ thanos_objstore_config | to_json }}"
+          - --data-dir=/data
+        volumes:
+          - thanos_store_data:/data
+        networks:
+          - observability
+        monitoring:
+          name: thanos-store
+          port: 10902
+
+      thanos_querier:
+        image: "{{ thanos_docker_repository }}:{{ thanos_docker_tag }}"
+        command:
+          - query
+          - --endpoint=observability_thanos_sidecar:10901
+          - --endpoint=observability_thanos_store:10901
+          - --query.replica-label=prometheus_replica
+        networks:
+          - observability
+        monitoring:
+          name: thanos-query
+          port: 10902
+
+      thanos_query_frontend:
+        image: "{{ thanos_docker_repository }}:{{ thanos_docker_tag }}"
+        command:
+          - query-frontend
+          - --query-range.partial-response
+          - --query-frontend.downstream-url=http://observability_thanos_querier:10902
+        networks:
+          - observability
+        monitoring:
+          name: thanos-query-frontend
+          port: 10902
+        reverse_proxy: "{{ thanos_reverse_proxy_computed }}"
+
+      thanos_compactor:
+        image: "{{ thanos_docker_repository }}:{{ thanos_docker_tag }}"
+        command:
+          - compact
+          - "--objstore.config={{ thanos_objstore_config | to_json }}"
+          - --data-dir=/data
+          - --hash-func=SHA256
+          - --retention.resolution-raw=90d
+          - --retention.resolution-5m=365d
+          - --retention.resolution-1h=0d
+          - --wait
+        volumes:
+          - thanos-compactor:/data
+        networks:
+          - observability
+        monitoring:
+          name: thanos-compactor
+          port: 10902
+
+      thanos_bucketweb:
+        image: "{{ thanos_docker_repository }}:{{ thanos_docker_tag }}"
+        command:
+          - tools
+          - bucket
+          - web
+          - "--objstore.config={{ thanos_objstore_config | to_json }}"
+          - --label=prometheus_replica
+        networks:
+          - observability
+        monitoring:
+          name: thanos-bucketweb
+          port: 10902
+        reverse_proxy: "{{ thanos_bucketweb_reverse_proxy_computed }}"
+
+      alertmanager:
+        image: "{{ alertmanager_docker_repository }}:{{ alertmanager_docker_tag }}"
+        command: "{{ alertmanager_options_computed }}"
+        volumes:
+          - alertmanager_config:/etc/alertmanager:ro
+          - alertmanager_data:/alertmanager
+        networks:
+          - alertmanager
+          - observability
+        monitoring:
+          name: alertmanager
+          port: 9093
+        reverse_proxy: "{{ alertmanager_reverse_proxy_computed }}"
+
+      alertmanager_discord:
+        image: "{{ alertmanager_discord_docker_repository }}:{{ alertmanager_discord_docker_tag }}"
+        environment:
+          TZ: Europe/Paris
+          CONFIG_PATH: /config/discord-alertmanager.yml
+        volumes:
+          - alertmanager_discord_config:/config:ro
+        networks:
+          - alertmanager
+
+      loki:
+        image: "{{ loki_docker_repository }}:{{ loki_docker_tag }}"
+        command: -config.file=/etc/loki/config.yml
+        volumes:
+          - loki_config:/etc/loki:ro
+          - loki_data:/loki
+        networks:
+          - observability
+        monitoring:
+          name: loki
+          port: 3100
+        reverse_proxy: "{{ loki_reverse_proxy_computed }}"
+        user: 65534:65534
+
+      phlare:
+        image: "{{ phlare_docker_repository }}:{{ phlare_docker_tag }}"
+        command: -config.file=/etc/phlare/config.yml
+        volumes:
+          - phlare_config:/etc/phlare:ro
+          - phlare_data:/phlare
+        networks:
+          - observability
+        monitoring:
+          name: phlare
+          port: 4100
+        reverse_proxy: "{{ phlare_reverse_proxy_computed }}"
+        user: 65534:65534
+
+      grafana:
+        image: "{{ grafana_docker_repository }}:{{ grafana_docker_tag }}"
+        environment:
+          GF_INSTALL_PLUGINS: "{{ grafana_plugins | join(',') }}"
+        volumes:
+          - grafana_config:/etc/grafana:ro
+          - grafana_data:/var/lib/grafana
+        networks:
+          - observability
+        monitoring:
+          name: grafana
+          port: 3000
+        reverse_proxy: "{{ grafana_reverse_proxy_computed }}"
+        secrets:
+          - grafana-admin-password
+        user: 65534:65534
+
+    docker_compose_secrets:
+      grafana-admin-user:
+        value: "{{ grafana_admin_user }}"
+        env: GF_SECURITY_ADMIN_USER__FILE
+      grafana-admin-password:
+        value: "{{ grafana_admin_password }}"
+        env: GF_SECURITY_ADMIN_PASSWORD__FILE
+
+    docker_compose_volumes_dir_owner: 65534  # nobody
+    docker_compose_volumes_dir_group: 65534  # nobody
+    docker_compose_volumes_dir_mode: 0755
+
+- name: Compute Prometheus configuration
+  ansible.builtin.set_fact:
+    prometheus_config:
+      global: "{{ prometheus_global_config_computed }}"
+      scrape_configs: "{{ prometheus_scrape_configs_computed }}"
+      rule_files:
+        - "/etc/prometheus.rules/*.rules"
+      alerting: "{{ prometheus_alerting_config_computed }}"
+
+- name: Ensure Prometheus configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ prometheus_config | to_nice_yaml }}"
+    dest: /srv/observability/volumes/prometheus_config/prometheus.yml
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  notify: Restart docker-compose
+
+- name: Ensure Prometheus rules are up-to-date
+  ansible.builtin.copy:
+    content: "{{ rule.value | to_nice_yaml }}"
+    dest: "/srv/observability/volumes/prometheus_rules/{{ rule.key }}.rules"
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  loop: "{{ prometheus_rules_computed | dict2items }}"
+  loop_control:
+    loop_var: rule
+  notify: Restart docker-compose
+
+- name: Compute Alertmanager configuration
+  ansible.builtin.set_fact:
+    alertmanager_config:
+      global: "{{ alertmanager_global_config_computed }}"
+      route: "{{ alertmanager_route_config_computed }}"
+      inhibit_rules: "{{ alertmanager_inhibit_rules_computed }}"
+      receivers: "{{ alertmanager_receivers_computed }}"
+
+- name: Ensure Alertmanager configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ alertmanager_config | to_nice_yaml }}"
+    dest: /srv/observability/volumes/alertmanager_config/alertmanager.yml
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  notify: Restart docker-compose
+
+- name: Compute discord-alertmanager configuration
+  ansible.builtin.set_fact:
+    discord_alertmanager_config:
+      prometheusURL: "{{ prometheus_external_url }}"
+      messageType: severity
+      firingCountToMention: 20
+      severitiesToMention:
+        - critical
+        - disaster
+      rolesToMention: "{{ alertmanager_discord_roles_to_mention }}"
+      channels: "{{ alertmanager_discord_channels_computed }}"
+
+- name: Ensure discord-alertmanager configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ discord_alertmanager_config | to_nice_yaml }}"
+    dest: /srv/observability/volumes/alertmanager_discord_config/discord-alertmanager.yml
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  notify: Restart docker-compose
+
+- name: Ensure Loki configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ loki_config_computed | to_nice_yaml }}"
+    dest: /srv/observability/volumes/loki_config/config.yml
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  notify: Restart docker-compose
+
+- name: Ensure Phlare configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ phlare_config_computed | to_nice_yaml }}"
+    dest: /srv/observability/volumes/phlare_config/config.yml
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  notify: Restart docker-compose
+
+- name: Ensure Grafana configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ grafana_config_computed | sivel.toiletwater.to_ini }}"
+    dest: /srv/observability/volumes/grafana_config/grafana.ini
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  notify: Restart docker-compose
+
+- name: Ensure Grafana provisioning folder exists
+  ansible.builtin.file:
+    path: "/srv/observability/volumes/grafana_config/provisioning"
+    state: directory
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0755
+  notify: Restart docker-compose
+
+- name: Ensure Grafana provisioning folders exist
+  ansible.builtin.file:
+    path: "/srv/observability/volumes/grafana_config/provisioning/{{ dir }}"
+    state: directory
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0755
+  loop:
+    - access-control
+    - alerting
+    - dashboards
+    - datasources
+    - notifiers
+    - plugins
+  loop_control:
+    loop_var: dir
+  notify: Restart docker-compose
+
+- name: Compute Grafana datasources
+  ansible.builtin.set_fact:
+    grafana_datasources_config:
+      apiVersion: 1
+      datasources: "{{ grafana_datasources_computed }}"
+
+- name: Ensure Grafana datasources are up-to-date
+  ansible.builtin.copy:
+    content: "{{ grafana_datasources_config | to_nice_yaml }}"
+    dest: /srv/observability/volumes/grafana_config/provisioning/datasources/datasources.yml
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  notify: Restart docker-compose
+
+- name: Compute Grafana plugins config
+  ansible.builtin.set_fact:
+    grafana_plugins_configs:
+      apiVersion: 1
+      apps: "{{ grafana_plugins_configs }}"
+
+- name: Ensure Grafana plugins configurations are up-to-date
+  ansible.builtin.copy:
+    content: "{{ grafana_plugins_configs | to_nice_yaml }}"
+    dest: /srv/observability/volumes/grafana_config/provisioning/plugins/plugins.yml
+    owner: 65534  # nobody
+    group: 65534  # nobody
+    mode: 0644
+  notify: Restart docker-compose

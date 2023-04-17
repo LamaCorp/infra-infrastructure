@@ -1,0 +1,23 @@
+---
+
+chrony_ntp_servers:
+  - server: 0.pool.ntp.org
+    options:
+      - option: iburst
+      - option: minpoll
+        val: 8
+  - server: 1.pool.ntp.org
+    options:
+      - option: iburst
+      - option: minpoll
+        val: 8
+  - server: 2.pool.ntp.org
+    options:
+      - option: iburst
+      - option: minpoll
+        val: 8
+  - server: 3.pool.ntp.org
+    options:
+      - option: iburst
+      - option: minpoll
+        val: 8

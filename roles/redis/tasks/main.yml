@@ -1,0 +1,36 @@
+---
+
+- name: Install Redis
+  ansible.builtin.include_tasks: install.yml
+
+- name: Disable default Redis instance
+  ansible.builtin.service:
+    name: redis-server
+    state: stopped
+    enabled: false
+  when: redis_disable_default_instance
+
+- name: Create storage directory
+  ansible.builtin.file:
+    path: "{{ redis_storage_dir }}"
+    state: directory
+    owner: redis
+    group: redis
+    mode: 0755
+
+- name: Set vm.overcommit_memory to 1
+  ansible.posix.sysctl:
+    name: vm.overcommit_memory
+    value: "1"
+    state: present
+  when: redis_enable_vm_overcommit
+
+- name: Configure Redis instances
+  ansible.builtin.include_tasks: instance.yml
+  loop: "{{ redis_instances }}"
+  loop_control:
+    loop_var: instance
+
+- name: Setup Redis exporter
+  ansible.builtin.include_tasks: exporter.yml
+  when: redis_exporter_enabled

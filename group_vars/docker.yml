@@ -1,0 +1,31 @@
+---
+
+docker_install_compose_plugin: true
+docker_install_compose: true
+
+docker_config_default:
+  live-restore: true
+  userland-proxy: false
+
+  bridge: "br-docker"
+  ip-forward: false
+  iptables: false
+  ipv6: true
+  dns: "{{ network_nameservers }}"
+
+  experimental: true  # needed for metrics-addr
+  log-driver: json-file
+  log-opts:
+    max-size: 10m
+    labels-regex: "^.+"
+  metrics-addr: 0.0.0.0:9323
+
+docker_config_no_network:
+  bridge: "none"
+
+docker_config: {}
+
+docker_daemon_options: "{{ docker_config_default | combine(docker_config, recursive=True) }}"
+
+
+dns_proxy_server_domain: "ctn.{{ inventory_hostname }}"

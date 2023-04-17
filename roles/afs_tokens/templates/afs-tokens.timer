@@ -1,0 +1,11 @@
+[Unit]
+Description=afs-tokens retriever for {{ item.user }}
+
+[Timer]
+OnBootSec=5s
+OnUnitActiveSec=1h
+Persistent=yes
+Unit=afs-tokens-{{ item.user }}.service
+
+[Install]
+WantedBy=multi-user.target

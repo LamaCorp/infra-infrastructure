@@ -1,0 +1,474 @@
+---
+
+
+### Prometheus
+
+prometheus_docker_repository: quay.io/prometheus/prometheus
+prometheus_docker_tag: v2.42.0
+
+prometheus_retention_time: "7d"
+prometheus_retention_size: "10GB"
+
+prometheus_external_url: "http://localhost:9090"
+
+
+prometheus_domain: ""
+prometheus_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ prometheus_domain }}`) && ! PathPrefix(`/api/v1/admin`)"
+    middlewares: default@file
+    tls:
+      options: modern@file
+  service:
+    port: 9090
+
+prometheus_reverse_proxy: {}
+prometheus_reverse_proxy_computed: "{{ prometheus_default_reverse_proxy | combine(prometheus_reverse_proxy, recursive=True) }}"
+
+
+prometheus_default_options:
+  config.file: "/etc/prometheus/prometheus.yml"
+  storage.tsdb.path: "/prometheus"
+  storage.tsdb.min-block-duration: "2h"
+  storage.tsdb.max-block-duration: "2h"
+  storage.tsdb.retention.size: "{{ prometheus_retention_size }}"
+  storage.tsdb.retention.time: "{{ prometheus_retention_time }}"
+  web.console.libraries: "/usr/share/prometheus/console_libraries"
+  web.console.templates: "/usr/share/prometheus/consoles"
+  web.enable-lifecycle: null
+  web.enable-admin-api: null
+
+prometheus_options: {}
+prometheus_options_computed: "{% for option in (prometheus_default_options | combine(prometheus_options, recursive=True) | dict2items) %} --{{ option.key }}{% if option.value != None %}={{ option.value }}{% endif %}{% endfor %}"
+
+# global_config
+
+prometheus_default_global_config:
+  scrape_interval: 30s
+  scrape_timeout: 10s
+  evaluation_interval: 30s
+
+prometheus_global_config: {}
+prometheus_global_config_computed: "{{ prometheus_default_global_config | combine(prometheus_global_config, recursive=True) }}"
+
+
+# scrape_configs
+
+prometheus_default_scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets:
+          - localhost:9090
+  - job_name: docker-containers
+    docker_sd_configs:
+      - host: unix:///var/run/docker.sock
+    relabel_configs:
+      # Only keep containers that have a `prometheus-job` label.
+      - source_labels: [__meta_docker_container_label_prometheus_job]
+        regex: .+
+        action: keep
+      # Only keep containers in the `monitoring_scrapping` network.
+      - source_labels: [__meta_docker_network_name]
+        regex: monitoring_scrapping
+        action: keep
+      # Use the task labels that are prefixed by `prometheus-`.
+      - regex: __meta_docker_container_label_prometheus_(.+)
+        action: labelmap
+        replacement: $1
+      # Use the prometheus-job Swarm label as Prometheus job label.
+      - source_labels: [__meta_docker_container_label_prometheus_job]
+        target_label: job
+      # User the prometheus-path label as the __metrics_path__.
+      - source_labels: [__meta_docker_container_label_prometheus_path]
+        target_label: __metrics_path__
+      # Relabel address to inject custom port value
+      - source_labels: [__address__, __meta_docker_container_label_prometheus_port]
+        action: replace
+        regex: ([^:]+)(?::\d+)?;(\d+)
+        replacement: ${1}:${2}
+        target_label: __address__
+
+prometheus_scrape_configs: {}
+prometheus_scrape_configs_computed: "{{ prometheus_default_scrape_configs + prometheus_scrape_configs }}"
+
+
+# rules
+
+prometheus_default_rules:
+  general:
+    groups:
+      - name: general
+        rules:
+          - alert: Watchdog
+            expr: vector(1)
+            labels:
+              severity: none
+            annotations:
+              summary: An alert that should always be firing to certify that Alertmanager is working properly.
+              description: |
+                This is an alert meant to ensure that the entire alerting pipeline is functional.
+                This alert is always firing, therefore it should always be firing in Alertmanager
+                and always fire against a receiver.
+          - alert: TargetDown
+            expr: "100 * (count(up == 0) BY (job) / count(up) BY (job)) > 10"
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: One or more targets are unreachable.
+              description: !unsafe '{{ printf "%.4g" $value }}% of the {{ $labels.job }}/{{ $labels.service }} targets in {{ $labels.namespace }} namespace are down.'
+
+prometheus_rules: {}
+prometheus_rules_computed: "{{ prometheus_default_rules | combine(prometheus_rules, recursive=True, list_merge='append') }}"
+
+
+# alerting
+
+prometheus_default_alerting_config:
+  alertmanagers:
+    - static_configs:
+        - targets:
+            - observability_alertmanager:9093
+
+prometheus_alerting_config: {}
+prometheus_alerting_config_computed: "{{ prometheus_default_alerting_config | combine(prometheus_alerting_config, recursive=True) }}"
+
+
+### Thanos
+
+thanos_docker_repository: quay.io/thanos/thanos
+thanos_docker_tag: v0.30.2
+
+# thanos_objstore_config: {}
+
+thanos_domain: ""
+thanos_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ thanos_domain }}`)"
+    middlewares: default@file
+    tls:
+      options: modern@file
+  service:
+    port: 10902
+
+thanos_reverse_proxy: {}
+thanos_reverse_proxy_computed: "{{ thanos_default_reverse_proxy | combine(thanos_reverse_proxy, recursive=True) }}"
+
+thanos_bucketweb_domain: ""
+thanos_bucketweb_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ thanos_bucketweb_domain }}`)"
+    middlewares: default@file
+    tls:
+      options: modern@file
+  service:
+    port: 10902
+
+thanos_bucketweb_reverse_proxy: {}
+thanos_bucketweb_reverse_proxy_computed: "{{ thanos_bucketweb_default_reverse_proxy | combine(thanos_bucketweb_reverse_proxy, recursive=True) }}"
+
+
+### Alertmanager
+
+alertmanager_docker_repository: quay.io/prometheus/alertmanager
+alertmanager_docker_tag: v0.25.0
+
+
+alertmanager_domain: ""
+alertmanager_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ alertmanager_domain }}`)"
+    tls:
+      options: modern@file
+    middlewares: default@file
+  service:
+    port: 9093
+
+alertmanager_reverse_proxy: {}
+alertmanager_reverse_proxy_computed: "{{ alertmanager_default_reverse_proxy | combine(alertmanager_reverse_proxy, recursive=True) }}"
+
+
+alertmanager_default_options:
+  config.file: "/etc/alertmanager/alertmanager.yml"
+  data.retention: 168h  # 7d
+  storage.path: "/alertmanager"
+
+alertmanager_options: {}
+alertmanager_options_computed: "{% for option in (alertmanager_default_options | combine(alertmanager_options, recursive=True) | dict2items) %} --{{ option.key }}{% if option.value != None %}={{ option.value }}{% endif %}{% endfor %}"
+
+
+# global
+
+alertmanager_default_global_config: {}
+alertmanager_global_config: {}
+alertmanager_global_config_computed: "{{ alertmanager_default_global_config | combine(alertmanager_global_config, recursive=True) }}"
+
+
+# route
+
+alertmanager_default_route_config:
+  receiver: discord-infra-alerts
+  group_by:
+    - alertname
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 6h
+alertmanager_route_config: {}
+alertmanager_route_config_computed: "{{ alertmanager_default_route_config | combine(alertmanager_route_config, recursive=True) }}"
+
+
+# inhibit_rules
+
+alertmanager_default_inhibit_rules:
+  - source_matchers:
+      - severity = "information"
+    target_matchers:
+      - severity =~ "none"
+    equal:
+      - alertname
+
+  - source_matchers:
+      - severity = "warning"
+    target_matchers:
+      - severity =~ "none|information"
+    equal:
+      - alertname
+
+  - source_matchers:
+      - severity = "critical"
+    target_matchers:
+      - severity =~ "none|information|warning"
+    equal:
+      - alertname
+
+  - source_matchers:
+      - severity = "disaster"
+    target_matchers:
+      - severity =~ "none|information|warning|critical"
+    equal:
+      - alertname
+alertmanager_inhibit_rules: []
+alertmanager_inhibit_rules_computed: "{{ alertmanager_default_inhibit_rules + alertmanager_inhibit_rules }}"
+
+
+alertmanager_default_receivers:
+  - name: discord-infra-alerts
+    webhook_configs:
+      - send_resolved: true
+        url: "http://observability_alertmanager_discord:8080/default"
+
+alertmanager_receivers: []
+alertmanager_receivers_computed: "{{ alertmanager_default_receivers + alertmanager_receivers }}"
+
+
+### Alertmanager discord
+
+alertmanager_discord_docker_repository: masgustavos/alertmanager-discord
+alertmanager_discord_docker_tag: 0.2.3
+
+
+alertmanager_discord_roles_to_mention: []
+
+alertmanager_discord_default_channels:
+  default:
+    name: default
+    webhookURL: ""
+
+alertmanager_discord_channels: {}
+alertmanager_discord_channels_computed: "{{ alertmanager_discord_default_channels | combine(alertmanager_discord_channels, recursive=True) }}"
+
+
+### Loki
+
+loki_docker_repository: grafana/loki
+loki_docker_tag: 2.7.3
+
+
+loki_domain: ""
+loki_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ loki_domain }}`)"
+    middlewares: default@file
+    tls:
+      options: modern@file
+  service:
+    port: 3100
+
+loki_reverse_proxy: {}
+loki_reverse_proxy_computed: "{{ loki_default_reverse_proxy | combine(loki_reverse_proxy, recursive=True) }}"
+
+
+loki_default_config:
+  target: all
+
+  auth_enabled: true
+
+  server:
+    http_listen_port: 3100
+
+  common:
+    path_prefix: /loki
+    replication_factor: 1
+    ring:
+      kvstore:
+        store: inmemory
+
+  ingester:
+    chunk_idle_period: 5m
+    chunk_retain_period: 1m
+
+  ruler:
+    alertmanager_url: http://observability_alertmanager:9093
+    enable_alertmanager_v2: true
+
+  compactor:
+    working_directory: /loki/compactor
+
+  storage_config:
+    boltdb_shipper:
+      active_index_directory: /loki/index
+      cache_location: /loki/boltdb-cache
+
+  limits_config:
+    enforce_metric_name: false
+    reject_old_samples: false
+    reject_old_samples_max_age: 168h  # 7 days
+    ingestion_rate_mb: 10
+    ingestion_burst_size_mb: 20
+
+  analytics:
+    reporting_enabled: false
+
+loki_config: {}
+loki_config_computed: "{{ loki_default_config | combine(loki_config, recursive=True) }}"
+
+
+### Phlare
+
+phlare_docker_repository: grafana/phlare
+phlare_docker_tag: 0.1.2
+
+
+phlare_domain: ""
+phlare_default_reverse_proxy:
+  enable: false
+  router:
+    rule: "Host(`{{ phlare_domain }}`)"
+    middlewares: default@file
+    tls:
+      options: modern@file
+  service:
+    port: 4100
+
+phlare_reverse_proxy: {}
+phlare_reverse_proxy_computed: "{{ phlare_default_reverse_proxy | combine(phlare_reverse_proxy, recursive=True) }}"
+
+
+phlare_default_config:
+  target: all
+
+  multitenancy_enabled: false
+
+  phlaredb:
+    data_path: /phlare/phlaredb
+
+  storage:
+    backend: filesystem
+    filesystem:
+      dir: /phlare/storage
+
+  ingester:
+    lifecycler:
+      ring:
+        kvstore:
+          store: inmemory
+
+  scrape_configs:
+    - job_name: phlare
+      scrape_interval: 1m
+      static_configs:
+        - targets:
+            - 127.0.0.1:4100
+
+  analytics:
+    reporting_enabled: false
+
+phlare_config: {}
+phlare_config_computed: "{{ phlare_default_config | combine(phlare_config, recursive=True, list_merge='append') }}"
+
+
+### Grafana
+
+grafana_docker_repository: grafana/grafana
+grafana_docker_tag: 9.3.6
+
+
+grafana_domain: ""
+grafana_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ grafana_domain }}`)"
+    middlewares: default@file
+    tls:
+      options: modern@file
+  service:
+    port: 3000
+
+grafana_reverse_proxy: {}
+grafana_reverse_proxy_computed: "{{ grafana_default_reverse_proxy | combine(grafana_reverse_proxy, recursive=True) }}"
+
+
+grafana_admin_user: "admin"
+grafana_admin_password: "admin"
+
+
+grafana_default_config:
+  database:
+    type: sqlite3
+  analytics:
+    reporting_enabled: false
+    check_for_updates: false
+  log.console:
+    format: json
+
+grafana_config: {}
+grafana_config_computed: "{{ grafana_default_config | combine(grafana_config, recursive=True) }}"
+
+
+grafana_default_datasources:
+  - name: Thanos
+    type: prometheus
+    access: proxy
+    url: http://observability_thanos_query_frontend:10902
+    editable: false
+    isDefault: true
+  - name: Prometheus
+    type: prometheus
+    access: proxy
+    url: http://observability_prometheus:9090
+    editable: false
+  - name: Alertmanager
+    type: alertmanager
+    access: proxy
+    url: http://observability_alertmanager:9093
+    editable: false
+    jsonData:
+      implementation: prometheus
+  - name: Phlare
+    type: phlare
+    access: proxy
+    url: http://observability_phlare:4100
+    editable: false
+
+grafana_datasources: []
+grafana_datasources_computed: "{{ grafana_default_datasources + grafana_datasources }}"
+
+
+grafana_plugins: []
+
+grafana_plugins_configs: []

@@ -1,0 +1,23 @@
+---
+
+backup_restic_creds_redis: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/redis') }}"
+
+backup_restic_list_raw:
+  - name: redis
+    enabled: true
+    repo_password: "{{ backup_restic_creds_redis['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_redis['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_redis['backup_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_redis['backup_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_redis['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_redis['prune_secret_key'] }}"
+    to_include:
+      - /var/lib/redis
+    backup_cron:
+      minute: 31
+      hour: 02
+    prune_cron:
+      minute: 16
+      hour: 12

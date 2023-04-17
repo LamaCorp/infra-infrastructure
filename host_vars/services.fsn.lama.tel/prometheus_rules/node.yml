@@ -1,0 +1,495 @@
+---
+
+# Alerts from:
+# - https://monitoring.mixins.dev/node-exporter/
+# - https://awesome-prometheus-alerts.grep.to/rules#host-and-hardware
+
+prometheus_rules_node:
+  node:
+    groups:
+      - name: node.alerts
+        rules:
+          ### NodeCPU
+
+          - alert: NodeCpuLoadHigh
+            expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{job = "node", mode = "idle"}[2m])) * 100) > 80
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: CPU load is more than 80%.
+              description: !unsafe 'CPU load on {{ $labels.instance }} is at {{ printf "%.2f" $value }}%.'
+
+          - alert: NodeCpuStealNoisyNeighbor
+            expr: avg by(instance) (rate(node_cpu_seconds_total{job = "node", mode = "steal"}[5m])) * 100 > 10
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: Node CPU steal is more than 10%.
+              description: !unsafe 'CPU steal is {{ printf "%.2f" $value }}% on {{ $labels.instance }}. A noisy neighbor is killing VM performances or a spot instance may be out of credit.'
+
+          - alert: NodeCpuIowaitHigh
+            expr: avg by (instance) (rate(node_cpu_seconds_total{job = "node", mode = "iowait"}[5m])) * 100 > 5
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: Node CPU iowait is more than 5%.
+              description: !unsafe 'CPU iowait is {{ printf "%.2f" $value }}% on {{ $labels.instance }}. A high iowait means that you are disk or network bound.'
+
+
+          ### NodeMemoryPressure
+
+          - alert: NodeMemoryPressure
+            expr: rate(node_vmstat_pgmajfault{job = "node"}[1m]) > 1000
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: Node is under memory pressure.
+              description: !unsafe '{{ $labels.instance }} is under heavy memory pressure. Rate of major page faults is {{ printf "%.0f" $value }}/min.'
+
+
+          ### NodeFilesystemSpaceFillingUp
+
+          - alert: NodeFilesystemSpaceFillingUp
+            expr: |
+              (
+                node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""} / node_filesystem_size_bytes{job = "node", fstype != "", mountpoint != ""} * 100 < 40
+              and
+                predict_linear(node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""}[6h], 7 * 24 * 60 * 60) < 0
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 1h
+            labels:
+              severity: warning
+            annotations:
+              summary: Filesystem is predicted to run out of space within the next 7 days.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left and is filling up.'
+
+          - alert: NodeFilesystemSpaceFillingUp
+            expr: |
+              (
+                node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""} / node_filesystem_size_bytes{job = "node", fstype != "", mountpoint != ""} * 100 < 20
+              and
+                predict_linear(node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""}[6h], 24 * 60 * 60) < 0
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 1h
+            labels:
+              severity: critical
+            annotations:
+              summary: Filesystem is predicted to run out of space within the next 24 hours.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left and is filling up fast.'
+
+          - alert: NodeFilesystemSpaceFillingUp
+            expr: |
+              (
+                node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""} / node_filesystem_size_bytes{job = "node", fstype != "", mountpoint != ""} * 100 < 20
+              and
+                predict_linear(node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""}[6h], 4 * 60 * 60) < 0
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 30m
+            labels:
+              severity: disaster
+            annotations:
+              summary: Filesystem is predicted to run out of space within the next 4 hours.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left and is filling up fast.'
+
+
+          ### NodeFilesystemAlmostOutOfSpace
+
+          - alert: NodeFilesystemAlmostOutOfSpace
+            expr: |
+              (
+                node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""} / node_filesystem_size_bytes{job = "node", fstype != "", mountpoint != ""} * 100 < 10
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 30m
+            labels:
+              severity: warning
+            annotations:
+              summary: Filesystem has less than 10% space left.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.'
+
+          - alert: NodeFilesystemAlmostOutOfSpace
+            expr: |
+              (
+                node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""} / node_filesystem_size_bytes{job = "node", fstype != "", mountpoint != ""} * 100 < 5
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 30m
+            labels:
+              severity: critical
+            annotations:
+              summary: Filesystem has less than 5% space left.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.'
+
+          - alert: NodeFilesystemAlmostOutOfSpace
+            expr: |
+              (
+                node_filesystem_free_bytes{job = "node", fstype != "", mountpoint != ""} / node_filesystem_size_bytes{job = "node", fstype != "", mountpoint != ""} * 100 < 3
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 10m
+            labels:
+              severity: disaster
+            annotations:
+              summary: Filesystem has less than 3% space left.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available space left.'
+
+
+          ### NodeFilesystemFilesFillingUp
+
+          - alert: NodeFilesystemFilesFillingUp
+            expr: |
+              (
+                node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""} / node_filesystem_files{job = "node", fstype != "", mountpoint != ""} * 100 < 40
+              and
+                predict_linear(node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""}[6h], 7 * 24 * 60 * 60) < 0
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 1h
+            labels:
+              severity: warning
+            annotations:
+              summary: Filesystem is predicted to run out of inodes within the next 7 days.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left and is filling up.'
+
+          - alert: NodeFilesystemFilesFillingUp
+            expr: |
+              (
+                node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""} / node_filesystem_files{job = "node", fstype != "", mountpoint != ""} * 100 < 20
+              and
+                predict_linear(node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""}[6h], 24 * 60 * 60) < 0
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 1h
+            labels:
+              severity: critical
+            annotations:
+              summary: Filesystem is predicted to run out of inodes within the next 24 hours.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left and is filling up fast.'
+
+          - alert: NodeFilesystemFilesFillingUp
+            expr: |
+              (
+                node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""} / node_filesystem_files{job = "node", fstype != "", mountpoint != ""} * 100 < 20
+              and
+                predict_linear(node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""}[6h], 4 * 60 * 60) < 0
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 30m
+            labels:
+              severity: disaster
+            annotations:
+              summary: Filesystem is predicted to run out of inodes within the next 4 hours.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left and is filling up fast.'
+
+
+          ### NodeFilesystemAlmostOutOfFiles
+
+          - alert: NodeFilesystemAlmostOutOfFiles
+            expr: |
+              (
+                node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""} / node_filesystem_files{job = "node", fstype != "", mountpoint != ""} * 100 < 10
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 1h
+            labels:
+              severity: warning
+            annotations:
+              summary: Filesystem has less than 10% inodes left.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left.'
+
+          - alert: NodeFilesystemAlmostOutOfFiles
+            expr: |
+              (
+                node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""} / node_filesystem_files{job = "node", fstype != "", mountpoint != ""} * 100 < 5
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 1h
+            labels:
+              severity: critical
+            annotations:
+              summary: Filesystem has less than 5% inodes left.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left.'
+
+          - alert: NodeFilesystemAlmostOutOfFiles
+            expr: |
+              (
+                node_filesystem_files_free{job = "node", fstype != "", mountpoint != ""} / node_filesystem_files{job = "node", fstype != "", mountpoint != ""} * 100 < 3
+              and
+                node_filesystem_readonly{job = "node", fstype != "", mountpoint != ""} == 0
+              )
+            for: 30m
+            labels:
+              severity: disaster
+            annotations:
+              summary: Filesystem has less than 3% inodes left.
+              description: !unsafe 'Filesystem on {{ $labels.device }} at {{ $labels.instance }} has only {{ printf "%.2f" $value }}% available inodes left.'
+
+
+          ### NodeUnusualDiskRate
+
+          - alert: NodeUnusualDiskReadRate
+            expr: sum by (instance) (rate(node_disk_read_bytes_total{job = "node"}[2m])) / 1024 / 1024 > 50
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: Unusual disk read rate (> 50 MB/s).
+              description: !unsafe 'Disks on {{ $labels.instance }} are probably reading too much data: {{ printf "%.2f" $value }} MB/s.'
+
+          - alert: NodeUnusualDiskWriteRate
+            expr: sum by (instance) (rate(node_disk_written_bytes_total{job = "node"}[2m])) / 1024 / 1024 > 50
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: Unusual disk write rate (> 50 MB/s).
+              description: !unsafe 'Disks on {{ $labels.instance }} are probably writing too much data: {{ printf "%.2f" $value }} MB/s.'
+
+
+          ### NodeUnusualDiskLatency
+
+          - alert: NodeUnusualDiskReadLatency
+            expr: rate(node_disk_read_time_seconds_total{job = "node"}[1m]) / rate(node_disk_reads_completed_total{job = "node"}[1m]) > 0.1 and rate(node_disk_reads_completed_total{job = "node"}[1m]) > 0
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: Unusual disk read latency (read operations > 100ms)
+              description: !unsafe 'Disk latency on {{ $labels.instance }} is growing (read operations are taking {{ printf "%.0f" $value }}ms).'
+
+          - alert: NodeUnusualDiskWriteLatency
+            expr: rate(node_disk_write_time_seconds_total{job = "node"}[1m]) / rate(node_disk_writes_completed_total{job = "node"}[1m]) > 0.1 and rate(node_disk_writes_completed_total{job = "node"}[1m]) > 0
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: Unusual disk write latency (write operations > 100ms)
+              description: !unsafe 'Disk latency on {{ $labels.instance }} is growing (write operations are taking {{ printf "%.0f" $value }}ms).'
+
+
+          ### NodeNetwork
+
+          - alert: NodeNetworkReceiveErrs
+            expr: rate(node_network_receive_errs_total{job = "node"}[2m]) / rate(node_network_receive_packets_total{job = "node"}[2m]) > 0.01
+            for: 1h
+            labels:
+              severity: warning
+            annotations:
+              summary: Network interface is reporting many receive errors.
+              description: !unsafe '{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} receive errors in the last two minutes.'
+
+          - alert: NodeNetworkTransmitErrs
+            expr: rate(node_network_transmit_errs_total{job = "node"}[2m]) / rate(node_network_transmit_packets_total{job = "node"}[2m]) > 0.01
+            for: 1h
+            labels:
+              severity: warning
+            annotations:
+              summary: Network interface is reporting many transmit errors.
+              description: !unsafe '{{ $labels.instance }} interface {{ $labels.device }} has encountered {{ printf "%.0f" $value }} transmit errors in the last two minutes.'
+
+          - alert: NodeUnusualNetworkThroughputIn
+            expr: sum by (instance) (rate(node_network_receive_bytes_total{job = "node"}[2m])) / 1024 / 1024 > 80
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: Unusually high network throughput in (> 80 MB/s).
+              description: !unsafe 'Network interfaces on {{ $labels.instance }} are probably receiving too much data: {{ printf "%.2f" $value }} MB/s.'
+
+          - alert: NodeUnusualNetworkThroughputOut
+            expr: sum by (instance) (rate(node_network_transmit_bytes_total{job = "node"}[2m])) / 1024 / 1024 > 80
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: Unusually high network throughput out (> 80 MB/s)
+              description: !unsafe 'Network interfaces on {{ $labels.instance }} are probably sending too much data: {{ printf "%.2f" $value }} MB/s.'
+
+          - alert: NodeHighNumberConntrackEntriesUsed
+            expr: node_nf_conntrack_entries{job = "node"} / node_nf_conntrack_entries_limit{job = "node"} * 100 > 75
+            labels:
+              severity: warning
+            annotations:
+              summary: Number of conntrack are getting close to the limit.
+              description: !unsafe '{{ printf "%.2f" $value }}% of conntrack entries are used.'
+
+
+          ### NodeContextSwitching
+
+          # 1000 context switches is an arbitrary number.
+          # Alert threshold depends on nature of application.
+          # Please read: https://github.com/samber/awesome-prometheus-alerts/issues/58
+          - alert: NodeContextSwitching
+            expr: (rate(node_context_switches_total{job = "node"}[5m])) / (count without(cpu, mode) (node_cpu_seconds_total{job = "node", mode = "idle"})) > 3000
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: Node context switching is high (> 3000/s)
+              description: !unsafe 'Context switching on {{ $labels.instance }} is at {{ printf "%.0f" $value }}/s and growing.'
+
+
+          ### NodeSystemd
+
+          - alert: NodeSystemdServiceCrashed
+            expr: node_systemd_unit_state{job = "node", state = "failed"} == 1
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: Systemd service crashed.
+              description: !unsafe 'Systemd unit {{ $labels.name }} is failed on {{ $labels.instance }}.'
+
+
+          ### NodeTemperature
+
+          - alert: NodePhysicalComponentTooHot
+            expr: node_hwmon_temp_celsius{job = "node"} > 75
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: Node physical component too hot.
+              description: !unsafe 'Physical hardware component on {{ $labels.instance }} too hot.'
+
+          - alert: NodeOvertemperatureAlarm
+            expr: node_hwmon_temp_crit_alarm_celsius{job = "node"} == 1
+            for: 0m
+            labels:
+              severity: critical
+            annotations:
+              summary: Node overtemperature alarm.
+              description: !unsafe 'Physical node temperature alarm triggered on {{ $labels.instance }}.'
+
+
+          ### NodeKernel
+
+          - alert: NodeKernelVersionDeviations
+            expr: count(sum(label_replace(node_uname_info{job = "node"}, "kernel", "$1", "release", "([0-9]+.[0-9]+.[0-9]+).*")) by (kernel)) > 1
+            for: 6h
+            labels:
+              severity: information
+            annotations:
+              summary: Node kernel version deviations.
+              description: !unsafe 'Different kernel versions are running on {{ $labels.instance }}.'
+
+
+          ### NodeReboot
+
+          - alert: NodeRequiresReboot
+            expr: node_reboot_required{job = "node"} > 0
+            for: 4h
+            labels:
+              severity: information
+            annotations:
+              summary: Node requires reboot.
+              description: !unsafe '{{ $labels.instance }} requires a reboot.'
+
+
+          ### NodeOOM
+
+          - alert: NodeOomKillDetected
+            expr: increase(node_vmstat_oom_kill{job = "node"}[1m]) > 0
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: OOM kill detected.
+              description: !unsafe 'OOM kill detected on {{ $labels.instance }}.'
+
+
+          ### NodeEdac
+
+          - alert: NodeEdacCorrectableErrorsDetected
+            expr: increase(node_edac_correctable_errors_total{job = "node"}[1m]) > 0
+            for: 0m
+            labels:
+              severity: information
+            annotations:
+              summary: Node EDAC Correctable Errors detected.
+              description: !unsafe 'Node {{ $labels.instance }} has had {{ printf "%.0f" $value }} correctable memory errors reported by EDAC in the last 5 minutes.'
+
+          - alert: HostEdacUncorrectableErrorsDetected
+            expr: node_edac_uncorrectable_errors_total{job = "node"} > 0
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: Node EDAC Uncorrectable Errors detected.
+              description: !unsafe 'Node {{ $labels.instance }} has had {{ printf "%.0f" $value }} uncorrectable memory errors reported by EDAC in the last 5 minutes.'
+
+
+          ### NodeClock
+
+          - alert: NodeClockSkewDetected
+            expr: |
+              (
+                node_timex_offset_seconds{job = "node"} > 0.05
+              and
+                deriv(node_timex_offset_seconds{job = "node"}[5m]) >= 0
+              )
+              or
+              (
+                node_timex_offset_seconds{job = "node"} < -0.05
+              and
+                deriv(node_timex_offset_seconds{job = "node"}[5m]) <= 0
+              )
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: Clock skew detected.
+              description: !unsafe 'Clock on {{ $labels.instance }} is out of sync by more than 300s. Ensure NTP is configured correctly on this host.'
+
+          - alert: NodeClockNotSynchronising
+            expr: |
+              min_over_time(node_timex_sync_status{job = "node"}[5m]) == 0
+              and
+              node_timex_maxerror_seconds{job = "node"} >= 16
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: Clock not synchronising.
+              description: !unsafe 'Clock on {{ $labels.instance }} is not synchronising. Ensure NTP is configured on this host.'
+
+
+          ### NodeTextFile
+
+          - alert: NodeTextFileCollectorScrapeError
+            expr: node_textfile_scrape_error{job = "node"} == 1
+            labels:
+              severity: warning
+            annotations:
+              summary: Node Exporter text file collector failed to scrape.
+              description: Node Exporter text file collector failed to scrape.
+
+
+          ### ZFS
+
+          - alert: ZfsOfflinePool
+            expr: node_zfs_zpool_state{job = "node", state != "online"} > 0
+            for: 1m
+            labels:
+              severity: disaster
+            annotations:
+              summary: ZFS offline pool.
+              description: !unsafe 'A ZFS pool on {{ $labels.instance }} is in a unexpected state: {{ $labels.state }}.'

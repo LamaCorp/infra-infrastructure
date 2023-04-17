@@ -1,0 +1,9 @@
+---
+
+afs_tokens_cell: "{{ afs_cell }}"
+afs_tokens_realm: "{{ afs_realm }}"
+
+afs_tokens_users:
+  - user: www-data
+    username: admin
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/freeipa/admin')['password'] }}"

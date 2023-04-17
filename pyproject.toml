@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "lama-corp-infrastructure"
+version = "1.0.0"
+description = ""
+authors = [
+  "Marc 'risson' Schmitt <risson@lama-corp.space>",
+]
+license = "AGPL-3.0"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+ansible = "^7"
+hvac = "*"
+jmespath = "*"
+xmltodict = "*"
+
+[tool.poetry.dev-dependencies]
+ansible-lint = "*"
+black = "*"
+isort = "*"
+pre-commit = "*"
+yamllint = "*"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

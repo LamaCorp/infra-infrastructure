@@ -1,0 +1,21 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Docker
+  hosts: docker
+  vars:
+    pip_install_packages:
+      - docker
+      - docker-compose
+  roles:
+    - geerlingguy.pip
+    - geerlingguy.docker
+    - role: docker2nftables
+      when: docker_daemon_options.bridge != 'none'
+    - role: dns_proxy_server
+      when: docker_daemon_options.bridge != 'none'
+  tags:
+    - docker

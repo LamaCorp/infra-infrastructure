@@ -1,0 +1,8 @@
+set expandtab
+set mouse=
+set nobackup
+set number
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
+syntax on

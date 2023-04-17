@@ -1,0 +1,13 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: ../base.yml
+
+- name: Static
+  hosts: services.fsn.lama.tel
+  roles:
+    - static
+  tags:
+    - apps
+    - static

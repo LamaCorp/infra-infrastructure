@@ -1,0 +1,13 @@
+---
+
+- name: Prerequisites
+  ansible.builtin.import_tasks: prerequisites.yml
+
+- name: Download
+  ansible.builtin.import_tasks: download.yml
+
+- name: Install
+  ansible.builtin.import_tasks: install.yml
+
+- name: Start and Schedule
+  ansible.builtin.import_tasks: schedule.yml

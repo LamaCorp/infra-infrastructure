@@ -1,0 +1,63 @@
+---
+
+
+mail_docker_repository: ghcr.io/docker-mailserver/docker-mailserver
+mail_docker_tag: 11.3.1
+
+mail_hostname: "{{ inventory_hostname }}"
+
+mail_default_environment:
+  OVERRIDE_HOSTNAME: "{{ mail_hostname }}"
+  SSL_TYPE: manual
+  SSL_CERT_PATH: "/certs/{{ mail_hostname }}.crt"
+  SSL_KEY_PATH: "/certs/{{ mail_hostname }}.key"
+  TLS_LEVEL: intermediate
+  SPOOF_PROTECTION: 1
+  ENABLE_SRS: 1
+  NETWORK_INTERFACE: "{{ ansible_default_ipv4.interface }}"
+  POSTFIX_MESSAGE_SIZE_LIMIT: 25600000  # 25 MB
+  ENABLE_AMAVIS: 0
+  ENABLE_MANAGESIEVE: 1
+  UPDATE_CHECK_INTERVAL: 7d
+  PFLOGSUMM_TRIGGER: logrotate
+  LOGWATCH_INTERVAL: weekly
+  ENABLE_SPAMASSASSIN: 1
+  ENABLE_POSTGREY: 1
+
+mail_environment: {}
+mail_environment_computed: "{{ mail_default_environment | combine(mail_environment) }}"
+
+
+mail_extra_configs: {}
+
+
+mail_ak_ldap_outpost_enable: false
+
+mail_ak_ldap_outpost_docker_repository: ghcr.io/goauthentik/ldap
+mail_ak_ldap_outpost_docker_tag: 2023.3.0
+
+# mail_ak_ldap_outpost_authentik_host: ""
+# mail_ak_ldap_outpost_token: ""
+
+
+mail_mailman_enable: false
+
+mail_mailman_core_docker_repository: ghcr.io/maxking/mailman-core
+mail_mailman_core_docker_tag: 0.4.5
+
+mail_mailman_web_docker_repository: ghcr.io/maxking/mailman-web
+mail_mailman_web_docker_tag: 0.4.5
+
+mail_mailman_postgresql_host: "{{ services_db_host }}"
+# mail_mailman_postgresql_database: ""
+# mail_mailman_postgresql_user: ""
+# mail_mailman_postgresql_password: ""
+
+# mail_mailman_hyperkitty_api_key: ""
+
+# mail_mailman_web_secret_key: ""
+
+mail_mailman_admin_user: admin
+mail_mailman_admin_email: admin@example.com
+
+mail_mailman_serve_from_domain: example.com

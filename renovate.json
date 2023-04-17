@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "local>prologin/tech/services/renovate//renovate-presets.json"
+  ],
+  "regexManagers": [
+    {
+      "datasourceTemplate": "docker",
+      "fileMatch": [
+        ".*ya?ml$"
+      ],
+      "matchStrings": [
+        ".*docker_repository:\\s*(?<depName>.*?)\\s*.*docker_tag:\\s*(?<currentValue>.*?)\\s"
+      ]
+    }
+  ]
+}

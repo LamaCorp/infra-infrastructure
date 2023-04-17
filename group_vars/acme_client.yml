@@ -1,0 +1,6 @@
+---
+
+acme_vault_client_cert_dir: /srv/acme
+acme_vault_client_always_fetch_certs: false
+
+acme_vault_client_mode: "0755"

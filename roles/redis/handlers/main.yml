@@ -1,0 +1,14 @@
+---
+
+- name: Restart Redis
+  ansible.builtin.service:
+    name: "redis-{{ instance_name }}"
+    state: restarted
+  loop: "{{ redis_instances_to_restart }}"
+  loop_control:
+    loop_var: instance_name
+
+- name: Restart Redis exporter
+  ansible.builtin.service:
+    name: redis_exporter
+    state: restarted

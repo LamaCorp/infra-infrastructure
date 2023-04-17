@@ -1,0 +1,29 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Libvirt host
+  hosts: kvm
+  roles:
+    - stackhpc.libvirt-host
+  tags:
+    - kvm
+    - libvirt
+
+- name: Libvirt VMs
+  hosts: kvm
+  roles:
+    - stackhpc.libvirt-vm
+  tags:
+    - kvm
+    - vms
+
+# - name: Drop VMs virtual memory caches
+#   hosts: vm
+#   roles:
+#     - vm_drop_caches
+#   tags:
+#     - kvm
+#     - vms

@@ -1,0 +1,27 @@
+---
+
+- name: Deploy pastebin docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: pastebin
+
+    docker_compose_services:
+      server:
+        image: "{{ pastebin_docker_repository }}:{{ pastebin_docker_tag }}"
+        command:
+          - "--public-path=https://{{ pastebin_domain }}"
+          - --editable
+          - --default-expiry=1week
+          - --enable-burn-after
+          - --highlightsyntax
+          - --no-eternal-pasta
+          - --private
+          - --qr
+        volumes:
+          - data:/app/pasta_data
+        reverse_proxy: "{{ pastebin_reverse_proxy_computed }}"
+
+    docker_compose_volumes_dir_owner: 1000
+    docker_compose_volumes_dir_group: 1000
+    docker_compose_volumes_dir_mode: 0775

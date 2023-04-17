@@ -1,0 +1,123 @@
+---
+
+traefik_static_config:
+  entryPoints:
+    http:
+      proxyProtocol:
+        trustedIPs:
+          - 172.28.0.0/16
+          - 2001:67c:17fc::/48
+    https:
+      proxyProtocol:
+        trustedIPs:
+          - 172.28.0.0/16
+          - 2001:67c:17fc::/48
+
+  certificatesResolvers:
+    letsEncrypt:
+      acme:
+        email: caa@lama-corp.space
+        storage: /acme/acme.json
+        keyType: EC256
+        tlsChallenge: {}
+    letsEncryptRsa:
+      acme:
+        email: caa@lama-corp.space
+        storage: /acme/acmeRsa.json
+        keyType: RSA2048
+        tlsChallenge: {}
+
+traefik_dynamic_config:
+  http:
+    middlewares:
+      torrent-forwardauth:
+        forwardauth:
+          address: http://ak-outpost-torrent-proxy:9000/outpost.goauthentik.io/auth/traefik
+          trustForwardHeader: true
+          authResponseHeaders: "{{ authentik_forwardauth_headers }}"
+
+      traefik-forwardauth:
+        forwardauth:
+          address: http://ak-outpost-traefik:9000/outpost.goauthentik.io/auth/traefik
+          trustForwardHeader: true
+          authResponseHeaders: "{{ authentik_forwardauth_headers }}"
+
+    routers:
+      auth:
+        rule: "Host(`auth.pie.lama-corp.space`)"
+        tls:
+          certresolver: letsEncrypt
+          options: modern
+        middlewares:
+          - default@file
+        service: auth
+
+      mailman:
+        rule: "Host(`lists.lama-corp.space`)"
+        tls:
+          certresolver: letsEncrypt
+          options: modern
+        middlewares:
+          - default@file
+        service: mailman
+
+      torrent:
+        rule: "Host(`torrent.lama-corp.space`)"
+        tls:
+          certresolver: letsEncrypt
+          options: modern
+        middlewares:
+          - torrent-forwardauth@file
+          - default@file
+        service: torrent
+
+      traefik:
+        rule: "Host(`traefik.lama.tel`)"
+        tls:
+          certresolver: letsEncrypt
+          options: modern
+        middlewares:
+          - traefik-forwardauth@file
+          - default@file
+        service: api@internal
+
+      vault:
+        rule: "Host(`vault.lama.tel`)"
+        tls:
+          certresolver: letsEncrypt
+          options: modern
+        middlewares:
+          - default@file
+        service: vault
+
+    serversTransports:
+      insecureSkipVerify:
+        insecureSkipVerify: true
+
+    services:
+      auth:
+        loadBalancer:
+          servers:
+            - url: https://auth.fsn.lama.tel:443
+          serversTransport: insecureSkipVerify
+
+      mailman:
+        loadBalancer:
+          servers:
+            - url: http://mail.fsn.lama.tel:8000
+
+      torrent:
+        loadBalancer:
+          servers:
+            - url: http://dl.psw.lama.tel:8080
+
+      vault:
+        loadBalancer:
+          servers:
+            - url: https://secure-services.fsn.lama.tel:8200
+          serversTransport: insecureSkipVerify
+
+  tls:
+    certificates:
+      - certFile: /certs/s3.lama-corp.space.crt
+        keyFile: /certs/s3.lama-corp.space.key

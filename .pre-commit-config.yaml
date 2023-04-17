@@ -1,0 +1,29 @@
+---
+repos:
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+  - repo: https://github.com/python/black
+    rev: 23.1.0
+    hooks:
+      - id: black
+        language_version: python3.10
+  - repo: https://github.com/pycqa/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        name: isort
+  - repo: https://github.com/gruntwork-io/pre-commit
+    rev: v0.1.18
+    hooks:
+      - id: terraform-fmt
+      - id: terraform-validate
+      - id: shellcheck
+        exclude: config.sh
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-json
+      - id: pretty-format-json
+        args: [--autofix]

@@ -1,0 +1,13 @@
+---
+
+- name: Install Vim
+  ansible.builtin.apt:
+    name: vim
+
+- name: Configure Vim
+  ansible.builtin.copy:
+    src: vimrc
+    dest: /root/.vimrc
+    mode: 0600
+    owner: root
+    group: root

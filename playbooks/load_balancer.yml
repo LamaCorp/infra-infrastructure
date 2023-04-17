@@ -1,0 +1,14 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Load balancer
+  hosts: lb
+  roles:
+    - ome.haproxy
+  tags:
+    - haproxy
+    - lb
+    - load_balancer

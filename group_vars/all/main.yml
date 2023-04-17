@@ -1,0 +1,53 @@
+---
+
+# acme
+
+acme_vault_certs_vault_path: "acme/certs/${ACME_DOMAIN}"
+acme_vault_approle_path: "acme-approle"
+
+
+# common
+
+root_password_hashed: "$6$RQ1LcccPWB/NO5V.$TWZLJnGGSF1CarIAZhT5YiK.mTLLrbnnVIxwzkCOXa39.WtSjLW7m99ARoPg8iyMzid7EUetecBBbqahyLWfH/"
+
+
+# chrony
+
+chrony_allow_hosts:
+  - 127.0.0.0/8
+
+
+# nftables
+
+nft_filter_input_policy: drop
+nft_filter_input_default_verdict: accept
+nft_filter_forward_policy: drop
+nft_filter_forward_default_verdict: accept
+
+
+# node exporter
+
+node_exporter_version: latest
+node_exporter_textfile_dir: /var/lib/node_exporter
+node_exporter_enabled_collectors:
+  - cgroups
+  - ethtool
+  - logind
+  - ntp
+  - systemd
+  - textfile:
+      directory: "{{ node_exporter_textfile_dir }}"
+
+
+# vault
+
+vault_addr: https://vault.lama.tel:443
+vault_version: 1.13.0
+
+
+# textfile collectors
+
+node_exporter_textfile_collector_scripts_to_install:
+  - apt_info.py
+  - deleted_libraries.py
+  - smartmon.sh

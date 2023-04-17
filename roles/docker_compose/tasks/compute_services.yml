@@ -1,0 +1,86 @@
+---
+
+- name: Compute services secrets
+  ansible.builtin.set_fact:
+    docker_compose_services_secrets_computed: |
+      {% for service in docker_compose_services | dict2items %}
+      {% if service.value.secrets | d([]) | length > 0 %}
+      {{ service.key }}:
+        environment:
+        {% for secret in service.value.secrets %}
+          {{ docker_compose_secrets[secret].env }}: /run/secrets/{{ secret }}
+        {% endfor %}
+        # leave this comment in for proper indentation in templates
+      {% endif %}
+      {% endfor %}
+
+- name: Compute services reverse_proxy
+  ansible.builtin.set_fact:
+    docker_compose_services_proxy_computed: |
+      {% for service in docker_compose_services | dict2items %}
+      {% if service.value.reverse_proxy.enable | default(false) %}
+      {{ service.key }}:
+        labels:
+          traefik.enable: "true"
+          traefik.http.routers.{{ docker_compose_project_name }}-{{ service.key }}.middlewares: "{% if service.value.reverse_proxy.middleware is defined %}{{ docker_compose_project_name }}-{{ service.key }}@docker,{% endif %}{{ service.value.reverse_proxy.router.middlewares | default('default@file') }}"
+          traefik.http.routers.{{ docker_compose_project_name }}-{{ service.key }}.rule: "{{ service.value.reverse_proxy.router.rule }}"
+          traefik.http.routers.{{ docker_compose_project_name }}-{{ service.key }}.service: "{{ docker_compose_project_name }}-{{ service.key }}"
+          traefik.http.routers.{{ docker_compose_project_name }}-{{ service.key }}.tls: "true"
+      {% if service.value.reverse_proxy.router.letsEncrypt | default(true) %}
+          traefik.http.routers.{{ docker_compose_project_name }}-{{ service.key }}.tls.certresolver: "letsEncrypt"
+      {% endif %}
+      {% for middleware in service.value.reverse_proxy.middleware | default({}) | dict2items %}
+          traefik.http.middlewares.{{ docker_compose_project_name }}-{{ service.key }}.{{ middleware.key }}: "{{ middleware.value }}"
+      {% endfor %}
+          traefik.http.routers.{{ docker_compose_project_name }}-{{ service.key }}.tls.options: "{{ service.value.reverse_proxy.router.tls.options | default('intermediate@file') }}"
+          traefik.http.services.{{ docker_compose_project_name }}-{{ service.key }}.loadbalancer.server.port: "{{ service.value.reverse_proxy.service.port }}"
+        networks:
+          - reverse_proxy
+      {% endif %}
+      {% endfor %}
+
+- name: Compute services monitoring
+  ansible.builtin.set_fact:
+    docker_compose_services_monitoring_computed: |
+      {% for service in docker_compose_services | dict2items %}
+      {% if service.value.monitoring is defined and service.value.monitoring %}
+      {{ service.key }}:
+        labels:
+          prometheus-job: "{{ service.value.monitoring.name }}"
+          prometheus-port: "{{ service.value.monitoring.port }}"
+          prometheus-path: "{{ service.value.monitoring.path | d('/metrics') }}"
+        networks:
+          - monitoring_scrapping
+      {% endif %}
+      {% endfor %}
+
+- name: Set services sysctl to enable IPv6
+  ansible.builtin.set_fact:
+    docker_compose_services_sysctl_ipv6_computed: |
+      {% for service in docker_compose_services | dict2items %}
+      {% if service.value.network_mode | default('') != 'host' %}
+      {{ service.key }}:
+        sysctls:
+          net.ipv6.conf.all.disable_ipv6: 0
+      {% endif %}
+      {% endfor %}
+
+- name: Set services restart policy
+  ansible.builtin.set_fact:
+    docker_compose_services_restart_policy_computed: |
+      {% for service in docker_compose_services | dict2items %}
+      {{ service.key }}:
+        restart: {{ service.value.restart | default(docker_compose_restart_policy) }}
+      {% endfor %}
+
+- name: Compute services generated attributes
+  ansible.builtin.set_fact:
+    docker_compose_services_computed: "{{ docker_compose_services_secrets_computed | from_yaml | combine(docker_compose_services_proxy_computed | from_yaml, recursive=True, list_merge='append') | combine(docker_compose_services_monitoring_computed | from_yaml, recursive=True, list_merge='append') | combine(docker_compose_services_sysctl_ipv6_computed | from_yaml, recursive=True) | combine(docker_compose_services_restart_policy_computed | from_yaml, recursive=True) | combine(docker_compose_services, recursive=True, list_merge='append') }}"
+
+- name: Compute services
+  ansible.builtin.set_fact:
+    docker_compose_services_computed: "{{ dict(docker_compose_services_computed.keys() | zip(docker_compose_services_computed.values() | map('dict2items') | map('rejectattr', 'key', 'in', ['monitoring', 'reverse_proxy']) | map('items2dict'))) }}"
+
+- name: Prefix services with project name
+  ansible.builtin.set_fact:
+    docker_compose_services_computed: "{{ dict([docker_compose_project_name] | product(docker_compose_services_computed.keys()) | map('join', '_') | zip(docker_compose_services_computed.values())) }}"

@@ -1,0 +1,16 @@
+[Unit]
+Description=postgres_exporter - Exporter for PostgreSQL metrics.
+Documentation=https://github.com/prometheus-community/postgres_exporter
+After=network.target
+
+[Service]
+User=postgres
+Group=postgres
+EnvironmentFile=/etc/default/postgres_exporter
+ExecStart=/usr/local/bin/postgres_exporter $FLAGS
+
+SyslogIdentifier=postgres_exporter
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,183 @@
+---
+
+# Alerts from:
+# - https://monitoring.mixins.dev/node-exporter/
+# - https://awesome-prometheus-alerts.grep.to/rules#host-and-hardware
+
+prometheus_rules_postgresql:
+  postgresql:
+    groups:
+      - name: postgresql.alerts
+        rules:
+          - alert: PostgreSQLDown
+            expr: pg_up == 0
+            for: 0m
+            labels:
+              severity: critical
+            annotations:
+              summary: PostgreSQL is down.
+              description: !unsafe 'PostgreSQL {{ $labels.instance }} is down.'
+
+          - alert: PostgreSQLRestarted
+            expr: time() - pg_postmaster_start_time_seconds < 60
+            for: 0m
+            labels:
+              severity: critical
+            annotations:
+              summary: PostgreSQL has restarted.
+              description: !unsafe 'PostgreSQL {{ $labels.instance }} has restarted.'
+
+          - alert: PostgreSQLExporterError
+            expr: pg_exporter_last_scrape_error > 0
+            for: 0m
+            labels:
+              severity: critical
+            annotations:
+              summary: PostgreSQL exporter has encountered errors.
+              description: !unsafe 'PostgreSQL exporter {{ $labels.instance }} is showing errors. A query may be buggy in query.yaml'
+
+          - alert: PostgreSQLTableNotAutoVacuumed
+            expr: '(pg_stat_user_tables_last_autovacuum > 0) and (time() - pg_stat_user_tables_last_autovacuum) > 60 * 60 * 24 * 10'
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL table not auto vacuumed.
+              description: !unsafe 'Table {{ $labels.relname }} on {{ $labels.instance }} has not been auto vacuumed for 10 days.'
+
+          - alert: PostgreSQLTableNotAutoAnalyzed
+            expr: (pg_stat_user_tables_last_autoanalyze > 0) and (time() - pg_stat_user_tables_last_autoanalyze) > 24 * 60 * 60 * 10
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL table not auto analyzed.
+              description: !unsafe 'Table {{ $labels.relname }} on {{ $labels.instance }} has not been auto analyzed for 10 days.'
+
+          - alert: PostgreSQLTooManyConnections
+            expr: 'sum by (datname) (pg_stat_activity_count{datname!~"template.*|postgres"}) > pg_settings_max_connections * 0.8'
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL has too many connections.
+              description: !unsafe 'PostgreSQL {{ $labels.instance }} has too many connections (> 80%).'
+
+          - alert: PostgreSQLNotEnoughConnections
+            expr: 'sum by (datname) (pg_stat_activity_count{datname!~"template.*|postgres"}) == 0'
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL has not enough connections.
+              description: !unsafe 'PostgreSQL {{ $labels.instance }} should have more connections on database {{ $labels.datname }}.'
+
+          - alert: PostgreSQLDeadLocks
+            expr: 'increase(pg_stat_database_deadlocks{datname!~"template.*|postgres"}[1m]) > 5'
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL has dead locks.
+              description: !unsafe 'PostgreSQL {{ $labels.instance }} has dead-locks.'
+
+          - alert: PostgreSQLHighRollbackRate
+            expr: 'rate(pg_stat_database_xact_rollback{datname!~"template.*"}[3m]) / rate(pg_stat_database_xact_commit{datname!~"template.*"}[3m]) > 0.02'
+            for: 5m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL high rollback rate.
+              description: !unsafe 'Ratio of transactions being aborted compared to committed is > 2% on {{ $labels.instance }}.'
+
+          - alert: PostgreSQLCommitRateLow
+            expr: 'rate(pg_stat_database_xact_commit{datname!~"template.*|"}[1m]) == 0'
+            for: 15m
+            labels:
+              severity: critical
+            annotations:
+              summary: PostgreSQL commit rate low.
+              description: !unsafe 'PostgreSQL {{ $labels.instance }} seems to not be processing transactions.'
+
+          - alert: PostgreSQLLowXidConsumption
+            expr: rate(pg_txid_current[1m]) < 5
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL low XID consumption.
+              description: !unsafe 'PostgreSQL {{ $labels.instance }} seems to be consuming transaction IDs very slowly.'
+
+          - alert: PostgreSQLHighRateStatementTimeout
+            expr: rate(postgresql_errors_total{type="statement_timeout"}[1m]) > 3
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: PostgreSQL high rate statement timeout.
+              description: !unsafe 'PostgreSQL transactions showing high rate of statement timeouts on {{ $labels.instance }}.'
+
+          - alert: PostgreSQLHighRateDeadlock
+            expr: increase(postgresql_errors_total{type="deadlock_detected"}[1m]) > 1
+            for: 5m
+            labels:
+              severity: critical
+            annotations:
+              summary: PostgreSQL high rate deadlock.
+              description: !unsafe 'PostgreSQL {{ $labels.instance }} detected deadlocks.'
+
+          - alert: PostgreSQLTooManyDeadTuples
+            expr: ((pg_stat_user_tables_n_dead_tup > 10000) / (pg_stat_user_tables_n_live_tup + pg_stat_user_tables_n_dead_tup)) >= 0.1
+            for: 2m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL too many dead tuples.
+              description: !unsafe 'PostgreSQL number of dead tuples is too large on {{ $labels.instance }}.'
+
+          - alert: PostgreSQLConfigurationChanged
+            expr: '{__name__=~"pg_settings_.*"} != ON(__name__) {__name__=~"pg_settings_([^t]|t[^r]|tr[^a]|tra[^n]|tran[^s]|trans[^a]|transa[^c]|transac[^t]|transact[^i]|transacti[^o]|transactio[^n]|transaction[^_]|transaction_[^r]|transaction_r[^e]|transaction_re[^a]|transaction_rea[^d]|transaction_read[^_]|transaction_read_[^o]|transaction_read_o[^n]|transaction_read_on[^l]|transaction_read_onl[^y]).*"} OFFSET 5m'
+            for: 0m
+            labels:
+              severity: info
+            annotations:
+              summary: PostgreSQL configuration changed.
+              description: !unsafe 'PostgreSQL Database configuration change has occurred on {{ $labels.instance }}.'
+
+          - alert: PostgreSQLSslCompressionActive
+            expr: sum(pg_stat_ssl_compression) > 0
+            for: 0m
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL SSL compression active.
+              description: !unsafe 'Database connections with SSL compression enabled on {{ $labels.instance }}. This may add significant jitter in replication delay. Replicas should turn off SSL compression via `sslcompression=0` in `recovery.conf`.'
+
+          - alert: PostgreSQLTooManyLocksAcquired
+            expr: ((sum (pg_locks_count)) / (pg_settings_max_locks_per_transaction * pg_settings_max_connections)) > 0.20
+            for: 2m
+            labels:
+              severity: critical
+            annotations:
+              summary: PostgreSQL too many locks acquired.
+              description: !unsafe 'Too many locks acquired on the database {{ $labels.datname }} on {{ $labels.instance }}. If this alert happens frequently, we may need to increase the postgres setting max_locks_per_transaction.'
+
+          # See https://github.com/samber/awesome-prometheus-alerts/issues/289#issuecomment-1164842737
+          - alert: PostgreSQLBloatIndexHigh(>80%)
+            expr: pg_bloat_btree_bloat_pct > 80 and on (idxname) (pg_bloat_btree_real_size > 100000000)
+            for: 1h
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL bloat index is high (> 80%).
+              description: !unsafe 'The index {{ $labels.idxname }} is bloated on {{ $labels.instance }}. You should execute `REINDEX INDEX CONCURRENTLY {{ $labels.idxname }};`'
+
+          # See https://github.com/samber/awesome-prometheus-alerts/issues/289#issuecomment-1164842737
+          - alert: PostgreSQLBloatTableHigh(>80%)
+            expr: pg_bloat_table_bloat_pct > 80 and on (relname) (pg_bloat_table_real_size > 200000000)
+            for: 1h
+            labels:
+              severity: warning
+            annotations:
+              summary: PostgreSQL bloat table high (> 80%).
+              description: !unsafe 'The table {{ $labels.relname }} is bloated on {{ $labels.instance }}. You should execute `VACUUM {{ $labels.relname }};`'

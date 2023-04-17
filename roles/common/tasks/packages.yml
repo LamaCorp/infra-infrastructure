@@ -1,0 +1,56 @@
+---
+
+- name: Install aptitude
+  ansible.builtin.apt:
+    name: aptitude
+    update_cache: true
+    force_apt_get: true
+  tags:
+    - packages
+
+- name: Install common packages
+  ansible.builtin.apt:
+    install_recommends: false
+    update_cache: true
+    state: present
+    name:
+      - curl
+      - ethtool
+      - fdisk
+      - file
+      - gdisk
+      - git
+      - gnupg
+      - htop
+      - iftop
+      - iotop
+      - iperf3
+      - jq
+      - ldnsutils
+      - lm-sensors
+      - lsof
+      - man
+      - molly-guard
+      - most
+      - mtr
+      - ncdu
+      - nload
+      - parted
+      - rsync
+      - screen
+      - strace
+      - sudo
+      - tcpdump
+      - telnet
+      - traceroute
+      - tree
+      - whois
+  tags:
+    - packages
+
+- name: Install host specific packages
+  ansible.builtin.apt:
+    state: present
+    name: "{{ host_specific_packages }}"
+  tags:
+    - packages

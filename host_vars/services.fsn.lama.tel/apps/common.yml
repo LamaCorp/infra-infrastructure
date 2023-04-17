@@ -1,0 +1,16 @@
+---
+
+services_db_host: postgresql.fsn.lama.tel
+
+services_s3_endpoint: https://s3.lama-corp.space
+
+services_redis_host: redis.fsn.lama.tel
+
+services_email_host: email-smtp.eu-west-3.amazonaws.com
+services_email_port: 587
+services_email_tls: true
+
+services_admins:
+  - root@lama-corp.space
+services_managers:
+  - root@lama-corp.space

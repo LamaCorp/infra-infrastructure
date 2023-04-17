@@ -1,0 +1,24 @@
+---
+
+- name: Create a service to run a textfile collector script
+  ansible.builtin.template:
+    src: textfile.service
+    dest: "/etc/systemd/system/{{ script_name_no_ext }}.service"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create a systemd timer to periodically run the script
+  ansible.builtin.template:
+    src: textfile.timer
+    dest: "/etc/systemd/system/{{ script_name_no_ext }}.timer"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Start the systemd timer and/or reload the config
+  ansible.builtin.systemd:
+    name: "{{ script_name_no_ext }}.timer"
+    enabled: true
+    state: started
+    daemon_reload: true

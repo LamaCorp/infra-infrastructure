@@ -1,0 +1,25 @@
+---
+
+authentik_reverse_proxy:
+  router:
+    rule: "Host(`auth.lama-corp.space`, `auth.lama.tel`)"
+
+authentik_postgresql_host: "{{ services_db_host }}"
+authentik_postgresql_user: authentik
+authentik_postgresql_database: authentik
+authentik_postgresql_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/authentik')['password'] }}"
+
+authentik_redis_host: "{{ services_redis_host }}"
+authentik_redis_port: 6380
+
+authentik_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/secret-key')['key'] }}"
+
+authentik_admin: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/admin') }}"
+authentik_admin_password: "{{ authentik_admin['password'] }}"
+authentik_admin_token: "{{ authentik_admin['token'] }}"
+
+
+authentik_environment:
+  AUTHENTIK_DEFAULT_USER_CHANGE_EMAIL: "false"
+  AUTHENTIK_DEFAULT_USER_CHANGE_USERNAME: "false"
+  AUTHENTIK_OUTPOSTS__DISCOVER: "false"

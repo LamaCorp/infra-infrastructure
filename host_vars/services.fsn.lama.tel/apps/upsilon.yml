@@ -1,0 +1,44 @@
+---
+
+upsilon_domain: upsilon.pie.lama-corp.space
+
+upsilon_realm: LAMA-CORP.SPACE
+upsilon_keytab_base64: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/upsilon/keytab')['keytab'] }}"
+
+upsilon_dex_config:
+  staticClients:
+    - id: authentik
+      name: GoAuthentik
+      redirectURIs:
+        - https://auth.lama-corp.space/source/oauth/callback/upsilon/
+      secret: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/upsilon/dex/clients/authentik')['client_secret'] }}"
+
+upsilon_backend_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/upsilon/secret-key')['key'] }}"
+
+upsilon_backend_db_name: upsilon
+upsilon_backend_db_user: upsilon
+upsilon_backend_db_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/upsilon')['password'] }}"
+
+upsilon_backend_s3_bucket: upsilon
+upsilon_backend_s3_custom_domain: upsilon.s3.lama-corp.space
+upsilon_backend_s3_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 's3/data/users/upsilon')['access_key'] }}"
+upsilon_backend_s3_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 's3/data/users/upsilon')['secret_key'] }}"
+
+upsilon_backend_redis_port: 6381
+
+upsilon_backend_email_from: root@lama-corps.space
+upsilon_backend_email_user: "{{ lookup('community.hashi_vault.hashi_vault', 'infra/data/aws/ses/senders/upsilon')['username'] }}"
+upsilon_backend_email_password: "{{ lookup('community.hashi_vault.hashi_vault', 'infra/data/aws/ses/senders/upsilon')['password'] }}"
+
+upsilon_auth_ldap_server_uri: ldap://auth.pie.lama-corp.space
+upsilon_auth_ldap_bind_dn: "uid=admin,cn=users,cn=accounts,dc=lama-corp,dc=space"
+upsilon_auth_ldap_bind_password: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/freeipa/admin')['password'] }}"
+upsilon_auth_ldap_user_search_base: cn=users,cn=accounts,dc=lama-corp,dc=space
+upsilon_auth_ldap_group_search_base: cn=groups,cn=accounts,dc=lama-corp,dc=space
+
+upsilon_oidc_private_key: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/upsilon/oidc-private-key')['private_key'] }}"
+upsilon_oidc_app_client_id: authentik
+upsilon_oidc_app_client_secret: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/upsilon/oauth-app-secret')['client_secret'] }}"
+upsilon_oidc_app_redirect_uris:
+  - https://auth.lama-corp.space/source/oauth/callback/upsilon/
+upsilon_oidc_app_name: Authentik

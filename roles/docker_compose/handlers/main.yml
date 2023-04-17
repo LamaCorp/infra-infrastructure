@@ -1,0 +1,8 @@
+---
+
+- name: Restart docker-compose
+  community.docker.docker_compose:
+    project_src: "{{ docker_compose_project_dir }}"
+    pull: true
+    state: present
+    restarted: true

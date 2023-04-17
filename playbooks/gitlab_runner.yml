@@ -1,0 +1,13 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: GitLab Runner
+  hosts: gitlab_runner
+  roles:
+    - cri.gitlab_runner
+  tags:
+    - gitlab-ci
+    - gitlab-runner

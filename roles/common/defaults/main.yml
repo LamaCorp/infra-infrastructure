@@ -1,0 +1,18 @@
+---
+
+# Packages
+
+host_specific_packages: []
+
+
+# SSH
+
+authorize_ssh_password: false
+ssh_authorized_keys: []
+ssh_authorized_keys_extra: []
+
+
+# Root password
+# Left intentionally unset to trigger an error if the operator forgot to set
+# it, to avoid having a root account without a password.
+# root_password_hashed: "Generate this with mkpassword -m sha512crypt"

@@ -1,0 +1,394 @@
+---
+
+# Alerts from:
+# - https://monitoring.mixins.dev/prometheus/
+# - https://awesome-prometheus-alerts.grep.to/rules#prometheus-self-monitoring
+
+prometheus_rules_prometheus:
+  prometheus:
+    groups:
+      - name: prometheus.alerts
+        rules:
+          - alert: PrometheusJobMissing
+            expr: absent(up{job = "prometheus"})
+            for: 1m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus job missing.
+              description: A Prometheus job has disappeared.
+
+          - alert: PrometheusTargetMissing
+            expr: up{job != "pie_node"} == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus target missing.
+              description: !unsafe 'A Prometheus target has disappeared on {{ $labels.instance }}. An exporter for the job {{ $labels.job }} might be crashed.'
+
+          - alert: PrometheusAllTargetsMissing
+            expr: sum by (job) (up{job != "pie_node"}) == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: All Prometheus targets are missing.
+              description: !unsafe 'A Prometheus job on {{ $labels.instance }} does not have living target anymore.'
+
+          - alert: PrometheusTargetMissingWithWarmupTime
+            expr: sum by (instance, job) ((up == 0) * on (instance) group_right(job) (node_time_seconds - node_boot_time_seconds > 600))
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus target missing with warmup time.
+              description: !unsafe 'A Prometheus target has disappeared on {{ $labels.instance }}. An exporter for the job {{ $labels.job }} might be crashed.'
+
+          - alert: PrometheusTargetEmpty
+            expr: prometheus_sd_discovered_targets{job = "prometheus", config != "pie_node"} == 0
+            for: 1m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus targets empty.
+              description: !unsafe 'Prometheus has no targets on {{ $labels.instance }}.'
+
+          - alert: PrometheusTooManyRestarts
+            expr: changes(process_start_time_seconds{job =~ "prometheus|pushgateway"}[15m]) > 2
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has too many restarts.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has restarted more than twice in the last 15 minutes. It might be crashlooping.'
+
+          - alert: PrometheusBadConfig
+            # Without max_over_time, failed scrapes could create false negatives, see
+            # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
+            expr: max_over_time(prometheus_config_last_reload_successful{job = "prometheus"}[5m]) == 0
+            for: 10m
+            labels:
+              severity: critical
+            annotations:
+              summary: Failed Prometheus configuration reload.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has failed to reload its configuration.'
+
+          - alert: PrometheusNotificationQueueRunningFull
+            # Without min_over_time, failed scrapes could create false negatives, see
+            # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
+            expr: |
+              (
+                predict_linear(prometheus_notifications_queue_length{job = "prometheus"}[5m], 60 * 30)
+              >
+                min_over_time(prometheus_notifications_queue_capacity{job = "prometheus"}[5m])
+              )
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus alert notification queue predicted to run full in less than 30m.
+              description: !unsafe 'Alert notification queue of Prometheus {{ $labels.instance }} is running full.'
+
+          - alert: PrometheusErrorSendingAlertsToSomeAlertmanagers
+            expr: |
+              (
+                rate(prometheus_notifications_errors_total{job = "prometheus"}[5m])
+              /
+                rate(prometheus_notifications_sent_total{job = "prometheus"}[5m])
+              )
+              * 100
+              > 1
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has encountered more than 1% errors sending alerts to a specific Alertmanager.
+              description: !unsafe '{{ printf "%.1f" $value }}% errors while sending alerts from Prometheus {{ $labels.instance }} to Alertmanager {{ $labels.alertmanager }}.'
+
+          - alert: PrometheusNotConnectedToAlertmanagers
+            # Without max_over_time, failed scrapes could create false negatives, see
+            # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
+            expr: max_over_time(prometheus_notifications_alertmanagers_discovered{job = "prometheus"}[5m]) < 1
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus is not connected to any Alertmanagers.
+              description: !unsafe 'Prometheus {{ $labels.instance }} is not connected to any Alertmanagers.'
+
+          - alert: PrometheusTSDBReloadsFailing
+            expr: increase(prometheus_tsdb_reloads_failures_total{job = "prometheus"}[3h]) > 0
+            for: 4h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has issues reloading blocks from disk.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has detected {{ $value | humanize }} reload failures over the last 3h.'
+
+          - alert: PrometheusTSDBCompactionsFailing
+            expr: increase(prometheus_tsdb_compactions_failed_total{job = "prometheus"}[3h]) > 0
+            for: 4h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has issues compacting blocks.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has detected {{ $value | humanize }} compaction failures over the last 3h.'
+
+          - alert: PrometheusTSDBCheckpointCreationFailing
+            expr: increase(prometheus_tsdb_checkpoint_creations_failed_total{job = "prometheus"}[3h]) > 0
+            for: 4h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has issues creating TSDB checkpoints.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has detected {{ $value | humanize }} checkpoint creation failures over the last 3h.'
+
+          - alert: PrometheusTSDBCheckpointDeletionFailures
+            expr: increase(prometheus_tsdb_checkpoint_deletions_failed_total{job = "prometheus"}[3h]) > 0
+            for: 4h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has issues deleting TSDB checkpoints.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has detected {{ $value | humanize }} checkpoint deletion failures over the last 3h.'
+
+          - alert: PrometheusTSDBHeadTruncationsFailed
+            expr: increase(prometheus_tsdb_head_truncations_failed_total{job = "prometheus"}[3h]) > 0
+            for: 4h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has issues truncating TSDB head.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has detected {{ $value | humanize }} TSDB head truncation failures over the last 3h.'
+
+          - alert: PrometheusTSDBWalCorruptions
+            expr: increase(prometheus_tsdb_wal_corruptions_total{job = "prometheus"}[3h]) > 0
+            for: 4h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus TSDB has WAL corruptions issues.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has detected {{ $value | humanize }} TSDB WAL corruptions over the last 3h.'
+
+          - alert: PrometheusTSDBWalTruncationsFailed
+            expr: increase(prometheus_tsdb_wal_truncations_failed_total{job = "prometheus"}[3h]) > 0
+            for: 4h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has issues truncating its WAL truncations.
+              description: !unsafe 'Prometheus {{ $labels.instance }} has detected {{ $value | humanize }} TSDB WAL truncation failures over the last 3h.'
+
+          - alert: PrometheusNotIngestingSamples
+            expr: |
+              (
+                rate(prometheus_tsdb_head_samples_appended_total{job = "prometheus"}[5m]) <= 0
+              and
+                (
+                  sum without(scrape_job) (prometheus_target_metadata_cache_entries{job = "prometheus"}) > 0
+                or
+                  sum without(rule_group) (prometheus_rule_group_rules{job = "prometheus"}) > 0
+                )
+              )
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus is not ingesting samples.
+              description: !unsafe 'Prometheus {{ $labels.instance }} is not ingesting samples.'
+
+          - alert: PrometheusDuplicateTimestamps
+            expr: rate(prometheus_target_scrapes_sample_duplicate_timestamp_total{job = "prometheus"}[5m]) > 0
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus is dropping samples with duplicate timestamps.
+              description: !unsafe 'Prometheus {{$labels.instance}} is dropping {{ printf "%.4g" $value }} samples/s with different values but duplicated timestamp.'
+
+          - alert: PrometheusOutOfOrderTimestamps
+            expr: rate(prometheus_target_scrapes_sample_out_of_order_total{job = "prometheus"}[5m]) > 0
+            for: 10m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus drops samples with out-of-order timestamps.
+              description: !unsafe 'Prometheus {{$labels.instance}} is dropping {{ printf "%.4g" $value }} samples/s with timestamps arriving out of order.'
+
+          - alert: PrometheusTimeserieCardinality
+            expr: label_replace(count by (__name__) ({__name__=~".+"}), "name", "$1", "__name__", "(.+)") > 10000
+            for: 2h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus timeserie cardinality is increasing.
+              description: !unsafe 'The "{{ $labels.name }}" timeseries cardinality is getting very high: {{ $value | humanize }}.'
+
+          - alert: PrometheusRemoteStorageFailures
+            expr: |
+              (
+                (rate(prometheus_remote_storage_failed_samples_total{job = "prometheus"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{job = "prometheus"}[5m]))
+              /
+                (
+                  (rate(prometheus_remote_storage_failed_samples_total{job = "prometheus"}[5m]) or rate(prometheus_remote_storage_samples_failed_total{job = "prometheus"}[5m]))
+                +
+                  (rate(prometheus_remote_storage_succeeded_samples_total{job = "prometheus"}[5m]) or rate(prometheus_remote_storage_samples_total{job = "prometheus"}[5m]))
+                )
+              )
+              * 100
+              > 1
+            for: 15m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus fails to send samples to remote storage.
+              description: !unsafe 'Prometheus {{$labels.instance}} failed to send {{ printf "%.1f" $value }}% of the samples to {{ $labels.remote_name }}:{{ $labels.url }}.'
+
+          - alert: PrometheusRemoteWriteBehind
+            expr: |
+              # Without max_over_time, failed scrapes could create false negatives, see
+              # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
+              (
+                max_over_time(prometheus_remote_storage_highest_timestamp_in_seconds{job = "prometheus"}[5m])
+              - ignoring(remote_name, url) group_right
+                max_over_time(prometheus_remote_storage_queue_highest_sent_timestamp_seconds{job = "prometheus"}[5m])
+              )
+              > 120
+            for: 15m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus remote write is behind.
+              description: !unsafe 'Prometheus {{$labels.instance}} remote write is {{ printf "%.1f" $value }}s behind for {{ $labels.remote_name }}:{{ $labels.url }}.'
+
+          - alert: PrometheusRemoteWriteDesiredShards
+            expr: |
+              # Without max_over_time, failed scrapes could create false negatives, see
+              # https://www.robustperception.io/alerting-on-gauges-in-prometheus-2-0 for details.
+              (
+                max_over_time(prometheus_remote_storage_shards_desired{job = "prometheus"}[5m])
+              >
+                max_over_time(prometheus_remote_storage_shards_max{job = "prometheus"}[5m])
+              )
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus remote write desired shards calculation wants to run more than configured max shards.
+              description: !unsafe 'Prometheus {{ $labels.instance }} remote write desired shards calculation wants to run {{ $value }} shards for queue {{ $labels.remote_name }}:{{ $labels.url }}, which is more than the max of {{ printf `prometheus_remote_storage_shards_max{instance="%s",job = "prometheus"}` $labels.instance | query | first | value }}.'
+
+          - alert: PrometheusRuleFailures
+            expr: increase(prometheus_rule_evaluation_failures_total{job = "prometheus"}[5m]) > 0
+            for: 15m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus is failing rule evaluations.
+              description: !unsafe 'Prometheus {{$labels.instance}} has failed to evaluate {{ printf "%.0f" $value }} rules in the last 5m.'
+
+          - alert: PrometheusMissingRuleEvaluations
+            expr: increase(prometheus_rule_group_iterations_missed_total{job = "prometheus"}[5m]) > 0
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus is missing rule evaluations due to slow rule group evaluation.
+              description: !unsafe 'Prometheus {{$labels.instance}} has missed {{ printf "%.0f" $value }} rule group evaluations in the last 5m.'
+
+          - alert: PrometheusRuleEvaluationSlow
+            expr: prometheus_rule_group_last_duration_seconds{job = "prometheus"} > prometheus_rule_group_interval_seconds{job = "prometheus"}
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus rule evaluation is slow.
+              description: !unsafe 'Prometheus {{ $labels.instance }} rule evaluation took more time than the scheduled interval. It indicates a slower storage backend access or too complex queries.'
+
+          - alert: PrometheusTemplateTextExpansionFailing
+            expr: increase(prometheus_template_text_expansion_failures_total[3h]) > 0
+            for: 4h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus template text expansion is failing.
+              description: !unsafe 'Prometheus {{ $labels.instance }} encountered {{ $value | humanize }} template text expansion failures over the last 3h.'
+
+          - alert: PrometheusTargetScrapingSlow
+            expr: prometheus_target_interval_length_seconds{job = "prometheus", quantile = "0.9"} / on (interval, instance, job) prometheus_target_interval_length_seconds{job = "prometheus", quantile = "0.5"} > 1.05
+            for: 1h
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus target scraping is slow.
+              description: !unsafe 'Prometheus {{ $labels.instance }} is scraping exporters slowly since it exceeded the requested interval time. Your Prometheus server is under-provisioned.'
+
+          - alert: PrometheusTargetLimitHit
+            expr: increase(prometheus_target_scrape_pool_exceeded_target_limit_total{job = "prometheus"}[5m]) > 0
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has dropped targets because some scrape configs have exceeded the targets limit.
+              description: !unsafe 'Prometheus {{$labels.instance}} has dropped {{ printf "%.0f" $value }} targets because the number of targets exceeded the configured target_limit.'
+
+          - alert: PrometheusLabelLimitHit
+            expr: increase(prometheus_target_scrape_pool_exceeded_label_limits_total{job = "prometheus"}[5m]) > 0
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has dropped targets because some scrape configs have exceeded the labels limit.
+              description: !unsafe 'Prometheus {{$labels.instance}} has dropped {{ printf "%.0f" $value }} targets because some samples exceeded the configured label_limit, label_name_length_limit or label_value_length_limit.'
+
+          - alert: PrometheusScrapeBodySizeLimitHit
+            expr: increase(prometheus_target_scrapes_exceeded_body_size_limit_total{job = "prometheus"}[5m]) > 0
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has dropped some targets that exceeded body size limit.
+              description: !unsafe 'Prometheus {{$labels.instance}} has failed {{ printf "%.0f" $value }} scrapes in the last 5m because some targets exceeded the configured body_size_limit.'
+
+          - alert: PrometheusScrapeSampleLimitHit
+            expr: increase(prometheus_target_scrapes_exceeded_sample_limit_total{job = "prometheus"}[5m]) > 0
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus has failed scrapes that have exceeded the configured sample limit.
+              description: !unsafe 'Prometheus {{$labels.instance}} has failed {{ printf "%.0f" $value }} scrapes in the last 5m because some targets exceeded the configured sample_limit.'
+
+          - alert: PrometheusTargetSyncFailure
+            expr: increase(prometheus_target_sync_failed_total{job = "prometheus"}[30m]) > 0
+            for: 15m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus has failed to sync targets.
+              description: !unsafe '{{ printf "%.0f" $value }} targets in Prometheus {{ $labels.instance }} have failed to sync because invalid configuration was supplied.'
+
+          - alert: PrometheusHighQueryLoad
+            expr: avg_over_time(prometheus_engine_queries{job = "prometheus"}[5m]) / max_over_time(prometheus_engine_queries_concurrent_max{job = "prometheus"}[5m]) > 0.8
+            for: 15m
+            labels:
+              severity: warning
+            annotations:
+              summary: Prometheus is reaching its maximum capacity serving concurrent requests.
+              description: !unsafe 'Prometheus {{ $labels.instance }} query API has less than 20% available capacity in its query engine for the last 15 minutes.'
+
+          - alert: PrometheusErrorSendingAlertsToAnyAlertmanager
+            expr: |
+              min without (alertmanager) (
+                rate(prometheus_notifications_errors_total{job = "prometheus", alertmanager !~ ""}[5m])
+              /
+                rate(prometheus_notifications_sent_total{job = "prometheus", alertmanager !~ ""}[5m])
+              )
+              * 100
+              > 3
+            for: 15m
+            labels:
+              severity: critical
+            annotations:
+              summary: Prometheus encounters more than 3% errors sending alerts to any Alertmanager.
+              description: !unsafe '{{ printf "%.1f" $value }}% minimum errors while sending alerts from Prometheus {{$labels.instance}} to any Alertmanager.'

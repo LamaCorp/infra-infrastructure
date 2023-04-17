@@ -1,0 +1,127 @@
+---
+
+bird2_router_id: 172.28.254.3
+bird2_bgp_region_id: 250  # France
+bird2_bgp_site_id: 3
+
+bird2_bgp_preferred_source:
+  v6: 2001:67c:17fc:ffff::3
+
+bird2_bgp_originations:
+  v6:
+    - 2001:67c:17fc::/48
+    - 2a06:e881:7700::/40
+
+bird2_bgp_blacklist:
+  v6:
+    - 2a05:f480:1c00:9ee::/64  # Local prefix
+    - 2001:19f0:ffff::1/128-  # Vultr router
+
+bird2_bgp_static_routes:
+  v4:
+    - 169.254.169.254/32 via 108.61.208.1 %enp1s0  # needed because multihop to vultr
+  v6:
+    - 2001:67c:17fc::/48 unreachable
+    - 2a06:e881:7700::/40 unreachable
+    - 2001:19f0:ffff::1/128 via fe80::fc00:3ff:fe21:2eeb %enp1s0  # needed because multihop to vultr
+
+bird2_bgp_sessions:
+  upstreams:
+    sessions:
+      - description: Vultr
+        alias: vultr
+        asn: 64515
+        md5: "Hrf4mGfYypgK6yX8"
+        multihop: 2
+        local:
+          v4: 108.61.208.236
+          v6: 2a05:f480:1c00:9ee:5400:03ff:fe21:2eeb
+        remote:
+          v4: 169.254.169.254
+          v6: 2001:19f0:ffff::1
+        # See https://github.com/vultr/vultr-docs/tree/main/faq/as20473-bgp-customer-guide
+        communities:
+          export:
+            - 20473:6003
+
+  peers:
+    defaults:
+      local_pref:
+        v6:
+          increase: 100
+    sessions:
+      - description: Phowork
+        alias: phowork
+        asn: 212270
+        irr: AS-PHOWORK
+        local:
+          v6: fd3c:c1c4:bbff:9a64::ee1
+        remote:
+          v6: fd3c:c1c4:bbff:9a64::cafe
+
+      - description: Delicious muffins
+        alias: deliciousmuffins
+        asn: 212002
+        irr: AS212002
+        local:
+          v6: fd3c:c1c4:bbff:9a64::ee1
+        remote:
+          v6: fd3c:c1c4:bbff:9a64::4251
+
+  cores:
+    defaults:
+      local:
+        v4: 172.28.254.3
+        v6: 2001:67c:17fc:ffff::3
+    sessions:
+      - description: FSN
+        alias: fsn
+        asn: 212024
+        route_reflector: true
+        remote:
+          v4: 172.28.254.1
+          v6: 2001:67c:17fc:ffff::1
+      - description: BAR
+        alias: bar
+        asn: 212024
+        route_reflector: true
+        remote:
+          v4: 172.28.254.2
+          v6: 2001:67c:17fc:ffff::2
+      - description: FRA
+        alias: fra
+        asn: 212024
+        remote:
+          v4: 172.28.254.4
+          v6: 2001:67c:17fc:ffff::4
+
+  looking_glasses:
+    sessions:
+      - description: bgp.tools
+        asn: 212232
+        alias: bgp_tools
+        multihop: 32
+        local:
+          v6: 2001:67c:17fc:ffff::3
+        remote:
+          v6: 2a0c:2f07:9459::b12
+
+  telemetries:
+    sessions:
+      - description: pmacctd
+        asn: 212024
+        alias: pmacctd
+        route_reflector: true
+        local:
+          v4: 127.0.0.1
+        remote:
+          port: 180
+          v4: 127.0.0.2
+
+
+bird2_ospf_sessions:
+  - alias: ospf
+    areas:
+      0.0.0.0:
+        interfaces:
+          tinc-lama: {}

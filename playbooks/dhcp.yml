@@ -1,0 +1,31 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: DHCP
+  hosts: dhcp
+  roles:
+    - kea
+  tags:
+    - dhcp
+    - kea
+
+- name: IPXE
+  hosts: dhcp
+  roles:
+    - role: ipxe
+      when: ipxe_enable | default(false)
+  tags:
+    - dhcp
+    - ipxe
+
+- name: Bttrack
+  hosts: dhcp
+  roles:
+    - role: bttrack
+      when: bttrack_enable | default(false)
+  tags:
+    - dhcp
+    - bttrack

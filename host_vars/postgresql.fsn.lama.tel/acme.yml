@@ -1,0 +1,12 @@
+---
+acme_vault_client_secrets: "{{ lookup('community.hashi_vault.hashi_vault', 'acme/data/server-creds/postgresql.fsn.lama.tel') }}"
+acme_vault_client_role_id: "{{ acme_vault_client_secrets['role_id'] }}"
+acme_vault_client_secret_id: "{{ acme_vault_client_secrets['secret_id'] }}"
+
+acme_vault_client_certs:
+  - domain: postgresql.fsn.lama.tel
+    user: postgres
+    group: postgres
+    mode: "0500"
+    postrun: |
+      systemctl reload postgresql.service

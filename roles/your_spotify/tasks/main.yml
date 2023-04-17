@@ -1,0 +1,36 @@
+---
+
+- name: Deploy your_spotify docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: your_spotify
+
+    docker_compose_services:
+      web:
+        image: "{{ your_spotify_web_docker_repository }}:{{ your_spotify_api_docker_tag }}"
+        environment:
+          API_ENDPOINT: "https://{{ your_spotify_api_domain }}"
+        reverse_proxy: "{{ your_spotify_web_reverse_proxy_computed }}"
+
+      api:
+        image: "{{ your_spotify_api_docker_repository }}:{{ your_spotify_api_docker_tag }}"
+        environment:
+          API_ENDPOINT: "https://{{ your_spotify_api_domain }}"
+          CLIENT_ENDPOINT: "https://{{ your_spotify_web_domain }}"
+          SPOTIFY_PUBLIC: "{{ your_spotify_spotify_client_id }}"
+          SPOTIFY_SECRET: "{{ your_spotify_spotify_client_secret }}"
+          CORS: "https://{{ your_spotify_web_domain }},https://{{ your_spotify_api_domain }}"
+          MONGO_ENDPOINT: mongodb://your_spotify_mongo:27017/your_spotify
+        networks:
+          - default
+        reverse_proxy: "{{ your_spotify_api_reverse_proxy_computed }}"
+
+      mongo:
+        image: "{{ your_spotify_mongo_docker_repository }}:{{ your_spotify_mongo_docker_tag }}"
+        volumes:
+          - mongo_data:/data/db
+
+    docker_compose_volumes_dir_owner: root
+    docker_compose_volumes_dir_group: root
+    docker_compose_volumes_dir_mode: 0755

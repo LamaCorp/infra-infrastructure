@@ -1,0 +1,40 @@
+---
+
+bird2_bgp_rpki:
+  host: rpki.lama.tel
+  port: 323
+
+pmacctd_configuration:
+  bgp_daemon: true
+  bgp_daemon_ip: 127.0.0.2
+  bgp_daemon_port: 180
+  bgp_daemon_max_peers: 10
+
+  plugins: kafka
+  kafka_output: json
+  kafka_broker_host: services.fsn.lama.tel
+  kafka_refresh_time: 5
+  kafka_history: 5m
+  kafka_history_roundoff: m
+
+pmacctd_pcap_interfaces_map_raw: |
+  {% for interface in ansible_interfaces | sort %}
+  {% if interface != 'lo' and not interface is regex('^(vnet|gre|ip6gre|ip6tnl|erspan).*') %}
+  - ifname: "{{ interface }}"
+  {% endif %}
+  {% endfor %}
+pmacctd_pcap_interfaces_map: "{{ pmacctd_pcap_interfaces_map_raw | from_yaml }}"
+
+pmacctd_networks:
+  - 212024,2001:67c:17fc::/48
+  - 212024,2a06:e881:7700::/40
+
+  # Little trick so our public IPs actually appear as ours
+  - 212024,148.251.148.232/29
+  - 212024,136.243.102.29/32
+  - 212024,108.61.208.236/32
+  - 212024,185.101.96.121/32
+
+pmacctd_peering_agent_map:
+  - bgp_ip: "{{ bird2_router_id }}"
+    ip: 0.0.0.0/0

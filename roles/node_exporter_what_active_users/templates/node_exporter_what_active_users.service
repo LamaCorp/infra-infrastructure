@@ -1,0 +1,14 @@
+[Unit]
+Description=Run the node exporter what active users
+
+[Service]
+ExecStart=/usr/local/bin/"{{ node_exporter_what_active_users_binary_name }}" \
+    --listen.host 0.0.0.0 \
+    --listen.port "{{ node_exporter_what_active_users_port }}" \
+    --metrics.retention "{{ node_exporter_what_active_users_metrics_retention }}" \
+    --metrics.with-timestamp "{{ node_exporter_what_active_users_metrics_with_timestamp }}" \
+    --scrape.interval "{{ node_exporter_what_active_users_scrape_interval }}"
+
+[Install]
+WantedBy=multi-user.target
+

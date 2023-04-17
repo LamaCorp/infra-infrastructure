@@ -1,0 +1,35 @@
+---
+
+gatus_project_name: gatus
+
+
+gatus_docker_repository: twinproduction/gatus
+gatus_docker_tag: v5.3.1
+
+
+# gatus_domain: "CHANGEME"
+
+gatus_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ gatus_domain }}`)"
+  service:
+    port: 8080
+
+gatus_reverse_proxy: {}
+gatus_reverse_proxy_computed: "{{ gatus_default_reverse_proxy | combine(gatus_reverse_proxy, recursive=True) }}"
+
+
+gatus_postgresql_host: "{{ services_db_host }}"
+# gatus_postgresql_user: ""
+# gatus_postgresql_database: ""
+# gatus_postgresql_password: ""
+
+gatus_default_config:
+  metrics: true
+  storage:
+    type: postgres
+    path: "postgres://{{ gatus_postgresql_user }}:{{ gatus_postgresql_password }}@{{ gatus_postgresql_host }}:5432/{{ gatus_postgresql_database }}?sslmode=require"
+
+gatus_config: {}
+gatus_config_computed: "{{ gatus_default_config | combine(gatus_config) }}"

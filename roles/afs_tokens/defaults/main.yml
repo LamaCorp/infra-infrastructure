@@ -1,0 +1,11 @@
+---
+
+# afs_tokens_cell: ""
+afs_tokens_realm: "{{ afs_tokens_cell | upper }}"
+
+afs_tokens_users: []
+# - user: root
+#   username: admin
+#   password: SomeSecurePassword
+#   cell: override.me
+#   realm: OVERRIDE.ME

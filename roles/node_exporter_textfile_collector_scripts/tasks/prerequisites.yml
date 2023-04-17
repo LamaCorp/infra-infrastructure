@@ -1,0 +1,11 @@
+---
+
+- name: Install required packages
+  ansible.builtin.apt:
+    install_recommends: false
+    update_cache: true
+    state: present
+    name:
+      - git
+      - moreutils
+      - smartmontools

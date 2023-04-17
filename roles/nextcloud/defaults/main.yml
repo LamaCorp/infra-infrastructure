@@ -1,0 +1,58 @@
+---
+
+
+nextcloud_docker_repository: nextcloud
+nextcloud_docker_tag: 25.0.3-apache
+
+
+# nextcloud_domain: "CHANGEME"
+
+nextcloud_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ nextcloud_domain }}`)"
+  middleware:
+    redirectregex.permanent: true
+    redirectregex.regex: "https://(.*)/.well-known/(?:card|cal)dav"
+    redirectregex.replacement: 'https://$${1}/remote.php/dav'
+  service:
+    port: 80
+
+nextcloud_reverse_proxy: {}
+nextcloud_reverse_proxy_computed: "{{ nextcloud_default_reverse_proxy | combine(nextcloud_reverse_proxy, recursive=True) }}"
+
+
+nextcloud_office_docker_repository: collabora/code
+nextcloud_office_docker_tag: 22.05.10.2.1
+
+# nextcloud_office_domain: "CHANGEME"
+
+nextcloud_office_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ nextcloud_office_domain }}`)"
+  service:
+    port: 9980
+
+nextcloud_office_reverse_proxy: {}
+nextcloud_office_reverse_proxy_computed: "{{ nextcloud_office_default_reverse_proxy | combine(nextcloud_office_reverse_proxy, recursive=True) }}"
+
+
+nextcloud_postgres_host: "{{ services_db_host }}"
+# nextcloud_postgres_user: ""
+# nextcloud_postgres_database: ""
+# nextcloud_postgres_password: ""
+
+nextcloud_redis_host: "{{ services_redis_host }}"
+# nextcloud_redis_port: ""
+
+nextcloud_email_from: "no-reply"
+nextcloud_email_host: "{{ services_email_host }}"
+nextcloud_email_port: "{{ services_email_port }}"
+nextcloud_email_authtype: "LOGIN"
+nextcloud_email_user: ""
+nextcloud_email_password: ""
+nextcloud_email_tls: "{{ services_email_tls }}"
+
+nextcloud_admin_user: admin
+# nextcloud_admin_password: ""

@@ -1,0 +1,49 @@
+---
+
+- name: Download bird-lg-go-frontend from GitHub releases
+  ansible.builtin.unarchive:
+    src: "{{ bird_lg_go_proxy_archive_url }}"
+    dest: /usr/local/bin
+    remote_src: true
+    owner: bird
+    group: bird
+    mode: 0755
+  notify: Restart bird-lgproxy-go
+
+- name: Ensure systemd service is up-to-date
+  ansible.builtin.copy:
+    content: |
+      [Unit]
+      After=bird.service
+      Description=BIRD looking glass proxy
+      Wants=bird.service
+
+      [Service]
+      {% for k, v in bird_lg_go_environment_computed.items() %}
+      Environment="{{ k }}={{ v }}"
+      {% endfor %}
+      ExecStart=/usr/local/bin/bird-lgproxy-go
+      Type=simple
+      User=bird
+      Group=bird
+      Restart=on-failure
+      RestartSec=5s
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/bird-lgproxy-go.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload systemd
+    - Restart bird-lgproxy-go
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure systemd service is enabled and started
+  ansible.builtin.service:
+    name: bird-lgproxy-go
+    enabled: true
+    state: started

@@ -1,0 +1,12 @@
+---
+
+- name: Deploy flaresoverr docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: socks5
+
+    docker_compose_services:
+      socks5:
+        image: "{{ socks5_docker_repository }}:{{ socks5_docker_tag }}"
+        network_mode: host

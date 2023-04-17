@@ -1,0 +1,31 @@
+---
+
+- name: Deploy gatus docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: "{{ gatus_project_name }}"
+
+    docker_compose_services:
+      server:
+        image: "{{ gatus_docker_repository }}:{{ gatus_docker_tag }}"
+        volumes:
+          - config:/config:ro
+        monitoring:
+          name: "{{ gatus_project_name }}"
+          port: 8080
+        reverse_proxy: "{{ gatus_reverse_proxy_computed }}"
+        user: 1000:1000
+
+    docker_compose_volumes_dir_owner: 1000
+    docker_compose_volumes_dir_group: 1000
+    docker_compose_volumes_dir_mode: 0755
+
+- name: Ensure Gatus configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ gatus_config_computed | to_nice_yaml }}"
+    dest: "/srv/{{ gatus_project_name }}/volumes/config/config.yaml"
+    owner: 1000
+    group: 1000
+    mode: 0400
+  notify: Restart docker-compose

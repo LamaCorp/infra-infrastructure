@@ -1,0 +1,62 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Common
+  import_playbook: common.yml
+
+- name: Network
+  import_playbook: network.yml
+
+- name: KVM
+  import_playbook: kvm.yml
+
+- name: Docker
+  import_playbook: docker.yml
+
+- name: Vault
+  import_playbook: vault.yml
+
+- name: Load balancer
+  import_playbook: load_balancer.yml
+
+- name: Reverse proxy
+  import_playbook: reverse_proxy.yml
+
+- name: ACME
+  import_playbook: acme.yml
+
+- name: S3
+  import_playbook: s3.yml
+
+- name: Postgresql
+  import_playbook: postgresql.yml
+
+- name: Redis
+  import_playbook: redis.yml
+
+- name: DHCP
+  import_playbook: dhcp.yml
+
+- name: Observability
+  import_playbook: observability.yml
+
+- name: Auth
+  import_playbook: auth.yml
+
+- name: VPN
+  import_playbook: vpn.yml
+
+- name: GitLab Runner
+  import_playbook: gitlab_runner.yml
+
+- name: AFS
+  import_playbook: afs.yml
+
+- name: Apps
+  import_playbook: apps/main.yml
+
+- name: Backups
+  import_playbook: backups.yml

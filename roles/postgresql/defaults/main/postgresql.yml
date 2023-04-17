@@ -1,0 +1,130 @@
+---
+
+postgresql_version: 15
+
+# Set this to `restarted` to restart PostgreSQL instead of just reloading
+postgresql_state: reloaded
+
+postgresql_config_dir: "/etc/postgresql/{{ postgresql_version }}/main"
+postgresql_data_dir: "/var/lib/postgresql/{{ postgresql_version }}/main"
+
+# Databases to create
+postgresql_dbs: {}
+# db_name: owner
+# app_1_db: app_1
+
+# Users to create
+postgresql_users: {}
+# app_1:
+#   password: "whatever"
+#   # we can also add extra attributes later on, like a connection limit (https://www.postgresql.org/docs/15/role-attributes.html)
+#   # permissions: []   # default to empty list
+# app_2:
+#   password: "something_else"
+#   permissions:
+#     - db: app_1
+#       grants: # list of privileges to grant from https://www.postgresql.org/docs/15/ddl-priv.html
+#         - SELECT
+#     - db: app_2
+#       grants:
+#         - SELECT
+#         - INSERT
+#         - REMOVE
+# app_3:
+#   password: "anything_else_really"
+#   permissions:
+#     - db: app_3
+#       grants:
+#         - ALL
+#     - db: app_1
+#       grants:
+#         - SELECT
+#       # type of db object to set privileges on
+#       type: table
+#       objs: # objects to set privileges on
+#         - metrics
+
+postgresql_default_config:
+  # You probably don't want to edit these four files, otherwise it will conflict with the service file
+  data_directory: "'{{ postgresql_data_dir }}'"  # change requires restart
+  hba_file: "'{{ postgresql_config_dir }}/pg_hba.conf'"  # change requires restart
+  ident_file: "'{{ postgresql_config_dir }}/pg_ident.conf'"  # change requires restart
+  external_pid_file: "'/run/postgresql/{{ postgresql_version }}-main.pid'"  # change requires restart
+  unix_socket_directories: "'/var/run/postgresql'"
+
+  listen_addresses: "'0.0.0.0,::'"
+  port: 5432  # change requires restart
+  max_connections: 100  # change requires restart
+
+  # SSL
+  ssl: "on"
+  ssl_cert_file: "'/etc/ssl/certs/ssl-cert-snakeoil.pem'"
+  ssl_key_file: "'/etc/ssl/certs/ssl-cert-snakeoil.key'"
+
+  shared_buffers: 128MB  # change requires restart
+
+  dynamic_shared_memory_type: posix  # change requires restart
+
+  max_wal_size: 1GB
+  min_wal_size: 80MB
+
+  log_line_prefix: "'%m [%p] %q%u@%d '"
+  log_timezone: "'Europe/Paris'"
+
+  cluster_name: "'{{ postgresql_version }}/main'"
+
+  datestyle: "'iso, mdy'"
+  timezone: "'Europe/Paris'"
+  lc_messages: "'en_US.UTF-8'"
+  lc_monetary: "'en_US.UTF-8'"
+  lc_numeric: "'en_US.UTF-8'"
+  lc_time: "'en_US.UTF-8'"
+  default_text_search_config: "'pg_catalog.english'"
+
+postgresql_config: {}
+postgresql_computed_config: "{{ postgresql_default_config | combine(postgresql_config) }}"
+
+
+postgresql_superuser_authentication_policy:
+  type: local
+  database: all
+  user: postgres
+  method: peer
+postgresql_default_authentication_policies:
+  # Local
+  - type: local
+    database: all
+    user: all
+    method: peer
+  # IPv4 local connections
+  - type: host
+    database: all
+    user: all
+    address: "127.0.0.1/32"
+    method: scram-sha-256
+  # IPv6 local connections
+  - type: host
+    database: all
+    user: all
+    address: "::1/128"
+    method: scram-sha-256
+  # Replication connections from localhost, by a user with the replication
+  # privilege
+  - type: local
+    database: replication
+    user: all
+    method: peer
+  - type: host
+    database: replication
+    user: all
+    address: "127.0.0.1/32"
+    method: scram-sha-256
+  - type: host
+    database: replication
+    user: all
+    address: "::1/128"
+    method: scram-sha-256
+
+postgresql_authentication_policies: []
+
+postgresql_authentication_policies_computed: "{{ [postgresql_superuser_authentication_policy] + postgresql_default_authentication_policies + postgresql_authentication_policies }}"

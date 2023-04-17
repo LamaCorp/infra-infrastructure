@@ -1,0 +1,9 @@
+---
+
+matrix_mautrix_slack_enabled: true
+
+matrix_mautrix_slack_database_engine: postgres
+matrix_mautrix_slack_database_hostname: "{{ services_db_host }}"
+matrix_mautrix_slack_database_name: matrix_mautrix_slack
+matrix_mautrix_slack_database_username: matrix_mautrix_slack
+matrix_mautrix_slack_database_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/matrix_mautrix_slack')['password'] }}"

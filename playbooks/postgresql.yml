@@ -1,0 +1,12 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Postgresql
+  hosts: postgresql
+  roles:
+    - postgresql
+  tags:
+    - postgresql

@@ -1,0 +1,25 @@
+---
+
+- name: Disable ssh password authentification
+  when: not authorize_ssh_password
+  block:
+    - name: Remove all occurrence of ssh password authentification yes
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^\s*#*\s*PasswordAuthentication\s*yes'
+        state: absent
+        validate: 'sshd -f %s -t'
+      notify: Restart sshd
+
+    - name: Add PasswordAuthentication no to config
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        line: 'PasswordAuthentication no'
+        validate: 'sshd -f %s -t'
+      notify: Restart sshd
+
+- name: Set ssh authorized_keys
+  ansible.posix.authorized_key:
+    key: "{{ ssh_authorized_keys | union(ssh_authorized_keys_extra) | flatten | join('\n') }}"
+    user: root
+    exclusive: true

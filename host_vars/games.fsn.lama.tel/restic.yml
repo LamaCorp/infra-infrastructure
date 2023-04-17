@@ -1,0 +1,23 @@
+---
+
+backup_restic_creds_factorio_2022_zarak: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/factorio_2022_zarak') }}"
+
+backup_restic_list_raw:
+  - name: factorio_2022_zarak
+    enabled: true
+    repo_password: "{{ backup_restic_creds_factorio_2022_zarak['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_factorio_2022_zarak['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_factorio_2022_zarak['backup_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_factorio_2022_zarak['backup_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_factorio_2022_zarak['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_factorio_2022_zarak['prune_secret_key'] }}"
+    to_include:
+      - /srv/factorio_2022_zarak
+    backup_cron:
+      minute: 40
+      hour: 07
+    prune_cron:
+      minute: 49
+      hour: 09

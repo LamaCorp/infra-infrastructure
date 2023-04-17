@@ -1,0 +1,91 @@
+---
+
+- name: Deploy Nextcloud docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: nextcloud
+
+    docker_compose_services:
+      nextcloud:
+        image: "{{ nextcloud_docker_repository }}:{{ nextcloud_docker_tag }}"
+        environment:
+          NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
+          NEXTCLOUD_TRUSTED_DOMAINS: "{{ nextcloud_domain }}"
+          NEXTCLOUD_UPDATE: "1"
+          POSTGRES_HOST: "{{ nextcloud_postgres_host }}"
+          POSTGRES_DB: "{{ nextcloud_postgres_database }}"
+          POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+          REDIS_HOST: "{{ nextcloud_redis_host }}"
+          REDIS_HOST_PORT: "{{ nextcloud_redis_port }}"
+          SMTP_HOST: "{{ nextcloud_email_host }}"
+          SMTP_PORT: "{{ nextcloud_email_port }}"
+          SMTP_SECURE: "{{ nextcloud_email_tls | ternary('tls', '') }}"
+          SMTP_AUTHTYPE: "{{ nextcloud_email_authtype }}"
+          SMTP_NAME: "{{ nextcloud_email_user }}"
+          SMTP_PASSWORD: "{{ nextcloud_email_password }}"
+          MAIL_FROM_ADDRESS: "{{ nextcloud_email_from }}"
+          PHP_UPLOAD_LIMIT: "16G"
+        secrets:
+          - admin-password
+          - postgres-password
+        volumes:
+          - /afs:/afs
+          - nextcloud:/var/www/html
+          - custom_apps:/var/www/html/custom_apps
+          - config:/var/www/html/config
+          - data:/var/www/html/data
+        networks:
+          - default
+        reverse_proxy: "{{ nextcloud_reverse_proxy_computed }}"
+
+      cron:
+        image: "{{ nextcloud_docker_repository }}:{{ nextcloud_docker_tag }}"
+        command: /cron.sh
+        environment:
+          NEXTCLOUD_ADMIN_USER: "{{ nextcloud_admin_user }}"
+          NEXTCLOUD_TRUSTED_DOMAINS: "{{ nextcloud_domain }}"
+          POSTGRES_HOST: "{{ nextcloud_postgres_host }}"
+          POSTGRES_DB: "{{ nextcloud_postgres_database }}"
+          POSTGRES_USER: "{{ nextcloud_postgres_user }}"
+          REDIS_HOST: "{{ nextcloud_redis_host }}"
+          REDIS_HOST_PORT: "{{ nextcloud_redis_port }}"
+          SMTP_HOST: "{{ nextcloud_email_host }}"
+          SMTP_PORT: "{{ nextcloud_email_port }}"
+          SMTP_SECURE: "{{ nextcloud_email_tls | ternary('tls', '') }}"
+          SMTP_AUTHTYPE: "{{ nextcloud_email_authtype }}"
+          SMTP_NAME: "{{ nextcloud_email_user }}"
+          SMTP_PASSWORD: "{{ nextcloud_email_password }}"
+          MAIL_FROM_ADDRESS: "{{ nextcloud_email_from }}"
+        secrets:
+          - admin-password
+          - postgres-password
+        volumes:
+          - /afs:/afs
+          - nextcloud:/var/www/html
+          - custom_apps:/var/www/html/custom_apps
+          - config:/var/www/html/config
+          - data:/var/www/html/data
+
+      office:
+        image: "{{ nextcloud_office_docker_repository }}:{{ nextcloud_office_docker_tag }}"
+        environment:
+          domain: "{{ nextcloud_domain }}"
+          extra_params: "--o:ssl.enable=false  --o:ssl.termination=true"
+        privileged: true
+        cap_add:
+          - MKNOD
+        tty: true
+        reverse_proxy: "{{ nextcloud_office_reverse_proxy_computed }}"
+
+    docker_compose_secrets:
+      admin-password:
+        value: "{{ nextcloud_admin_password }}"
+        env: NEXTCLOUD_ADMIN_PASSWORD_FILE
+      postgres-password:
+        value: "{{ nextcloud_postgres_password }}"
+        env: POSTGRES_PASSWORD_FILE
+
+    docker_compose_volumes_dir_owner: 33  # www-data
+    docker_compose_volumes_dir_group: 33  # www-data
+    docker_compose_volumes_dir_mode: 0755

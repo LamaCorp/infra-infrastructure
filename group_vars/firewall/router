@@ -1,0 +1,22 @@
+---
+
+nft_define_group:
+  bird lg proxy:
+    name: bird_lg_proxy
+    value: 8990
+
+  prometheus exporter bird:
+    name: prometheus_exporter_bird
+    value: 9324
+
+nft_input_group_rules:
+  100 ospf:
+    - meta iif $ospf_interfaces ip6 nexthdr ospf accept
+
+  220 prometheus exporter bird:
+    - ip saddr $subnet_internal_4 tcp dport {$prometheus_exporter_bird} accept
+    - ip6 saddr $subnet_internal_6 tcp dport {$prometheus_exporter_bird} accept
+
+  250 bird lg proxy:
+    - ip saddr $subnet_internal_4 tcp dport {$bird_lg_proxy} accept
+    - ip6 saddr $subnet_internal_6 tcp dport {$bird_lg_proxy} accept

@@ -1,0 +1,10 @@
+[Unit]
+Description=thefractal.space twitter bot
+
+[Timer]
+OnCalendar={{ thefractalspace_bot_calendar }}
+Persistent=yes
+Unit=thefractalspace-bot.service
+
+[Install]
+WantedBy=multi-user.target

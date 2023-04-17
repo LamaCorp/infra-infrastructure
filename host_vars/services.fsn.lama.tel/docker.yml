@@ -1,0 +1,14 @@
+---
+
+docker_config_default_address_pools_raw: |
+  - base: 172.28.96.0/20
+    size: 29
+  {% for i in range(0, 256) %}
+  - base: 2001:67c:17fc:60{{ '%02x' % i }}::/64
+    size: 64
+  {% endfor %}
+
+docker_config:
+  default-address-pools: "{{ docker_config_default_address_pools_raw | from_yaml }}"
+  fixed-cidr: 172.28.96.0/29
+  fixed-cidr-v6: 2001:67c:17fc:6000::/64

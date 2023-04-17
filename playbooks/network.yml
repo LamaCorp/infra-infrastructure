@@ -1,0 +1,145 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Kresd
+  hosts: core
+  roles:
+    - kresd
+  tags:
+    - kresd
+
+- name: Network
+  hosts: all
+  pre_tasks:
+    - name: Ensure /etc/resolv.conf is up-to-date
+      ansible.builtin.copy:
+        content: |
+          {% for ns in network_nameservers %}
+          nameserver {{ ns }}
+          {% endfor %}
+          search .
+          options edns0 trust-ad
+        dest: /etc/resolv.conf
+        owner: root
+        group: root
+        mode: 0644
+    - name: Ensure hostname is up-to-date
+      ansible.builtin.hostname:
+        name: "{{ inventory_hostname }}"
+
+    - name: Ensure /etc/whois.conf is up-to-date
+      ansible.builtin.copy:
+        content: |
+          .*  {{ whois_server }}
+        dest: /etc/whois.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Ensure /etc/network/interfaces is empty
+      ansible.builtin.copy:
+        content: ""
+        dest: /etc/network/interfaces
+        backup: true
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Ensure networkd configuration is up-to-date
+      ansible.builtin.copy:
+        content: |
+          [Network]
+          ManageForeignRoutes=no
+        dest: /etc/systemd/networkd.conf
+        owner: root
+        group: root
+        mode: 0644
+      register: systemd_networkd_config_update
+
+    - name: Restart systemd-networkd
+      ansible.builtin.service:
+        name: systemd-networkd
+        state: restarted
+      when: systemd_networkd_config_update.changed
+  roles:
+    - stackhpc.systemd_networkd
+    - mrlesmithjr.netplan
+  tags:
+    - netplan
+    - network
+
+- name: Firewall
+  hosts: all
+  tasks:
+    - name: Activate IP forwarding
+      ansible.posix.sysctl:
+        name: "{{ item.key }}"
+        value: "{{ item.value }}"
+        state: present
+        reload: true
+        sysctl_set: true
+      loop:
+        - key: net.ipv4.conf.all.rp_filter
+          value: 0
+        - key: net.ipv4.conf.default.rp_filter
+          value: 0
+        - key: net.ipv4.ip_forward
+          value: 1
+        - key: net.ipv4.conf.all.forwarding
+          value: 1
+        - key: net.ipv4.conf.default.forwarding
+          value: 1
+        - key: net.ipv6.conf.all.forwarding
+          value: 1
+        - key: net.ipv6.conf.default.forwarding
+          value: 1
+      tags:
+        - sysctl
+    - name: Ensure /etc/nftables.d/filter-forward-docker.nft exists
+      ansible.builtin.file:
+        path: /etc/nftables.d/filter-forward-docker.nft
+        state: touch
+        owner: root
+        group: root
+        mode: 0644
+        modification_time: preserve
+        access_time: preserve
+      when: inventory_hostname in groups['docker']
+  roles:
+    - ipr-cnrs.nftables
+  tags:
+    - firewall
+    - nftables
+
+- name: Nftables prometheus exporter
+  hosts: all
+  roles:
+    - node_exporter_nftables
+  tags:
+    - firewall
+    - nftables
+    - observability
+
+- name: Routers
+  hosts: router
+  roles:
+    - role: bird2
+      tags:
+        - bird
+    - role: bird_lg_go_proxy
+      tags:
+        - lg
+  tags:
+    - router
+
+- name: Core router monitoring
+  hosts: core
+  roles:
+    - role: pmacct
+      tags:
+        - pmacct
+  tags:
+    - router

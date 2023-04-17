@@ -1,0 +1,44 @@
+---
+
+
+authentik_docker_repository: ghcr.io/goauthentik/server
+authentik_docker_tag: 2023.3.0
+
+
+authentik_default_reverse_proxy:
+  enable: true
+  router:
+  service:
+    port: 9000
+
+authentik_reverse_proxy: {}
+authentik_reverse_proxy_computed: "{{ authentik_default_reverse_proxy | combine(authentik_reverse_proxy, recursive=True) }}"
+
+
+# authentik_postgresql_host: ""
+# authentik_postgresql_user: ""
+# authentik_postgresql_database: ""
+# authentik_postgresql_password: ""
+
+# authentik_redis_host: ""
+# authentik_redis_port: ""
+
+# authentik_secret_key: ""
+
+# authentik_admin_password: ""
+# authentik_admin_token: ""
+
+
+authentik_default_environment:
+  AUTHENTIK_POSTGRESQL__HOST: "{{ authentik_postgresql_host }}"
+  AUTHENTIK_POSTGRESQL__USER: "{{ authentik_postgresql_user }}"
+  AUTHENTIK_POSTGRESQL__NAME: "{{ authentik_postgresql_database }}"
+  AUTHENTIK_POSTGRESQL__PASSWORD: "{{ authentik_postgresql_password }}"
+  AUTHENTIK_REDIS__HOST: "{{ authentik_redis_host }}"
+  AUTHENTIK_REDIS__PORT: "{{ authentik_redis_port }}"
+  AUTHENTIK_SECRET_KEY: "{{ authentik_secret_key }}"
+  AK_ADMIN_PASS: "{{ authentik_admin_password }}"
+  AK_ADMIN_TOKEN: "{{ authentik_admin_token }}"
+
+authentik_environment: {}
+authentik_environment_computed: "{{ authentik_default_environment | combine(authentik_environment) }}"

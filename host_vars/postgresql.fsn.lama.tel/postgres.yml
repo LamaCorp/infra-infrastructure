@@ -1,0 +1,135 @@
+---
+
+postgresql_version: 15
+
+postgresql_users:
+  authentik:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/authentik')['password'] }}"
+
+  gatus_devoups:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/gatus_devoups')['password'] }}"
+
+  gatus_phowork:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/gatus_phowork')['password'] }}"
+
+  gatus_prologin:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/gatus_prologin')['password'] }}"
+
+  hedgedoc:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/hedgedoc')['password'] }}"
+
+  lidarr:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/lidarr')['password'] }}"
+
+  mailman:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/mailman')['password'] }}"
+
+  matrix_dimension:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/matrix_dimension')['password'] }}"
+
+  matrix_ma1sd:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/matrix_ma1sd')['password'] }}"
+
+  matrix_maubot:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/matrix_maubot')['password'] }}"
+
+  matrix_mautrix_facebook:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/matrix_mautrix_facebook')['password'] }}"
+
+  matrix_mautrix_slack:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/matrix_mautrix_slack')['password'] }}"
+
+  matrix_synapse:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/matrix_synapse')['password'] }}"
+
+  mattermost:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/mattermost')['password'] }}"
+
+  netbox:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/netbox')['password'] }}"
+
+  nextcloud:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/nextcloud')['password'] }}"
+
+  paperless_risson:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/paperless_risson')['password'] }}"
+
+  prowlarr:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/prowlarr')['password'] }}"
+
+  radarr:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/radarr')['password'] }}"
+
+  readarr:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/readarr')['password'] }}"
+
+  upsilon:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/upsilon')['password'] }}"
+
+  vaultwarden:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/vaultwarden')['password'] }}"
+
+postgresql_dbs:
+  authentik: authentik
+  gatus_devoups: gatus_devoups
+  gatus_phowork: gatus_phowork
+  gatus_prologin: gatus_prologin
+  hedgedoc: hedgedoc
+  lidarr_log: lidarr
+  lidarr_main: lidarr
+  mailman: mailman
+  matrix_dimension: matrix_dimension
+  matrix_ma1sd: matrix_ma1sd
+  matrix_maubot: matrix_maubot
+  matrix_mautrix_facebook: matrix_mautrix_facebook
+  matrix_mautrix_slack: matrix_mautrix_slack
+  matrix_synapse: matrix_synapse
+  mattermost: netbox
+  netbox: netbox
+  nextcloud: nextcloud
+  paperless_risson: paperless_risson
+  prowlarr_log: prowlarr
+  prowlarr_main: prowlarr
+  radarr_log: radarr
+  radarr_main: radarr
+  readarr_cache: readarr
+  readarr_log: readarr
+  readarr_main: readarr
+  upsilon: upsilon
+  vaultwarden: vaultwarden
+
+postgresql_config:
+  ssl_cert_file: "'{{ acme_vault_client_cert_dir }}/postgresql.fsn.lama.tel/fullchain.pem'"
+  ssl_key_file: "'{{ acme_vault_client_cert_dir }}/postgresql.fsn.lama.tel/key.pem'"
+
+  # See https://pgtune.leopard.in.ua/
+  # and https://wiki.postgresql.org/wiki/Tuning_Your_PostgreSQL_Server
+  max_connections: 300
+  shared_buffers: 4GB
+  effective_cache_size: 12GB
+  maintenance_work_mem: 1GB
+  checkpoint_completion_target: 0.9
+  wal_buffers: 16MB
+  default_statistics_target: 100
+  random_page_cost: 1.1
+  effective_io_concurrency: 200
+  work_mem: 1753kB
+  min_wal_size: 1GB
+  max_wal_size: 4GB
+  max_worker_processes: 8
+  max_parallel_workers_per_gather: 4
+  max_parallel_workers: 8
+  max_parallel_maintenance_workers: 4
+
+
+postgresql_authentication_policies:
+  - type: host
+    database: all
+    user: all
+    address: "172.28.0.0/16"
+    method: scram-sha-256
+  - type: host
+    database: all
+    user: all
+    address: "2001:67c:17fc::/48"
+    method: scram-sha-256

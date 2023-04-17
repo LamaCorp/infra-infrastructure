@@ -1,0 +1,10 @@
+[Unit]
+Description=docker2nftables forward rules
+
+[Timer]
+OnCalendar={{ docker2nftables_calendar }}
+Persistent=yes
+Unit=docker2nftables.service
+
+[Install]
+WantedBy=multi-user.target

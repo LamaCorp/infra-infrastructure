@@ -1,0 +1,17 @@
+---
+
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      enp1s0:
+        accept-ra: true
+        addresses:
+          - 51.159.64.207/24
+          - 2001:bc8:1200:9:208:a2ff:fe0c:7e98/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 51.159.64.1
+          # Transmitted in RA
+          - to: ::/0
+            via: fe80::a293:51ff:fea2:ded5

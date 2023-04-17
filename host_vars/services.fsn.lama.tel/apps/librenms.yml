@@ -1,0 +1,5 @@
+---
+
+librenms_domain: nms.lama.tel
+
+librenms_redis_port: 6386

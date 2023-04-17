@@ -1,0 +1,63 @@
+---
+
+- name: Deploy Vault docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: vault
+    docker_compose_services:
+      vault:
+        image: "{{ vault_docker_repository }}:{{ vault_docker_tag }}"
+        command: vault server -config=/vault/config
+        network_mode: host
+        cap_add:
+          - IPC_LOCK
+        environment:
+          VAULT_LOCAL_CONFIG: |
+            {
+              "listener": {
+                "tcp": {
+                  "address": "0.0.0.0:8200",
+                  "tls_cert_file": "/vault/file/vault.crt",
+                  "tls_key_file": "/vault/file/vault.key",
+                  "telemetry": {
+                    "unauthenticated_metrics_access": true
+                  }
+                }
+              },
+              "storage": {
+                "file": {
+                  "path": "/vault/file"
+                }
+              },
+              "log_format": "json",
+              "telemetry": {
+                "disable_hostname": true
+              },
+              "ui": true
+            }
+        volumes:
+          - data:/vault/file
+          - logs:/vault/logs
+          - audit:/vault/audit
+    docker_compose_volumes_dir_owner: 100  # vault
+    docker_compose_volumes_dir_group: 1000  # vault
+    docker_compose_volumes_dir_mode: 0700
+
+- name: Create private key for Vault
+  community.crypto.openssl_privatekey:
+    path: /srv/vault/volumes/data/vault.key
+    type: RSA
+    size: 4096
+    owner: 100  # vault
+    group: 1000  # vault
+    mode: 0400
+
+- name: Create a self-signed certificate for Vault
+  community.crypto.x509_certificate:
+    path: /srv/vault/volumes/data/vault.crt
+    privatekey_path: /srv/vault/volumes/data/vault.key
+    provider: selfsigned
+    owner: 100  # vault
+    group: 1000  # vault
+    mode: 0400

@@ -1,0 +1,54 @@
+---
+
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      enp1s0:
+        accept-ra: true
+        addresses:
+          - 108.61.208.236/23
+          - 2a05:f480:1c00:9ee::1/64
+          - 2a05:f480:1c00:9ee::53/64
+          - 2a05:f480:1c00:9ee:5400:3ff:fe21:2eeb/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 108.61.208.1
+          - to: 169.254.0.0/16
+            via: 108.61.208.1
+            metric: 100
+          # Transmitted in RA
+          - to: ::/0
+            via: fe80::fc00:3ff:fe21:2eeb
+          - to: ::/0
+            via: fe80::fc00:3ff:fe21:2eeb
+            table: 101
+        routing-policy:
+          - from: 2a05:f480:1c00:9ee::/64
+            table: 101
+    tunnels:
+      wg-cri:
+        mode: wireguard
+        key: /etc/netplan/wg-cri.priv
+        port: 51821
+        addresses:
+          - fd3c:c1c4:bbff:9a64::ee1/64
+        peers:
+          # Phowork
+          - keys:
+              public: E1EBL3208LQ6xt3NmxSQdkgmrPMH6bjO0tTDdASJPR8=
+            allowed-ips:
+              - fd3c:c1c4:bbff:9a64::cafe/128
+              - 2a0f:9240:2000::/48
+              - 2a0e:b107:f50::/44
+            keepalive: 60
+            endpoint: "[2001:19f0:6801:7c4:5400:3ff:fe47:7968]:51823"
+          # Delicious muffins
+          - keys:
+              public: GHq5ONIpnsgdrBar2fvIgWCfPWK5wKi4LUmF6MBjIjU=
+            allowed-ips:
+              - fd3c:c1c4:bbff:9a64::4251/128
+              - 2001:67c:229c::/48
+              - 2a06:3881:7800::/40
+            keepalive: 60
+            endpoint: "[2a05:f480:1c00:e18:5400:3ff:fe21:317a]:51820"

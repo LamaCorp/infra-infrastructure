@@ -1,0 +1,29 @@
+---
+
+- name: Deploy ddclient docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: ddclient
+
+    docker_compose_services:
+      ddclient:
+        image: "{{ ddclient_docker_repository }}:{{ ddclient_docker_tag }}"
+        environment:
+          PUID: 1000
+          PGID: 1000
+          TZ: Europe/Paris
+        volumes:
+          - config:/config
+        network_mode: host
+
+    docker_compose_volumes_dir_mode: 0700
+
+- name: Ensure ddclient configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ ddclient_config }}"
+    dest: /srv/ddclient/volumes/config/ddclient.conf
+    owner: 1000
+    group: root
+    mode: 0660
+  notify: Restart docker-compose

@@ -1,0 +1,40 @@
+---
+
+
+your_spotify_web_docker_repository: yooooomi/your_spotify_client
+your_spotify_web_docker_tag: latest
+
+your_spotify_api_docker_repository: yooooomi/your_spotify_server
+your_spotify_api_docker_tag: latest
+
+your_spotify_mongo_docker_repository: mongo
+your_spotify_mongo_docker_tag: 4.4.8
+
+
+# your_spotify_web_domain: "CHANGEME"
+
+your_spotify_web_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ your_spotify_web_domain }}`)"
+  service:
+    port: 3000
+
+your_spotify_web_reverse_proxy: {}
+your_spotify_web_reverse_proxy_computed: "{{ your_spotify_web_default_reverse_proxy | combine(your_spotify_web_reverse_proxy, recursive=True) }}"
+
+# your_spotify_api_domain: "CHANGEME"
+
+your_spotify_api_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ your_spotify_api_domain }}`)"
+  service:
+    port: 8080
+
+your_spotify_api_reverse_proxy: {}
+your_spotify_api_reverse_proxy_computed: "{{ your_spotify_api_default_reverse_proxy | combine(your_spotify_api_reverse_proxy, recursive=True) }}"
+
+
+# your_spotify_spotify_client_id: "CHANGEME"
+# your_spotify_spotify_client_secret: "CHANGEME"

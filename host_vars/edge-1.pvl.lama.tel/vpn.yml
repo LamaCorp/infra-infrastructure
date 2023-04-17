@@ -1,0 +1,9 @@
+---
+
+tinc_network_lama_bind_to_interface: enp1s0
+tinc_network_lama_address:
+  - 2a05:f480:1c00:9ee:5400:3ff:fe21:2eeb
+  - 108.61.208.236
+
+tinc_network_lama_internal_addr4: 172.28.254.3/24
+tinc_network_lama_internal_addr6: 2001:67c:17fc:ffff::3/64

@@ -1,0 +1,40 @@
+---
+
+- name: Compute volumes list from services definition
+  ansible.builtin.set_fact:
+    docker_compose_volume_list: "{{ docker_compose_volume_list | d([]) + service.value.volumes | d([]) }}"
+  loop: "{{ docker_compose_services | dict2items }}"
+  loop_control:
+    loop_var: service
+  no_log: true
+
+- name: Extract volume name from volume list
+  ansible.builtin.set_fact:
+    docker_compose_volume_list: "{{ docker_compose_volume_list | map('split', ':') | map('first') | select('match', '^[^/]') }}"
+
+- name: Create volume folders
+  ansible.builtin.file:
+    path: "{{ docker_compose_volumes_dir }}/{{ volume_dir }}"
+    state: directory
+    owner: "{{ docker_compose_volumes_dir_owner }}"
+    group: "{{ docker_compose_volumes_dir_group }}"
+    mode: "{{ docker_compose_volumes_dir_mode }}"
+  loop: "{{ docker_compose_volume_list }}"
+  loop_control:
+    loop_var: volume_dir
+
+- name: Compute volumes from services definition
+  ansible.builtin.set_fact:
+    docker_compose_volumes_computed: |
+      {% for volume in docker_compose_volume_list %}
+      {{ volume }}:
+        driver: local
+        driver_opts:
+          o: bind
+          type: none
+          device: {{ docker_compose_volumes_dir }}/{{ volume }}
+      {% endfor %}
+
+- name: Compute volumes from services definition and user definition
+  ansible.builtin.set_fact:
+    docker_compose_volumes_computed: "{{ docker_compose_volumes_computed | from_yaml | combine(docker_compose_volumes, recursive=True) }}"

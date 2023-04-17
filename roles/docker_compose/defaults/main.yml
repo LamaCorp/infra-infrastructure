@@ -1,0 +1,86 @@
+---
+
+# Intentionally left undefined to force definition.
+# docker_compose_project_name: "app"
+docker_compose_project_dir: "/srv/{{ docker_compose_project_name }}"
+docker_compose_volumes_dir: "{{ docker_compose_project_dir }}/volumes"
+docker_compose_secrets_dir: "{{ docker_compose_project_dir }}/secrets"
+
+docker_compose_services: {}
+# frontend:
+#   image: hello-world
+#   ports:
+#     - 80:8080
+#   environment:
+#     LISTEN_PORT: 8080
+#     BACKEND_HOST: backend_service:8000
+#   reverse_proxy:
+#     router:
+#       rule: "Host(`example.org`)"
+#     service:
+#       port: 8080
+#   # As reverse_proxy is defined, the network `reverse_proxy` is automatically
+#   # added.
+#   networks:
+#     - backend
+#   depends_on:
+#     - backend
+#
+# backend:
+#   image: hello-world
+#   environment:
+#     LISTEN_PORT: 8000
+#   volumes:
+#     - app-data:/data
+#   networks:
+#     - backend
+#   secrets:
+#     # Needs to be defined in docker_compose_secrets
+#     - secret-key
+
+
+# Automatically generated from networks defined in docker_compose_services.
+# Can be used to overwrite network options.
+docker_compose_networks: {}
+# Generated for the services above:
+# backend: {}
+# reverse_proxy:
+#   external: true
+
+# Automatically generated from volumes defined in docker_compose_services.
+# Can be used to overwrite volumes options.
+docker_compose_volumes: {}
+# Generated for the services above:
+# app-data:
+#   driver: local
+#   driver_opts:
+#     o: bind
+#     type: none
+#     device: /srv/app/volumes/app-data
+
+docker_compose_volumes_dir_owner: root
+docker_compose_volumes_dir_group: root
+docker_compose_volumes_dir_mode: 0755
+
+docker_compose_secrets: {}
+# secret-key:
+#   value: mySuperSecretKey12345
+#   env: SECRET_KEY_FILE
+# This will create /srv/app/secrets/secret-key with the value as the content,
+# and will add SECRET_KEY_FILE=/run/secrets/secret-key as an environment
+# variable to the services that list this secret.
+
+# Can be used to set default restart policy (unless-stopped) for all services in
+# a role, in a host, etc. Additionally per-service restart policy can be applied
+# directly in the service definition in docker_compose_services
+docker_compose_restart_policy: unless-stopped
+
+
+# Networks that already exist and will considered as external.
+docker_compose_existing_networks_default:
+  - host
+  - reverse_proxy
+  - monitoring_scrapping
+
+docker_compose_existing_networks: []
+docker_compose_existing_networks_computed: "{{ (docker_compose_existing_networks_default + docker_compose_existing_networks) | unique }}"

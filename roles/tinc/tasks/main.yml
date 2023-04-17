@@ -1,0 +1,19 @@
+---
+
+- ansible.builtin.import_tasks: install.yml
+- ansible.builtin.import_tasks: configure.yml
+
+- name: Ensure tinc is enabled and started
+  ansible.builtin.service:
+    name: tinc.service
+    state: started
+    enabled: true
+  throttle: 1
+
+- name: Ensure tinc networks are enabled and started
+  ansible.builtin.service:
+    name: "tinc@{{ item }}.service"
+    state: started
+    enabled: true
+  loop: "{{ tinc_networks.keys() }}"
+  throttle: 1

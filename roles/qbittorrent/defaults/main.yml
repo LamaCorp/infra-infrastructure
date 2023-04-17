@@ -1,0 +1,5 @@
+---
+
+
+qbittorrent_docker_repository: ghcr.io/hotio/qbittorrent
+qbittorrent_docker_tag: release-4.5.2

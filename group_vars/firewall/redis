@@ -1,0 +1,11 @@
+---
+
+nft_define_group:
+  prometheus exporter redis:
+    name: prometheus_exporter_redis
+    value: 9121
+
+nft_input_group_rules:
+  220 prometheus exporter redis:
+    - ip saddr $subnet_internal_4 tcp dport {$prometheus_exporter_redis} accept
+    - ip6 saddr $subnet_internal_6 tcp dport {$prometheus_exporter_redis} accept

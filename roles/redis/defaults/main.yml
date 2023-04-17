@@ -1,0 +1,24 @@
+---
+
+redis_disable_default_instance: true
+redis_enable_vm_overcommit: false
+
+redis_storage_dir: /var/lib/redis
+
+redis_instances: []
+# - name: cache
+#   bind: "* -::*"  # the default
+#   port: 6379
+#   extra_config: |
+
+
+redis_exporter_enabled: true
+
+redis_exporter_version: 1.45.0
+redis_exporter_checksum: "sha256:0890f4a75c41a953b608a3c025ef735296a473e0119ed31864c8510efe7a8393"
+
+redis_exporter_dist: "redis_exporter-v{{ redis_exporter_version }}.linux-amd64"
+redis_exporter_url: "https://github.com/oliver006/redis_exporter/releases/download/v{{ redis_exporter_version }}/{{ redis_exporter_dist }}.tar.gz"
+
+redis_exporter_flags:
+  - --redis.addr=

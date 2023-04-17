@@ -1,0 +1,17 @@
+---
+
+backup_restic_creds_mail: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/mail') }}"
+
+backup_restic_list_raw:
+  - name: mail
+    enabled: true
+    repo_password: "{{ backup_restic_creds_mail['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_mail['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_mail['prune_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_mail['prune_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_mail['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_mail['prune_secret_key'] }}"
+    to_include:
+      - /srv/mail

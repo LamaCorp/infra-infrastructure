@@ -1,0 +1,14 @@
+---
+
+- name: Add Redis apt repo key
+  ansible.builtin.apt_key:
+    url: https://packages.redis.io/gpg
+
+- name: Add Redis repo
+  ansible.builtin.apt_repository:
+    repo: "deb  https://packages.redis.io/deb {{ ansible_distribution_release }} main"
+    update_cache: true
+
+- name: Install Redis
+  ansible.builtin.apt:
+    name: redis-server

@@ -1,0 +1,7 @@
+---
+
+- name: Restart kresd
+  ansible.builtin.service:
+    name: "kresd@{{ item }}.service"
+    state: restarted
+  loop: "{{ range(0, knot_resolver_systemd_instances) | list }}"

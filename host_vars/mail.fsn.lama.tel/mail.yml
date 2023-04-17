@@ -1,0 +1,97 @@
+---
+
+mail_hostname: mail-1.lama-corp.space
+
+mail_environment:
+  NETWORK_INTERFACE: public
+  ACCOUNT_PROVISIONER: LDAP
+  POSTMASTER_ADDRESS: postmaster@lama-corp.space
+  POSTFIX_INET_PROTOCOLS: ipv4
+  LDAP_SERVER_HOST: ldap://localhost:3389
+  LDAP_SEARCH_BASE: dc=mail,dc=lama-corp,dc=space
+  LDAP_BIND_DN: cn=mail,ou=users,dc=mail,dc=lama-corp,dc=space
+  LDAP_BIND_PW: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/apps/mail/ldap')['bind_password'] }}"
+  LDAP_QUERY_FILTER_USER: "(&(objectClass=user)(mailPrimaryAddress=%s))"
+  LDAP_QUERY_FILTER_GROUP: "(&(objectClass=group)(mailAlias=%s))"
+  LDAP_QUERY_FILTER_ALIAS: "(&(objectClass=user)(mailAlias=%s))"
+  LDAP_QUERY_FILTER_DOMAIN: "(|(mailPrimaryAddress=*@%s)(mailAlias=*@%s))"
+  DOVECOT_AUTH_BIND: "yes"
+  DOVECOT_USER_FILTER: "(&(objectClass=user)(cn=%n))"
+  DOVECOT_USER_ATTRS: "=home=/var/mail/%{ldap:cn},=mail=maildir:/var/mail/%{ldap:cn}/Maildir"
+  ENABLED_SASLAUTHD: 1
+  SASLAUTHD_MECHANISMS: ldap
+  SASLAUTHD_LDAP_FILTER: "(&(objectClass=user)(cn=%n))"
+  SASLAUTHD_LDAP_PASSWORD_ATTR: " "
+
+mail_ldap_default_config: |
+  version = 3
+  server_host = {{ mail_environment.LDAP_SERVER_HOST }}
+  server_port = 3389
+  start_tls = no
+  search_base = {{ mail_environment.LDAP_SEARCH_BASE }}
+  bind = yes
+  bind_dn = {{ mail_environment.LDAP_BIND_DN }}
+  bind_pw = {{ mail_environment.LDAP_BIND_PW }}
+
+mail_extra_configs:
+  dovecot.cf: |
+    mail_uid = docker
+    mail_gid = docker
+  ldap-users.cf: |
+    {{ mail_ldap_default_config }}
+    query_filter = {{ mail_environment.LDAP_QUERY_FILTER_USER }}
+    result_attribute = mailPrimaryAddress
+  ldap-groups.cf: |
+    {{ mail_ldap_default_config }}
+    query_filter = {{ mail_environment.LDAP_QUERY_FILTER_GROUP }}
+    result_attribute = mailForwardTo, mailPrimaryAddress
+    leaf_result_attribute = mailForwardTo, mailPrimaryAddress
+    special_result_attribute = member
+  ldap-aliases.cf: |
+    {{ mail_ldap_default_config }}
+    query_filter = {{ mail_environment.LDAP_QUERY_FILTER_ALIAS }}
+    result_attribute = mailForwardTo, mailPrimaryAddress
+  ldap-domains.cf: |
+    {{ mail_ldap_default_config }}
+    query_filter = {{ mail_environment.LDAP_QUERY_FILTER_DOMAIN }}
+    result_attribute = mailPrimaryAddress, mailAlias
+  ldap-senders-users.cf: |
+    {{ mail_ldap_default_config }}
+    query_filter = (&(objectClass=user)(|(mailPrimaryAddress=%s)(mailAlias=%s)(mailAlias=@%s)))
+    result_attribute = cn
+  ldap-senders-groups.cf: |
+    {{ mail_ldap_default_config }}
+    query_filter = (&(objectClass=group)(|(mailAlias=%s)(mailAlias=@%s)))
+    result_attribute = cn
+    leaf_result_attribute = cn
+    special_result_attribute = member
+  postfix-main.cf: |
+    mynetworks = 127.0.0.0/8, [::ffff:127.0.0.0]/104, [::1]/128
+    relay_domains = regexp:/opt/mailman/core/var/data/postfix_domains
+    local_recipient_maps = regexp:/opt/mailman/core/var/data/postfix_lmtp proxy:unix:passwd.byname $alias_maps
+    owner_request_special = no
+    smtpd_sender_login_maps = ldap:/tmp/docker-mailserver/ldap-senders-users.cf ldap:/tmp/docker-mailserver/ldap-senders-groups.cf
+    transport_maps = regexp:/opt/mailman/core/var/data/postfix_lmtp
+  postfix-master.cf: |
+    smtp/unix/smtp_bind_address=148.251.148.232
+    relay/unix/smtp_bind_address=148.251.148.232
+
+
+mail_ak_ldap_outpost_enable: true
+mail_ak_ldap_outpost_authentik_host: https://auth.lama-corp.space
+mail_ak_ldap_outpost_token: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/apps/mail/ldap')['outpost_token'] }}"
+
+
+mail_mailman_enable: true
+
+mail_mailman_postgresql_host: postgresql.fsn.lama.tel
+mail_mailman_postgresql_database: mailman
+mail_mailman_postgresql_user: mailman
+mail_mailman_postgresql_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/mailman')['password'] }}"
+
+mail_mailman_hyperkitty_api_key: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/mailman/secrets')['hyperkitty-api-key'] }}"
+mail_mailman_web_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/mailman/secrets')['secret-key'] }}"
+
+mail_mailman_admin_email: root@lama-corp.space
+
+mail_mailman_serve_from_domain: lists.lama-corp.space

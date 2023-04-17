@@ -1,0 +1,17 @@
+---
+
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      ens3:
+        addresses:
+          - 172.28.1.80/26
+          - 2001:67c:17fc:102::80/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.28.1.126
+    bridges:
+      public:
+        addresses:
+          - 148.251.148.234/32

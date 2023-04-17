@@ -1,0 +1,7 @@
+---
+
+- name: Download what active users node exporter binary
+  ansible.builtin.import_tasks: download.yml
+
+- name: Run the what active users node exporter
+  ansible.builtin.import_tasks: launch.yml

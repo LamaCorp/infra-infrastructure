@@ -1,0 +1,35 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Observability
+  hosts: observability
+  pre_tasks:
+    - name: Compute Prometheus rules
+      ansible.builtin.set_fact:
+        prometheus_rules: "{{ prometheus_rules | default({}) | combine(rules, recursive=True, list_merge='append') }}"
+      loop: "{{ prometheus_rules_list | default([]) }}"
+      loop_control:
+        loop_var: rules
+  roles:
+    - observability
+  tags:
+    - observability
+
+- name: Snmpd
+  hosts: all
+  roles:
+    - buluma.snmpd
+  tags:
+    - observability
+    - snmpd
+
+- name: Promtail
+  hosts: all
+  roles:
+    - patrickjahns.promtail
+  tags:
+    - observability
+    - promtail

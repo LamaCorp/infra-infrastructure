@@ -1,0 +1,13 @@
+---
+
+bird_lg_go_proxy_version: v1.2.0
+
+bird_lg_go_proxy_archive_url: "https://github.com/xddxdd/bird-lg-go/releases/download/{{ bird_lg_go_proxy_version }}/bird-lgproxy-go-{{ bird_lg_go_proxy_version }}-linux-amd64.tar.gz"
+
+bird_lg_go_environment_default:
+  BIRDLG_PROXY_PORT: 8990
+  BIRDLG_TRACEROUTE_BIN: mtr
+  BIRDLG_TRACEROUTE_FLAGS: -w -c1 -Z1 -G1 -b -z
+
+bird_lg_go_environment: {}
+bird_lg_go_environment_computed: "{{ bird_lg_go_environment_default | combine(bird_lg_go_environment) }}"

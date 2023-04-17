@@ -1,0 +1,30 @@
+---
+
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      ens3:
+        addresses:
+          - 172.28.1.30/26
+          - 2001:67c:17fc:101::30/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.28.1.62
+    bridges:
+      br-docker: {}
+      public:
+        addresses:
+          - 148.251.148.237/32
+
+
+bird2_router_id: 172.28.1.30
+
+bird2_ospf_sessions:
+  - alias: ospf
+    areas:
+      0.0.0.0:
+        interfaces:
+          ens3: {}
+          "br*":
+            stub: true

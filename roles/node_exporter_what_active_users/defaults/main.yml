@@ -1,0 +1,10 @@
+---
+
+node_exporter_what_active_users_download_url: https://github.com/stfsy/prometheus-what-active-users-exporter/releases/download/v0.7.0/prometheus-what-active-users-exporter-v0.7.0-linuxstatic-x64
+
+node_exporter_what_active_users_port: 9839
+node_exporter_what_active_users_metrics_retention: 30000
+node_exporter_what_active_users_scrape_interval: 5000
+node_exporter_what_active_users_metrics_with_timestamp: true
+
+node_exporter_what_active_users_binary_name: node_exporter_what_active_users

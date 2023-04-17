@@ -1,0 +1,29 @@
+---
+
+
+thefractalspace_docker_repository: registry.gitlab.com/risson/thefractal.space/dockerize
+thefractalspace_docker_tag: 978d33cf52f0dd706c65da35608012861a0e6867
+
+thefractalspace_brocoli_docker_repository: registry.gitlab.com/ddorn/brocoli
+thefractalspace_brocoli_docker_tag: 2c7d685795d7ac5836870194b7c8994f5d88ff48
+
+# thefractalspace_domain: ""
+
+thefractalspace_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ thefractalspace_domain }}`)"
+    middlewares: "default-with-error-pages@file"
+  service:
+    port: 8000
+
+thefractalspace_reverse_proxy: {}
+thefractalspace_reverse_proxy_computed: "{{ thefractalspace_default_reverse_proxy | combine(thefractalspace_reverse_proxy, recursive=True) }}"
+
+
+thefractalspace_bot_calendar: "*-*-* 08:42:00 Europe/Paris"
+
+# thefractalspace_bot_twitter_access_key: ""
+# thefractalspace_bot_twitter_access_secret: ""
+# thefractalspace_bot_twitter_consumer_key: ""
+# thefractalspace_bot_twitter_consumer_secret: ""

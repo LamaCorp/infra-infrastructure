@@ -1,0 +1,291 @@
+---
+
+prometheus_retention_time: "30d"
+prometheus_retention_size: "5GB"
+
+prometheus_domain: prometheus.lama.tel
+prometheus_external_url: "https://{{ prometheus_domain }}"
+
+prometheus_global_config:
+  external_labels:
+    prometheus_cluster: fsn
+    prometheus_replica: 1
+
+
+prometheus_scrape_configs_node_targets_raw: |
+  {% for host in groups['all'] %}
+  - {{ host }}:9100
+  {% endfor %}
+
+prometheus_scrape_configs_what_active_users_targets_raw: |
+  {% for host in groups['all'] %}
+  - {{ host }}:9839
+  {% endfor %}
+
+prometheus_scrape_configs_firewall_targets_raw: |
+  {% for host in groups['all'] %}
+  - {{ host }}:9630
+  {% endfor %}
+
+prometheus_scrape_configs_bird_targets_raw: |
+  {% for host in groups['router'] %}
+  - {{ host }}:9324
+  {% endfor %}
+
+prometheus_scrape_configs_docker_targets_raw: |
+  {% for host in groups['docker'] %}
+  - {{ host }}:9323
+  {% endfor %}
+
+prometheus_scrape_configs_postgresql_targets_raw: |
+  {% for host in groups['postgresql'] %}
+  - {{ host }}:9187
+  {% endfor %}
+
+prometheus_scrape_configs_redis_static_configs_raw: |
+  {% for host in groups['redis'] %}
+  {% for redis_instance in hostvars[host]['redis_instances'] %}
+  - targets:
+      - redis://{{ host }}:{{ redis_instance.port }}
+    labels:
+      redis_instance: {{ redis_instance.name }}
+  {% endfor %}
+  {% endfor %}
+
+prometheus_scrape_configs:
+  - job_name: node
+    static_configs:
+      - targets: "{{ prometheus_scrape_configs_node_targets_raw | from_yaml }}"
+  - job_name: what_active_users
+    static_configs:
+      - targets: "{{ prometheus_scrape_configs_what_active_users_targets_raw | from_yaml }}"
+  - job_name: nftables
+    static_configs:
+      - targets: "{{ prometheus_scrape_configs_firewall_targets_raw | from_yaml }}"
+  - job_name: bird
+    static_configs:
+      - targets: "{{ prometheus_scrape_configs_bird_targets_raw | from_yaml }}"
+  - job_name: docker
+    static_configs:
+      - targets: "{{ prometheus_scrape_configs_docker_targets_raw | from_yaml }}"
+  - job_name: vault
+    metrics_path: /v1/sys/metrics
+    params:
+      format: [prometheus]
+    scheme: https
+    tls_config:
+      insecure_skip_verify: true
+    static_configs:
+      - targets:
+          - secure-services.fsn.lama.tel:8200
+  - job_name: postgres
+    static_configs:
+      - targets: "{{ prometheus_scrape_configs_postgresql_targets_raw | from_yaml }}"
+  - job_name: redis_targets
+    static_configs: "{{ prometheus_scrape_configs_redis_static_configs_raw | from_yaml }}"
+    metrics_path: /scrape
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: redis.fsn.lama.tel:9121
+  - job_name: redis_exporter
+    static_configs:
+      - targets:
+          - redis.fsn.lama.tel:9121
+  - job_name: bgptools
+    scheme: https
+    static_configs:
+      - targets:
+          - bgp.tools:443
+    metrics_path: /prom/495364bc-abd8-4204-a622-2471db82481d
+
+
+prometheus_rules_list:
+  - "{{ prometheus_rules_alertmanager }}"
+  - "{{ prometheus_rules_django }}"
+  - "{{ prometheus_rules_loki }}"
+  - "{{ prometheus_rules_node }}"
+  - "{{ prometheus_rules_postgresql }}"
+  - "{{ prometheus_rules_prometheus }}"
+  - "{{ prometheus_rules_redis }}"
+  - "{{ prometheus_rules_vault }}"
+
+
+thanos_objstore_config:
+  type: S3
+  config:
+    bucket: thanos
+    access_key: "{{ lookup('community.hashi_vault.hashi_vault', 's3/data/users/thanos')['access_key'] }}"
+    secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 's3/data/users/thanos')['secret_key'] }}"
+    endpoint: s3.lama-corp.space
+
+thanos_domain: thanos.lama.tel
+
+thanos_bucketweb_domain: thanos-bucketweb.lama.tel
+thanos_bucketweb_reverse_proxy:
+  middleware:
+    forwardauth.address: http://ak-outpost-thanos-bucketweb:9000/outpost.goauthentik.io/auth/traefik
+    forwardauth.trustForwardHeader: true
+    forwardauth.authResponseHeaders: "{{ authentik_forwardauth_headers }}"
+
+
+alertmanager_domain: alerts.lama.tel
+alertmanager_reverse_proxy:
+  middleware:
+    forwardauth.address: http://ak-outpost-alertmanager:9000/outpost.goauthentik.io/auth/traefik
+    forwardauth.trustForwardHeader: true
+    forwardauth.authResponseHeaders: "{{ authentik_forwardauth_headers }}"
+
+alertmanager_route_config:
+  routes:
+    - matchers:
+        - severity =~ "none|information|warning"
+      repeat_interval: 7d
+    - matchers:
+        - severity =~ "critical"
+      receiver: discord-infra-critical-alerts
+    - matchers:
+        - severity =~ "disaster"
+      repeat_interval: 1h
+      receiver: discord-infra-critical-alerts
+
+
+alertmanager_receivers:
+  - name: discord-infra-critical-alerts
+    webhook_configs:
+      - send_resolved: true
+        url: "http://observability_alertmanager_discord:8080/critical"
+
+alertmanager_discord_roles_to_mention:
+  - "<@&984753202232713216>"
+
+alertmanager_discord_channels_webhooks: "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/discord-webhooks') }}"
+
+alertmanager_discord_channels:
+  default:
+    name: infra-alerts
+    webhookURL: "{{ alertmanager_discord_channels_webhooks['infra-alerts'] }}"
+  critical:
+    name: infra-critical-alerts
+    webhookURL: "{{ alertmanager_discord_channels_webhooks['infra-critical-alerts'] }}"
+
+
+loki_basic_auth_user_list:
+  - "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/loki/basic-auth/infra') }}"
+  - "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/loki/basic-auth/pie') }}"
+loki_basic_auth_users: |
+  {% for user in loki_basic_auth_user_list %}
+  - "{{ user['username'] }}:{{ user['htpasswd'] | regex_replace('\$', '$$') }}"
+  {% endfor %}
+
+loki_domain: loki.lama.tel
+loki_reverse_proxy:
+  middleware:
+    basicauth.users: "{{ loki_basic_auth_users | from_yaml | join(',') }}"
+    basicauth.realm: loki
+    basicauth.removeHeader: "true"
+
+loki_config:
+  common:
+    storage:
+      s3:
+        endpoint: s3.lama-corp.space
+        bucketnames: loki
+        access_key_id: "{{ lookup('community.hashi_vault.hashi_vault', 's3/data/users/loki')['access_key'] }}"
+        secret_access_key: "{{ lookup('community.hashi_vault.hashi_vault', 's3/data/users/loki')['secret_key'] }}"
+  schema_config:
+    configs:
+      - from: "2022-01-30"
+        store: boltdb-shipper
+        object_store: s3
+        schema: v11
+        index:
+          prefix: index_
+          period: 24h
+
+  compactor:
+    shared_store: s3
+
+  storage_config:
+    boltdb_shipper:
+      shared_store: s3
+
+  chunk_store_config:
+    max_look_back_period: 1036800h  # 2 years
+
+  table_manager:
+    retention_deletes_enabled: true
+    retention_period: 1036800h  # 2 years
+
+
+grafana_domain: grafana.lama.tel
+
+grafana_admin_creds: "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/grafana/admin') }}"
+grafana_admin_user: "{{ grafana_admin_creds['username'] }}"
+grafana_admin_password: "{{ grafana_admin_creds['password'] }}"
+
+grafana_config_auth_creds: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/apps/grafana/oidc') }}"
+grafana_config:
+  server:
+    domain: "{{ grafana_domain }}"
+    enforce_domain: true
+    root_url: "https://{{ grafana_domain }}"
+  security:
+    cookie_secure: true
+  auth.anonymous:
+    enabled: true
+    org_name: Main Org.
+  auth:
+    signout_redirect_url: https://auth.lama.tel/application/o/grafana/end-session/
+  auth.generic_oauth:
+    name: Lama Corp.
+    enabled: true
+    allow_sign_up: true
+    client_id: "{{ grafana_config_auth_creds['client_id'] }}"
+    client_secret: "{{ grafana_config_auth_creds['secret_id'] }}"
+    scopes: openid email profile
+    auth_url: https://auth.lama.tel/application/o/authorize/
+    token_url: https://auth.lama.tel/application/o/token/
+    api_url: https://auth.lama.tel/application/o/userinfo/
+    role_attribute_path: "contains(groups[*], 'roots') && 'Admin' || 'Viewer'"
+    allow_assign_grafana_admin: true
+    role_attribute_strict: true
+  users:
+    auto_assign_org: true
+    auto_assign_org_id: 1  # Main Org.
+  plugins:
+    plugin_admin_enabled: false
+  feature_toggles:
+    enable: dashboardPreviews flameGraph scenes
+
+grafana_plugins:
+  - cloudflare-app
+  - knightss27-weathermap-panel
+
+grafana_plugins_configs:
+  - type: cloudflare-app
+    secureJsonData:
+      bearer: "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/grafana/cloudflare-token')['token'] }}"
+
+grafana_datasources:
+  - name: Loki infra
+    type: loki
+    access: proxy
+    url: http://observability_loki:3100
+    editable: false
+    jsonData:
+      httpHeaderName1: "X-Scope-OrgID"
+    secureJsonData:
+      httpHeaderValue1: "infra"
+  - name: Loki PIE
+    type: loki
+    access: proxy
+    url: http://observability_loki:3100
+    editable: false
+    jsonData:
+      httpHeaderName1: "X-Scope-OrgID"
+    secureJsonData:
+      httpHeaderValue1: "pie"

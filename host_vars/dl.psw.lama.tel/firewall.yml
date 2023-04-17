@@ -1,0 +1,15 @@
+---
+
+nft_define_group:
+  ospf interfaces:
+    name: ospf_interfaces
+    value: tinc-lama
+
+
+nft_input_host_rules:
+  500 qbittorent:
+    - tcp dport 25826 accept
+    - udp dport 25826 accept
+  510 qbittorent ui:
+    - ip saddr {$subnet_internal_4} tcp dport 8080 accept
+    - ip6 saddr {$subnet_internal_6} tcp dport 8080 accept

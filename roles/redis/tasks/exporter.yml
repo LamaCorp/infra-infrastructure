@@ -1,0 +1,50 @@
+---
+
+- name: Download and extract Redis exporter
+  ansible.builtin.unarchive:
+    src: "{{ redis_exporter_url }}"
+    dest: "/usr/local/share/"
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: true
+    creates: "/usr/local/share/{{ redis_exporter_dist }}/redis_exporter"
+
+- name: Symlink exporter into $PATH
+  ansible.builtin.file:
+    src: "/usr/local/share/{{ redis_exporter_dist }}/redis_exporter"
+    path: "/usr/local/bin/redis_exporter"
+    owner: root
+    group: root
+    force: true
+    state: link
+  notify: Restart Redis exporter
+
+- name: Ensure Redis exporter configuration is up-to-date
+  ansible.builtin.template:
+    src: redis_exporter.default.conf
+    dest: /etc/default/redis_exporter
+    owner: root
+    group: redis
+    mode: 0640
+  notify: Restart Redis exporter
+
+- name: Install Redis exporter service
+  ansible.builtin.template:
+    src: redis_exporter.service
+    dest: /etc/systemd/system/redis_exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  register: copy_redis_exporter_service
+  notify: Restart Redis exporter
+
+- name: Reload systemd
+  ansible.builtin.systemd:  # noqa no-handler
+    daemon_reload: true
+  when: copy_redis_exporter_service.changed
+
+- name: Enable Redis exporter service
+  ansible.builtin.service:  # noqa no-handler
+    name: redis_exporter
+    enabled: true

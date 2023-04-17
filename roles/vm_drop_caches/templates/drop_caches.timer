@@ -1,0 +1,10 @@
+[Unit]
+Description=Drop virtual memory caches
+
+[Timer]
+OnCalendar={{ vm_drop_caches_calendar | d(vm_drop_caches_default_calendar) }}
+{% if vm_drop_caches_randomize_delay %}
+RandomizedDelaySec={{ vm_drop_caches_randomize_delay_sec }}
+{% endif %}
+Persistent=yes
+Unit=drop_caches.service

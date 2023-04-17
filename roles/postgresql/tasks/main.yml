@@ -1,0 +1,73 @@
+---
+
+- name: Add signing key for PostgreSQL repo
+  ansible.builtin.apt_key:
+    url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
+
+- name: Add PostgreSQL repo to sources list
+  ansible.builtin.apt_repository:
+    repo: "deb http://apt.postgresql.org/pub/repos/apt/ {{ ansible_distribution_release }}-pgdg main"
+    update_cache: true
+
+- name: Install PostgreSQL packages
+  ansible.builtin.apt:
+    name:
+      - "postgresql-{{ postgresql_version }}"
+      - python3-psycopg2
+
+- name: Template PostgreSQL configuration
+  ansible.builtin.template:
+    src: postgresql.conf
+    dest: "{{ postgresql_config_dir }}/postgresql.conf"
+    owner: postgres
+    group: postgres
+    mode: 0644
+  notify: Reload postgresql service
+
+- name: Template PostgreSQL authentication policies
+  ansible.builtin.template:
+    src: pg_hba.conf
+    dest: "{{ postgresql_config_dir }}/pg_hba.conf"
+    owner: postgres
+    group: postgres
+    mode: 0640
+  notify: Reload postgresql service
+
+- name: Restart of reload PostgreSQL before creating users and databases
+  ansible.builtin.meta: flush_handlers
+
+- name: Create users, databases and configure privileges
+  become: true
+  become_user: postgres
+  block:
+    - name: Create users
+      community.postgresql.postgresql_user:
+        name: "{{ user.name }}"
+        password: "{{ user.settings.password }}"
+      loop: "{{ postgresql_users | dict2items(key_name='name', value_name='settings') }}"
+      loop_control:
+        loop_var: user
+      no_log: true
+
+    - name: Create databases
+      community.postgresql.postgresql_db:
+        name: "{{ db.name }}"
+        owner: "{{ db.owner }}"
+      loop: "{{ postgresql_dbs | dict2items(key_name='name', value_name='owner') }}"
+      loop_control:
+        loop_var: db
+
+    - name: Grant user privileges
+      community.postgresql.postgresql_privs:
+        database: "{{ user.1.db }}"
+        roles: "{{ user.0.name }}"
+        privs: "{{ user.1.grants | join(',') }}"
+        type: "{{ user.1.type | default('database') }}"
+        objs: "{{ omit if user.1.objs is not defined else user.1.objs | join(',') }}"
+      loop: "{{ postgresql_users | dict2items(key_name='name', value_name='settings') | subelements('settings.permissions', skip_missing=True) }}"
+      loop_control:
+        loop_var: user
+
+- name: Setup PostgreSQL exporter
+  ansible.builtin.import_tasks: exporter.yml
+  when: postgresql_exporter_enabled

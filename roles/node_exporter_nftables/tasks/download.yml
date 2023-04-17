@@ -1,0 +1,20 @@
+---
+
+- name: Download and unarchive the desired revision of the scripts
+  ansible.builtin.unarchive:
+    src: "{{ node_exporter_nftables_download_url }}"
+    dest: /tmp
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: true
+
+- name: Install the binary
+  ansible.builtin.copy:
+    src: /tmp/usr/bin/nftables-exporter
+    dest: "/usr/local/bin/{{ node_exporter_nftables_binary_name }}"
+    owner: root
+    group: root
+    mode: 0755
+    force: true
+    remote_src: true

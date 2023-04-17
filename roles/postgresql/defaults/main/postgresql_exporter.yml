@@ -1,0 +1,17 @@
+---
+
+postgresql_exporter_enabled: true
+
+postgresql_exporter_user: postgres
+postgresql_exporter_group: postgres
+
+postgresql_exporter_version: 0.11.1
+postgresql_exporter_checksum: "sha256:ec27e2a52b764c4313076ea6db335607cc40fb8a503dcb74d9517dc8baf049f0"
+
+postgresql_exporter_dist: "postgres_exporter-{{ postgresql_exporter_version }}.linux-amd64"
+postgresql_exporter_url: "https://github.com/prometheus-community/postgres_exporter/releases/download/v{{ postgresql_exporter_version }}/{{ postgresql_exporter_dist }}.tar.gz"
+
+postgresql_exporter_datasource: "postgresql://postgres@:5432/postgres?host=/var/run/postgresql/&sslmode=disable"
+postgresql_exporter_flags:
+  - --auto-discover-databases
+  - "--extend.query-path={{ postgresql_config_dir }}/queries.yml"

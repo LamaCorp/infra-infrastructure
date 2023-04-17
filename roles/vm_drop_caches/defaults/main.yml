@@ -1,0 +1,5 @@
+---
+
+vm_drop_caches_default_calendar: "hourly"  # nicer version of *-*-* *:00:00
+vm_drop_caches_randomize_delay: true
+vm_drop_caches_randomize_delay_sec: 600

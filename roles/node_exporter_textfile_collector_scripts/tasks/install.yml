@@ -1,0 +1,13 @@
+---
+
+- name: Install the desired scripts into /usr/local/bin
+  ansible.builtin.copy:
+    src: "/tmp/textfile_collector_scripts/{{ script }}"
+    dest: "/usr/local/bin/{{ script }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: 0755
+  loop: "{{ node_exporter_textfile_collector_scripts_to_install }}"
+  loop_control:
+    loop_var: script

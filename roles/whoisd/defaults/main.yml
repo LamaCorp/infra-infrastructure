@@ -1,0 +1,5 @@
+---
+
+
+whoisd_docker_repository: registry.gitlab.com/lama-corp/infra/tools/whoisd
+whoisd_docker_tag: v0.1.1

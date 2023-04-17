@@ -1,0 +1,25 @@
+---
+
+
+pastebin_docker_repository: danielszabo99/microbin
+pastebin_docker_tag: 1.2.0
+
+# pastebin_domain: ""
+pastebin_extra_domains: []
+
+pastebin_domains_computed: |
+  - Host(`{{ pastebin_domain }}`)
+  {% for domain in pastebin_extra_domains %}
+  - Host(`{{ domain }}`)
+  {% endfor %}
+
+pastebin_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "{{ pastebin_domains_computed | from_yaml | join(' || ') }}"
+    middlewares: "default-with-error-pages@file"
+  service:
+    port: 8080
+
+pastebin_reverse_proxy: {}
+pastebin_reverse_proxy_computed: "{{ pastebin_default_reverse_proxy | combine(pastebin_reverse_proxy, recursive=True) }}"

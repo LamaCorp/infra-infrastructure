@@ -1,0 +1,62 @@
+---
+
+network_nameservers:
+  - ::1
+  - 127.0.0.1
+
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      enp7s0:
+        accept-ra: true
+        addresses:
+          - 136.243.102.29/32
+          - 2a01:4f8:171:b0d::1/128
+          - 2a01:4f8:171:b0d::2/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 136.243.102.1
+            on-link: true
+          - to: ::/0
+            via: fe80::1
+          - to: ::/0
+            via: fe80::1
+            table: 101
+          - to: 148.251.148.232/29
+            via: 0.0.0.0
+            type: unreachable
+        routing-policy:
+          - from: 2a01:4f8:171:b0d::/64
+            table: 101
+    bridges:
+      br-svc:
+        addresses:
+          - 172.28.1.62/26
+          - 2001:67c:17fc:101::/64
+          - 2001:67c:17fc:101::1/64
+          - 2001:67c:17fc:101::53/64
+        routes:
+          - to: 148.251.148.233/32
+            via: 172.28.1.20  # pine.fsn.lama.tel
+          - to: 148.251.148.237/32
+            via: 172.28.1.30  # games.fsn.lama.tel
+          - to: 148.251.148.238/32
+            via: 172.28.1.10  # services.fsn.lama.tel
+      br-mdw:
+        addresses:
+          - 172.28.1.126/26
+          - 2001:67c:17fc:102::/64
+          - 2001:67c:17fc:102::1/64
+          - 2001:67c:17fc:102::53/64
+        routes:
+          - to: 148.251.148.232/32
+            via: 172.28.1.90  # mail.fsn.lama.tel
+          - to: 148.251.148.234/32
+            via: 172.28.1.80  # auth.fsn.lama.tel
+      br-cc:
+        addresses:
+          - 172.29.1.62/26
+          - 2a06:e881:7701:1::/64
+          - 2a06:e881:7701:1::1/64
+          - 2a06:e881:7701:1::53/64

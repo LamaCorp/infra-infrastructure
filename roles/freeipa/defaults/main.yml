@@ -1,0 +1,13 @@
+---
+
+
+freeipa_docker_repository: quay.io/freeipa/freeipa-server
+freeipa_docker_tag: fedora-37-4.10.1
+
+# freeipa_hostname: "auth.example.org"
+# freeipa_domain: "example.org"
+freeipa_realm: "{{ freeipa_domain | upper }}"
+# freeipa_admin_password: "changeme"
+
+mmproxy_docker_repository: registry.cri.epita.fr/cri/docker/mmproxy
+mmproxy_docker_tag: 5cc5bbea37430a51a9bf538d417256e0bcc883dc

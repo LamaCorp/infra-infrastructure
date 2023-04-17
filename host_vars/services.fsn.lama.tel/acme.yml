@@ -1,0 +1,18 @@
+---
+
+acme_vault_client_secrets: "{{ lookup('community.hashi_vault.hashi_vault', 'acme/data/server-creds/services.fsn.lama.tel') }}"
+acme_vault_client_role_id: "{{ acme_vault_client_secrets['role_id'] }}"
+acme_vault_client_secret_id: "{{ acme_vault_client_secrets['secret_id'] }}"
+
+acme_vault_client_certs_raw_list:
+  - name: s3.lama-corp.space
+
+acme_vault_client_certs_raw: |
+  {% for cert in acme_vault_client_certs_raw_list %}
+  - domain: {{ cert.name }}
+    postrun: |
+      cp fullchain.pem /srv/traefik/volumes/certs/{{ cert.name }}.crt
+      cp key.pem /srv/traefik/volumes/certs/{{ cert.name }}.key
+      cp chain.pem /srv/traefik/volumes/certs/{{ cert.name }}.chain.pem
+  {% endfor %}
+acme_vault_client_certs: "{{ acme_vault_client_certs_raw | from_yaml }}"

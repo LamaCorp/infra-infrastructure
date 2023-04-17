@@ -1,0 +1,53 @@
+---
+
+- name: Ensure hosts configuration is up-to-date
+  ansible.builtin.copy:
+    content: |
+      {% for key, value in item.value.conf.items() %}
+      {% if value != None %}
+      {% if value is iterable and value is not string %}
+      {% for v in value %}
+      {{ key }}={{ v }}
+      {% endfor %}
+      {% else %}
+      {{ key }}={{ value }}
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+
+      {{ hostvars[item.key].tinc_networks_keys[tinc_network.key]['rsa'] }}
+      {{ hostvars[item.key].tinc_networks_keys[tinc_network.key]['ed25519'] }}
+    dest: "/etc/tinc/{{ tinc_network.key }}/hosts/{{ item.value.conf.Name }}"
+    owner: root
+    group: root
+    mode: 0644
+  loop: "{{ tinc_network.value.hosts | dict2items }}"
+  notify: Reload tinc
+
+- name: Ensure hosts up scripts are up-to-date
+  ansible.builtin.copy:
+    content: |
+      #!/usr/bin/env bash
+
+      {{ item.up }}
+    dest: "/etc/tinc/{{ tinc_network.key }}/hosts/{{ item.value.Name }}-up"
+    owner: root
+    group: root
+    mode: 0755
+  when: item.up is defined
+  loop: "{{ tinc_network.value.hosts | dict2items }}"
+  notify: Restart tinc
+
+- name: Ensure hosts down scripts are up-to-date
+  ansible.builtin.copy:
+    content: |
+      #!/usr/bin/env bash
+
+      {{ item.down }}
+    dest: "/etc/tinc/{{ tinc_network.key }}/hosts/{{ item.value.Name }}-down"
+    owner: root
+    group: root
+    mode: 0755
+  when: item.down is defined
+  loop: "{{ tinc_network.value.hosts | dict2items }}"
+  notify: Restart tinc

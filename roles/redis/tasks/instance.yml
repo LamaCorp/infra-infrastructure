@@ -1,0 +1,56 @@
+---
+
+- name: Assert that instance name is not server
+  ansible.builtin.assert:
+    that:
+      - "instance.name != 'server'"
+    fail_msg: "Redis instance name cannot be server."
+
+- name: Template Redis service
+  ansible.builtin.template:
+    src: redis.service
+    dest: "/etc/systemd/system/redis-{{ instance.name }}.service"
+    mode: 0644
+  register: copy_redis_service
+  notify: Restart Redis
+
+- name: Template Redis config
+  ansible.builtin.template:
+    src: redis.conf
+    dest: "/etc/redis/redis-{{ instance.name }}.conf"
+    owner: redis
+    group: redis
+    mode: 0640
+  register: copy_redis_config
+  notify: Restart Redis
+
+- name: Template logrotate config
+  ansible.builtin.template:
+    src: logrotate.conf
+    dest: "/etc/logrotate.d/redis-{{ instance.name }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Create storage directory
+  ansible.builtin.file:
+    path: "{{ redis_storage_dir }}/{{ instance.name }}"
+    state: directory
+    owner: redis
+    group: redis
+    mode: 0750
+
+- name: Reload systemd
+  ansible.builtin.systemd:  # noqa no-handler
+    daemon_reload: true
+  when: copy_redis_service.changed
+
+- name: Enable Redis service
+  ansible.builtin.service:  # noqa no-handler
+    name: "redis-{{ instance.name }}"
+    enabled: true
+
+- name: Add this Redis instance to the list of instances to be restarted
+  ansible.builtin.set_fact:  # noqa no-handler
+    redis_instances_to_restart: "{{ (redis_instances_to_restart | d([])) + [instance.name] }}"
+  when: copy_redis_service.changed or copy_redis_config.changed

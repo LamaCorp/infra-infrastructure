@@ -1,0 +1,11 @@
+---
+
+- name: Deploy iPXE docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: ipxe
+    docker_compose_services:
+      ipxe:
+        image: "{{ ipxe_docker_repository }}:{{ ipxe_docker_tag }}"
+        network_mode: host

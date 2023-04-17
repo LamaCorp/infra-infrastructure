@@ -1,0 +1,8 @@
+---
+
+- name: Download the desired revision of the scripts
+  ansible.builtin.get_url:
+    url: "{{ node_exporter_what_active_users_download_url }}"
+    dest: "/usr/local/bin/{{ node_exporter_what_active_users_binary_name }}"
+    force: true
+    mode: 0755

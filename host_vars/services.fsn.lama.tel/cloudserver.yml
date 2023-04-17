@@ -1,0 +1,36 @@
+---
+
+cloudserver_domain: s3.lama-corp.space
+
+cloudserver_reverse_proxy:
+  router:
+    letsEncrypt: false
+
+cloudserver_config:
+  restEndpoints:
+    s3.lama-corp.space: us-east-1
+
+cloudserver_authdata_users:
+  - hedgedoc
+  - loki
+  - matrix
+  - mattermost
+  - nix-cache
+  - thanos
+  - upsilon
+
+cloudserver_authdata_raw: |
+  {% for user in cloudserver_authdata_users %}
+  {% set secret = lookup('community.hashi_vault.hashi_vault', 's3/data/users/' + user) %}
+  - name: "{{ user }}"
+    email: "{{ secret['email'] }}"
+    arn: "{{ secret['arn'] }}"
+    canonicalID: "{{ secret['canonicalID'] }}"
+    shortid: "{{ secret['shortid'] }}"
+    keys:
+      - access: "{{ secret['access_key'] }}"
+        secret: "{{ secret['secret_key'] }}"
+  {% endfor %}
+
+cloudserver_authdata:
+  accounts: "{{ cloudserver_authdata_raw | from_yaml }}"

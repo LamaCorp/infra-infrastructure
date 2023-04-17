@@ -1,0 +1,26 @@
+---
+
+librenms_docker_repository: librenms/librenms
+librenms_docker_tag: 23.1.1
+
+librenms_mariadb_docker_repository: mariadb
+librenms_mariadb_docker_tag: 10.11.2
+
+# librenms_domain: ""
+
+librenms_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ librenms_domain }}`)"
+    middlewares: "default@file"
+    tls:
+      options: modern@file
+  service:
+    port: 8000
+
+librenms_reverse_proxy: {}
+librenms_reverse_proxy_computed: "{{ librenms_default_reverse_proxy | combine(librenms_reverse_proxy, recursive=True) }}"
+
+
+librenms_redis_host: "{{ services_redis_host }}"
+# librenms_redis_port: ""

@@ -1,0 +1,44 @@
+---
+
+- name: Ensure bird2 package is installed
+  ansible.builtin.apt:
+    name: bird2
+
+- name: Ensure configuration is up-to-date
+  ansible.builtin.template:
+    src: "{{ item }}"
+    dest: "/etc/bird/{{ item }}"
+    owner: bird
+    group: bird
+    mode: 0640
+  loop:
+    - bird.conf
+    - static.conf
+    - bgp.conf
+    - peers.conf
+    - ospf.conf
+    - radv.conf
+  notify: Reload bird
+
+- name: Ensure prometheus-bird-exporter is installed
+  ansible.builtin.apt:
+    name: prometheus-bird-exporter
+
+- name: Ensure prometheus-bird-exporter arguments are up-to-date
+  ansible.builtin.copy:
+    content: |
+      ARGS="-format.new -bird.v2"
+    dest: /etc/default/prometheus-bird-exporter
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart prometheus bird exporter
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure bird is enabled and started
+  ansible.builtin.service:
+    name: bird
+    state: started
+    enabled: true

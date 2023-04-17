@@ -1,0 +1,6 @@
+---
+
+freeipa_hostname: auth.pie.lama-corp.space
+freeipa_domain: lama-corp.space
+freeipa_realm: "{{ freeipa_domain | upper }}"
+freeipa_admin_password: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/freeipa/admin')['password'] }}"

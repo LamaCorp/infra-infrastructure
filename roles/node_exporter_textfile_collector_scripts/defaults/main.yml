@@ -1,0 +1,7 @@
+---
+
+node_exporter_textfile_collector_scripts_revision: 8f6be63aa022c977bf21a86d1fe1d4e8d1d4cb2f
+
+node_exporter_textfile_collector_scripts_systemd_time:
+  OnBootSec: 1min
+  OnUnitActiveSec: 5min

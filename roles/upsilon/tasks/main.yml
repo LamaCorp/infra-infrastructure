@@ -1,0 +1,120 @@
+---
+
+- name: Deploy Upsilon docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose_django
+  vars:
+    docker_compose_django_project_name: "{{ upsilon_project_name }}"
+
+    docker_compose_django_docker_repository: "{{ upsilon_docker_repository }}"
+    docker_compose_django_docker_tag: "{{ upsilon_docker_tag }}"
+
+    docker_compose_django_domain: "{{ upsilon_domain }}"
+
+
+    docker_compose_django_backend_enable: true
+
+    docker_compose_django_backend_allowed_hosts:
+      - "{{ upsilon_domain }}"
+    docker_compose_django_backend_admins: "{{ upsilon_admins }}"
+    docker_compose_django_backend_managers: "{{ upsilon_managers }}"
+    docker_compose_django_backend_secret_key: "{{ upsilon_backend_secret_key }}"
+
+    docker_compose_django_backend_db_host: "{{ upsilon_backend_db_host }}"
+    docker_compose_django_backend_db_name: "{{ upsilon_backend_db_name }}"
+    docker_compose_django_backend_db_user: "{{ upsilon_backend_db_user }}"
+    docker_compose_django_backend_db_password: "{{ upsilon_backend_db_password }}"
+
+    docker_compose_django_backend_s3_endpoint: "{{ upsilon_backend_s3_endpoint }}"
+    docker_compose_django_backend_s3_bucket: "{{ upsilon_backend_s3_bucket }}"
+    docker_compose_django_backend_s3_custom_domain: "{{ upsilon_backend_s3_custom_domain }}"
+    docker_compose_django_backend_s3_access_key: "{{ upsilon_backend_s3_access_key }}"
+    docker_compose_django_backend_s3_secret_key: "{{ upsilon_backend_s3_secret_key }}"
+
+    docker_compose_django_backend_redis_host: "{{ upsilon_backend_redis_host }}"
+    docker_compose_django_backend_redis_port: "{{ upsilon_backend_redis_port }}"
+
+    docker_compose_django_backend_email_from: "{{ upsilon_backend_email_from }}"
+    docker_compose_django_backend_email_host: "{{ upsilon_backend_email_host }}"
+    docker_compose_django_backend_email_port: "{{ upsilon_backend_email_port }}"
+    docker_compose_django_backend_email_user: "{{ upsilon_backend_email_user }}"
+    docker_compose_django_backend_email_password: "{{ upsilon_backend_email_password }}"
+    docker_compose_django_backend_email_tls: "{{ upsilon_backend_email_tls }}"
+    docker_compose_django_backend_email_server_from: "{{ upsilon_backend_email_server_from | default(omit) }}"
+
+    docker_compose_django_backend_override:
+      environment:
+        KERBEROS_REALM: "{{ upsilon_realm }}"
+        AUTH_LDAP_SERVER_URI: "{{ upsilon_auth_ldap_server_uri }}"
+        AUTH_LDAP_BIND_DN: "{{ upsilon_auth_ldap_bind_dn }}"
+        AUTH_LDAP_USER_SEARCH_BASE: "{{ upsilon_auth_ldap_user_search_base }}"
+        AUTH_LDAP_GROUP_SEARCH_BASE: "{{ upsilon_auth_ldap_group_search_base }}"
+        DO_OAUTH_APP_CONFIGURATION: 1
+        OAUTH_APP_CLIENT_ID: "{{ upsilon_oidc_app_client_id }}"
+        OAUTH_APP_REDIRECT_URIS: "{{ upsilon_oidc_app_redirect_uris | join(' ') }}"
+        OAUTH_APP_NAME: "{{ upsilon_oidc_app_name }}"
+      secrets:
+        - ldap-bind-password
+        - oidc-rsa-private-key
+        - oidc-app-client-secret
+
+
+    docker_compose_django_frontend_enable: false
+
+
+    docker_compose_django_oidc_enable: false
+
+
+    docker_compose_django_secrets:
+      ldap-bind-password:
+        env: AUTH_LDAP_BIND_PASSWORD_FILE
+        value: "{{ upsilon_auth_ldap_bind_password }}"
+      oidc-rsa-private-key:
+        env: OIDC_RSA_PRIVATE_KEY_FILE
+        value: "{{ upsilon_oidc_private_key }}"
+      oidc-app-client-secret:
+        env: OAUTH_APP_CLIENT_SECRET_FILE
+        value: "{{ upsilon_oidc_app_client_secret }}"
+
+
+    docker_compose_django_backend_reverse_proxy_computed: null
+
+
+    docker_compose_django_services_override:
+      httpd:
+        image: "{{ upsilon_httpd_docker_repository }}:{{ upsilon_httpd_docker_tag }}"
+        command: "/bin/sh -c 'apt-get update && apt-get install -y --no-install-recommends libapache2-mod-auth-gssapi && cp /usr/lib/apache2/modules/mod_auth_gssapi.so /usr/local/apache2/modules/mod_auth_gssapi.so && exec httpd-foreground'"
+        volumes:
+          - httpd_config:/usr/local/apache2/conf
+          - /srv/upsilon/volumes/httpd_config/krb5.conf:/etc/krb5.conf
+        networks:
+          - default
+        reverse_proxy: "{{ upsilon_reverse_proxy_computed }}"
+
+
+- name: Ensure httpd configuration is up-to-date
+  ansible.builtin.template:
+    src: httpd.conf
+    dest: /srv/upsilon/volumes/httpd_config/httpd.conf
+    owner: root
+    group: root
+    mode: 0400
+  notify: Restart docker-compose
+
+- name: Ensure Keytab is up-to-date
+  ansible.builtin.copy:
+    content: "{{ upsilon_keytab_base64 | b64decode }}"
+    dest: /srv/upsilon/volumes/httpd_config/krb5.keytab
+    owner: root
+    group: root
+    mode: 0400
+  notify: Restart docker-compose
+
+- name: Ensure krb5.conf is up-to-date
+  ansible.builtin.template:
+    src: krb5.conf
+    dest: /srv/upsilon/volumes/httpd_config/krb5.conf
+    owner: root
+    group: root
+    mode: 0400
+  notify: Restart docker-compose

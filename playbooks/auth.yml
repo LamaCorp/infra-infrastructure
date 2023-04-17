@@ -1,0 +1,29 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Authentik
+  hosts: services.fsn.lama.tel
+  roles:
+    - authentik
+  tags:
+    - auth
+    - authentik
+
+- name: FreeIPA
+  hosts: auth.fsn.lama.tel
+  roles:
+    - freeipa
+  tags:
+    - auth
+    - freeipa
+
+- name: Upsilon
+  hosts: services.fsn.lama.tel
+  roles:
+    - upsilon
+  tags:
+    - auth
+    - upsilon

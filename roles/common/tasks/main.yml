@@ -1,0 +1,22 @@
+---
+
+- name: Packages
+  ansible.builtin.import_tasks: packages.yml
+
+- name: Tmux
+  ansible.builtin.import_tasks: tmux.yml
+- name: Vim
+  ansible.builtin.import_tasks: vim.yml
+- name: Zsh
+  ansible.builtin.import_tasks: zsh.yml
+
+- name: SSH
+  ansible.builtin.import_tasks: ssh.yml
+  tags:
+    - ssh
+
+- name: Root password
+  ansible.builtin.import_tasks: password.yml
+
+- name: Timezone
+  ansible.builtin.import_tasks: timezone.yml

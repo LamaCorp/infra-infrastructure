@@ -1,0 +1,16 @@
+[Unit]
+Description=redis_exporter - Exporter for Redis metrics.
+Documentation=https://github.com/oliver006/redis_exporter
+After=network.target
+
+[Service]
+User=redis
+Group=redis
+EnvironmentFile=/etc/default/redis_exporter
+ExecStart=/usr/local/bin/redis_exporter $FLAGS
+
+SyslogIdentifier=redis_exporter
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

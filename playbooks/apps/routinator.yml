@@ -1,0 +1,13 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: ../base.yml
+
+- name: Routinator
+  hosts: services.fsn.lama.tel
+  roles:
+    - routinator
+  tags:
+    - apps
+    - routinator

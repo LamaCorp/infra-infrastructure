@@ -1,0 +1,114 @@
+---
+
+- name: Create network configuration directories
+  ansible.builtin.file:
+    path: "/etc/tinc/{{ tinc_network.key }}/hosts"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Ensure tinc global configuration is up-to-date
+  ansible.builtin.copy:
+    content: |
+      {% for key, value in tinc_network.value.main.items() %}
+      {% if value != None %}
+      {% if value is iterable and value is not string %}
+      {% for v in value %}
+      {{ key }}={{ v }}
+      {% endfor %}
+      {% else %}
+      {{ key }}={{ value }}
+      {% endif %}
+      {% endif %}
+      {% endfor %}
+    dest: "/etc/tinc/{{ tinc_network.key }}/tinc.conf"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Reload tinc
+
+- name: Create private RSA key
+  ansible.builtin.command:
+    cmd: tinc -n {{ tinc_network.key }} generate-rsa-keys 4096
+    creates: "/etc/tinc/{{ tinc_network.key }}/rsa_key.priv"
+  register: tinc_network_rsa_key_created
+
+- name: Create private Ed25519 key
+  ansible.builtin.command:
+    cmd: tinc -n {{ tinc_network.key }} generate-ed25519-keys
+    creates: "/etc/tinc/{{ tinc_network.key }}/ed25519_key.priv"
+  register: tinc_network_ed25519_key_created
+
+- name: Retrieve public keys
+  ansible.builtin.slurp:
+    src: "/etc/tinc/{{ tinc_network.key }}/hosts/{{ tinc_network.value.main.Name }}"
+  register: tinc_network_public_keys
+
+- name: Process public keys
+  ansible.builtin.set_fact:
+    tinc_network_public_keys: "{{ tinc_network_public_keys.content | b64decode | trim | split('\n') }}"
+
+- name: Store public RSA key on the node
+  ansible.builtin.copy:
+    content: "{{ tinc_network_public_keys[:-1] | join('\n') }}"
+    dest: "/etc/tinc/{{ tinc_network.key }}/rsa_key.pub"
+  when: tinc_network_rsa_key_created.changed
+
+- name: Store public Ed25519 key on the node
+  ansible.builtin.copy:
+    content: "{{ tinc_network_public_keys[-1] }}"
+    dest: "/etc/tinc/{{ tinc_network.key }}/ed25519_key.pub"
+  when: tinc_network_ed25519_key_created.changed
+
+- name: Retrieve public RSA key from the node
+  ansible.builtin.slurp:
+    src: "/etc/tinc/{{ tinc_network.key }}/rsa_key.pub"
+  register: tinc_network_public_rsa_key
+
+- name: Retrieve public Ed25519 key from the node
+  ansible.builtin.slurp:
+    src: "/etc/tinc/{{ tinc_network.key }}/ed25519_key.pub"
+  register: tinc_network_public_ed25519_key
+
+- name: Set public keys
+  ansible.builtin.set_fact:
+    tinc_networks_keys: "{{ tinc_networks_keys | combine({ tinc_network.key: { 'rsa': tinc_network_public_rsa_key.content | b64decode, 'ed25519': tinc_network_public_ed25519_key.content | b64decode} }) }}"
+
+- name: Ensure up and down scripts are up-to-date
+  ansible.builtin.copy:
+    content: |
+      #!/usr/bin/env bash
+
+      ip link set dev $INTERFACE {{ item }}
+
+      {{ tinc_network.value[item] }}
+    dest: "/etc/tinc/{{ tinc_network.key }}/tinc-{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  when: item in tinc_network.value
+  loop:
+    - up
+    - down
+  notify: Restart tinc
+
+- name: Ensure other scripts are up-to-date
+  ansible.builtin.copy:
+    content: |
+      #!/usr/bin/env bash
+
+      {{ tinc_network.value[item] }}
+    dest: "/etc/tinc{{ tinc_network.key }}/{{ item }}"
+    owner: root
+    group: root
+    mode: 0755
+  when: item in tinc_network.value
+  loop:
+    - host-up
+    - host-down
+    - subnet-up
+    - subnet-down
+    - invitation-created
+    - invitation-accepted
+  notify: Restart tinc

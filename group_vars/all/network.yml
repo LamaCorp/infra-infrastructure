@@ -1,0 +1,18 @@
+---
+
+network_nameservers:
+  - 1.1.1.1
+  - 1.0.0.1
+
+systemd_networkd_apply_config: true
+systemd_networkd_enable_resolved: false
+systemd_networkd_symlink_resolv_conf: false
+
+netplan_config_file: /etc/netplan/00-network.yaml
+netplan_remove_existing: true
+
+netplan_renderer: networkd
+
+whois_server: whois.lama.tel
+
+bird2_asn: 212024

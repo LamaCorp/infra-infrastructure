@@ -1,0 +1,7 @@
+---
+
+- name: Enable and start timer
+  ansible.builtin.systemd:
+    name: drop_caches.timer
+    state: started
+    enabled: true

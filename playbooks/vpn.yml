@@ -1,0 +1,13 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Tinc
+  hosts: vpn
+  roles:
+    - tinc
+  tags:
+    - tinc
+    - vpn

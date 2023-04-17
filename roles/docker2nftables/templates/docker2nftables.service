@@ -1,0 +1,5 @@
+[Unit]
+Description=docker2nftables forward rules
+
+[Service]
+ExecStart=/usr/local/bin/docker2nftables

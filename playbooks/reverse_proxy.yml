@@ -1,0 +1,13 @@
+#!/usr/bin/env ansible-playbook
+---
+
+- name: Base
+  import_playbook: base.yml
+
+- name: Reverse proxy
+  hosts: reverse_proxy
+  roles:
+    - traefik
+  tags:
+    - reverse_proxy
+    - traefik

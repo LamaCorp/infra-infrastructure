@@ -1,0 +1,28 @@
+---
+
+nft_define_host:
+  ospf interfaces:
+    name: ospf_interfaces
+    value: ens3
+
+nft_input_host_rules:
+  500 http https:
+    - tcp dport {80, 443} accept
+    - ip saddr {$subnet_internal_4} tcp dport {81, 444} accept
+    - ip6 saddr {$subnet_internal_6} tcp dport {81, 444} accept
+
+  505 flow export kafka:
+    - ip saddr {$subnet_internal_4} tcp dport {9092} accept
+    - ip6 saddr {$subnet_internal_6} tcp dport {9092} accept
+
+  510 whois:
+    - tcp dport {43} accept
+
+  515 rpki:
+    - tcp dport {323} accept
+
+nft_forward_host_rules:
+  200 allow internal docker traffic:
+    - meta iif != ens3 accept
+  201 allow external:
+    - oif ens3 accept

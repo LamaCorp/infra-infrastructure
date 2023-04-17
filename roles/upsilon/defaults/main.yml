@@ -1,0 +1,66 @@
+---
+
+upsilon_domain: ""
+
+upsilon_httpd_docker_repository: httpd
+upsilon_httpd_docker_tag: "2.4"
+
+# upsilon_realm: "CHANGEME"
+# upsilon_keytab_base64: ""
+
+upsilon_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ upsilon_domain }}`)"
+    middlewares: default@file
+  service:
+    port: 8000
+
+upsilon_reverse_proxy: {}
+upsilon_reverse_proxy_computed: "{{ upsilon_default_reverse_proxy | combine(upsilon_reverse_proxy, recursive=True) }}"
+
+
+upsilon_docker_repository: registry.gitlab.com/prologin/tech/services/upsilon/main
+upsilon_docker_tag: 87c4098c9bf93556614c95d024d991d4a05d898e
+
+upsilon_project_name: upsilon
+
+upsilon_admins: "{{ services_admins }}"
+upsilon_managers: "{{ services_managers }}"
+
+# upsilon_backend_secret_key: "CHANGEME"
+
+upsilon_backend_db_host: "{{ services_db_host }}"
+# upsilon_backend_db_name: "CHANGEME"
+# upsilon_backend_db_user: "CHANGEME"
+# upsilon_backend_db_password: "CHANGEME"
+
+upsilon_backend_s3_endpoint: "{{ services_s3_endpoint }}"
+# upsilon_backend_s3_bucket: "CHANGEME"
+# upsilon_backend_s3_custom_domain: "CHANGEME"
+# upsilon_backend_s3_access_key: "CHANGEME"
+# upsilon_backend_s3_secret_key: "CHANGEME"
+
+upsilon_backend_redis_host: "{{ services_redis_host }}"
+# upsilon_backend_redis_port: "CHANGEME"
+
+# upsilon_backend_email_from: "CHANGEME"
+upsilon_backend_email_host: "{{ services_email_host }}"
+upsilon_backend_email_port: "{{ services_email_port }}"
+# upsilon_backend_email_user: "CHANGEME"
+# upsilon_backend_email_password: "CHANGEME"
+upsilon_backend_email_tls: "{{ services_email_tls }}"
+# upsilon_backend_email_server_from: ""  # optional
+
+# upsilon_auth_ldap_server_uri: "CHANGEME"
+# upsilon_auth_ldap_bind_dn: "CHANGEME"
+# upsilon_auth_ldap_bind_password: "CHANGEME"
+# upsilon_auth_ldap_user_search_base: "CHANGEME"
+# upsilon_auth_ldap_group_search_base: "CHANGEME"
+
+
+# upsilon_oidc_private_key: "CHANGEME"
+# upsilon_oidc_app_client_id: "CHANGEME"
+# upsilon_oidc_app_client_secret: "CHANGEME"
+# upsilon_oidc_app_redirect_uris: []
+# upsilon_oidc_app_name: "CHANGEME"

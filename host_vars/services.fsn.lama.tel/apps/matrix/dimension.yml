@@ -1,0 +1,15 @@
+---
+
+matrix_dimension_enabled: true
+
+matrix_dimension_admins:
+  - "@diego:{{ matrix_domain }}"
+  - "@risson:{{ matrix_domain }}"
+
+matrix_dimension_access_token: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/matrix/access-token')['token'] }}"
+
+matrix_dimension_database_engine: postgres
+matrix_dimension_database_hostname: "{{ services_db_host }}"
+matrix_dimension_database_name: matrix_dimension
+matrix_dimension_database_username: matrix_dimension
+matrix_dimension_database_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/matrix_dimension')['password'] }}"

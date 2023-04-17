@@ -1,0 +1,82 @@
+---
+
+haproxy_frontends:
+  - name: http
+    address: "*:80"
+    mode: tcp
+    backend: http
+  - name: https
+    address: "*:443"
+    mode: tcp
+    backend: https
+  - name: http-proxy
+    address: "*:81"
+    bind_params: accept-proxy
+    mode: tcp
+    backend: http
+  - name: https-proxy
+    address: "*:444"
+    bind_params: accept-proxy
+    mode: tcp
+    backend: https
+
+  - name: whois
+    address: "*:43"
+    mode: tcp
+    backend: whois
+
+  - name: rpki
+    address: "*:323"
+    mode: tcp
+    timeout_client: 960000ms  # 11 minutes
+    backend: rpki
+
+  - name: flow_exporter_kafka
+    address: "*:9092"
+    mode: tcp
+    backend: flow_exporter_kafka
+
+haproxy_backends:
+  - name: http
+    mode: tcp
+    check: false
+    servers:
+      - name: traefik
+        address: "traefik_traefik.ctn.{{ inventory_hostname }}:80"
+        extra_opts: send-proxy resolvers docker
+  - name: https
+    mode: tcp
+    check: false
+    servers:
+      - name: traefik
+        address: "traefik_traefik.ctn.{{ inventory_hostname }}:443"
+        extra_opts: send-proxy resolvers docker
+
+  - name: whois
+    mode: tcp
+    check: false
+    servers:
+      - name: whois
+        address: "whoisd_server.ctn.{{ inventory_hostname }}:43"
+        extra_opts: resolvers docker
+
+  - name: rpki
+    mode: tcp
+    check: false
+    servers:
+      - name: routinator
+        address: "routinator_server.ctn.{{ inventory_hostname }}:3323"
+        extra_opts: resolvers docker
+    timeout_server: 960000ms  # 11 minutes
+
+  - name: flow_exporter_kafka
+    mode: tcp
+    check: false
+    servers:
+      - name: flow_exporter_kafka
+        address: "flow_exporter_kafka.ctn.{{ inventory_hostname }}:9092"
+        extra_opts: resolvers docker
+
+haproxy_additional_configuration: |
+  resolvers docker
+    nameserver dps 127.0.0.1:5354

@@ -1,0 +1,32 @@
+---
+
+- name: Compute network list from services definition
+  ansible.builtin.set_fact:
+    docker_compose_network_list: "{{ docker_compose_network_list | d([]) + service.value.networks | d([]) }}"
+  loop: "{{ docker_compose_services_computed | dict2items }}"
+  loop_control:
+    loop_var: service
+  no_log: true
+
+- name: Set default network with IPv6 enabled
+  ansible.builtin.set_fact:
+    docker_compose_networks_default:
+      default:
+        enable_ipv6: true
+
+- name: Compute networks from services definition
+  ansible.builtin.set_fact:
+    docker_compose_networks_computed: |
+      {% for network in docker_compose_network_list %}
+      {% if network in docker_compose_existing_networks_computed %}
+      {{ network }}:
+        external: true
+      {% else %}
+      {{ network }}:
+        enable_ipv6: true
+      {% endif %}
+      {% endfor %}
+
+- name: Compute networks from services definition and user definition
+  ansible.builtin.set_fact:
+    docker_compose_networks_computed: "{{ docker_compose_networks_default | combine(docker_compose_networks_computed | from_yaml, recursive=True) | combine(docker_compose_networks, recursive=True) }}"

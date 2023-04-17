@@ -1,0 +1,11 @@
+---
+
+- name: Reload bird
+  ansible.builtin.service:
+    name: bird
+    state: reloaded
+
+- name: Restart prometheus bird exporter
+  ansible.builtin.service:
+    name: prometheus-bird-exporter
+    state: restarted

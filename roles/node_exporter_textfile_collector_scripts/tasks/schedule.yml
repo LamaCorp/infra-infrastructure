@@ -1,0 +1,8 @@
+---
+
+- name: Schedule each collector scripts
+  ansible.builtin.include_tasks: schedule_each.yml
+  vars:
+    script_name: "{{ item }}"
+    script_name_no_ext: "{{ item.split('.') | first }}"
+  loop: "{{ node_exporter_textfile_collector_scripts_to_install }}"

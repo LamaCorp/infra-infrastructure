@@ -1,0 +1,37 @@
+---
+
+- name: Deploy static docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: static
+
+    docker_compose_services:
+      server:
+        image: "{{ static_docker_repository }}:{{ static_docker_tag }}"
+        volumes:
+          - data:/data
+          - config:/etc/nginx/conf.d
+        reverse_proxy: "{{ static_reverse_proxy_computed }}"
+
+    docker_compose_volumes_dir_owner: 101  # nginx
+    docker_compose_volumes_dir_group: 101  # nginx
+    docker_compose_volumes_dir_mode: 0755
+
+- name: Ensure domain directories are present
+  ansible.builtin.file:
+    path: "/srv/static/volumes/data/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  loop: "{{ static_domains.keys() }}"
+
+- name: Ensure nginx configuration is up-to-date
+  ansible.builtin.template:
+    src: nginx.conf
+    dest: /srv/static/volumes/config/default.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart docker-compose
