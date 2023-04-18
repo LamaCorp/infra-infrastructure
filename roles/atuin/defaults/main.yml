@@ -1,0 +1,24 @@
+---
+
+atuin_docker_repository: ghcr.io/ellie/atuin
+atuin_docker_tag: 14.0.1
+
+# atuin_domain: ""
+
+atuin_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ atuin_domain }}`)"
+  service:
+    port: 8888
+
+atuin_reverse_proxy: {}
+atuin_reverse_proxy_computed: "{{ atuin_default_reverse_proxy | combine(atuin_reverse_proxy, recursive=True) }}"
+
+atuin_open_registration: true
+
+atuin_postgresql_host: "{{ services_db_host }}"
+
+# atuin_postgresql_user: ""
+# atuin_postgresql_password: ""
+# atuin_postgresql_database: ""

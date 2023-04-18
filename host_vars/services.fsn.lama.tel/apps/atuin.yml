@@ -1,0 +1,7 @@
+---
+
+atuin_domain: atuin.lama-corp.space
+
+atuin_postgresql_db: atuin
+atuin_postgresql_user: atuin
+atuin_postgresql_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/atuin')['password'] }}"

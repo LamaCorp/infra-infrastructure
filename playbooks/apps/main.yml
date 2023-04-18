@@ -4,6 +4,9 @@
 - name: Base
   import_playbook: ../base.yml
 
+- name: Atuin
+  import_playbook: atuin.yml
+
 - name: Bird LG Go frontend
   import_playbook: bird_lg_go_frontend.yml
 

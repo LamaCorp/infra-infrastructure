@@ -5,6 +5,7 @@ resource "vault_mount" "postgresql" {
 
 locals {
   postgresql_users = toset([
+    "atuin",
     "authentik",
     "gatus_devoups",
     "gatus_phowork",

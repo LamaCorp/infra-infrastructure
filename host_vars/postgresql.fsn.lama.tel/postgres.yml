@@ -1,8 +1,10 @@
 ---
-
 postgresql_version: 15
 
 postgresql_users:
+  atuin:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/atuin')['password'] }}"
+
   authentik:
     password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/authentik')['password'] }}"
 
@@ -70,6 +72,7 @@ postgresql_users:
     password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/vaultwarden')['password'] }}"
 
 postgresql_dbs:
+  atuin: atuin
   authentik: authentik
   gatus_devoups: gatus_devoups
   gatus_phowork: gatus_phowork
@@ -120,7 +123,6 @@ postgresql_config:
   max_parallel_workers_per_gather: 4
   max_parallel_workers: 8
   max_parallel_maintenance_workers: 4
-
 
 postgresql_authentication_policies:
   - type: host

@@ -1,0 +1,17 @@
+---
+
+- name: Deploy atuin docker-compose
+  ansible.builtin.include_role:
+    name: docker_compose
+  vars:
+    docker_compose_project_name: atuin
+
+    docker_compose_services:
+      server:
+        image: "{{ atuin_docker_repository }}:{{ atuin_docker_tag }}"
+        command: server start
+        environment:
+          ATUIN_HOST: 0.0.0.0
+          ATUIN_OPEN_REGISTRATION: "{{ atuin_open_registration | ternary('true', 'false') }}"
+          ATUIN_DB_URI: "postgres://{{ atuin_postgresql_user }}:{{ atuin_postgresql_password }}@{{ atuin_postgresql_host }}/{{ atuin_postgresql_db }}"
+        reverse_proxy: "{{ atuin_reverse_proxy_computed }}"
