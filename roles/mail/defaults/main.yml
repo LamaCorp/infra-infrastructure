@@ -34,7 +34,7 @@ mail_extra_configs: {}
 mail_ak_ldap_outpost_enable: false
 
 mail_ak_ldap_outpost_docker_repository: ghcr.io/goauthentik/ldap
-mail_ak_ldap_outpost_docker_tag: 2023.3.0
+mail_ak_ldap_outpost_docker_tag: 2023.4.1
 
 # mail_ak_ldap_outpost_authentik_host: ""
 # mail_ak_ldap_outpost_token: ""
