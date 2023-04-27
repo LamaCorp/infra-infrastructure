@@ -29,6 +29,11 @@ docker-build:
           --output type=image,\"name=$CI_REGISTRY_IMAGE:$CI_COMMIT_SHA,$CI_REGISTRY_IMAGE:latest\",push=true \
           --import-cache type=registry,ref=$CI_REGISTRY_IMAGE:buildcache \
           --export-cache type=registry,ref=$CI_REGISTRY_IMAGE:buildcache,mode=max
+  rules:
+    - changes:
+        - Dockerfile
+        - pyproject.toml
+        - poetry.lock
 
 ansible-lint:
   stage: lint
