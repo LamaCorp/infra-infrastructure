@@ -16,4 +16,4 @@ gitlab_runners:
       privileged: true
       disable_entrypoint_overwrite: false
       activate_dind: true
-      dind_type: service
+      dind_type: socket
