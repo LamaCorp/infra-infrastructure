@@ -285,7 +285,7 @@ alertmanager_discord_channels_computed: "{{ alertmanager_discord_default_channel
 ### Loki
 
 loki_docker_repository: grafana/loki
-loki_docker_tag: 2.7.3
+loki_docker_tag: 2.8.1
 
 
 loki_domain: ""
