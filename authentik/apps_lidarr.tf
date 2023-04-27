@@ -1,9 +1,9 @@
 resource "authentik_provider_proxy" "lidarr" {
-  name               = "lidarr"
-  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
+  name                  = "lidarr"
+  authorization_flow    = data.authentik_flow.default-provider-authorization-implicit-consent.id
   access_token_validity = "hours=24"
-  mode               = "forward_single"
-  external_host      = "https://lidarr.lama-corp.space"
+  mode                  = "forward_single"
+  external_host         = "https://lidarr.lama-corp.space"
 }
 
 resource "authentik_application" "lidarr" {

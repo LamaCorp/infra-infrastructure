@@ -2,6 +2,7 @@
   "annotations": {
     "list": []
   },
+  "description": "A dashboard to display the various autonomous systems a router is communicating with.",
   "graphTooltip": 1,
   "hideControls": false,
   "links": [],
@@ -716,6 +717,5 @@
     ]
   },
   "title": "Network Traffic Flow Analysis",
-  "description": "A dashboard to display the various autonomous systems a router is communicating with.",
   "version": 0
 }

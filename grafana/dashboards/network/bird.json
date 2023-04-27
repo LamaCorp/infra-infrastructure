@@ -5,6 +5,7 @@
   "graphTooltip": 1,
   "hideControls": false,
   "links": [],
+  "refresh": "5m",
   "rows": [
     {
       "collapse": false,
@@ -191,7 +192,6 @@
       "titleSize": "h6"
     }
   ],
-  "refresh": "5m",
   "schemaVersion": 14,
   "style": "dark",
   "tags": [],

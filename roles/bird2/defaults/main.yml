@@ -39,8 +39,6 @@
 #
 # Each of the configuration options are explained below:
 
-
-
 # The public Autonomous System Number of the border router that this
 # configuration is running on.
 # bird2_asn: 65536
@@ -48,7 +46,6 @@
 # A unique identifer of this router, known as the "router ID". This is often an
 # IP address of the border router, as it's thought to be unique.
 # bird2_router_id: '198.51.100.1'
-
 
 bird2_kernel:
   defaults:
@@ -62,7 +59,6 @@ bird2_kernel:
 # v6:
 #   merge_paths: true
 
-
 # The ISO 3166-1 country code of where the border router is operating. This is
 # used for BGP community support.
 # bird2_bgp_region_id: 840  # USA
@@ -75,40 +71,43 @@ bird2_kernel:
 # Used in source address selection for outgoing packets. Has to be one of the IP
 # addresses of the router. More information can be found in:
 # https://bird.network.cz/?get_doc&v=20&f=bird-6.html
-bird2_bgp_preferred_source: {}
+bird2_bgp_preferred_source:
+  {}
   # v4: '198.51.100.1'
   # v6: '2001:db8::200:5eff:fe15:429e'
 
 # The prefixes being originated by this router
-bird2_bgp_originations: {}
+bird2_bgp_originations:
+  {}
   # v4:
   #   - '198.51.100.0/24'
   # v6:
   #   - '2001:db8::/32'
 
-
 # The prefixes that will be allowed through filters. Useful for allowing through
 # more specific prefixes of originations (perhaps for customers who have a sub
 # allocation of an origination, and you want them to announce them on their
 # own).
-bird2_bgp_whitelist: {}
+bird2_bgp_whitelist:
+  {}
   # v6:
   #   - '2001:db8:fff::/48'
 
 # Prefixes that should never be announced. Often IXP ranges should be placed
 # here to avoid leaking them to the world.
-bird2_bgp_blacklist: {}
+bird2_bgp_blacklist:
+  {}
   # v4:
   #   - '203.0.113.0/23+'   # DE-CIX New York in this example
   # v6:
   #   - 'fd00:504:36::/64+' # DE-CIX New York in this example
 
-
 # Define any static routes that you would like to define in BIRD here.
 # If you're originating routes on this BIRD instance that aren't learned
 # elsewhere, you'll need to add "unreachable" static routes in order for them
 # to be originated.
-bird2_bgp_static_routes: {}
+bird2_bgp_static_routes:
+  {}
   # v4:
   #   - '198.51.100.0/24 unreachable'
   # v6:
@@ -235,7 +234,6 @@ bird2_bgp_sessions: {}
 #         v6:
 #           decrease: 50  # Or decrease the existing bgp_local_pref
 
-
 bird2_ospf_sessions: []
 # - alias: internal
 #   v4: false  # defaults to true
@@ -267,7 +265,6 @@ bird2_ospf_sessions: []
 #           type: pointtopoint
 #           neighbors:
 #             - 192.0.2.1 eligible
-
 
 bird2_radv_sessions: []
 # - alias: internal

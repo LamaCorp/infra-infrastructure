@@ -1,9 +1,9 @@
 resource "authentik_provider_proxy" "sonarr" {
-  name               = "sonarr"
-  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
+  name                  = "sonarr"
+  authorization_flow    = data.authentik_flow.default-provider-authorization-implicit-consent.id
   access_token_validity = "hours=24"
-  mode               = "forward_single"
-  external_host      = "https://sonarr.lama-corp.space"
+  mode                  = "forward_single"
+  external_host         = "https://sonarr.lama-corp.space"
 }
 
 resource "authentik_application" "sonarr" {

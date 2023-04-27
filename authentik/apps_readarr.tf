@@ -1,9 +1,9 @@
 resource "authentik_provider_proxy" "readarr" {
-  name               = "readarr"
-  authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
+  name                  = "readarr"
+  authorization_flow    = data.authentik_flow.default-provider-authorization-implicit-consent.id
   access_token_validity = "hours=24"
-  mode               = "forward_single"
-  external_host      = "https://readarr.lama-corp.space"
+  mode                  = "forward_single"
+  external_host         = "https://readarr.lama-corp.space"
 }
 
 resource "authentik_application" "readarr" {

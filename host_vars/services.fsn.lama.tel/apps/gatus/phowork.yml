@@ -1,5 +1,4 @@
 ---
-
 gatus_phowork_vars:
   gatus_project_name: gatus_phowork
 
@@ -52,77 +51,76 @@ gatus_phowork_vars:
         - "[RESPONSE_TIME] <= 1000"
 
     endpoints:
+      ###
+      # Internal
+      ###
 
-        ###
-        # Internal
-        ###
+      - name: NS (0)
+        <<: *defaults
+        group: internal
+        url: ns0.phowork.fr
+        dns:
+          query-name: phowork.fr
+          query-type: A
+        conditions:
+          - "[BODY] == 82.64.153.14"
+          - "[DNS_RCODE] == NOERROR"
 
-        - name: NS (0)
-          <<: *defaults
-          group: internal
-          url: ns0.phowork.fr
-          dns:
-            query-name: phowork.fr
-            query-type: A
-          conditions:
-            - "[BODY] == 82.64.153.14"
-            - "[DNS_RCODE] == NOERROR"
+      - name: NS (1)
+        <<: *defaults
+        group: internal
+        url: ns1.phowork.fr
+        dns:
+          query-name: phowork.fr
+          query-type: A
+        conditions:
+          - "[BODY] == 82.64.153.14"
+          - "[DNS_RCODE] == NOERROR"
 
-        - name: NS (1)
-          <<: *defaults
-          group: internal
-          url: ns1.phowork.fr
-          dns:
-            query-name: phowork.fr
-            query-type: A
-          conditions:
-            - "[BODY] == 82.64.153.14"
-            - "[DNS_RCODE] == NOERROR"
+      - name: GitLab
+        <<: *https-endpoint
+        group: internal
+        url: https://gitlab.phowork.fr/
 
-        - name: GitLab
-          <<: *https-endpoint
-          group: internal
-          url: https://gitlab.phowork.fr/
+      - name: Weathermap
+        <<: *https-endpoint
+        group: internal
+        url: https://weathermap.phowork.fr/
 
-        - name: Weathermap
-          <<: *https-endpoint
-          group: internal
-          url: https://weathermap.phowork.fr/
+      - name: Observium
+        <<: *https-endpoint
+        group: internal
+        url: https://observium.phowork.fr/
 
-        - name: Observium
-          <<: *https-endpoint
-          group: internal
-          url: https://observium.phowork.fr/
+      - name: Netbox
+        <<: *https-endpoint
+        group: internal
+        url: https://netbox.phowork.fr/
 
-        - name: Netbox
-          <<: *https-endpoint
-          group: internal
-          url: https://netbox.phowork.fr/
+      ###
+      # Servers
+      ###
 
-        ###
-        # Servers
-        ###
+      - name: gw-ovh
+        <<: *tcp-endpoint
+        group: Servers
+        url: tcp://gw-ovh.storj.phowork.fr:22
 
-        - name: gw-ovh
-          <<: *tcp-endpoint
-          group: Servers
-          url: tcp://gw-ovh.storj.phowork.fr:22
+      - name: node-5.storj
+        <<: *tcp-endpoint
+        group: Servers
+        url: tcp://node-5.storj.phowork.fr:22
 
-        - name: node-5.storj
-          <<: *tcp-endpoint
-          group: Servers
-          url: tcp://node-5.storj.phowork.fr:22
+      - name: tonkinois.edge.vlt
+        <<: *tcp-endpoint
+        group: Servers
+        url: tcp://tonkinois.edge.vlt.phowork.fr:22
 
-        - name: tonkinois.edge.vlt
-          <<: *tcp-endpoint
-          group: Servers
-          url: tcp://tonkinois.edge.vlt.phowork.fr:22
+      ###
+      # Hosted websites
+      ###
 
-        ###
-        # Hosted websites
-        ###
-
-        - name: "Sèvr'Escalade"
-          <<: *https-endpoint
-          group: Hosted websites
-          url: https://sevrescalade.fr/
+      - name: "Sèvr'Escalade"
+        <<: *https-endpoint
+        group: Hosted websites
+        url: https://sevrescalade.fr/

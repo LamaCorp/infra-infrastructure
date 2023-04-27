@@ -1,8 +1,6 @@
 ---
-
 hedgedoc_docker_repository: quay.io/hedgedoc/hedgedoc
 hedgedoc_docker_tag: 1.9.7
-
 
 # hedgedoc_domain: "CHANGEME"
 hedgedoc_extra_domains: []
@@ -28,7 +26,6 @@ hedgedoc_default_reverse_proxy:
 hedgedoc_reverse_proxy: {}
 hedgedoc_reverse_proxy_computed: "{{ hedgedoc_default_reverse_proxy | combine(hedgedoc_reverse_proxy, recursive=True) }}"
 
-
 hedgedoc_postgresql_host: "{{ services_db_host }}"
 # hedgedoc_postgresql_user: ""
 # hedgedoc_postgresql_database: ""
@@ -47,8 +44,6 @@ hedgedoc_s3_endpoint: "{{ services_s3_endpoint | regex_replace('https://', '') }
 # hedgedoc_oauth_user_profile_url: ""
 # hedgedoc_oauth_client_id: ""
 # hedgedoc_oauth_client_secret: ""
-
-
 
 hedgedoc_default_environment:
   CMD_DB_URL: "postgres://{{ hedgedoc_postgresql_user }}:{{ hedgedoc_postgresql_password }}@{{ hedgedoc_postgresql_host }}/{{ hedgedoc_postgresql_database }}?ssl=true"
