@@ -1,5 +1,4 @@
 ---
-
 netplan_configuration:
   network:
     version: 2

@@ -1,0 +1,18 @@
+---
+docker_daemon_options:
+  default-address-pools:
+    - base: 192.168.0.0/16
+      size: 24
+  dns:
+    - 1.1.1.1
+    - 1.0.0.1
+
+  live-restore: true
+  userland-proxy: false
+
+  experimental: true # needed for metrics-addr
+  log-driver: json-file
+  log-opts:
+    max-size: 10m
+    labels-regex: "^.+"
+  metrics-addr: 0.0.0.0:9323

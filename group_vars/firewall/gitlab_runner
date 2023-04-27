@@ -1,0 +1,5 @@
+---
+
+nft_forward_group_rules:
+  500 docker:
+    - meta oif ens3 accept

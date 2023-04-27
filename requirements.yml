@@ -1,5 +1,4 @@
 ---
-
 collections:
   - name: ansible.utils
     version: 2.9.0
@@ -21,7 +20,6 @@ collections:
     type: git
     version: ce081739be9f5fc67d410710a39ead0c80df55cb
 
-
 roles:
   - name: buluma.snmpd
     version: v0.1.3
@@ -42,8 +40,8 @@ roles:
   - name: geerlingguy.pip
     version: 2.2.0
   - name: ipr-cnrs.nftables
-    src: git+https://github.com/rissson/ansible-role-nftables.git
-    version: 5d9d2bb1d7e2d2317a4149dcad3986274bf1007d
+    src: git+https://github.com/ipr-cnrs/nftables.git
+    version: bd11aac65b9c77bbcbbb5d4f9b5d24e74f456b67
   - name: mrlesmithjr.chrony
     version: v0.1.5
   - name: mrlesmithjr.netplan

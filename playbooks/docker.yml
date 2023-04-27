@@ -1,6 +1,5 @@
 #!/usr/bin/env ansible-playbook
 ---
-
 - name: Base
   import_playbook: base.yml
 
@@ -14,8 +13,12 @@
     - geerlingguy.pip
     - geerlingguy.docker
     - role: docker2nftables
-      when: docker_daemon_options.bridge != 'none'
+      when:
+        - (docker_daemon_options.bridge | d('docker0')) != 'none'
+        - inventory_hostname not in groups['gitlab_runner']
     - role: dns_proxy_server
-      when: docker_daemon_options.bridge != 'none'
+      when:
+        - (docker_daemon_options.bridge | d("docker0")) != 'none'
+        - inventory_hostname not in groups['gitlab_runner']
   tags:
     - docker
