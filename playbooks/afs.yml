@@ -1,6 +1,5 @@
 #!/usr/bin/env ansible-playbook
 ---
-
 - name: Base
   import_playbook: base.yml
 
@@ -30,6 +29,9 @@
       ansible.builtin.file:
         path: /usr/local/etc/openafs/server
         state: directory
+        mode: 0700
+        owner: root
+        group: root
 
     - name: Upload service keytab
       ansible.builtin.copy:
@@ -67,7 +69,7 @@
         mount: "{{ item.mount }}"
         acl: "{{ item.acl }}"
         localauth: true
-      run_once: true
+      run_once: true # noqa: run_once[task]
       loop:
         - name: root.cell
           mount: "/afs/{{ afs_cell }}"
@@ -98,7 +100,7 @@
           - system:authuser write
           - system:administrators all
         localauth: true
-      run_once: true
+      run_once: true # noqa: run_once[task]
       loop:
         - name: media
           mount: "/afs/{{ afs_cell }}/media"

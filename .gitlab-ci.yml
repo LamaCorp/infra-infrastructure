@@ -42,8 +42,8 @@ pre-commit:
   stage: lint
   needs: []
   before_script:
+    - mkdir -p vault/secrets
     - >
-      mkdir -p vault/secrets
       echo '{"root_token": ""}' > vault/secrets/vault.json
   script:
     - pre-commit run --all-files

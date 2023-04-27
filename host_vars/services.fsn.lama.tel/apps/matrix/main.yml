@@ -1,5 +1,4 @@
 ---
-
 matrix_domain: lama-corp.space
 matrix_mailer_sender_address: "no-reply@{{ matrix_domain }}"
 
@@ -26,7 +25,7 @@ matrix_nginx_proxy_container_labels_additional_labels: |
   traefik.http.routers.matrix-nginx-proxy-base-domain.tls.options=intermediate@file
   traefik.http.routers.matrix-nginx-proxy-base-domain.priority=3000
 matrix_nginx_proxy_container_labels_traefik_proxy_base_domain_rule: "Host(`{{ matrix_nginx_proxy_container_labels_traefik_proxy_base_domain_hostname }}`) && PathPrefix(`/.well-known/matrix`)"
-matrix_nginx_proxy_container_labels_traefik_tls_certResolver: letsEncrypt
+matrix_nginx_proxy_container_labels_traefik_tls_certResolver: letsEncrypt # noqa: var-naming
 matrix_nginx_proxy_hsts_preload_enabled: true
 matrix_nginx_proxy_proxy_matrix_metrics_enabled: true
 matrix_playbook_reverse_proxy_type: other-traefik-container

@@ -1,6 +1,5 @@
 #!/usr/bin/env ansible-playbook
 ---
-
 - name: Base
   import_playbook: ../base.yml
 
@@ -64,7 +63,7 @@
 - name: Static
   import_playbook: static.yml
 
-- name: thefractal.space
+- name: Thefractal.space
   import_playbook: thefractalspace.yml
 
 - name: Vaultwarden

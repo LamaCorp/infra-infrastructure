@@ -1,5 +1,4 @@
 ---
-
 - name: Deploy Paperless docker-compose
   ansible.builtin.include_role:
     name: docker_compose
@@ -18,8 +17,8 @@
           - export:/usr/src/paperless/export
           - consume:/usr/src/paperless/consume
         depends_on:
-          - "{{ paperless_project_name}}_gotenberg"
-          - "{{ paperless_project_name}}_tika"
+          - "{{ paperless_project_name }}_gotenberg"
+          - "{{ paperless_project_name }}_tika"
         reverse_proxy: "{{ paperless_reverse_proxy_computed }}"
 
       gotenberg:

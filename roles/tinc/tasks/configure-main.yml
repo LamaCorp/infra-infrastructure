@@ -1,5 +1,4 @@
 ---
-
 - name: Create network configuration directories
   ansible.builtin.file:
     path: "/etc/tinc/{{ tinc_network.key }}/hosts"
@@ -50,15 +49,21 @@
     tinc_network_public_keys: "{{ tinc_network_public_keys.content | b64decode | trim | split('\n') }}"
 
 - name: Store public RSA key on the node
-  ansible.builtin.copy:
+  ansible.builtin.copy: # noqa no-handler
     content: "{{ tinc_network_public_keys[:-1] | join('\n') }}"
     dest: "/etc/tinc/{{ tinc_network.key }}/rsa_key.pub"
+    owner: root
+    group: root
+    mode: 0644
   when: tinc_network_rsa_key_created.changed
 
 - name: Store public Ed25519 key on the node
-  ansible.builtin.copy:
+  ansible.builtin.copy: # noqa no-handler
     content: "{{ tinc_network_public_keys[-1] }}"
     dest: "/etc/tinc/{{ tinc_network.key }}/ed25519_key.pub"
+    owner: root
+    group: root
+    mode: 0644
   when: tinc_network_ed25519_key_created.changed
 
 - name: Retrieve public RSA key from the node
@@ -73,7 +78,7 @@
 
 - name: Set public keys
   ansible.builtin.set_fact:
-    tinc_networks_keys: "{{ tinc_networks_keys | combine({ tinc_network.key: { 'rsa': tinc_network_public_rsa_key.content | b64decode, 'ed25519': tinc_network_public_ed25519_key.content | b64decode} }) }}"
+    tinc_networks_keys: "{{ tinc_networks_keys | combine({tinc_network.key: {'rsa': tinc_network_public_rsa_key.content | b64decode, 'ed25519': tinc_network_public_ed25519_key.content | b64decode}}) }}"
 
 - name: Ensure up and down scripts are up-to-date
   ansible.builtin.copy:

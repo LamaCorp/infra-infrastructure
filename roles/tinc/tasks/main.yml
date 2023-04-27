@@ -1,7 +1,8 @@
 ---
-
-- ansible.builtin.import_tasks: install.yml
-- ansible.builtin.import_tasks: configure.yml
+- name: Install tinc
+  ansible.builtin.import_tasks: install.yml
+- name: Configure tinc
+  ansible.builtin.import_tasks: configure.yml
 
 - name: Ensure tinc is enabled and started
   ansible.builtin.service:

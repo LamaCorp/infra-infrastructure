@@ -1,15 +1,13 @@
 ---
-
 matrix_client_element_enabled: true
 
 matrix_client_element_container_network: matrix
-matrix_client_element_container_labels_traefik_tls_certResolver: letsEncrypt
+matrix_client_element_container_labels_traefik_tls_certResolver: letsEncrypt # noqa: var-naming
 
 matrix_client_element_hostname: element.lama-corp.space
 matrix_client_element_brand: Lama Corp.
 
 matrix_client_element_themes_enabled: true
 matrix_client_element_default_theme: Discord-Dark
-
 # TODO
 # matrix_client_element_location_sharing_enabled: true

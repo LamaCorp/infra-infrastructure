@@ -1,7 +1,6 @@
 ---
-
 - name: Compute ak ldap outpost service definition
-  set_fact:
+  ansible.builtin.set_fact:
     mail_ak_ldap_outpost_service:
       image: "{{ mail_ak_ldap_outpost_docker_repository }}:{{ mail_ak_ldap_outpost_docker_tag }}"
       environment:
@@ -12,7 +11,7 @@
   when: mail_ak_ldap_outpost_enable
 
 - name: Compute mailman services definition
-  set_fact:
+  ansible.builtin.set_fact:
     mail_mailman_core_service:
       image: "{{ mail_mailman_core_docker_repository }}:{{ mail_mailman_core_docker_tag }}"
       environment:

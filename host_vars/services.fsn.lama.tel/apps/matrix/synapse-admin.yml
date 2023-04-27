@@ -1,6 +1,5 @@
 ---
-
 matrix_synapse_admin_enabled: true
 
 matrix_synapse_admin_container_network: matrix
-matrix_synapse_admin_container_labels_traefik_tls_certResolver: letsEncrypt
+matrix_synapse_admin_container_labels_traefik_tls_certResolver: letsEncrypt # noqa: var-naming
