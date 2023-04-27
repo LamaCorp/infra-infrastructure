@@ -23,7 +23,7 @@ nextcloud_reverse_proxy_computed: "{{ nextcloud_default_reverse_proxy | combine(
 
 
 nextcloud_office_docker_repository: collabora/code
-nextcloud_office_docker_tag: 22.05.10.2.1
+nextcloud_office_docker_tag: 22.05.13.1.1
 
 # nextcloud_office_domain: "CHANGEME"
 
