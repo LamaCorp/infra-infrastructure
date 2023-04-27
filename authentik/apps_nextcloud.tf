@@ -29,9 +29,9 @@ resource "authentik_certificate_key_pair" "nextcloud-saml" {
 resource "authentik_provider_saml" "nextcloud-saml" {
   name               = "nextcloud-saml"
   authorization_flow = data.authentik_flow.default-provider-authorization-implicit-consent.id
-  acs_url            = "https://cloud.lama-corp.space/index.php/apps/user_saml/saml/acs"
+  acs_url            = "https://cloud.lama-corp.space/apps/user_saml/saml/acs"
   issuer             = "https://auth.lama-corp.space"
-  audience           = "https://cloud.lama-corp.space/index.php/apps/user_saml/saml/metadata"
+  audience           = "https://cloud.lama-corp.space/apps/user_saml/saml/metadata"
   sp_binding         = "post"
   signing_kp         = data.authentik_certificate_key_pair.default.id
   verification_kp    = authentik_certificate_key_pair.nextcloud-saml.id
