@@ -1,5 +1,4 @@
 ---
-
 default:
   image: registry.gitlab.com/lama-corp/infra/infrastructure:latest
 variables:
@@ -44,6 +43,7 @@ pre-commit:
   needs: []
   before_script:
     - >
-      echo '{"root_token": ""}' > vault/bootstrap/secrets/vault.json
+      mkdir -p vault/secrets
+      echo '{"root_token": ""}' > vault/secrets/vault.json
   script:
     - pre-commit run --all-files
