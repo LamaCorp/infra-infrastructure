@@ -2,7 +2,7 @@
 
 
 pastebin_docker_repository: danielszabo99/microbin
-pastebin_docker_tag: 1.2.0
+pastebin_docker_tag: 1.2.1
 
 # pastebin_domain: ""
 pastebin_extra_domains: []
