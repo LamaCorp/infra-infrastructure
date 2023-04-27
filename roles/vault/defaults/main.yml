@@ -1,4 +1,4 @@
 ---
 
 vault_docker_repository: vault
-vault_docker_tag: 1.13.0
+vault_docker_tag: 1.13.2
