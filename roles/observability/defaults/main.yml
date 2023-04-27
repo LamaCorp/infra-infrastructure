@@ -351,7 +351,7 @@ loki_config_computed: "{{ loki_default_config | combine(loki_config, recursive=T
 ### Phlare
 
 phlare_docker_repository: grafana/phlare
-phlare_docker_tag: 0.1.2
+phlare_docker_tag: 0.5.1
 
 
 phlare_domain: ""
