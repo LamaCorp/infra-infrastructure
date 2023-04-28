@@ -1,8 +1,6 @@
 ---
-
 netbox_docker_repository: netboxcommunity/netbox
-netbox_docker_tag: v3.4.5-2.4.0
-
+netbox_docker_tag: v3.4.10
 
 # netbox_domain: "CHANGEME"
 
@@ -15,7 +13,6 @@ netbox_default_reverse_proxy:
 
 netbox_reverse_proxy: {}
 netbox_reverse_proxy_computed: "{{ netbox_default_reverse_proxy | combine(netbox_reverse_proxy, recursive=True) }}"
-
 
 netbox_postgresql_host: "{{ services_db_host }}"
 # netbox_postgresql_user: ""
@@ -30,7 +27,6 @@ netbox_redis_host: "{{ services_redis_host }}"
 # netbox_admin_user: ""
 # netbox_admin_password: ""
 # netbox_admin_api_token: ""
-
 
 netbox_default_environment:
   DB_HOST: "{{ netbox_postgresql_host }}"
