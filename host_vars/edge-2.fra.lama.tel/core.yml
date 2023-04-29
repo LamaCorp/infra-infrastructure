@@ -1,7 +1,6 @@
 ---
-
 bird2_router_id: 172.28.254.4
-bird2_bgp_region_id: 276  # Germany
+bird2_bgp_region_id: 276 # Germany
 bird2_bgp_site_id: 4
 
 bird2_bgp_preferred_source:
@@ -14,10 +13,10 @@ bird2_bgp_originations:
 
 bird2_bgp_blacklist:
   v6:
-    - 2a09:0:9::/48  # Local prefix
-    - 2001:7f8:f2:e1::/64-  # LocIX
-    - 2001:7f8:d0::/64-  # 4IXP
-    - 2a0e:8f01:1000:46::/64-  # BGP Exchange
+    - 2a09:0:9::/48 # Local prefix
+    - 2001:7f8:f2:e1::/64- # LocIX
+    - 2001:7f8:d0::/64- # 4IXP
+    - 2a0e:8f01:1000:46::/64- # BGP Exchange
 
 bird2_bgp_static_routes:
   v6:
@@ -70,15 +69,30 @@ bird2_bgp_sessions:
           v6: 2001:7f8:f2:e1:0:2120:24:1
         remote:
           v6: 2001:7f8:f2:e1::be5a
-
-      - description: AS112
-        alias: as112
+      - description: LocIX AS112
+        alias: locix_as112
         asn: 112
         irr: AS112
         local:
           v6: 2001:7f8:f2:e1:0:2120:24:1
         remote:
           v6: 2001:7f8:f2:e1::112
+      - description: LocIX AS6939
+        alias: locix_as6939
+        asn: 6939
+        irr: AS-HURRICANE
+        local:
+          v6: 2001:7f8:f2:e1:0:2120:24:1
+        remote:
+          v6: 2001:7f8:f2:e1::6939:1
+      - description: LocIX AS208328
+        alias: locix_as208328
+        asn: 208328
+        irr: AS208328:AS-LUIGILABATE
+        local:
+          v6: 2001:7f8:f2:e1:0:2120:24:1
+        remote:
+          v6: 2001:7f8:f2:e1:a5:20:8328:1
 
       - description: 4IXP RS1
         alias: 4ixp_rs1
@@ -168,7 +182,6 @@ bird2_bgp_sessions:
         remote:
           port: 180
           v4: 127.0.0.2
-
 
 bird2_ospf_sessions:
   - alias: ospf
