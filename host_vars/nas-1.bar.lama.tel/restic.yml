@@ -1,5 +1,4 @@
 ---
-
 backup_restic_creds_afs: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/afs') }}"
 
 backup_restic_list_raw:
@@ -17,9 +16,9 @@ backup_restic_list_raw:
       - /afs/lama-corp.space/resources
       - /afs/lama-corp.space/sgoinfre
       - /afs/lama-corp.space/user
-    backup_cron:
+    backup_systemd_timers:
       minute: 15
       hour: 05
-    prune_cron:
+    prune_systemd_timers:
       minute: 51
       hour: 14

@@ -1,5 +1,4 @@
 ---
-
 backup_restic_creds_cloudserver: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/cloudserver') }}"
 backup_restic_creds_jellyfin: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/jellyfin') }}"
 backup_restic_creds_mattermost: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/mattermost') }}"
@@ -27,10 +26,10 @@ backup_restic_list_raw:
       s3_prune_secret_key: "{{ backup_restic_creds_cloudserver['prune_secret_key'] }}"
     to_include:
       - /srv/cloudserver
-    backup_cron:
+    backup_systemd_timers:
       minute: 02
       hour: 04
-    prune_cron:
+    prune_systemd_timers:
       minute: 32
       hour: 13
 
@@ -46,10 +45,10 @@ backup_restic_list_raw:
       s3_prune_secret_key: "{{ backup_restic_creds_jellyfin['prune_secret_key'] }}"
     to_include:
       - /srv/jellyfin
-    backup_cron:
+    backup_systemd_timers:
       minute: 22
       hour: 07
-    prune_cron:
+    prune_systemd_timers:
       minute: 13
       hour: 13
 
@@ -65,10 +64,10 @@ backup_restic_list_raw:
       s3_prune_secret_key: "{{ backup_restic_creds_mattermost['prune_secret_key'] }}"
     to_include:
       - /srv/mattermost
-    backup_cron:
+    backup_systemd_timers:
       minute: 27
       hour: 03
-    prune_cron:
+    prune_systemd_timers:
       minute: 12
       hour: 13
 
@@ -84,10 +83,10 @@ backup_restic_list_raw:
       s3_prune_secret_key: "{{ backup_restic_creds_matrix['prune_secret_key'] }}"
     to_include:
       - /srv/matrix
-    backup_cron:
+    backup_systemd_timers:
       minute: 15
       hour: 04
-    prune_cron:
+    prune_systemd_timers:
       minute: 37
       hour: 13
 
@@ -103,10 +102,10 @@ backup_restic_list_raw:
       s3_prune_secret_key: "{{ backup_restic_creds_netbox['prune_secret_key'] }}"
     to_include:
       - /srv/netbox
-    backup_cron:
+    backup_systemd_timers:
       minute: 15
       hour: 04
-    prune_cron:
+    prune_systemd_timers:
       minute: 37
       hour: 13
 

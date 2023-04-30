@@ -1,5 +1,4 @@
 ---
-
 backup_restic_creds_qbittorrent: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/qbittorrent') }}"
 
 backup_restic_list_raw:
@@ -15,8 +14,8 @@ backup_restic_list_raw:
       s3_prune_secret_key: "{{ backup_restic_creds_qbittorrent['prune_secret_key'] }}"
     to_include:
       - /srv/qbittorrent
-    backup_cron:
+    backup_systemd_timers:
       minute: 12
-    prune_cron:
+    prune_systemd_timers:
       minute: 51
       hour: 14

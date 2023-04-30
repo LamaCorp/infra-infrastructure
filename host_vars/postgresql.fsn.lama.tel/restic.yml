@@ -1,5 +1,4 @@
 ---
-
 backup_restic_creds_postgresql: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/postgresql') }}"
 
 backup_restic_list_raw:
@@ -22,9 +21,9 @@ backup_restic_list_raw:
           - "postgres"
           - "-c"
           - "pg_dumpall --clean --file /var/lib/postgresql/backup.sql --verbose --exclude-database=postgres --exclude-database=template0 --exclude-database=template1"
-    backup_cron:
+    backup_systemd_timers:
       minute: 02
       hour: 04
-    prune_cron:
+    prune_systemd_timers:
       minute: 05
       hour: 13

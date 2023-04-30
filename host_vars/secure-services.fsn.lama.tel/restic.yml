@@ -1,7 +1,4 @@
 ---
-
-backup_restic_default_disable_external_prune: true
-
 backup_restic_creds_acme: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/acme') }}"
 backup_restic_creds_vault: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/vault') }}"
 
@@ -31,10 +28,10 @@ backup_restic_list:
       s3_prune_secret_key: "{{ backup_restic_creds_user_root['prune_secret_key'] }}"
     to_include:
       - /root
-    backup_cron:
+    backup_systemd_timers:
       minute: 20
       hour: 02
-    prune_cron:
+    prune_systemd_timers:
       minute: 05
       hour: 12
   - name: vault

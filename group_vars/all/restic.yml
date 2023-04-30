@@ -1,6 +1,6 @@
 ---
-
-backup_restic_use_systemd_timers: true
+backup_restic_default_schedule_type: "systemd-timers"
+backup_restic_default_prune_schedule_type: "systemd-timers"
 backup_restic_default_compression_level: max
 backup_restic_prune_host: secure-services.fsn.lama.tel
 backup_restic_default_s3_host: s3.eu-central-1.wasabisys.com
@@ -27,10 +27,10 @@ backup_restic_list_user_root:
       s3_prune_secret_key: "{{ backup_restic_creds_user_root['prune_secret_key'] }}"
     to_include:
       - /root
-    backup_cron:
+    backup_systemd_timers:
       minute: 20
       hour: 02
-    prune_cron:
+    prune_systemd_timers:
       minute: 05
       hour: 12
 

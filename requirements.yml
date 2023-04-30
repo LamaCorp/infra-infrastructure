@@ -34,7 +34,7 @@ roles:
     version: eb664f5ddd8006d25610cb6023ebc9f05d83ef4b
   - name: cri.restic
     src: git+https://gitlab.cri.epita.fr/cri/iac/ansible/roles/restic.git
-    version: e9b9d440905c0fb1883eaf8026dcbe6f4b5c3783
+    version: e8912d022a651c627b8ff87e1b547109803f7a4d
   - name: geerlingguy.docker
     version: 6.1.0
   - name: geerlingguy.pip

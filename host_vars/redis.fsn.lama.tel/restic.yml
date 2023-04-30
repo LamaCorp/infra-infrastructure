@@ -1,5 +1,4 @@
 ---
-
 backup_restic_creds_redis: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/redis') }}"
 
 backup_restic_list_raw:
@@ -15,9 +14,9 @@ backup_restic_list_raw:
       s3_prune_secret_key: "{{ backup_restic_creds_redis['prune_secret_key'] }}"
     to_include:
       - /var/lib/redis
-    backup_cron:
+    backup_systemd_timers:
       minute: 31
       hour: 02
-    prune_cron:
+    prune_systemd_timers:
       minute: 16
       hour: 12
