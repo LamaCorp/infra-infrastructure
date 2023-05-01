@@ -34,6 +34,7 @@ docker-build:
         - Dockerfile
         - pyproject.toml
         - poetry.lock
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
 
 ansible-lint:
   stage: lint
