@@ -38,7 +38,6 @@ docker-build:
 
 ansible-lint:
   stage: lint
-  needs: []
   variables:
     ANSIBLE_CONFIG: ansible.cfg
   script: |
@@ -46,7 +45,6 @@ ansible-lint:
 
 pre-commit:
   stage: lint
-  needs: []
   before_script:
     - mkdir -p vault/secrets
     - >
