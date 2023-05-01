@@ -18,7 +18,7 @@ collections:
     version: 0.0.10
   - name: git+https://gitlab.cri.epita.fr/cri/iac/ansible/collections/acme.git
     type: git
-    version: ce081739be9f5fc67d410710a39ead0c80df55cb
+    version: 0.5.0
 
 roles:
   - name: buluma.snmpd
