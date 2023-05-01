@@ -12,7 +12,6 @@ __pycache__
 /roles/buluma.snmpd
 /roles/cloudalchemy.node_exporter
 /roles/cri.gitlab_runner
-/roles/cri.nftables
 /roles/cri.restic
 /roles/geerlingguy.docker
 /roles/geerlingguy.pip

@@ -29,9 +29,6 @@ roles:
   - name: cri.gitlab_runner
     src: git+https://gitlab.cri.epita.fr/cri/iac/ansible/roles/gitlab_runner.git
     version: ec26994af10e7d5eb809a1cd19a66e50f6ce512f
-  - name: cri.nftables
-    src: git+https://gitlab.cri.epita.fr/cri/iac/ansible/roles/nftables.git
-    version: eb664f5ddd8006d25610cb6023ebc9f05d83ef4b
   - name: cri.restic
     src: git+https://gitlab.cri.epita.fr/cri/iac/ansible/roles/restic.git
     version: 644d0c62ad92938c33c61d4e97929ecd08bba71f
