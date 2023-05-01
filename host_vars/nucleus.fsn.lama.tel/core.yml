@@ -1,5 +1,4 @@
 ---
-
 kresd_listeners:
   - ip: "::1"
     port: 53
@@ -29,13 +28,14 @@ bird2_bgp_sessions:
       local:
         v4: 172.28.254.1
         v6: 2001:67c:17fc:ffff::1
+      med_metric: true
     sessions:
-      # - description: BAR
-      #   alias: bar
-      #   asn: 212024
-      #   remote:
-      #     v4: 172.28.254.2
-      #     v6: 2001:67c:17fc:ffff::2
+      - description: BAR
+        alias: bar
+        asn: 212024
+        remote:
+          v4: 172.28.254.2
+          v6: 2001:67c:17fc:ffff::2
       - description: PVL
         alias: pvl
         asn: 212024
@@ -60,7 +60,6 @@ bird2_bgp_sessions:
           port: 180
           v4: 127.0.0.2
 
-
 bird2_ospf_sessions:
   - alias: ospf
     areas:
@@ -68,11 +67,10 @@ bird2_ospf_sessions:
         interfaces:
           tinc-lama: {}
           br-svc: {}
-          br-mdw":
+          br-mdw:
             stub: true
           br-cc:
             stub: true
-
 
 bird2_radv_sessions:
   - alias: radv6

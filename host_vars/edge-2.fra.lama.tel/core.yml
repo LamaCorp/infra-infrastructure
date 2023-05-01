@@ -25,10 +25,6 @@ bird2_bgp_static_routes:
 
 bird2_bgp_sessions:
   upstreams:
-    defaults:
-      local_pref:
-        v6:
-          increase: 50
     sessions:
       - description: xTom
         alias: xtom
@@ -38,12 +34,12 @@ bird2_bgp_sessions:
           v6: 2a09:0:9::101
         remote:
           v6: 2a09:0:9::9
+        default_med: 100
+        med_metric: true
+        med:
+          decrease: 10
 
   peers:
-    defaults:
-      local_pref:
-        v6:
-          increase: 150
     sessions:
       - description: LocIX RS01
         alias: locix_rs01
@@ -148,14 +144,12 @@ bird2_bgp_sessions:
       - description: FSN
         alias: fsn
         asn: 212024
-        route_reflector: true
         remote:
           v4: 172.28.254.1
           v6: 2001:67c:17fc:ffff::1
       - description: BAR
         alias: bar
         asn: 212024
-        route_reflector: true
         remote:
           v4: 172.28.254.2
           v6: 2001:67c:17fc:ffff::2

@@ -1,5 +1,4 @@
 ---
-
 bird2_router_id: 172.28.254.2
 
 bird2_bgp_preferred_source:
@@ -11,13 +10,14 @@ bird2_bgp_sessions:
       local:
         v4: 172.28.254.2
         v6: 2001:67c:17fc:ffff::2
+      med_metric: true
     sessions:
-      # - description: FSN
-      #   alias: fsn
-      #   asn: 212024
-      #   remote:
-      #     v4: 172.28.254.1
-      #     v6: 2001:67c:17fc:ffff::1
+      - description: FSN
+        alias: fsn
+        asn: 212024
+        remote:
+          v4: 172.28.254.1
+          v6: 2001:67c:17fc:ffff::1
       - description: PVL
         alias: pvl
         asn: 212024
@@ -41,7 +41,6 @@ bird2_bgp_sessions:
         remote:
           port: 180
           v4: 127.0.0.2
-
 
 bird2_ospf_sessions:
   - alias: ospf
