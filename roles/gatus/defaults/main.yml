@@ -4,7 +4,7 @@ gatus_project_name: gatus
 
 
 gatus_docker_repository: twinproduction/gatus
-gatus_docker_tag: v5.3.2
+gatus_docker_tag: v5.4.0
 
 
 # gatus_domain: "CHANGEME"
