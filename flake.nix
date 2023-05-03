@@ -30,12 +30,8 @@
               projectDir = self;
 
               overrides = pkgs.poetry2nix.overrides.withDefaults (self: super: {
-                hvac = super.hvac.overridePythonAttrs (old: {
-                  buildInputs = old.buildInputs ++ [ self.poetry ];
-                });
-
-                rfc3986-validator = super.rfc3986-validator.overridePythonAttrs (old: {
-                  buildInputs = old.buildInputs ++ [ self.setuptools self.pytest-runner ];
+                urllib3 = super.urllib3.overridePythonAttrs (old: {
+                  nativeBuildInputs = old.nativeBuildInputs ++ [ self.hatchling ];
                 });
               });
             })
