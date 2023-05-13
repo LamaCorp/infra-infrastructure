@@ -405,7 +405,7 @@ phlare_config_computed: "{{ phlare_default_config | combine(phlare_config, recur
 ### Grafana
 
 grafana_docker_repository: grafana/grafana
-grafana_docker_tag: 9.5.1
+grafana_docker_tag: 9.5.2
 
 
 grafana_domain: ""
