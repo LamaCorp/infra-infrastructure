@@ -2,7 +2,7 @@
 
 
 mail_docker_repository: ghcr.io/docker-mailserver/docker-mailserver
-mail_docker_tag: 11.3.1
+mail_docker_tag: 12.1.0
 
 mail_hostname: "{{ inventory_hostname }}"
 
