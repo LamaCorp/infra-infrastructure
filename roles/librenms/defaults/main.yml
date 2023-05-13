@@ -4,7 +4,7 @@ librenms_docker_repository: librenms/librenms
 librenms_docker_tag: 23.2.0
 
 librenms_mariadb_docker_repository: mariadb
-librenms_mariadb_docker_tag: 10.11.2
+librenms_mariadb_docker_tag: 10.11.3
 
 # librenms_domain: ""
 
