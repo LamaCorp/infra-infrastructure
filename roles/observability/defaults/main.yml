@@ -4,7 +4,7 @@
 ### Prometheus
 
 prometheus_docker_repository: quay.io/prometheus/prometheus
-prometheus_docker_tag: v2.43.0
+prometheus_docker_tag: v2.44.0
 
 prometheus_retention_time: "7d"
 prometheus_retention_size: "10GB"
