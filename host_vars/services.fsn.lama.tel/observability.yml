@@ -1,5 +1,4 @@
 ---
-
 prometheus_retention_time: "30d"
 prometheus_retention_size: "5GB"
 
@@ -10,7 +9,6 @@ prometheus_global_config:
   external_labels:
     prometheus_cluster: fsn
     prometheus_replica: 1
-
 
 prometheus_scrape_configs_node_targets_raw: |
   {% for host in groups['all'] %}
@@ -102,7 +100,6 @@ prometheus_scrape_configs:
           - bgp.tools:443
     metrics_path: /prom/495364bc-abd8-4204-a622-2471db82481d
 
-
 prometheus_rules_list:
   - "{{ prometheus_rules_alertmanager }}"
   - "{{ prometheus_rules_django }}"
@@ -112,7 +109,6 @@ prometheus_rules_list:
   - "{{ prometheus_rules_prometheus }}"
   - "{{ prometheus_rules_redis }}"
   - "{{ prometheus_rules_vault }}"
-
 
 thanos_objstore_config:
   type: S3
@@ -130,7 +126,6 @@ thanos_bucketweb_reverse_proxy:
     forwardauth.address: http://ak-outpost-thanos-bucketweb:9000/outpost.goauthentik.io/auth/traefik
     forwardauth.trustForwardHeader: true
     forwardauth.authResponseHeaders: "{{ authentik_forwardauth_headers }}"
-
 
 alertmanager_domain: alerts.lama.tel
 alertmanager_reverse_proxy:
@@ -152,7 +147,6 @@ alertmanager_route_config:
       repeat_interval: 1h
       receiver: discord-infra-critical-alerts
 
-
 alertmanager_receivers:
   - name: discord-infra-critical-alerts
     webhook_configs:
@@ -171,7 +165,6 @@ alertmanager_discord_channels:
   critical:
     name: infra-critical-alerts
     webhookURL: "{{ alertmanager_discord_channels_webhooks['infra-critical-alerts'] }}"
-
 
 loki_basic_auth_user_list:
   - "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/loki/basic-auth/infra') }}"
@@ -214,12 +207,11 @@ loki_config:
       shared_store: s3
 
   chunk_store_config:
-    max_look_back_period: 1036800h  # 2 years
+    max_look_back_period: 1036800h # 2 years
 
   table_manager:
     retention_deletes_enabled: true
-    retention_period: 1036800h  # 2 years
-
+    retention_period: 1036800h # 2 years
 
 grafana_domain: grafana.lama.tel
 
@@ -247,6 +239,7 @@ grafana_config:
     client_id: "{{ grafana_config_auth_creds['client_id'] }}"
     client_secret: "{{ grafana_config_auth_creds['secret_id'] }}"
     scopes: openid email profile
+    use_pkce: true
     auth_url: https://auth.lama.tel/application/o/authorize/
     token_url: https://auth.lama.tel/application/o/token/
     api_url: https://auth.lama.tel/application/o/userinfo/
@@ -255,7 +248,7 @@ grafana_config:
     role_attribute_strict: true
   users:
     auto_assign_org: true
-    auto_assign_org_id: 1  # Main Org.
+    auto_assign_org_id: 1 # Main Org.
   plugins:
     plugin_admin_enabled: false
   feature_toggles:
