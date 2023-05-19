@@ -4,6 +4,7 @@ After=network-online.target
 
 [Service]
 ExecStart=/usr/local/bin/"{{ node_exporter_nftables_binary_name }}"
+RestartOnFailure=true
 
 [Install]
 WantedBy=multi-user.target
