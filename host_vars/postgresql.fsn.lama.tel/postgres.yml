@@ -107,7 +107,7 @@ postgresql_config:
 
   # See https://pgtune.leopard.in.ua/
   # and https://wiki.postgresql.org/wiki/Tuning_Your_PostgreSQL_Server
-  max_connections: 400
+  max_connections: 500
   shared_buffers: 4GB
   effective_cache_size: 12GB
   maintenance_work_mem: 1GB
