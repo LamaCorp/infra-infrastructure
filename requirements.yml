@@ -3,7 +3,7 @@ collections:
   - name: ansible.utils
     version: 2.10.3
   - name: community.crypto
-    version: 2.13.0
+    version: 2.13.1
   - name: community.docker
     version: 3.4.5
   - name: community.general
