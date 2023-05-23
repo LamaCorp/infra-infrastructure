@@ -1,7 +1,7 @@
 ---
 
 mattermost_docker_repository: mattermost/mattermost-team-edition
-mattermost_docker_tag: 7.10.1
+mattermost_docker_tag: 7.10.2
 
 
 # mattermost_domain: "CHANGEME"
