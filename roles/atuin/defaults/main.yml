@@ -1,7 +1,7 @@
 ---
 
 atuin_docker_repository: ghcr.io/ellie/atuin
-atuin_docker_tag: 14.0.1
+atuin_docker_tag: 15.0.0
 
 # atuin_domain: ""
 
