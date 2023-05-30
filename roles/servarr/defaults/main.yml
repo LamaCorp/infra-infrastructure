@@ -29,7 +29,7 @@ servarr_config: {}
 servarr_config_computed: "{{ servarr_default_config | combine(servarr_config, recursive=True) }}"
 
 lidarr_docker_repository: ghcr.io/hotio/lidarr
-lidarr_docker_tag: testing-1.1.3.2982
+lidarr_docker_tag: testing-1.1.4.3027
 
 # lidarr_domain: ""
 
@@ -76,7 +76,7 @@ lidarr_config: {}
 lidarr_config_computed: "{{ servarr_config_computed | combine(lidarr_default_config, recursive=True) | combine(lidarr_config, recursive=True) }}"
 
 prowlarr_docker_repository: ghcr.io/hotio/prowlarr
-prowlarr_docker_tag: release-1.2.2.2699
+prowlarr_docker_tag: release-1.4.1.3258
 
 # prowlarr_domain: ""
 
@@ -158,7 +158,7 @@ sonarr_config: {}
 sonarr_config_computed: "{{ servarr_config_computed | combine(sonarr_default_config, recursive=True) | combine(sonarr_config, recursive=True) }}"
 
 radarr_docker_repository: ghcr.io/hotio/radarr
-radarr_docker_tag: release-4.3.2.6857
+radarr_docker_tag: release-4.5.2.7388
 
 # radarr_domain: ""
 
@@ -204,7 +204,7 @@ radarr_config: {}
 radarr_config_computed: "{{ servarr_config_computed | combine(radarr_default_config, recursive=True) | combine(radarr_config, recursive=True) }}"
 
 readarr_docker_repository: ghcr.io/hotio/readarr
-readarr_docker_tag: testing-0.1.4.1596
+readarr_docker_tag: testing-0.1.6.1867
 
 # readarr_domain: ""
 

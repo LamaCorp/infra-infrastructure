@@ -1,8 +1,6 @@
 ---
-
-
 jellyfin_docker_repository: ghcr.io/hotio/jellyfin
-jellyfin_docker_tag: release-10.8.9-1
+jellyfin_docker_tag: release-10.8.10-1
 
 # jellyfin_domain: ""
 
