@@ -7,6 +7,7 @@ locals {
     "nextcloud",
     "upsilon",
     "vaultwarden",
+    "vikunja",
   ])
 }
 

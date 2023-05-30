@@ -1,5 +1,4 @@
 ---
-
 redis_enable_vm_overcommit: true
 
 # sort by port number
@@ -18,3 +17,5 @@ redis_instances:
     port: 6385
   - name: librenms
     port: 6386
+  - name: vikunja
+    port: 6387

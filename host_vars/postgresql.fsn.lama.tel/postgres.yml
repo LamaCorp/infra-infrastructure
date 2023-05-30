@@ -71,6 +71,9 @@ postgresql_users:
   vaultwarden:
     password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/vaultwarden')['password'] }}"
 
+  vikunja:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/vikunja')['password'] }}"
+
 postgresql_dbs:
   atuin: atuin
   authentik: authentik
@@ -100,6 +103,7 @@ postgresql_dbs:
   readarr_main: readarr
   upsilon: upsilon
   vaultwarden: vaultwarden
+  vikunja: vikunja
 
 postgresql_config:
   ssl_cert_file: "'{{ acme_vault_client_cert_dir }}/postgresql.fsn.lama.tel/fullchain.pem'"

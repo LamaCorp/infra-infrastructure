@@ -28,6 +28,7 @@ locals {
     "readarr",
     "upsilon",
     "vaultwarden",
+    "vikunja",
   ])
 }
 

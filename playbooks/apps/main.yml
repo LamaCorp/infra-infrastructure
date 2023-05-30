@@ -69,6 +69,9 @@
 - name: Vaultwarden
   import_playbook: vaultwarden.yml
 
+- name: Vaultwarden
+  import_playbook: vikunja.yml
+
 - name: Whoisd
   import_playbook: whoisd.yml
 

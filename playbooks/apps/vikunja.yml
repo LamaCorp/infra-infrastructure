@@ -1,0 +1,12 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Base
+  import_playbook: ../base.yml
+
+- name: Vikunja
+  hosts: services.fsn.lama.tel
+  roles:
+    - vikunja
+  tags:
+    - apps
+    - vikunja

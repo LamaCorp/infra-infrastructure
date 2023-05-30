@@ -1,0 +1,19 @@
+---
+vikunja_domain: tasks.lama-corp.space
+
+vikunja_postgresql_database: vikunja
+vikunja_postgresql_user: vikunja
+vikunja_postgresql_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/vikunja')['password'] }}"
+
+vikunja_redis_port: 6387
+
+vikunja_email_from: tasks@lama-corp.space
+vikunja_email_user: "{{ lookup('community.hashi_vault.hashi_vault', 'infra/data/aws/ses/senders/vikunja')['username'] }}"
+vikunja_email_password: "{{ lookup('community.hashi_vault.hashi_vault', 'infra/data/aws/ses/senders/vikunja')['password'] }}"
+
+vikunja_secret_key: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/vikunja/secret-key')['key'] }}"
+
+vikunja_openid_provider_name: Lama Corp.
+vikunja_openid_provider_url: https://auth.lama-corp.space/application/o/vikunja/
+vikunja_openid_client_id: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/apps/vikunja/oidc')['client_id'] }}"
+vikunja_openid_client_secret: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/apps/vikunja/oidc')['secret_id'] }}"

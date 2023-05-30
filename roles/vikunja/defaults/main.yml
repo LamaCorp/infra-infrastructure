@@ -1,0 +1,106 @@
+---
+vikunja_api_docker_repository: vikunja/api
+vikunja_api_docker_tag: 0.20.4
+
+vikunja_frontend_docker_repository: vikunja/frontend
+vikunja_frontend_docker_tag: 0.20.5
+
+# vikunja_domain: "CHANGEME"
+
+vikunja_api_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ vikunja_domain }}`) && PathPrefix(`/api`, `/dav`, `/.well-known`)"
+  service:
+    port: 3456
+
+vikunja_api_reverse_proxy: {}
+vikunja_api_reverse_proxy_computed: "{{ vikunja_api_default_reverse_proxy | combine(vikunja_api_reverse_proxy, recursive=True) }}"
+
+vikunja_frontend_default_reverse_proxy:
+  enable: true
+  router:
+    rule: "Host(`{{ vikunja_domain }}`)"
+  service:
+    port: 80
+
+vikunja_frontend_reverse_proxy: {}
+vikunja_frontend_reverse_proxy_computed: "{{ vikunja_frontend_default_reverse_proxy | combine(vikunja_frontend_reverse_proxy, recursive=True) }}"
+
+vikunja_postgresql_host: "{{ services_db_host }}"
+# vikunja_postgresql_user: ""
+# vikunja_postgresql_database: ""
+# vikunja_postgresql_password: ""
+
+vikunja_redis_host: "{{ services_redis_host }}"
+# vikunja_redis_port: ""
+
+# vikunja_email_from: "CHANGEME"
+vikunja_email_host: "{{ services_email_host }}"
+vikunja_email_port: "{{ services_email_port }}"
+# vikunja_email_user: "CHANGEME"
+# vikunja_email_password: "CHANGEME"
+
+# vikunja_secret_key: ""
+
+# vikunja_openid_provider_name: ""
+# vikunja_openid_provider_url: ""
+# vikunja_openid_client_id: ""
+# vikunja_openid_client_secret: ""
+
+vikunja_default_config:
+  service:
+    JWTSecret: "{{ vikunja_secret_key }}"
+    frontendurl: "https://{{ vikunja_domain }}"
+    maxitemsperpage: 100
+    timezone: Europe/Paris
+
+  database:
+    type: postgres
+    host: "{{ vikunja_postgresql_host }}"
+    user: "{{ vikunja_postgresql_user }}"
+    password: "{{ vikunja_postgresql_password }}"
+    database: "{{ vikunja_postgresql_database }}"
+    maxopenconnections: 20
+    maxidleconnections: 10
+    sslmode: require
+
+  keyvalue:
+    type: redis
+  cache:
+    enabled: true
+    type: redis
+  redis:
+    enabled: true
+    host: "{{ vikunja_redis_host }}:{{ vikunja_redis_port }}"
+
+  mailer:
+    enabled: true
+    host: "{{ vikunja_email_host }}"
+    port: "{{ vikunja_email_port }}"
+    username: "{{ vikunja_email_user }}"
+    password: "{{ vikunja_email_password }}"
+    fromemail: "{{ vikunja_email_from }}"
+
+  auth:
+    local:
+      enabled: false
+    openid:
+      enabled: true
+      providers:
+        - name: "{{ vikunja_openid_provider_name }}"
+          authurl: "{{ vikunja_openid_provider_url }}"
+          clientid: "{{ vikunja_openid_client_id }}"
+          clientsecret: "{{ vikunja_openid_client_secret }}"
+
+  metrics:
+    enabled: true
+
+  defaultsettings:
+    avatar_provider: gravatar
+    discoverable_by_name: true
+    discoverable_by_email: true
+    week_start: 1 # Monday
+
+vikunja_config: {}
+vikunja_config_computed: "{{ vikunja_default_config | combine(vikunja_config, recursive=True) }}"
