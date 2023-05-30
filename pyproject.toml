@@ -9,13 +9,13 @@ license = "AGPL-3.0"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-ansible = "^7"
+ansible = "^8"
 hvac = "*"
 jmespath = "*"
 xmltodict = "*"
 
 [tool.poetry.dev-dependencies]
-ansible-lint = "*"
+ansible-lint = { version = "*", markers = "platform_system != 'Windows'" }
 black = "*"
 isort = "*"
 pre-commit = "*"
