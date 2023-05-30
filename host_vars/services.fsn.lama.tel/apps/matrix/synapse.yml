@@ -1,5 +1,4 @@
 ---
-
 matrix_homeserver_implementation: synapse
 matrix_synapse_workers_enabled: true
 
@@ -47,6 +46,7 @@ matrix_synapse_enable_registration: false
 matrix_synapse_auto_join_rooms:
   - "#everyone:lama-corp.space"
 matrix_synapse_autocreate_auto_join_rooms: true
+matrix_synapse_forget_rooms_on_leave: false
 
 matrix_synapse_password_config_localdb_enabled: false
 

@@ -13,7 +13,7 @@ matrix_homeserver_generic_secret_key: "{{ lookup('community.hashi_vault.hashi_va
 devture_postgres_enabled: false
 grafana_enabled: false
 redis_enabled: false
-matrix_prometheus_enabled: false
+prometheus_enabled: false
 matrix_mailer_enabled: false
 
 devture_traefik_certs_dumper_enabled: false
