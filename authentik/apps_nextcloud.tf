@@ -103,8 +103,8 @@ resource "authentik_provider_ldap" "nextcloud-ldap" {
   base_dn      = "dc=cloud,dc=lama-corp,dc=space"
   search_group = authentik_group.nextcloud-ldapsearch.id
 
-  bind_mode   = "cached"
-  search_mode = "cached"
+  bind_mode   = "direct"
+  search_mode = "direct"
 }
 
 resource "authentik_application" "nextcloud-ldap" {

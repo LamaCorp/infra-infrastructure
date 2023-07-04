@@ -72,8 +72,8 @@ resource "authentik_provider_ldap" "jellyfin-ldap" {
   base_dn      = "dc=jellyfin,dc=lama-corp,dc=space"
   search_group = authentik_group.jellyfin-ldapsearch.id
 
-  bind_mode   = "cached"
-  search_mode = "cached"
+  bind_mode   = "direct"
+  search_mode = "direct"
 }
 
 resource "authentik_application" "jellyfin-ldap" {

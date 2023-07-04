@@ -21,8 +21,8 @@ resource "authentik_provider_ldap" "mail-ldap" {
   base_dn      = "dc=mail,dc=lama-corp,dc=space"
   search_group = authentik_group.mail-ldapsearch.id
 
-  bind_mode   = "cached"
-  search_mode = "cached"
+  bind_mode   = "direct"
+  search_mode = "direct"
 }
 
 resource "authentik_application" "mail-ldap" {

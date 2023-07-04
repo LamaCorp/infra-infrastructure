@@ -21,8 +21,8 @@ resource "authentik_provider_ldap" "matrix-ldap" {
   base_dn      = "dc=matrix,dc=lama-corp,dc=space"
   search_group = authentik_group.matrix-ldapsearch.id
 
-  bind_mode   = "cached"
-  search_mode = "cached"
+  bind_mode   = "direct"
+  search_mode = "direct"
 }
 
 resource "authentik_application" "matrix-ldap" {
