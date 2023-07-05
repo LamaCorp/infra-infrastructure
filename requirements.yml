@@ -13,7 +13,7 @@ collections:
   - name: community.hashi_vault
     version: 5.0.0
   - name: openafs_contrib.openafs
-    version: 1.8.1
+    version: 1.9.0
   - name: sivel.toiletwater
     version: 0.0.10
   - name: git+https://gitlab.cri.epita.fr/cri/iac/ansible/collections/acme.git
