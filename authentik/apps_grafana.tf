@@ -41,7 +41,6 @@ resource "authentik_application" "grafana-oidc" {
   protocol_provider  = authentik_provider_oauth2.grafana-oidc.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://grafana.lama.tel"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/grafana.png"
   meta_description = "Observability Dashboards"
 }

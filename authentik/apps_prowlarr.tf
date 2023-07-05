@@ -19,7 +19,6 @@ resource "authentik_application" "prowlarr" {
   protocol_provider  = authentik_provider_proxy.prowlarr.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://prowlarr.lama-corp.space"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prowlarr.png"
   meta_description = "Movies"
 }

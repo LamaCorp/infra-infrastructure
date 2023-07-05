@@ -18,7 +18,6 @@ resource "authentik_application" "traefik" {
   protocol_provider  = authentik_provider_proxy.traefik.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://traefik.lama.tel"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/traefik.png"
   meta_description = "Reverse proxy"
 }

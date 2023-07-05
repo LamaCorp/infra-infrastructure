@@ -35,7 +35,6 @@ resource "authentik_application" "hedgedoc-oidc" {
   protocol_provider  = authentik_provider_oauth2.hedgedoc-oidc.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://md.lama-corp.space"
   meta_icon        = "https://github.com/hedgedoc/hedgedoc-logo/raw/main/LOGOTYPE/PNG/HedgeDoc-Logo%201.png"
   meta_description = "Éditeur de texte collaboratif"
 }

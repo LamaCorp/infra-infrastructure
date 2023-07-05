@@ -43,7 +43,6 @@ resource "authentik_application" "vault-oidc" {
   protocol_provider  = authentik_provider_oauth2.vault-oidc.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://vault.lama.tel"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/vault.png"
   meta_description = "Secret storage"
 }

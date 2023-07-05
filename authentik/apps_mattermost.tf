@@ -37,7 +37,6 @@ resource "authentik_application" "mattermost-oidc" {
   protocol_provider  = authentik_provider_oauth2.mattermost-oidc.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://chat.lama-corp.space"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/mattermost.png"
   meta_description = "Messagerie instantannée d'équipe"
 }

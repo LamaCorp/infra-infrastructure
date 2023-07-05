@@ -13,7 +13,6 @@ resource "authentik_application" "radarr" {
   protocol_provider  = authentik_provider_proxy.radarr.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://radarr.lama-corp.space"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/radarr.png"
   meta_description = "Movies"
 }

@@ -19,7 +19,6 @@ resource "authentik_application" "torrent" {
   protocol_provider  = authentik_provider_proxy.torrent.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://torrent.lama-corp.space"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/qbittorent.png"
   meta_description = "Torrent management"
 }

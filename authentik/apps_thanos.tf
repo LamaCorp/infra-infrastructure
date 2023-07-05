@@ -42,7 +42,6 @@ resource "authentik_application" "thanos-bucketweb" {
   protocol_provider  = authentik_provider_proxy.thanos-bucketweb.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://thanos-bucketweb.lama.tel"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/thanos.png"
   meta_description = "Thanos bucket overview"
 }

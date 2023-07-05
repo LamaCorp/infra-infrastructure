@@ -13,7 +13,6 @@ resource "authentik_application" "lidarr" {
   protocol_provider  = authentik_provider_proxy.lidarr.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://lidarr.lama-corp.space"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/lidarr.png"
   meta_description = "Movies"
 }

@@ -18,7 +18,6 @@ resource "authentik_application" "alertmanager" {
   protocol_provider  = authentik_provider_proxy.alertmanager.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://alerts.lama.tel"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/alertmanager.png"
   meta_description = "Infrastructure alerts"
 }

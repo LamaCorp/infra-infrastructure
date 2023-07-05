@@ -74,7 +74,6 @@ resource "authentik_application" "nextcloud" {
   protocol_provider  = authentik_provider_saml.nextcloud-saml.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://cloud.lama-corp.space"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/nextcloud.png"
   meta_description = "Stockage de fichiers"
 }

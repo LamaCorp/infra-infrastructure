@@ -13,7 +13,6 @@ resource "authentik_application" "sonarr" {
   protocol_provider  = authentik_provider_proxy.sonarr.id
   policy_engine_mode = "any"
 
-  meta_launch_url  = "https://sonarr.lama-corp.space"
   meta_icon        = "https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sonarr.png"
   meta_description = "Movies"
 }
