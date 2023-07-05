@@ -1,6 +1,6 @@
 ---
 hedgedoc_docker_repository: quay.io/hedgedoc/hedgedoc
-hedgedoc_docker_tag: 1.9.7
+hedgedoc_docker_tag: 1.9.8
 
 # hedgedoc_domain: "CHANGEME"
 hedgedoc_extra_domains: []
