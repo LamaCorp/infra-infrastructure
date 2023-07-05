@@ -2,23 +2,23 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/grafana/grafana" {
-  version     = "1.40.1"
-  constraints = "1.40.1"
+  version     = "1.42.0"
+  constraints = "1.42.0"
   hashes = [
-    "h1:4KoTiutSr2sKcMvLDhqHWh4Fta1GYK3OYaYxV6p9jKw=",
-    "h1:9+Hg4hTKHgpzbloImll5cYRSzz2Pz52lvunfiQ+UuD8=",
-    "h1:9q4eYLDoYdAEoF+5bvu35r/aaYe0YSDZlS+Vep6k3aQ=",
-    "h1:BC+nzuubamgvwQLcc+17j806/PowVoujVsAY3Xx6uiQ=",
-    "h1:H+1/naEpJd9UD/WkIgcCc9pbEbhr7SDiI4R4ugVeQ8A=",
-    "h1:JK3+mVaEI7CEWrWGJtjfJ/6lRsbrI4VdapOZfqmXc44=",
-    "h1:PZu1PG+EdLJbjxFButpPbagYpZswYIixyiZJDZMCoX4=",
-    "h1:d7sH0k+XUD1nbUfbczuf9yNHB8uHKt21fvNis9gSjy4=",
-    "h1:hjDvASq/Tt3LKeZkyTez5k6JYDBgXojKVr/+yrj1+wQ=",
-    "h1:jwrO9gFdIut2TAwF73fvqvdndrycKwJvWZPYY6i3vNA=",
-    "h1:pme63lERkbnjP2zpkuXWWNM/AD9DDNFogtXsUwy/Zw4=",
-    "h1:qP3uuIFmjHd4d5zlNGpW4DU89k5coSoojdsuunlqETY=",
-    "h1:tmfmP+hcTvW1RgmCgbPAT2nMI9iGXtINue+AlB5LXbs=",
-    "h1:y4MAGIUzxS3hdpFWCZMNvXo9D44giUGJH5zX09ZKHsM=",
+    "h1:5rdRsonkgNMbZYTXtjlz9iaoPPbKQlxIOIkuYmuyLvM=",
+    "h1:8yMIUFn/FvPeshvyR82lb/C5KkaUl+VJCyLUDJqUEdc=",
+    "h1:AiWDELImpIkxw+N/lImz/wshUh3y/c9axK8I0n5NKAE=",
+    "h1:GHbqtLV6VYw2GyctBVDRXWLFigoIHXyCaSl1q/W/geo=",
+    "h1:I+gHA3BG7iA4OJzmtrJNE64UMZmt9BTmfSvrzF1xRkU=",
+    "h1:OHdJLpiXlkO/6HoiVDjy3zFFlwW0tA1DJ5+nbuzFAJ0=",
+    "h1:Qx7VMqIPNFCbIaiu8tLYmtVpikro4GwFohA6ynfxtnM=",
+    "h1:S8Pr4rubXqArl4eNoymO0+mmyJ0ezGq30NaziY1ib1w=",
+    "h1:TjnctMgCX3NngAApo3+8ny5ixeT2GT/evw6gcnEqs+U=",
+    "h1:Z6E9BnHKk9SUI6/S/ksxmdzxubyqJhjZaq/dU4+jfMU=",
+    "h1:adBqPuiVrW9wQJdmjsFPiZp6xCClumncaUgBVqIxUl0=",
+    "h1:h31PIGHaUMrbCLDNG7Kdfy+LQBTpzJHeEc6cjkEdu40=",
+    "h1:kLZvle5selPnbt1hFNPjSoc4pMqAYD3ozg6jIc2zxLQ=",
+    "h1:pPqCudo/3xzYKWEDuAQjCcQzkPA+dioC4RSHnOhAuP8=",
   ]
 }
 
