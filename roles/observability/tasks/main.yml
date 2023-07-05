@@ -1,5 +1,4 @@
 ---
-
 - name: Create monitoring_scrapping Docker network
   community.docker.docker_network:
     name: monitoring_scrapping
@@ -157,20 +156,6 @@
         reverse_proxy: "{{ loki_reverse_proxy_computed }}"
         user: 65534:65534
 
-      phlare:
-        image: "{{ phlare_docker_repository }}:{{ phlare_docker_tag }}"
-        command: -config.file=/etc/phlare/config.yml
-        volumes:
-          - phlare_config:/etc/phlare:ro
-          - phlare_data:/phlare
-        networks:
-          - observability
-        monitoring:
-          name: phlare
-          port: 4100
-        reverse_proxy: "{{ phlare_reverse_proxy_computed }}"
-        user: 65534:65534
-
       grafana:
         image: "{{ grafana_docker_repository }}:{{ grafana_docker_tag }}"
         environment:
@@ -196,8 +181,8 @@
         value: "{{ grafana_admin_password }}"
         env: GF_SECURITY_ADMIN_PASSWORD__FILE
 
-    docker_compose_volumes_dir_owner: 65534  # nobody
-    docker_compose_volumes_dir_group: 65534  # nobody
+    docker_compose_volumes_dir_owner: 65534 # nobody
+    docker_compose_volumes_dir_group: 65534 # nobody
     docker_compose_volumes_dir_mode: 0755
 
 - name: Compute Prometheus configuration
@@ -213,8 +198,8 @@
   ansible.builtin.copy:
     content: "{{ prometheus_config | to_nice_yaml }}"
     dest: /srv/observability/volumes/prometheus_config/prometheus.yml
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0644
   notify: Restart docker-compose
 
@@ -222,8 +207,8 @@
   ansible.builtin.copy:
     content: "{{ rule.value | to_nice_yaml }}"
     dest: "/srv/observability/volumes/prometheus_rules/{{ rule.key }}.rules"
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0644
   loop: "{{ prometheus_rules_computed | dict2items }}"
   loop_control:
@@ -242,8 +227,8 @@
   ansible.builtin.copy:
     content: "{{ alertmanager_config | to_nice_yaml }}"
     dest: /srv/observability/volumes/alertmanager_config/alertmanager.yml
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0644
   notify: Restart docker-compose
 
@@ -263,8 +248,8 @@
   ansible.builtin.copy:
     content: "{{ discord_alertmanager_config | to_nice_yaml }}"
     dest: /srv/observability/volumes/alertmanager_discord_config/discord-alertmanager.yml
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0644
   notify: Restart docker-compose
 
@@ -272,17 +257,8 @@
   ansible.builtin.copy:
     content: "{{ loki_config_computed | to_nice_yaml }}"
     dest: /srv/observability/volumes/loki_config/config.yml
-    owner: 65534  # nobody
-    group: 65534  # nobody
-    mode: 0644
-  notify: Restart docker-compose
-
-- name: Ensure Phlare configuration is up-to-date
-  ansible.builtin.copy:
-    content: "{{ phlare_config_computed | to_nice_yaml }}"
-    dest: /srv/observability/volumes/phlare_config/config.yml
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0644
   notify: Restart docker-compose
 
@@ -290,8 +266,8 @@
   ansible.builtin.copy:
     content: "{{ grafana_config_computed | sivel.toiletwater.to_ini }}"
     dest: /srv/observability/volumes/grafana_config/grafana.ini
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0644
   notify: Restart docker-compose
 
@@ -299,8 +275,8 @@
   ansible.builtin.file:
     path: "/srv/observability/volumes/grafana_config/provisioning"
     state: directory
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0755
   notify: Restart docker-compose
 
@@ -308,8 +284,8 @@
   ansible.builtin.file:
     path: "/srv/observability/volumes/grafana_config/provisioning/{{ dir }}"
     state: directory
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0755
   loop:
     - access-control
@@ -332,8 +308,8 @@
   ansible.builtin.copy:
     content: "{{ grafana_datasources_config | to_nice_yaml }}"
     dest: /srv/observability/volumes/grafana_config/provisioning/datasources/datasources.yml
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0644
   notify: Restart docker-compose
 
@@ -347,7 +323,7 @@
   ansible.builtin.copy:
     content: "{{ grafana_plugins_configs | to_nice_yaml }}"
     dest: /srv/observability/volumes/grafana_config/provisioning/plugins/plugins.yml
-    owner: 65534  # nobody
-    group: 65534  # nobody
+    owner: 65534 # nobody
+    group: 65534 # nobody
     mode: 0644
   notify: Restart docker-compose

@@ -1,6 +1,4 @@
 ---
-
-
 ### Prometheus
 
 prometheus_docker_repository: quay.io/prometheus/prometheus
@@ -10,7 +8,6 @@ prometheus_retention_time: "7d"
 prometheus_retention_size: "10GB"
 
 prometheus_external_url: "http://localhost:9090"
-
 
 prometheus_domain: ""
 prometheus_default_reverse_proxy:
@@ -25,7 +22,6 @@ prometheus_default_reverse_proxy:
 
 prometheus_reverse_proxy: {}
 prometheus_reverse_proxy_computed: "{{ prometheus_default_reverse_proxy | combine(prometheus_reverse_proxy, recursive=True) }}"
-
 
 prometheus_default_options:
   config.file: "/etc/prometheus/prometheus.yml"
@@ -51,7 +47,6 @@ prometheus_default_global_config:
 
 prometheus_global_config: {}
 prometheus_global_config_computed: "{{ prometheus_default_global_config | combine(prometheus_global_config, recursive=True) }}"
-
 
 # scrape_configs
 
@@ -83,7 +78,8 @@ prometheus_default_scrape_configs:
       - source_labels: [__meta_docker_container_label_prometheus_path]
         target_label: __metrics_path__
       # Relabel address to inject custom port value
-      - source_labels: [__address__, __meta_docker_container_label_prometheus_port]
+      - source_labels:
+          [__address__, __meta_docker_container_label_prometheus_port]
         action: replace
         regex: ([^:]+)(?::\d+)?;(\d+)
         replacement: ${1}:${2}
@@ -91,7 +87,6 @@ prometheus_default_scrape_configs:
 
 prometheus_scrape_configs: {}
 prometheus_scrape_configs_computed: "{{ prometheus_default_scrape_configs + prometheus_scrape_configs }}"
-
 
 # rules
 
@@ -122,7 +117,6 @@ prometheus_default_rules:
 prometheus_rules: {}
 prometheus_rules_computed: "{{ prometheus_default_rules | combine(prometheus_rules, recursive=True, list_merge='append') }}"
 
-
 # alerting
 
 prometheus_default_alerting_config:
@@ -133,7 +127,6 @@ prometheus_default_alerting_config:
 
 prometheus_alerting_config: {}
 prometheus_alerting_config_computed: "{{ prometheus_default_alerting_config | combine(prometheus_alerting_config, recursive=True) }}"
-
 
 ### Thanos
 
@@ -170,12 +163,10 @@ thanos_bucketweb_default_reverse_proxy:
 thanos_bucketweb_reverse_proxy: {}
 thanos_bucketweb_reverse_proxy_computed: "{{ thanos_bucketweb_default_reverse_proxy | combine(thanos_bucketweb_reverse_proxy, recursive=True) }}"
 
-
 ### Alertmanager
 
 alertmanager_docker_repository: quay.io/prometheus/alertmanager
 alertmanager_docker_tag: v0.25.0
-
 
 alertmanager_domain: ""
 alertmanager_default_reverse_proxy:
@@ -191,22 +182,19 @@ alertmanager_default_reverse_proxy:
 alertmanager_reverse_proxy: {}
 alertmanager_reverse_proxy_computed: "{{ alertmanager_default_reverse_proxy | combine(alertmanager_reverse_proxy, recursive=True) }}"
 
-
 alertmanager_default_options:
   config.file: "/etc/alertmanager/alertmanager.yml"
-  data.retention: 168h  # 7d
+  data.retention: 168h # 7d
   storage.path: "/alertmanager"
 
 alertmanager_options: {}
 alertmanager_options_computed: "{% for option in (alertmanager_default_options | combine(alertmanager_options, recursive=True) | dict2items) %} --{{ option.key }}{% if option.value != None %}={{ option.value }}{% endif %}{% endfor %}"
-
 
 # global
 
 alertmanager_default_global_config: {}
 alertmanager_global_config: {}
 alertmanager_global_config_computed: "{{ alertmanager_default_global_config | combine(alertmanager_global_config, recursive=True) }}"
-
 
 # route
 
@@ -219,7 +207,6 @@ alertmanager_default_route_config:
   repeat_interval: 6h
 alertmanager_route_config: {}
 alertmanager_route_config_computed: "{{ alertmanager_default_route_config | combine(alertmanager_route_config, recursive=True) }}"
-
 
 # inhibit_rules
 
@@ -254,7 +241,6 @@ alertmanager_default_inhibit_rules:
 alertmanager_inhibit_rules: []
 alertmanager_inhibit_rules_computed: "{{ alertmanager_default_inhibit_rules + alertmanager_inhibit_rules }}"
 
-
 alertmanager_default_receivers:
   - name: discord-infra-alerts
     webhook_configs:
@@ -264,12 +250,10 @@ alertmanager_default_receivers:
 alertmanager_receivers: []
 alertmanager_receivers_computed: "{{ alertmanager_default_receivers + alertmanager_receivers }}"
 
-
 ### Alertmanager discord
 
 alertmanager_discord_docker_repository: masgustavos/alertmanager-discord
 alertmanager_discord_docker_tag: 0.2.3
-
 
 alertmanager_discord_roles_to_mention: []
 
@@ -281,12 +265,10 @@ alertmanager_discord_default_channels:
 alertmanager_discord_channels: {}
 alertmanager_discord_channels_computed: "{{ alertmanager_discord_default_channels | combine(alertmanager_discord_channels, recursive=True) }}"
 
-
 ### Loki
 
 loki_docker_repository: grafana/loki
 loki_docker_tag: 2.8.2
-
 
 loki_domain: ""
 loki_default_reverse_proxy:
@@ -301,7 +283,6 @@ loki_default_reverse_proxy:
 
 loki_reverse_proxy: {}
 loki_reverse_proxy_computed: "{{ loki_default_reverse_proxy | combine(loki_reverse_proxy, recursive=True) }}"
-
 
 loki_default_config:
   target: all
@@ -337,7 +318,7 @@ loki_default_config:
   limits_config:
     enforce_metric_name: false
     reject_old_samples: false
-    reject_old_samples_max_age: 168h  # 7 days
+    reject_old_samples_max_age: 168h # 7 days
     ingestion_rate_mb: 10
     ingestion_burst_size_mb: 20
 
@@ -347,66 +328,10 @@ loki_default_config:
 loki_config: {}
 loki_config_computed: "{{ loki_default_config | combine(loki_config, recursive=True) }}"
 
-
-### Phlare
-
-phlare_docker_repository: grafana/phlare
-phlare_docker_tag: 0.6.0
-
-
-phlare_domain: ""
-phlare_default_reverse_proxy:
-  enable: false
-  router:
-    rule: "Host(`{{ phlare_domain }}`)"
-    middlewares: default@file
-    tls:
-      options: modern@file
-  service:
-    port: 4100
-
-phlare_reverse_proxy: {}
-phlare_reverse_proxy_computed: "{{ phlare_default_reverse_proxy | combine(phlare_reverse_proxy, recursive=True) }}"
-
-
-phlare_default_config:
-  target: all
-
-  multitenancy_enabled: false
-
-  phlaredb:
-    data_path: /phlare/phlaredb
-
-  storage:
-    backend: filesystem
-    filesystem:
-      dir: /phlare/storage
-
-  ingester:
-    lifecycler:
-      ring:
-        kvstore:
-          store: inmemory
-
-  scrape_configs:
-    - job_name: phlare
-      scrape_interval: 1m
-      static_configs:
-        - targets:
-            - 127.0.0.1:4100
-
-  analytics:
-    reporting_enabled: false
-
-phlare_config: {}
-phlare_config_computed: "{{ phlare_default_config | combine(phlare_config, recursive=True, list_merge='append') }}"
-
-
 ### Grafana
 
 grafana_docker_repository: grafana/grafana
 grafana_docker_tag: 10.0.1
-
 
 grafana_domain: ""
 grafana_default_reverse_proxy:
@@ -422,10 +347,8 @@ grafana_default_reverse_proxy:
 grafana_reverse_proxy: {}
 grafana_reverse_proxy_computed: "{{ grafana_default_reverse_proxy | combine(grafana_reverse_proxy, recursive=True) }}"
 
-
 grafana_admin_user: "admin"
 grafana_admin_password: "admin"
-
 
 grafana_default_config:
   database:
@@ -438,7 +361,6 @@ grafana_default_config:
 
 grafana_config: {}
 grafana_config_computed: "{{ grafana_default_config | combine(grafana_config, recursive=True) }}"
-
 
 grafana_default_datasources:
   - name: Thanos
@@ -459,15 +381,9 @@ grafana_default_datasources:
     editable: false
     jsonData:
       implementation: prometheus
-  - name: Phlare
-    type: phlare
-    access: proxy
-    url: http://observability_phlare:4100
-    editable: false
 
 grafana_datasources: []
 grafana_datasources_computed: "{{ grafana_default_datasources + grafana_datasources }}"
-
 
 grafana_plugins: []
 
