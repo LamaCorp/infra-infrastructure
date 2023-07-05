@@ -27,9 +27,6 @@
 - name: Jellyfin
   import_playbook: jellyfin.yml
 
-- name: Librenms
-  import_playbook: librenms.yml
-
 - name: Mail
   import_playbook: mail.yml
 

@@ -1,5 +1,4 @@
 ---
-
 promtail_loki_server_url: loki.lama.tel
 promtail_system_user: root
 
@@ -74,40 +73,3 @@ promtail_config_scrape_configs_raw: |
 promtail_config_scrape_configs_extra: []
 
 promtail_config_scrape_configs: "{{ promtail_config_scrape_configs_raw | from_yaml + promtail_config_scrape_configs_extra }}"
-
-
-snmpd_syscontact: Root <root@lama-corp.space>
-
-snmpd_security_names:
-  - name: readonly
-    source: default
-    community: public
-
-snmpd_groups:
-  - name: ROGroup
-    security_model: v2c
-    security_name: readonly
-
-snmpd_views:
-  - name: all
-    type: included
-    subtree: ".1"
-    mask: 80
-
-snmpd_accesses:
-  - group: ROGroup
-    context: ""
-    security_model: any
-    security_level: noauth
-    prefix: exact
-    read: all
-    write: none
-    notif: none
-
-snmpd_processes: []
-snmpd_scripts: []
-snmpd_disks: []
-snmpd_load:
-  one_minute_average: "{{ ansible_processor_vcpus }}"
-  five_minute_average: "{{ ansible_processor_vcpus }}"
-  fifteen_minute_average: "{{ ansible_processor_vcpus }}"

@@ -1,15 +1,12 @@
 ---
-
 # Messes up with docker
 nft_old_pkg_manage: false
 
 nft__forward_table_manage: true
 nft__nat_table_manage: true
 
-
 nft_merged_groups: true
 nft_merged_groups_dir: ../group_vars/firewall/
-
 
 nft_define:
   prometheus exporter node:
@@ -35,13 +32,11 @@ nft_define:
     name: subnet_customer_6
     value: "2a06:e881:7700::/40"
 
-
 nft_global_rules:
   # Because of BGP, incoming traffic may not take the same path as the outgoing one.
   # Let's not drop packets because of this.
   # We'll be dropping in input or output anyway
   006 invalid: []
-
 
 nft_input_rules:
   006 invalid: "{{ nft_templates.drop_invalid_log_no_rst }}"
@@ -57,14 +52,9 @@ nft_input_rules:
     - ip saddr $subnet_internal_4 tcp dport { $prometheus_exporter_node, $prometheus_exporter_nftables, $prometheus_exporter_what_active_users } accept
     - ip6 saddr $subnet_internal_6 tcp dport { $prometheus_exporter_node, $prometheus_exporter_nftables, $prometheus_exporter_what_active_users } accept
 
-  221 snmpd:
-    - ip saddr $subnet_internal_4 udp dport 161 accept
-    - ip6 saddr $subnet_internal_6 udp dport 161 accept
-
   # Override to remove the log entry.
   900 log:
     - counter
-
 
 # Override everything, to accept everything
 nft_output_default_rules:
@@ -73,7 +63,6 @@ nft_output_default_rules:
   005 global:
     - jump global
   006 invalid: "{{ nft_templates.drop_invalid_log_no_rst }}"
-
 
 nft_forward_rules:
   013 icmpv6 ping: "{{ nft_templates.icmpv6_allow_ping }}"
