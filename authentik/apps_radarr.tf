@@ -9,7 +9,7 @@ resource "authentik_provider_proxy" "radarr" {
 resource "authentik_application" "radarr" {
   name               = "Radarr"
   slug               = "radarr"
-  group              = "Services"
+  group              = "Media"
   protocol_provider  = authentik_provider_proxy.radarr.id
   policy_engine_mode = "any"
 

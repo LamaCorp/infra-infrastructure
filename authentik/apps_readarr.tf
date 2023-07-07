@@ -9,7 +9,7 @@ resource "authentik_provider_proxy" "readarr" {
 resource "authentik_application" "readarr" {
   name               = "readarr"
   slug               = "readarr"
-  group              = "Services"
+  group              = "Media"
   protocol_provider  = authentik_provider_proxy.readarr.id
   policy_engine_mode = "any"
 

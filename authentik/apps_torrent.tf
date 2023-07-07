@@ -15,7 +15,7 @@ resource "authentik_provider_proxy" "torrent" {
 resource "authentik_application" "torrent" {
   name               = "torrent"
   slug               = "torrent"
-  group              = "Services"
+  group              = "Media"
   protocol_provider  = authentik_provider_proxy.torrent.id
   policy_engine_mode = "any"
 

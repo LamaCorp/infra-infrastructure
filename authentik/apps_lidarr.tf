@@ -9,7 +9,7 @@ resource "authentik_provider_proxy" "lidarr" {
 resource "authentik_application" "lidarr" {
   name               = "lidarr"
   slug               = "lidarr"
-  group              = "Services"
+  group              = "Media"
   protocol_provider  = authentik_provider_proxy.lidarr.id
   policy_engine_mode = "any"
 

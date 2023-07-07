@@ -31,7 +31,7 @@ resource "authentik_provider_oauth2" "jellyfin-oidc" {
 resource "authentik_application" "jellyfin-oidc" {
   name               = "Jellyfin"
   slug               = "jellyfin"
-  group              = "Services"
+  group              = "Media"
   protocol_provider  = authentik_provider_oauth2.jellyfin-oidc.id
   policy_engine_mode = "any"
 
@@ -79,7 +79,7 @@ resource "authentik_provider_ldap" "jellyfin-ldap" {
 resource "authentik_application" "jellyfin-ldap" {
   name               = "Jellyfin"
   slug               = "jellyfin-ldap"
-  group              = "Services"
+  group              = "Media"
   protocol_provider  = authentik_provider_ldap.jellyfin-ldap.id
   policy_engine_mode = "any"
 

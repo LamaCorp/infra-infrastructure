@@ -15,7 +15,7 @@ resource "authentik_provider_proxy" "prowlarr" {
 resource "authentik_application" "prowlarr" {
   name               = "prowlarr"
   slug               = "prowlarr"
-  group              = "Services"
+  group              = "Media"
   protocol_provider  = authentik_provider_proxy.prowlarr.id
   policy_engine_mode = "any"
 

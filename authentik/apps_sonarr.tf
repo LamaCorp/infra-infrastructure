@@ -9,7 +9,7 @@ resource "authentik_provider_proxy" "sonarr" {
 resource "authentik_application" "sonarr" {
   name               = "sonarr"
   slug               = "sonarr"
-  group              = "Services"
+  group              = "Media"
   protocol_provider  = authentik_provider_proxy.sonarr.id
   policy_engine_mode = "any"
 
