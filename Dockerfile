@@ -1,4 +1,4 @@
-FROM python:3.10-slim as base
+FROM python:3.10 as base
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV LC_ALL C.UTF-8
@@ -23,15 +23,13 @@ RUN apt-get install -y --no-install-recommends golang-go
 RUN apt-get install -y --no-install-recommends shellcheck
 
 # Terraform
-RUN curl -1sLf https://apt.releases.hashicorp.com/gpg | apt-key add - && \
-  apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com bullseye main" && \
+RUN curl -1sLf https://apt.releases.hashicorp.com/gpg | gpg --dearmor > /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+  echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" > /etc/apt/sources.list.d/hashicorp.list && \
   apt-get update && \
   apt-get install -y --no-install-recommends terraform
 
-FROM base as builder
-
 RUN apt-get update && \
-  apt-get install -y --no-install-recommends gcc python-dev git
+  apt-get install -y --no-install-recommends gcc python3-dev git
 
 RUN --mount=type=bind,target=./pyproject.toml,src=./pyproject.toml \
   --mount=type=bind,target=./poetry.lock,src=./poetry.lock \
@@ -40,7 +38,3 @@ RUN --mount=type=bind,target=./pyproject.toml,src=./pyproject.toml \
   pip3 install --upgrade pip && \
   pip3 install --upgrade poetry && \
   poetry install
-
-FROM base
-
-COPY --from=builder /opt/venv/ /opt/venv/
