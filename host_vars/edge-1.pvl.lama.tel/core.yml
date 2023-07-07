@@ -104,18 +104,6 @@ bird2_bgp_sessions:
         remote:
           v6: 2a0c:2f07:9459::b12
 
-  telemetries:
-    sessions:
-      - description: pmacctd
-        asn: 212024
-        alias: pmacctd
-        route_reflector: true
-        local:
-          v4: 127.0.0.1
-        remote:
-          port: 180
-          v4: 127.0.0.2
-
 bird2_ospf_sessions:
   - alias: ospf
     areas:

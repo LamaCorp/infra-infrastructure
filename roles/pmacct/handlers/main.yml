@@ -1,6 +1,0 @@
----
-
-- name: Restart pmacctd
-  ansible.builtin.service:
-    name: pmacctd
-    state: restarted

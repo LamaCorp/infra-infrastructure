@@ -15,9 +15,6 @@
 - name: Flaresolverr
   import_playbook: flaresolverr.yml
 
-- name: Flow exporter
-  import_playbook: flow_exporter.yml
-
 - name: Gatus
   import_playbook: gatus.yml
 

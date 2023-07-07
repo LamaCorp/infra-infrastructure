@@ -133,12 +133,3 @@
         - lg
   tags:
     - router
-
-- name: Core router monitoring
-  hosts: core
-  roles:
-    - role: pmacct
-      tags:
-        - pmacct
-  tags:
-    - router

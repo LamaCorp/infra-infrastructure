@@ -1,5 +1,4 @@
 ---
-
 haproxy_frontends:
   - name: http
     address: "*:80"
@@ -28,13 +27,8 @@ haproxy_frontends:
   - name: rpki
     address: "*:323"
     mode: tcp
-    timeout_client: 960000ms  # 11 minutes
+    timeout_client: 960000ms # 11 minutes
     backend: rpki
-
-  - name: flow_exporter_kafka
-    address: "*:9092"
-    mode: tcp
-    backend: flow_exporter_kafka
 
 haproxy_backends:
   - name: http
@@ -67,7 +61,7 @@ haproxy_backends:
       - name: routinator
         address: "routinator_server.ctn.{{ inventory_hostname }}:3323"
         extra_opts: resolvers docker
-    timeout_server: 960000ms  # 11 minutes
+    timeout_server: 960000ms # 11 minutes
 
   - name: flow_exporter_kafka
     mode: tcp
