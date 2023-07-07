@@ -3,6 +3,16 @@
   ansible.builtin.apt:
     name: bird2
 
+- name: Setup some sysctls
+  ansible.posix.sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+  loop:
+    - name: net.ipv6.route.max_size
+      value: "1073741824"
+    - name: net.core.rmem_default
+      value: "4194304"
+
 - name: Ensure configuration is up-to-date
   ansible.builtin.template:
     src: "{{ item }}"
