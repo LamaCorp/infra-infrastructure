@@ -9,9 +9,8 @@
     - name: Set Gatus authentik role variables
       ansible.builtin.set_fact:
         "{{ item.key }}": "{{ item.value }}"
-      loop:
-        "{{ gatus_authentik_vars | dict2items }}"
-        #no_log: true
+      loop: "{{ gatus_authentik_vars | dict2items }}"
+      no_log: true
     - name: Gatus devoups
       ansible.builtin.include_role:
         name: gatus

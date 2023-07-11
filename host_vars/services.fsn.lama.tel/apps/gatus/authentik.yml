@@ -16,6 +16,22 @@ gatus_authentik_vars:
       link: https://goauthentik.io
 
     alerting:
+      custom:
+        url: https://smsapi.free-mobile.fr/sendmsg
+        method: POST
+        headers:
+          Content-Type: application/json
+        body: |
+          {
+            "user": "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/gatus/authentik/free-webhook')['user'] }}",
+            "pass": "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/gatus/authentik/free-webhook')['api_key'] }}",
+            "msg": "[ALERT_TRIGGERED_OR_RESOLVED]: [ENDPOINT_NAME]"
+          }
+        default-alert:
+          enabled: true
+          failure-threshold: 5
+          success-threshold: 3
+          send-on-resolved: false
       slack:
         webhook-url: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/gatus/authentik/slack-webhook')['webhook'] }}"
         default-alert:
@@ -27,6 +43,7 @@ gatus_authentik_vars:
     .defaults: &defaults
       interval: 30s
       alerts:
+        - type: custom
         - type: slack
 
     .https-endpoint: &https-endpoint
