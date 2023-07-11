@@ -8,6 +8,9 @@ postgresql_users:
   authentik:
     password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/authentik')['password'] }}"
 
+  gatus_authentik:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/gatus_authentik')['password'] }}"
+
   gatus_devoups:
     password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/gatus_devoups')['password'] }}"
 
@@ -77,6 +80,7 @@ postgresql_users:
 postgresql_dbs:
   atuin: atuin
   authentik: authentik
+  gatus_authentik: gatus_authentik
   gatus_devoups: gatus_devoups
   gatus_phowork: gatus_phowork
   gatus_prologin: gatus_prologin

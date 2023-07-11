@@ -7,6 +7,7 @@ locals {
   postgresql_users = toset([
     "atuin",
     "authentik",
+    "gatus_authentik",
     "gatus_devoups",
     "gatus_phowork",
     "gatus_prologin",

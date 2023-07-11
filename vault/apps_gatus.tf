@@ -1,3 +1,11 @@
+resource "vault_generic_secret" "apps_gatus_authentik_slack-webhook" {
+  path         = "${vault_mount.apps.path}/gatus/authentik/slack-webhook"
+  disable_read = true
+  data_json = jsonencode({
+    webhook = "FIXME"
+  })
+}
+
 resource "vault_generic_secret" "apps_gatus_devoups_slack-webhook" {
   path         = "${vault_mount.apps.path}/gatus/devoups/slack-webhook"
   disable_read = true

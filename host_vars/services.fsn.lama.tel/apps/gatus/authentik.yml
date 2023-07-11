@@ -1,0 +1,142 @@
+---
+gatus_authentik_vars:
+  gatus_project_name: gatus_authentik
+
+  gatus_domain: status.corp.goauthentik.io
+
+  gatus_postgresql_database: gatus_authentik
+  gatus_postgresql_user: gatus_authentik
+  gatus_postgresql_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/gatus_authentik')['password'] }}"
+
+  gatus_config:
+    ui:
+      title: Authentik Security Inc.
+      header: Internal infrastructure monitoring
+      logo: https://goauthentik.io/img/icon.png
+      link: https://goauthentik.io
+
+    alerting:
+      slack:
+        webhook-url: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/gatus/authentik/slack-webhook')['webhook'] }}"
+        default-alert:
+          enabled: true
+          failure-threshold: 5
+          success-threshold: 3
+          send-on-resolved: true
+
+    .defaults: &defaults
+      interval: 30s
+      alerts:
+        - type: slack
+
+    .https-endpoint: &https-endpoint
+      <<: *defaults
+      conditions:
+        - "[STATUS] == 200"
+        - "[RESPONSE_TIME] <= 3000"
+        - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+    endpoints:
+      ###
+      # authentik
+      ###
+
+      - name: authentik Corp.
+        <<: *https-endpoint
+        group: authentik
+        url: https://id.goauthentik.io/-/health/live/
+        conditions:
+          - "[STATUS] == 204"
+          - "[RESPONSE_TIME] <= 3000"
+          - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+      - name: authentik Customers
+        <<: *https-endpoint
+        group: authentik
+        url: https://id.customers.goauthentik.io/-/health/live/
+        conditions:
+          - "[STATUS] == 204"
+          - "[RESPONSE_TIME] <= 3000"
+          - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+      - name: Customer portal
+        <<: *https-endpoint
+        group: authentik
+        url: https://customers.goauthentik.io/healthz
+
+      - name: Vault licensing
+        <<: *https-endpoint
+        group: authentik
+        url: https://vault.customers.goauthentik.io/v1/sys/health
+
+      ###
+      # Infra
+      ###
+
+      - name: ArgoCD
+        <<: *https-endpoint
+        group: Infra
+        url: https://argocd.corp.goauthentik.io/healthz
+
+      - name: ArgoCD AppSet
+        <<: *https-endpoint
+        group: Infra
+        url: https://appset.argocd.corp.goauthentik.io/api/webhook
+        conditions:
+          - "[STATUS] == 400"
+          - "[RESPONSE_TIME] <= 3000"
+          - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+      - name: Atlantis
+        <<: *https-endpoint
+        group: Infra
+        url: https://atlantis.corp.goauthentik.io/events
+        conditions:
+          - "[STATUS] == 405"
+          - "[RESPONSE_TIME] <= 3000"
+          - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+      - name: Grafana
+        <<: *https-endpoint
+        group: Infra
+        url: https://grafana.corp.goauthentik.io/api/health
+
+      - name: 1password SCIM bridge
+        <<: *https-endpoint
+        group: Infra
+        url: https://op-scim.corp.goauthentik.io/ping
+
+      - name: Plausible
+        <<: *https-endpoint
+        group: Infra
+        url: https://plausible.a7k.io/api/health
+
+      # - name: Sentry relay - Authentik
+      #   <<: *https-endpoint
+      #   group: Infra
+      #   url: https://authentik.error-reporting.a7k.io/api/relay/healthcheck/live/
+
+      - name: Vault
+        <<: *https-endpoint
+        group: Infra
+        url: https://vault.corp.goauthentik.io/v1/sys/health
+
+      ###
+      # Domains
+      ###
+
+      - name: goauthentik.io
+        <<: *defaults
+        group: Domains
+        url: https://goauthentik.io
+        interval: 1h
+        conditions:
+          - "[DOMAIN_EXPIRATION] > 720h"
+
+      - name: a7k.io
+        <<: *defaults
+        group: Domains
+        url: https://a7k.io
+        interval: 1h
+        conditions:
+          - "[DOMAIN_EXPIRATION] > 720h"
