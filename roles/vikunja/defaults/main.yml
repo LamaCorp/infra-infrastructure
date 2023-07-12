@@ -3,7 +3,7 @@ vikunja_api_docker_repository: vikunja/api
 vikunja_api_docker_tag: 0.21.0
 
 vikunja_frontend_docker_repository: vikunja/frontend
-vikunja_frontend_docker_tag: 0.20.5
+vikunja_frontend_docker_tag: 0.21.0
 
 # vikunja_domain: "CHANGEME"
 
