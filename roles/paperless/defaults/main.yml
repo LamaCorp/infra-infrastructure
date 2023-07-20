@@ -7,7 +7,7 @@ paperless_docker_repository: ghcr.io/paperless-ngx/paperless-ngx
 paperless_docker_tag: 1.17.1
 
 paperless_gotenberg_docker_repository: gotenberg/gotenberg
-paperless_gotenberg_docker_tag: 7.8.3
+paperless_gotenberg_docker_tag: 7.9.1
 
 paperless_tika_docker_repository: ghcr.io/paperless-ngx/tika
 paperless_tika_docker_tag: 2.7.0-full
