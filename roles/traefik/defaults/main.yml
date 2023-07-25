@@ -1,7 +1,7 @@
 ---
 
 traefik_docker_repository: traefik
-traefik_docker_tag: v2.10.3
+traefik_docker_tag: v2.10.4
 
 traefik_default_static_config:
   api:
