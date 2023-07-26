@@ -1,8 +1,6 @@
 ---
-
 mattermost_docker_repository: mattermost/mattermost-team-edition
-mattermost_docker_tag: 7.10.5
-
+mattermost_docker_tag: 8.0.1
 
 # mattermost_domain: "CHANGEME"
 
@@ -16,12 +14,10 @@ mattermost_default_reverse_proxy:
 mattermost_reverse_proxy: {}
 mattermost_reverse_proxy_computed: "{{ mattermost_default_reverse_proxy | combine(mattermost_reverse_proxy, recursive=True) }}"
 
-
 mattermost_postgresql_host: "{{ services_db_host }}"
 # mattermost_postgresql_user: ""
 # mattermost_postgresql_database: ""
 # mattermost_postgresql_password: ""
-
 
 mattermost_default_environment:
   MM_CONFIG: "postgres://{{ mattermost_postgresql_user }}:{{ mattermost_postgresql_password }}@{{ mattermost_postgresql_host }}:5432/{{ mattermost_postgresql_database }}?sslmode=require&connect_timeout=10"
