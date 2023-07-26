@@ -331,7 +331,7 @@ loki_config_computed: "{{ loki_default_config | combine(loki_config, recursive=T
 ### Grafana
 
 grafana_docker_repository: grafana/grafana
-grafana_docker_tag: 10.0.1
+grafana_docker_tag: 10.0.3
 
 grafana_domain: ""
 grafana_default_reverse_proxy:
