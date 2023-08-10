@@ -31,7 +31,7 @@ roles:
     src: git+https://gitlab.cri.epita.fr/cri/iac/ansible/roles/restic.git
     version: afd7b7d0e0bda7621e9d0b0562a26c0c88a6c737
   - name: geerlingguy.docker
-    version: 6.1.0
+    version: 6.2.0
   - name: geerlingguy.pip
     version: 2.2.0
   - name: ipr-cnrs.nftables
