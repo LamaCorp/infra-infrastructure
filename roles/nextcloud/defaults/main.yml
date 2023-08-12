@@ -2,7 +2,7 @@
 
 
 nextcloud_docker_repository: nextcloud
-nextcloud_docker_tag: 27.0.0-apache
+nextcloud_docker_tag: 27.0.2-apache
 
 
 # nextcloud_domain: "CHANGEME"
