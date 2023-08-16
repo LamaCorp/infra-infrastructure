@@ -1,6 +1,6 @@
 ---
 netbox_docker_repository: netboxcommunity/netbox
-netbox_docker_tag: v3.5.4
+netbox_docker_tag: v3.5.8
 
 # netbox_domain: "CHANGEME"
 
