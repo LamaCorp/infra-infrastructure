@@ -53,6 +53,6 @@ roles:
     src: git+https://github.com/stackhpc/ansible-role-libvirt-vm.git
     version: fc3687773232a211a57c4cc49c39c46b86c353de
   - name: stackhpc.systemd_networkd
-    version: v1.0.1
+    version: v1.0.2
   - name: timorunge.sssd
     version: 0.5.5
