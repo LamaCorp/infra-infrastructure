@@ -2,7 +2,7 @@
 
 
 static_docker_repository: nginx
-static_docker_tag: 1.25.1
+static_docker_tag: 1.25.2
 
 static_domains: {}
 
