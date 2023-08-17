@@ -1,5 +1,4 @@
 ---
-
 - name: Deploy pastebin docker-compose
   ansible.builtin.include_role:
     name: docker_compose
@@ -9,15 +8,21 @@
     docker_compose_services:
       server:
         image: "{{ pastebin_docker_repository }}:{{ pastebin_docker_tag }}"
-        command:
-          - "--public-path=https://{{ pastebin_domain }}"
-          - --editable
-          - --default-expiry=1week
-          - --enable-burn-after
-          - --highlightsyntax
-          - --no-eternal-pasta
-          - --private
-          - --qr
+        environment:
+          MICROBIN_PUBLIC_PATH: "https://{{ pastebin_domain }}"
+          MICROBIN_THREADS: "4"
+          MICROBIN_ADMIN_USERNAME: "" # disable admin interface
+          MICROBIN_EDITABLE: "true"
+          MICROBIN_DEFAULT_EXPIRY: "1week"
+          MICROBIN_ENABLE_BURN_AFTER: "true"
+          MICROBIN_HIGHLIGHTSYNTAX: "true"
+          MICROBIN_ETERNAL_PASTA: "false"
+          MICROBIN_PRIVATE: "true"
+          MICROBIN_QR: "true"
+          MICROBIN_ENCRYPTION_CLIENT_SIDE: "true"
+          MICROBIN_ENCRYPTION_SERVER_SIDE: "true"
+          MICROBIN_DISABLE_UPDATE_CHECKING: "true"
+          MICROBIN_LIST_SERVER: "true"
         volumes:
           - data:/app/pasta_data
         reverse_proxy: "{{ pastebin_reverse_proxy_computed }}"
