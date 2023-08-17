@@ -27,7 +27,6 @@ vaultwarden_disable_admin_token: "false"
 
 vaultwarden_signups_allowed: "false"
 vaultwarden_show_password_hint: "true"
-vaultwarden_websocket_enabled: "false"
 vaultwarden_sends_allowed: "true"
 vaultwarden_emergency_access_allowed: "false"
 vaultwarden_org_creation_users: []
@@ -47,8 +46,6 @@ vaultwarden_default_environment:
   SENDS_ALLOWED: "{{ vaultwarden_sends_allowed }}"
   SHOW_PASSWORD_HINT: "{{ vaultwarden_show_password_hint }}"
   SIGNUPS_ALLOWED: "{{ vaultwarden_signups_allowed }}"
-  WEBSOCKET_ENABLED: "{{ vaultwarden_websocket_enabled }}"
-  WEBSOCKET_PORT: "{{ vaultwarden_websocket_enabled | bool | ternary(vaultwarden_websocket_port, omit, omit) }}"
 
 vaultwarden_environment: {}
 vaultwarden_environment_computed: "{{ vaultwarden_default_environment | combine(vaultwarden_environment) | dict2items | rejectattr('value', 'equalto', omit) | items2dict }}"
