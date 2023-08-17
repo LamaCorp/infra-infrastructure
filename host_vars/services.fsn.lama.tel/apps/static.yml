@@ -1,5 +1,4 @@
 ---
-
 static_domains:
   lama-corp.space:
     extra_names:
@@ -45,3 +44,10 @@ static_domains:
       - scoreboard-seedbox-cri.risson.me
       - scoreboard-seedbox-cri.risson.rocks
       - scoreboard-seedbox-cri.risson.tech
+  workshop.risson.space:
+    autoindex: true
+    extra_names:
+      - workshop.marcerisson.space
+      - workshop.risson.me
+      - workshop.risson.rocks
+      - workshop.risson.tech

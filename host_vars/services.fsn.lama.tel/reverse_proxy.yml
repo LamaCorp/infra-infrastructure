@@ -1,5 +1,4 @@
 ---
-
 traefik_static_config:
   entryPoints:
     http:
@@ -39,6 +38,12 @@ traefik_dynamic_config:
       traefik-forwardauth:
         forwardauth:
           address: http://ak-outpost-traefik:9000/outpost.goauthentik.io/auth/traefik
+          trustForwardHeader: true
+          authResponseHeaders: "{{ authentik_forwardauth_headers }}"
+
+      v-core-3-forwardauth:
+        forwardauth:
+          address: http://ak-outpost-v-core-3-proxy:9000/outpost.goauthentik.io/auth/traefik
           trustForwardHeader: true
           authResponseHeaders: "{{ authentik_forwardauth_headers }}"
 
@@ -90,6 +95,16 @@ traefik_dynamic_config:
           - default@file
         service: vault
 
+      v-core-3:
+        rule: "Host(`v-core-3.workshop.risson.space`)"
+        tls:
+          certresolver: letsEncrypt
+          options: modern
+        middlewares:
+          - v-core-3-forwardauth@file
+          - default@file
+        service: v-core-3
+
     serversTransports:
       insecureSkipVerify:
         insecureSkipVerify: true
@@ -116,6 +131,11 @@ traefik_dynamic_config:
           servers:
             - url: https://secure-services.fsn.lama.tel:8200
           serversTransport: insecureSkipVerify
+
+      v-core-3:
+        loadBalancer:
+          servers:
+            - url: http://v-core-3.bar.lama.tel:80
 
   tls:
     certificates:
