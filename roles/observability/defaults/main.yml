@@ -166,7 +166,7 @@ thanos_bucketweb_reverse_proxy_computed: "{{ thanos_bucketweb_default_reverse_pr
 ### Alertmanager
 
 alertmanager_docker_repository: quay.io/prometheus/alertmanager
-alertmanager_docker_tag: v0.25.0
+alertmanager_docker_tag: v0.26.0
 
 alertmanager_domain: ""
 alertmanager_default_reverse_proxy:
