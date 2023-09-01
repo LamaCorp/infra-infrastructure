@@ -15,7 +15,7 @@ collections:
   - name: openafs_contrib.openafs
     version: 1.9.0
   - name: sivel.toiletwater
-    version: 0.0.12
+    version: 0.0.15
   - name: git+https://gitlab.cri.epita.fr/cri/iac/ansible/collections/acme.git
     type: git
     version: 0.5.0
