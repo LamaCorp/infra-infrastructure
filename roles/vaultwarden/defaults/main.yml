@@ -1,6 +1,6 @@
 ---
 vaultwarden_docker_repository: quay.io/vaultwarden/server
-vaultwarden_docker_tag: 1.29.1
+vaultwarden_docker_tag: 1.29.2
 
 # vaultwarden_domain: ""
 
