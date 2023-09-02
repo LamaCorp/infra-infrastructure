@@ -4,7 +4,7 @@ paperless_project_name: paperless
 
 
 paperless_docker_repository: ghcr.io/paperless-ngx/paperless-ngx
-paperless_docker_tag: 1.17.1
+paperless_docker_tag: 1.17.4
 
 paperless_gotenberg_docker_repository: gotenberg/gotenberg
 paperless_gotenberg_docker_tag: 7.9.1
