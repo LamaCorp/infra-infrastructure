@@ -113,7 +113,7 @@ traefik_dynamic_config_computed: "{{ traefik_default_dynamic_config | combine(tr
 
 
 errorpages_docker_repository: ghcr.io/tarampampam/error-pages
-errorpages_docker_tag: 2.24.0
+errorpages_docker_tag: 2.25.0
 
 errorpages_config:
   templates:
