@@ -10,7 +10,7 @@ paperless_gotenberg_docker_repository: gotenberg/gotenberg
 paperless_gotenberg_docker_tag: 7.9.1
 
 paperless_tika_docker_repository: ghcr.io/paperless-ngx/tika
-paperless_tika_docker_tag: 2.8.0-full
+paperless_tika_docker_tag: 2.9.0-full
 
 
 # paperless_domain: "CHANGEME"
