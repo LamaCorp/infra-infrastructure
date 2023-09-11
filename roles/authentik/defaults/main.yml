@@ -2,7 +2,7 @@
 
 
 authentik_docker_repository: ghcr.io/goauthentik/server
-authentik_docker_tag: 2023.6.1
+authentik_docker_tag: 2023.8.3
 
 
 authentik_default_reverse_proxy:
