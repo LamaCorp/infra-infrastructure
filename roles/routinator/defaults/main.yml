@@ -2,7 +2,7 @@
 
 
 routinator_docker_repository: nlnetlabs/routinator
-routinator_docker_tag: v0.12.1
+routinator_docker_tag: v0.13.0
 
 # routinator_domain: ""
 
