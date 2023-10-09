@@ -137,11 +137,6 @@ gatus_devoups_vars:
         group: "4. Services"
         url: https://recrutements.cri.epita.fr
 
-      - name: Rocket.Chat
-        <<: *https-endpoint
-        group: "4. Services"
-        url: https://rocketchat.cri.epita.fr
-
       - name: News
         <<: *defaults
         conditions:
