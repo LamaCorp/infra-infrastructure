@@ -1,6 +1,6 @@
 ---
 your_spotify_web_docker_repository: yooooomi/your_spotify_client
-your_spotify_web_docker_tag: 1.7.0
+your_spotify_web_docker_tag: 1.7.1
 
 your_spotify_api_docker_repository: yooooomi/your_spotify_server
 your_spotify_api_docker_tag: 1.7.1
