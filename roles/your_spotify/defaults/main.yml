@@ -3,7 +3,7 @@ your_spotify_web_docker_repository: yooooomi/your_spotify_client
 your_spotify_web_docker_tag: 1.7.0
 
 your_spotify_api_docker_repository: yooooomi/your_spotify_server
-your_spotify_api_docker_tag: 1.7.0
+your_spotify_api_docker_tag: 1.7.1
 
 your_spotify_mongo_docker_repository: mongo
 your_spotify_mongo_docker_tag: 6.0.9
