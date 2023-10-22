@@ -253,7 +253,7 @@ readarr_config: {}
 readarr_config_computed: "{{ servarr_config_computed | combine(readarr_default_config, recursive=True) | combine(readarr_config, recursive=True) }}"
 
 recyclarr_docker_repository: ghcr.io/recyclarr/recyclarr
-recyclarr_docker_tag: 5.4.3
+recyclarr_docker_tag: 6.0.2
 
 recyclarr_default_config:
   radarr:
