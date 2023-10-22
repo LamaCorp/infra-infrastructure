@@ -1,5 +1,4 @@
 ---
-
 netplan_configuration:
   network:
     version: 2
@@ -17,16 +16,6 @@ netplan_configuration:
         accept-ra: true
         addresses:
           - 172.28.2.253/24
-          - 2a01:cb10:1d5:9500::1/64
         routes:
           - to: 0.0.0.0/0
-            via: 172.28.2.254
-          # Transmitted in RA
-          - to: ::/0
-            via: fe80::1a82:8cff:fe0c:6498
-          - to: ::/0
-            via: fe80::1a82:8cff:fe0c:6498
-            table: 101
-        routing-policy:
-          - from: 2a01:cb10:1d5:9500::/64
-            table: 101
+            via: 172.28.2.1

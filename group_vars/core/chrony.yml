@@ -1,4 +1,11 @@
 ---
+chrony_allow_hosts:
+  - 127.0.0.0/8
+  - ::1/128
+  - 172.28.0.0/16
+  - 2001:67c:17fc::/48
+  - 172.29.0.0/16
+  - 2a06:e881:7700::/40
 
 chrony_ntp_servers:
   - server: 0.pool.ntp.org

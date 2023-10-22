@@ -10,7 +10,7 @@ nft_define_group:
 
   ospf interfaces:
     name: ospf_interfaces
-    value: tinc-lama
+    value: eno1
 
 
 nft_input_group_rules:

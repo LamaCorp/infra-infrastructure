@@ -1,21 +1,18 @@
 ---
-
 # acme
 
 acme_vault_certs_vault_path: "acme/certs/${ACME_DOMAIN}"
 acme_vault_approle_path: "acme-approle"
 
-
 # common
 
 root_password_hashed: "$6$RQ1LcccPWB/NO5V.$TWZLJnGGSF1CarIAZhT5YiK.mTLLrbnnVIxwzkCOXa39.WtSjLW7m99ARoPg8iyMzid7EUetecBBbqahyLWfH/"
-
 
 # chrony
 
 chrony_allow_hosts:
   - 127.0.0.0/8
-
+  - ::1/128
 
 # nftables
 
@@ -23,7 +20,6 @@ nft_filter_input_policy: drop
 nft_filter_input_default_verdict: accept
 nft_filter_forward_policy: drop
 nft_filter_forward_default_verdict: accept
-
 
 # node exporter
 
@@ -38,12 +34,10 @@ node_exporter_enabled_collectors:
   - textfile:
       directory: "{{ node_exporter_textfile_dir }}"
 
-
 # vault
 
 vault_addr: https://vault.lama.tel:443
 vault_version: 1.13.0
-
 
 # textfile collectors
 

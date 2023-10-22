@@ -42,8 +42,6 @@ bird2_ospf_sessions:
               hidden: true
               summary: true
         interfaces:
-          tinc-lama: {}
-          "br-*":
-            stub: true
-          bond0:
+          zt-lama: {}
+          eno1:
             stub: true

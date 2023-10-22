@@ -1,5 +1,4 @@
 ---
-
 kea_ctrl_agent_enable: true
 kea_dhcp4_enable: true
 kea_dhcp6_enable: false
@@ -12,19 +11,21 @@ kea_dhcp4_config:
   Dhcp4:
     interfaces-config:
       interfaces:
-        - bond0
+        - eno1
       dhcp-socket-type: raw
     lease-database:
       persist: true
       lfc-interval: 0
-    next-server: 172.28.2.253
+    next-server: 172.28.2.254
     option-data:
+      - name: routers
+        data: 172.28.2.1
       - name: domain-name-servers
-        data: "172.28.2.253"
+        data: "172.28.2.254"
       - name: domain-name
         data: "bar.lama.tel"
       - name: ntp-servers
-        data: 172.28.2.253
+        data: 172.28.2.254
       - name: no-pxedhcp
         code: 176
         space: ipxe
@@ -62,12 +63,13 @@ kea_dhcp4_config:
       - subnet: 172.28.2.0/24
         pools:
           - pool: "172.28.2.100 - 172.28.2.199"
-        option-data:
-          - name: routers
-            data: 172.28.2.254
-          - name: static-routes
-            data: 172.28.0.0,172.28.2.253
+        # option-data:
+        #   - name: static-routes
+        #     data: 172.28.0.0,172.28.2.254
         reservations:
+          - hw-address: d8:3a:dd:11:23:8b
+            ip-address: 172.28.2.210
+            hostname: v-core-3
           - hw-address: 00:09:82:17:1c:c0
             ip-address: 172.28.2.220
             hostname: loewe-tv
@@ -86,3 +88,6 @@ kea_dhcp4_config:
           - hw-address: 00:e0:4c:90:a8:52
             ip-address: 172.28.2.241
             hostname: wifi-floor-1
+          - hw-address: da:41:14:98:20:f0
+            ip-address: 172.28.2.253
+            hostname: nas-1

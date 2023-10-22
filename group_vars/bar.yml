@@ -1,9 +1,11 @@
 ---
+network_nameservers:
+  - 172.28.2.254
 bird2_bgp_region_id: 250 # France
 bird2_bgp_site_id: 2
 
 chrony_ntp_servers:
-  - server: nas-1.bar.lama.tel
+  - server: gate-1.bar.lama.tel
     options:
       - option: iburst
       - option: minpoll

@@ -1,0 +1,40 @@
+---
+- name: Add signing key for Zerotier repo
+  ansible.builtin.apt_key:
+    url: https://download.zerotier.com/contact@zerotier.com.gpg
+
+- name: Add Zerotier repo to sources list
+  ansible.builtin.apt_repository:
+    repo: "deb http://download.zerotier.com/debian/{{ ansible_distribution_release }} {{ ansible_distribution_release }} main"
+    update_cache: true
+
+- name: Install Zerotier
+  ansible.builtin.apt:
+    name: zerotier-one
+
+- name: Configure Zerotier
+  ansible.builtin.copy:
+    content: "{{ zerotier_config_computed | to_json }}"
+    dest: /var/lib/zerotier-one/local.conf
+    owner: zerotier-one
+    group: zerotier-one
+    mode: 0644
+  notify: Restart Zerotier
+
+- name: Configure devicemap
+  ansible.builtin.copy:
+    content: |
+      {% for network_id, interface in zerotier_devicemap.items() %}
+      {{ network_id}}={{ interface }}
+      {% endfor %}
+    dest: /var/lib/zerotier-one/devicemap
+    owner: zerotier-one
+    group: zerotier-one
+    mode: 0644
+  notify: Restart Zerotier
+
+- name: Configure network
+  ansible.builtin.include_tasks: network.yml
+  loop: "{{ zerotier_networks }}"
+  loop_control:
+    loop_var: network

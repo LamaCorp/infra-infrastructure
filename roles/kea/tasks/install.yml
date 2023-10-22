@@ -1,5 +1,4 @@
 ---
-
 - name: Add signing key for isc-kea repo
   ansible.builtin.apt_key:
     url: https://dl.cloudsmith.io/public/isc/kea-2-3/gpg.DA05D46B7BABA24A.key
@@ -11,4 +10,4 @@
 
 - name: Install Kea
   ansible.builtin.apt:
-    name: isc-kea
+    name: kea

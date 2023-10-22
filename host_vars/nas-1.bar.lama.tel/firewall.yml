@@ -1,13 +1,4 @@
 ---
-
-nft_define_host:
-  bgp neighbors 4:
-    name: bgp_neighbors_4
-    value: "{172.28.254.3, 172.28.254.4}"
-  bgp neighbors 6:
-    name: bgp_neighbors_6
-    value: "{2001:67c:17fc:ffff::/64}"
-
 nft_input_host_rules:
   560 nfs:
     - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 2049 accept

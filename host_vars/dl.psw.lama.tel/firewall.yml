@@ -1,10 +1,8 @@
 ---
-
 nft_define_group:
   ospf interfaces:
     name: ospf_interfaces
-    value: tinc-lama
-
+    value: zt-lama
 
 nft_input_host_rules:
   500 qbittorent:

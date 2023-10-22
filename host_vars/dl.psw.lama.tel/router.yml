@@ -1,13 +1,11 @@
 ---
-
 bird2_router_id: 172.28.254.6
-bird2_bgp_region_id: 250  # France
+bird2_bgp_region_id: 250 # France
 bird2_bgp_site_id: 6
-
 
 bird2_ospf_sessions:
   - alias: ospf
     areas:
       0.0.0.0:
         interfaces:
-          tinc-lama: {}
+          zt-lama: {}

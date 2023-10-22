@@ -54,7 +54,7 @@ bird2_ospf_sessions:
     areas:
       0.0.0.0:
         interfaces:
-          tinc-lama: {}
+          zt-lama: {}
           br-svc: {}
           br-mdw:
             stub: true

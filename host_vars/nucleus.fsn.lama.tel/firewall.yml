@@ -1,5 +1,4 @@
 ---
-
 nft_define_host:
   bgp neighbors 4:
     name: bgp_neighbors_4
@@ -10,8 +9,7 @@ nft_define_host:
 
   ospf interfaces:
     name: ospf_interfaces
-    value: "{tinc-lama, br-svc}"
-
+    value: "{zt-lama, br-svc}"
 
 nft__nat_host_postrouting_rules:
   100 external connectivity:

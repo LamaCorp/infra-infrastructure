@@ -11,7 +11,7 @@ nft_define_group:
 
 nft_input_group_rules:
   100 ospf:
-    - meta iif $ospf_interfaces ip6 nexthdr ospf accept
+    - meta iifname $ospf_interfaces ip6 nexthdr ospf accept
 
   220 prometheus exporter bird:
     - ip saddr $subnet_internal_4 tcp dport {$prometheus_exporter_bird} accept
