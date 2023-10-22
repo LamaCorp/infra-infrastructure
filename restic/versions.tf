@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "4.67.0"
+      version = "5.22.0"
     }
     minio = {
       source  = "aminueza/minio"
@@ -27,19 +27,18 @@ data "vault_generic_secret" "restic_wasabi-credentials" {
 
 # AWS provider to handle Wasabi S3 conf
 provider "aws" {
-  region     = "eu-central-1"
+  region     = "us-east-1"
   access_key = data.vault_generic_secret.restic_wasabi-credentials.data["access_key"]
   secret_key = data.vault_generic_secret.restic_wasabi-credentials.data["secret_key"]
 
   endpoints {
-    iam = "https://iam.eu-central-1.wasabisys.com"
-    s3  = "https://s3.eu-central-1.wasabisys.com"
-    sts = "https://sts.eu-central-1.wasabisys.com"
+    iam = "https://iam.wasabisys.com"
+    s3  = "https://s3.wasabisys.com"
+    sts = "https://sts.wasabisys.com"
   }
 
   # Skip checks
   s3_use_path_style           = true
-  skip_get_ec2_platforms      = true
   skip_credentials_validation = true
   skip_metadata_api_check     = true
   skip_requesting_account_id  = true

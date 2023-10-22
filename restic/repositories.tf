@@ -27,6 +27,10 @@ locals {
       "user_root",
     ]
 
+    "gate-1.bar.lama.tel" = [
+      "user_root",
+    ]
+
     "gitlab-runner.fsn.lama.tel" = [
       "user_root",
     ]
