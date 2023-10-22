@@ -264,7 +264,7 @@
 
 - name: Ensure Grafana configuration is up-to-date
   ansible.builtin.copy:
-    content: "{{ grafana_config_computed | sivel.toiletwater.to_ini }}"
+    content: "{{ grafana_config_computed | sivel.toiletwater.to_ini }}" # noqa: jinja[invalid]
     dest: /srv/observability/volumes/grafana_config/grafana.ini
     owner: 65534 # nobody
     group: 65534 # nobody

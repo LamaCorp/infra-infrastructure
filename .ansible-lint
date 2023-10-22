@@ -26,3 +26,6 @@ exclude_paths:
 use_default_rules: true
 
 offline: false
+
+skip_list:
+  - "var-naming[no-role-prefix]"

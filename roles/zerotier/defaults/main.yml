@@ -19,4 +19,4 @@ zerotier_default_config:
     softwareUpdate: "disable"
     allowTcpFallbackRelay: true
 zerotier_config: {}
-zerotier_config_computed: "{{ zerotier_default_config | combine(zerotier_config, recursive=True)}}"
+zerotier_config_computed: "{{ zerotier_default_config | combine(zerotier_config, recursive=True) }}"

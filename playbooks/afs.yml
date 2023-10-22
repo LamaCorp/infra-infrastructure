@@ -9,9 +9,6 @@
 
 - name: Install servers
   hosts: afs_cell
-  collections:
-    - openafs_contrib.openafs
-
   pre_tasks:
     - name: Generate /etc/hosts for all of the nodes
       ansible.builtin.blockinfile:
@@ -42,25 +39,21 @@
         group: root
 
   roles:
-    - openafs_krbclient
-    - openafs_server
+    - openafs_contrib.openafs.openafs_krbclient
+    - openafs_contrib.openafs.openafs_server
   tags:
     - afs
 
 - name: Install clients
   hosts: afs_cell,afs_clients
-  collections:
-    - openafs_contrib.openafs
   roles:
-    - openafs_krbclient
-    - openafs_client
+    - openafs_contrib.openafs.openafs_krbclient
+    - openafs_contrib.openafs.openafs_client
   tags:
     - afs
 
 - name: Finish bootstrapping cell
   hosts: afs_cell
-  collections:
-    - openafs_contrib.openafs
   tasks:
     - name: Ensure root volumes exist
       openafs_contrib.openafs.openafs_volume:
@@ -69,7 +62,7 @@
         mount: "{{ item.mount }}"
         acl: "{{ item.acl }}"
         localauth: true
-      run_once: true # noqa: run_once[task]
+      run_once: true # noqa: run-once[task]
       loop:
         - name: root.cell
           mount: "/afs/{{ afs_cell }}"
@@ -100,7 +93,7 @@
           - system:authuser write
           - system:administrators all
         localauth: true
-      run_once: true # noqa: run_once[task]
+      run_once: true # noqa: run-once[task]
       loop:
         - name: media
           mount: "/afs/{{ afs_cell }}/media"
