@@ -33,6 +33,7 @@
             openssl
             poetry
             pre-commit
+            python3
             shellcheck
             terraform
             vault
