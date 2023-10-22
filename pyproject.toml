@@ -18,6 +18,7 @@ xmltodict = "*"
 ansible-lint = { version = "*", markers = "platform_system != 'Windows'" }
 black = "*"
 isort = "*"
+pre-commit = "*"
 yamllint = "*"
 
 [build-system]
