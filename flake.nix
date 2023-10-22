@@ -1,14 +1,10 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
-    poetry2nix = {
-      url = "github:nix-community/poetry2nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     futils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, poetry2nix, futils } @ inputs:
+  outputs = { self, nixpkgs, futils } @ inputs:
     let
       inherit (nixpkgs) lib;
       inherit (lib) recursiveUpdate;
@@ -16,7 +12,11 @@
 
       nixpkgsFor = lib.genAttrs defaultSystems (system: import nixpkgs {
         inherit system;
-        overlays = [ poetry2nix.overlay ];
+        config = {
+          allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+            "terraform"
+          ];
+        };
       });
     in
     (eachDefaultSystem (system:
@@ -26,15 +26,6 @@
       {
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
-            (pkgs.poetry2nix.mkPoetryEnv {
-              projectDir = self;
-
-              overrides = pkgs.poetry2nix.overrides.withDefaults (self: super: {
-                urllib3 = super.urllib3.overridePythonAttrs (old: {
-                  nativeBuildInputs = old.nativeBuildInputs ++ [ self.hatchling ];
-                });
-              });
-            })
             bgpq3
             go
             git
