@@ -146,11 +146,6 @@ gatus_devoups_vars:
         group: "4. Services"
         url: https://news.epita.fr
 
-      - name: MaaS
-        <<: *https-endpoint
-        group: "4. Services"
-        url: https://maas.cri.epita.fr/q/health
-
       - name: Tickets authentication redirection
         <<: *defaults
         conditions:
