@@ -1,5 +1,4 @@
 ---
-
 mail_hostname: mail-1.lama-corp.space
 
 mail_environment:
@@ -18,6 +17,7 @@ mail_environment:
   DOVECOT_AUTH_BIND: "yes"
   DOVECOT_USER_FILTER: "(&(objectClass=user)(cn=%n))"
   DOVECOT_USER_ATTRS: "=home=/var/mail/%{ldap:cn},=mail=maildir:/var/mail/%{ldap:cn}/Maildir"
+  DOVECOT_PASS_ATTRS: cn=user
   ENABLED_SASLAUTHD: 1
   SASLAUTHD_MECHANISMS: ldap
   SASLAUTHD_LDAP_FILTER: "(&(objectClass=user)(cn=%n))"
@@ -76,11 +76,9 @@ mail_extra_configs:
     smtp/unix/smtp_bind_address=148.251.148.232
     relay/unix/smtp_bind_address=148.251.148.232
 
-
 mail_ak_ldap_outpost_enable: true
 mail_ak_ldap_outpost_authentik_host: https://auth.lama-corp.space
 mail_ak_ldap_outpost_token: "{{ lookup('community.hashi_vault.hashi_vault', 'authentik/data/apps/mail/ldap')['outpost_token'] }}"
-
 
 mail_mailman_enable: true
 
