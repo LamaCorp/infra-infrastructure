@@ -13,10 +13,9 @@ bird2_bgp_originations:
 
 bird2_bgp_blacklist:
   v6:
-    - 2a09:0:9::/48 # Local prefix
-    - 2001:7f8:f2:e1::/64- # LocIX
+    - 2a09:4c0:303:c232::/64 # Local prefix
     - 2001:7f8:d0::/64- # 4IXP
-    - 2a0e:8f01:1000:46::/64- # BGP Exchange
+    - 2a0e:8f01:1000:14::/64- # BGP Exchange
 
 bird2_bgp_static_routes:
   v6:
@@ -26,14 +25,16 @@ bird2_bgp_static_routes:
 bird2_bgp_sessions:
   upstreams:
     sessions:
-      - description: xTom
-        alias: xtom
-        asn: 3204
-        md5: "qsf420212iuf"
+      - description: Securebit AG
+        alias: sbag
+        asn: 58057
+        md5: "2faf060a6c794c5fbbff6b93c64e6a94"
         local:
-          v6: 2a09:0:9::101
+          v4: 194.50.92.165
+          v6: 2a09:4c0:303:c232::5ca5
         remote:
-          v6: 2a09:0:9::9
+          v4: 194.50.92.250
+          v6: 2a09:4c0:303:c232::5cfa
         default_med: 100
         med_metric: true
         med:
@@ -41,54 +42,28 @@ bird2_bgp_sessions:
 
   peers:
     sessions:
-      - description: LocIX RS01
-        alias: locix_rs01
-        asn: 202409
-        irr: AS-LOCIX
+      - description: SBIX RS1
+        alias: sbix_rs1
+        asn: 56755
+        irr: AS-SBIX-RS
+        md5: "H2j4qB78uE9cK15"
         local:
-          v6: 2001:7f8:f2:e1:0:2120:24:1
+          v4: 5.196.188.52
+          v6: 2001:7f8:d9:3::0003:3c38:4
         remote:
-          v6: 2001:7f8:f2:e1::babe:1
-      - description: LocIX RS02
-        alias: locix_rs02
-        asn: 202409
-        irr: AS-LOCIX
+          v4: 5.196.188.1
+          v6: 2001:7f8:d9:3::1
+      - description: SBIX RS2
+        alias: sbix_rs2
+        asn: 56755
+        irr: AS-SBIX-RS
+        md5: "H2j4qB78uE9cK15"
         local:
-          v6: 2001:7f8:f2:e1:0:2120:24:1
+          v4: 5.196.188.52
+          v6: 2001:7f8:d9:3::0003:3c38:4
         remote:
-          v6: 2001:7f8:f2:e1::dead:1
-      - description: LocIX RS03
-        alias: locix_rs03
-        asn: 202409
-        irr: AS-LOCIX
-        local:
-          v6: 2001:7f8:f2:e1:0:2120:24:1
-        remote:
-          v6: 2001:7f8:f2:e1::be5a
-      - description: LocIX AS112
-        alias: locix_as112
-        asn: 112
-        irr: AS112
-        local:
-          v6: 2001:7f8:f2:e1:0:2120:24:1
-        remote:
-          v6: 2001:7f8:f2:e1::112
-      - description: LocIX AS6939
-        alias: locix_as6939
-        asn: 6939
-        irr: AS-HURRICANE
-        local:
-          v6: 2001:7f8:f2:e1:0:2120:24:1
-        remote:
-          v6: 2001:7f8:f2:e1::6939:1
-      - description: LocIX AS208328
-        alias: locix_as208328
-        asn: 208328
-        irr: AS208328:AS-LUIGILABATE
-        local:
-          v6: 2001:7f8:f2:e1:0:2120:24:1
-        remote:
-          v6: 2001:7f8:f2:e1:a5:20:8328:1
+          v4: 5.196.188.2
+          v6: 2001:7f8:d9:3::2
 
       - description: 4IXP RS1
         alias: 4ixp_rs1
@@ -123,11 +98,11 @@ bird2_bgp_sessions:
         asn: 24381
         irr: AS-BGPEXCHANGE-PEERS
         local:
-          v4: 100.66.181.43
-          v6: 2a0e:8f01:1000:46::12b
+          v4: 100.66.53.11
+          v6: 2a0e:8f01:1000:14::10b
         remote:
-          v4: 100.66.183.254
-          v6: 2a0e:8f01:1000:46::1
+          v4: 100.66.55.254
+          v6: 2a0e:8f01:1000:14::1
 
   cores:
     defaults:
@@ -154,16 +129,16 @@ bird2_bgp_sessions:
           v4: 172.28.254.2
           v6: 2001:67c:17fc:ffff::2
 
-  looking_glasses:
-    sessions:
-      - description: bgp.tools
-        asn: 212232
-        alias: bgp_tools
-        multihop: 32
-        local:
-          v6: 2001:67c:17fc:ffff::4
-        remote:
-          v6: 2a0c:2f07:9459::b11
+  # looking_glasses:
+  #   sessions:
+  #     - description: bgp.tools
+  #       asn: 212232
+  #       alias: bgp_tools
+  #       multihop: 32
+  #       local:
+  #         v6: 2001:67c:17fc:ffff::4
+  #       remote:
+  #         v6: 2a0c:2f07:9459::b11
 
 bird2_ospf_sessions:
   - alias: ospf

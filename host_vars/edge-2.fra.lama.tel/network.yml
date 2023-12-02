@@ -1,38 +1,39 @@
 ---
-
 netplan_configuration:
   network:
     version: 2
     ethernets:
-      enp6s18:
+      enp11s0:
         match:
-          macaddress: 26:9a:a1:f8:1c:c7
-        set-name: enp6s18
+          macaddress: 0a:ff:c2:32:5c:a5
+        set-name: enp11s0
         addresses:
-          - 45.80.188.48/24
-          - 2a09:0:9::101/48
+          - 194.50.92.165/24
+          - 2a09:4c0:303:c232::5ca5/64
         routes:
           - to: 0.0.0.0/0
-            via: 45.80.188.1
+            via: 194.50.92.254
           - to: ::/0
-            via: 2a09:0:9::1
-      enp6s19:
+            via: 2a09:4c0:303:c232::5cfe
+      enp19s0:
         match:
-          macaddress: e6:53:21:03:ae:d6
-        set-name: enp6s19
+          macaddress: c0:03:c2:32:5c:a5
+        set-name: enp19s0
         addresses:
-          - 2001:7f8:f2:e1:0:2120:24:1/64
+          - 5.196.188.52/25
+          - 2001:7f8:d9:3::0003:3c38:4/64
     tunnels:
       4ixp:
         mode: ip6gretap
-        local: 2a09:0:9::101
+        macaddress: 62:39:bc:a4:d8:43
+        local: 2a09:4c0:303:c232::5ca5
         remote: 2a09:4c0:100:5eb1::7aef
         addresses:
           - 2001:7f8:d0::3:3c38:1/64
       bgp-exch:
         mode: gretap
-        local: 45.80.188.48
-        remote: 194.28.99.186
+        local: 194.50.92.165
+        remote: 45.13.105.239
         addresses:
-          - 100.66.181.43/22
-          - 2a0e:8f01:1000:46::12b/64
+          - 100.66.53.11/22
+          - 2a0e:8f01:1000:14::10b/64
