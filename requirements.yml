@@ -36,7 +36,7 @@ roles:
   - name: patrickjahns.promtail
     version: 1.31.0
   - name: stackhpc.libvirt-host
-    version: v1.12.1
+    version: v1.13.0
   - name: stackhpc.libvirt-vm
     version: v1.16.1
   - name: xanmanning.k3s
