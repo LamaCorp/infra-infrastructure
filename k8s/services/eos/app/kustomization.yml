@@ -16,7 +16,7 @@ resources:
 
 images:
   - name: gitlab-registry.cern.ch/dss/eos/eos-ci
-    newTag: 5.2.22
+    newTag: 5.2.31
   - name: gitlab-registry.cern.ch/sciencebox/docker-images/nslcd
     newTag: stable
   - name: gitlab-registry.cern.ch/sciencebox/docker-images/nscd
