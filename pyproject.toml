@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = "==3.13.*"
 dependencies = [
     "ansible==11.4.0",
-    "ansible-lint==25.2.0",
+    "ansible-lint==25.2.1",
     "black==25.1.0",
     "hvac==2.3.0",
     "jmespath==1.0.1",
