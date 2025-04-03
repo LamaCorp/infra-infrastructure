@@ -41,7 +41,7 @@ resource "cloudflare_record" "this" {
   zone_id = data.cloudflare_zone.this[each.value.zone].id
   name    = "${each.value.token}._domainkey"
   type    = "CNAME"
-  value   = "${each.value.token}.dkim.amazonses.com"
+  content = "${each.value.token}.dkim.amazonses.com"
 }
 
 resource "aws_ses_domain_identity_verification" "this" {
