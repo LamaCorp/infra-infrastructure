@@ -1,0 +1,20 @@
+---
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      eth0:
+        accept-ra: false
+        addresses:
+          - 172.28.2.192/24
+          - 2001:67c:17fc:201::192/64
+    vlans:
+      bar-iot:
+        id: 2092
+        link: eth0
+        addresses:
+          - 172.29.192.1/24
+          - 2a06:e881:7701:192::8123/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.29.192.254

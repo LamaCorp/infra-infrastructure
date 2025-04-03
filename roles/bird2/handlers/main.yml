@@ -1,5 +1,4 @@
 ---
-
 - name: Reload bird
   ansible.builtin.service:
     name: bird
@@ -9,3 +8,11 @@
   ansible.builtin.service:
     name: prometheus-bird-exporter
     state: restarted
+
+- name: Restart bird prefixes filter gen timer
+  ansible.builtin.service:
+    name: "bird-prefixes-filter-gen-{{ irr.formatted }}-{{ irr.protocol_number }}.timer"
+    state: restarted
+  loop: "{{ bird2_bgp_prefixes_filter_gen_timers_to_restart }}"
+  loop_control:
+    loop_var: irr

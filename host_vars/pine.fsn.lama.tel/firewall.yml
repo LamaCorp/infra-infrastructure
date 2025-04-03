@@ -1,27 +1,4 @@
 ---
-
-nft_define_host:
-  ospf interfaces:
-    name: ospf_interfaces
-    value: ens3
-
 nft_input_host_rules:
   500 http https:
     - tcp dport {80, 443} accept
-
-  505 book:
-    - ip saddr {$subnet_internal_4} tcp dport {8200} accept
-    - ip6 saddr {$subnet_internal_6} tcp dport {8200} accept
-  506 cozyfractal:
-    - ip saddr {$subnet_internal_4} tcp dport {8400} accept
-    - ip6 saddr {$subnet_internal_6} tcp dport {8400} accept
-  507 cozyfractal:
-    - ip saddr {$subnet_internal_4} tcp dport {8080} accept
-    - ip6 saddr {$subnet_internal_6} tcp dport {8080} accept
-  508 cozyfractal:
-    - ip saddr {$subnet_internal_4} tcp dport {8300} accept
-    - ip6 saddr {$subnet_internal_6} tcp dport {8300} accept
-
-nft_forward_host_rules:
-  200 allow external:
-    - oif ens3 accept

@@ -1,0 +1,13 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: volume
+
+resources:
+  - service.yml
+  - statefulset.yml
+
+configMapGenerator:
+  - name: seaweedfs-volume-config-env
+    literals: []

@@ -1,0 +1,12 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: media-repo
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - pod-monitor.yml
+  - secrets.yml
+  - service.yml

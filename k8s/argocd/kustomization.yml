@@ -1,0 +1,11 @@
+---
+kind: Kustomization
+namespace: argocd
+
+resources:
+  - apps.yml
+  - argocd.yml
+  - clusters.yml
+  - projects.yml
+  - network-policy.yml
+  - secrets.yml

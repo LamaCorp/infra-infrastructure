@@ -1,0 +1,19 @@
+---
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      ens3:
+        accept-ra: false
+        addresses:
+          - 172.28.1.11/26
+          - 2001:67c:17fc:101::11/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.28.1.62
+          - to: ::/0
+            via: 2001:67c:17fc:101::1
+    bridges:
+      stalwart:
+        addresses:
+          - 148.251.148.232/32

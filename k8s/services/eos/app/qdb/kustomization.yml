@@ -1,0 +1,17 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: qdb
+
+resources:
+  - service.yml
+  # - statefulset.yml
+
+configMapGenerator:
+  - name: qdb-config
+    files:
+      - config/xrd.cf.quarkdb
+  - name: qdb-scripts
+    files:
+      - scripts/qdb_create.sh

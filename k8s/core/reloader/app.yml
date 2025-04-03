@@ -1,0 +1,52 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-reloader
+  labels:
+    app: core-reloader
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-reloader-{{ .name }}
+      labels:
+        app: core-reloader
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-reloader
+      sources:
+        - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+          targetRevision: HEAD
+          path: k8s/core/reloader/extra
+        - repoURL: https://stakater.github.io/stakater-charts
+          targetRevision: 1.0.121
+          chart: reloader
+          helm:
+            releaseName: reloader
+            values: |
+              reloader:
+                reloadOnCreate: true
+                syncAfterRestart: true
+                reloadStrategy: annotations
+                readOnlyRootFileSystem: true
+
+                deployment:
+                  containerSecurityContext:
+                    capabilities:
+                      drop:
+                        - ALL
+                    allowPrivilegeEscalation: false
+                    readOnlyRootFilesystem: true
+
+                podMonitor:
+                  enabled: true

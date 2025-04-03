@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+# yamllint disable
+---
+version: 1
+metadata:
+  name: Apps - Home assistant
+entries:
+  - id: application
+    model: authentik_core.application
+    identifiers:
+      slug: home-assistant
+    attrs:
+      name: Home assistant
+      group: Maison
+      description: Home automation
+      meta_launch_url: https://home.risson.space
+      icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/home-assistant.png
+      policy_engine_mode: any
+
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      group: !Find [authentik_core.group, [name, "schmitt"]]
+    attrs:
+      order: 1
+
+  - id: provider-zigbee2mqtt
+    model: authentik_providers_proxy.proxyprovider
+    identifiers:
+      name: zigbee2mqtt
+    attrs:
+      authorization_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-authorization-implicit-consent"],
+        ]
+
+      mode: forward_single
+      external_host: https://z2m.home.risson.space
+
+      access_token_validity: hours=1
+
+  - id: application-zigbee2mqtt
+    model: authentik_core.application
+    identifiers:
+      slug: zigbee2mqtt
+    attrs:
+      name: Zigbee2MQTT
+      group: Maison
+      description: Gestion des appareils Zigbee
+      icon: https://www.zigbee2mqtt.io/logo.png
+      provider: !KeyOf provider-zigbee2mqtt
+      policy_engine_mode: any
+
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application-zigbee2mqtt
+      user: !Find [authentik_core.user, [username, "risson"]]
+    attrs:
+      order: 1

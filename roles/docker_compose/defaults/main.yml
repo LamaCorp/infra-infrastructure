@@ -1,5 +1,4 @@
 ---
-
 # Intentionally left undefined to force definition.
 # docker_compose_project_name: "app"
 docker_compose_project_dir: "/srv/{{ docker_compose_project_name }}"
@@ -14,13 +13,6 @@ docker_compose_services: {}
 #   environment:
 #     LISTEN_PORT: 8080
 #     BACKEND_HOST: backend_service:8000
-#   reverse_proxy:
-#     router:
-#       rule: "Host(`example.org`)"
-#     service:
-#       port: 8080
-#   # As reverse_proxy is defined, the network `reverse_proxy` is automatically
-#   # added.
 #   networks:
 #     - backend
 #   depends_on:
@@ -38,14 +30,11 @@ docker_compose_services: {}
 #     # Needs to be defined in docker_compose_secrets
 #     - secret-key
 
-
 # Automatically generated from networks defined in docker_compose_services.
 # Can be used to overwrite network options.
 docker_compose_networks: {}
 # Generated for the services above:
 # backend: {}
-# reverse_proxy:
-#   external: true
 
 # Automatically generated from volumes defined in docker_compose_services.
 # Can be used to overwrite volumes options.
@@ -75,12 +64,9 @@ docker_compose_secrets: {}
 # directly in the service definition in docker_compose_services
 docker_compose_restart_policy: unless-stopped
 
-
 # Networks that already exist and will considered as external.
 docker_compose_existing_networks_default:
   - host
-  - reverse_proxy
-  - monitoring_scrapping
 
 docker_compose_existing_networks: []
 docker_compose_existing_networks_computed: "{{ (docker_compose_existing_networks_default + docker_compose_existing_networks) | unique }}"

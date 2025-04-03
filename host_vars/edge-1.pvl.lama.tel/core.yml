@@ -1,28 +1,35 @@
 ---
-bird2_router_id: 172.28.254.3
-bird2_bgp_region_id: 250 # France
-bird2_bgp_site_id: 3
+bird2_router_id: 209.112.97.243
 
-bird2_bgp_preferred_source:
-  v6: 2001:67c:17fc:ffff::3
-
-bird2_bgp_originations:
-  v6:
-    - 2001:67c:17fc::/48
-    - 2a06:e881:7700::/40
-
-bird2_bgp_blacklist:
-  v6:
-    - 2a05:f480:1c00:9ee::/64 # Local prefix
-    - 2001:19f0:ffff::1/128- # Vultr router
-
-bird2_bgp_static_routes:
+bird2_static_routes:
   v4:
+    - 209.112.97.0/24 unreachable
     - 169.254.169.254/32 via 108.61.208.1 %enp1s0 # needed because multihop to vultr
   v6:
     - 2001:67c:17fc::/48 unreachable
     - 2a06:e881:7700::/40 unreachable
     - 2001:19f0:ffff::1/128 via fe80::fc00:3ff:fe21:2eeb %enp1s0 # needed because multihop to vultr
+
+bird2_bgp_region_id: 250 # France
+bird2_bgp_site_id: 3
+
+bird2_bgp_preferred_source:
+  v4: 209.112.97.243
+  v6: 2001:67c:17fc:ffff::3
+
+bird2_bgp_originations:
+  v4:
+    - 209.112.97.0/24
+  v6:
+    - 2001:67c:17fc::/48
+    - 2a06:e881:7700::/40
+
+bird2_bgp_blacklist:
+  v4:
+    - 108.61.208.0/23 # Local prefix
+  v6:
+    - 2a05:f480:1c00:9ee::/64 # Local prefix
+    - 2001:19f0:ffff::1/128- # Vultr router
 
 bird2_bgp_sessions:
   upstreams:
@@ -58,19 +65,19 @@ bird2_bgp_sessions:
         remote:
           v6: fd3c:c1c4:bbff:9a64::cafe
 
-      - description: Delicious muffins
-        alias: deliciousmuffins
-        asn: 212002
-        irr: AS212002
+      - description: Alexandre Gliganic
+        alias: alex
+        asn: 215581
+        irr: AS215581:AS-ALEX
         local:
-          v6: fd3c:c1c4:bbff:9a64::ee1
+          v6: 2001:67c:17fc:fc41::21:2024
         remote:
-          v6: fd3c:c1c4:bbff:9a64::4251
+          v6: 2001:67c:17fc:fc41::21:5581
 
   cores:
     defaults:
       local:
-        v4: 172.28.254.3
+        v4: 209.112.97.243
         v6: 2001:67c:17fc:ffff::3
       med_metric: true
     sessions:
@@ -78,35 +85,25 @@ bird2_bgp_sessions:
         alias: fsn
         asn: 212024
         remote:
-          v4: 172.28.254.1
+          v4: 209.112.97.241
           v6: 2001:67c:17fc:ffff::1
       - description: BAR
         alias: bar
         asn: 212024
         remote:
-          v4: 172.28.254.2
+          v4: 209.112.97.242
           v6: 2001:67c:17fc:ffff::2
       - description: FRA
         alias: fra
         asn: 212024
         remote:
-          v4: 172.28.254.4
+          v4: 209.112.97.244
           v6: 2001:67c:17fc:ffff::4
-
-  looking_glasses:
-    sessions:
-      - description: bgp.tools
-        asn: 212232
-        alias: bgp_tools
-        multihop: 32
-        local:
-          v6: 2001:67c:17fc:ffff::3
-        remote:
-          v6: 2a0c:2f07:9459::b12
 
 bird2_ospf_sessions:
   - alias: ospf
     areas:
       0.0.0.0:
         interfaces:
-          zt-lama: {}
+          zt-lama:
+            cost: 20

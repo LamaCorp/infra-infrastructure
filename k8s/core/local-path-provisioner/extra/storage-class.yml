@@ -1,0 +1,14 @@
+---
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: local-path
+  annotations:
+    defaultVolumeType: hostPath
+    storageclass.kubernetes.io/is-default-class: "true"
+provisioner: cluster.local/local-path-provisioner
+reclaimPolicy: Retain
+volumeBindingMode: WaitForFirstConsumer
+allowVolumeExpansion: true
+parameters:
+  nodePath: /srv/local-path-provisioner

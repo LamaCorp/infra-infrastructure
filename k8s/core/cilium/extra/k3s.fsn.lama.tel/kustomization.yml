@@ -1,0 +1,8 @@
+---
+kind: Kustomization
+
+resources:
+  - ../base
+  - cilium-bgp.yml
+  - cilium-egress-gateway-policy.yml
+  - cilium-load-balancer-ip-pool.yml

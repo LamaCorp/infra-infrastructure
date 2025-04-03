@@ -1,8 +1,13 @@
 ---
+- name: Add signing key for knot-resolver repo
+  ansible.builtin.apt_key:
+    url: https://download.opensuse.org/repositories/home:CZ-NIC:knot-resolver-latest/Debian_12/Release.key
 
-- name: Install knot-resolver release files
-  ansible.builtin.apt:
-    deb: https://secure.nic.cz/files/knot-resolver/knot-resolver-release.deb
+- name: Add knot-resolver repo to sources list
+  ansible.builtin.apt_repository:
+    repo: "deb https://download.opensuse.org/repositories/home:/CZ-NIC:/knot-resolver-latest/Debian_12/ /"
+    update_cache: true
+    filename: knot-resolver
 
 - name: Install knot-resolver
   ansible.builtin.apt:

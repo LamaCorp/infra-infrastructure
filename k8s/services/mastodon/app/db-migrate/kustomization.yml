@@ -1,0 +1,13 @@
+---
+kind: Kustomization
+
+nameSuffix: -db-migrate
+
+commonLabels:
+  app.kubernetes.io/component: db-migrate
+
+resources:
+  - ../bases/job
+
+patches:
+  - path: job.yml

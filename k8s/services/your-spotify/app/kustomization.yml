@@ -1,0 +1,17 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: your-spotify
+
+resources:
+  - web
+  - api
+  - network-policy.yml
+  - secrets.yml
+
+images:
+  - name: yooooomi/your_spotify_server
+    newTag: 1.12.0
+  - name: yooooomi/your_spotify_client
+    newTag: 1.12.0

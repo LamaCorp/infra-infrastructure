@@ -1,7 +1,0 @@
----
-
-- name: Restart node exporter nftables service
-  ansible.builtin.service:
-    name: "{{ node_exporter_nftables_binary_name }}.service"
-    state: restarted
-    daemon_reload: true

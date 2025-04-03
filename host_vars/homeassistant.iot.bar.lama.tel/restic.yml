@@ -1,0 +1,22 @@
+---
+backup_restic_creds_homeassistant: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/homeassistant') }}"
+
+backup_restic_list_raw:
+  - name: homeassistant
+    enabled: true
+    repo_password: "{{ backup_restic_creds_homeassistant['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_homeassistant['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_homeassistant['backup_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_homeassistant['backup_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_homeassistant['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_homeassistant['prune_secret_key'] }}"
+    to_include:
+      - /srv/homeassistant
+    backup_systemd_timers:
+      minute: 40
+      hour: 03
+    prune_systemd_timers:
+      minute: 49
+      hour: 14

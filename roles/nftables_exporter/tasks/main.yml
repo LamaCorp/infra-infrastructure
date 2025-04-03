@@ -1,0 +1,52 @@
+---
+- name: Install nftables-exporter from GitHub release
+  ansible.builtin.get_url:
+    url: "https://github.com/metal-stack/nftables-exporter/releases/download/{{ nftables_exporter_version }}/nftables-exporter-linux-{{ nftables_exporter_host_arch }}"
+    dest: "/usr/local/bin/nftables-exporter"
+    checksum: "sha256:{{ nftables_exporter_checksum }}"
+    owner: root
+    group: root
+    mode: 0755
+  notify: Restart nftables-exporter
+
+- name: Ensure configuration is up-to-date
+  ansible.builtin.copy:
+    content: |
+      nftables_exporter:
+        {{ nftables_exporter_computed_config | to_nice_yaml | indent(2) }}
+    dest: /etc/nftables_exporter.yaml
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart nftables-exporter
+
+- name: Ensure systemd service is up-to-date
+  ansible.builtin.copy:
+    content: |
+      [Unit]
+      Description=prometheus exporter for nftables metrics
+
+      [Service]
+      ExecStart=/usr/local/bin/nftables-exporter
+      Type=simple
+      Restart=on-failure
+      RestartSec=5s
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/nftables-exporter.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload systemd
+    - Restart nftables-exporter
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure systemd service is enabled and started
+  ansible.builtin.service:
+    name: nftables-exporter
+    enabled: true
+    state: started

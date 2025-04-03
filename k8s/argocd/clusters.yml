@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: argocd-cluster-k3s-fsn-lama-tel
+  labels:
+    argocd.argoproj.io/secret-type: "cluster"
+  annotations:
+    podSubnet4: 172.28.128.0/22
+    svcSubnet4: 172.28.132.0/22
+    podSubnet6: 2001:67c:17fc:110::/60
+    svcSubnet6: 2001:67c:17fc:120::/60
+    extraPodSubnet4: 172.28.136.0/22
+    dnsIP4: 172.28.132.53
+    dnsIP6: 2001:67c:17fc:120::53
+    controllerEndpoint: 2001:67c:17fc:101::11
+stringData:
+  name: k3s.fsn.lama.tel
+  server: https://kubernetes.default.svc

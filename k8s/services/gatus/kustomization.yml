@@ -1,0 +1,9 @@
+---
+kind: Kustomization
+namespace: argocd
+
+resources:
+  - devoups.yml
+  - phowork.yml
+  - prologin.yml
+  - zarak.yml

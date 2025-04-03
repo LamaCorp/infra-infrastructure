@@ -1,0 +1,107 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: seaweedfs-master
+spec:
+  serviceName: seaweedfs-master
+  podManagementPolicy: Parallel
+  replicas: 1
+  template:
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      enableServiceLinks: false
+      containers:
+        - name: seaweedfs
+          image: chrislusf/seaweedfs
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          command: ["/bin/sh", "-ec"]
+          args:
+            - |
+              exec /usr/bin/weed \
+                -logtostderr=true \
+                -v=1 \
+                master \
+                -port=9333 \
+                -port.grpc=19333 \
+                -metricsPort=9327 \
+                -mdir=/data \
+                -ip.bind=0.0.0.0 \
+                -defaultReplication=000 \
+                -volumeSizeLimitMB=30000 \
+                -ip=${POD_NAME}.seaweedfs-master.${NAMESPACE} \
+                -peers=seaweedfs-master-0.seaweedfs-master.${NAMESPACE}:9333
+          volumeMounts:
+            - name: seaweedfs-master-data
+              mountPath: /data
+            - name: seaweedfs-home-root
+              mountPath: /root
+            - name: config
+              mountPath: /etc/seaweedfs/master.toml
+              subPath: master.toml
+              readOnly: true
+            - name: config
+              mountPath: /etc/seaweedfs/shell.toml
+              subPath: shell.toml
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 9333
+              protocol: TCP
+            - name: grpc
+              containerPort: 19333
+              protocol: TCP
+            - name: metrics
+              containerPort: 9327
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              port: http
+              scheme: HTTP
+              path: /cluster/status
+            initialDelaySeconds: 10
+            periodSeconds: 45
+            successThreshold: 2
+            failureThreshold: 100
+            timeoutSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: http
+              scheme: HTTP
+              path: /cluster/status
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 4
+            timeoutSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: seaweedfs-master-config
+  volumeClaimTemplates:
+    - metadata:
+        name: seaweedfs-master-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 10Gi
+    - metadata:
+        name: seaweedfs-home-root
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi

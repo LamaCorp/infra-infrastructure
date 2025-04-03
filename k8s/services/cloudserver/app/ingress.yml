@@ -1,0 +1,35 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cloudserver
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-dns01
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+spec:
+  rules:
+    - host: s3.lama-corp.space
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cloudserver
+                port:
+                  name: http
+    - host: "*.s3.lama-corp.space"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cloudserver
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - s3.lama-corp.space
+        - "*.s3.lama-corp.space"
+      secretName: cloudserver-tls

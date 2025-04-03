@@ -17,13 +17,3 @@
   tags:
     - chrony
     - ntp
-
-- name: Common prometheus exporters
-  hosts: all
-  roles:
-    - cloudalchemy.node_exporter
-    - node_exporter_textfile_collector_scripts
-    - node_exporter_what_active_users
-  tags:
-    - node_exporter
-    - observability

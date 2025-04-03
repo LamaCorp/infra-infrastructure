@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+# yamllint disable
+---
+version: 1
+metadata:
+  name: Apps - Thanos
+entries:
+  - id: provider
+    model: authentik_providers_proxy.proxyprovider
+    identifiers:
+      name: thanos-bucketweb
+    attrs:
+      authorization_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-authorization-implicit-consent"],
+        ]
+
+      mode: forward_single
+      external_host: https://thanos-bucketweb.lama.tel
+
+      access_token_validity: hours=24
+
+  - id: application-bucketweb
+    model: authentik_core.application
+    identifiers:
+      slug: thanos-bucketweb
+    attrs:
+      name: Thanos Bucket Web
+      group: Infrastructure
+      description: Thanos bucket overview
+      icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/thanos.png
+      provider: !KeyOf provider
+      policy_engine_mode: any
+
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application-bucketweb
+      group: !Find [authentik_core.group, [name, "roots"]]
+    attrs:
+      order: 1
+
+  - id: application-frontend
+    model: authentik_core.application
+    identifiers:
+      slug: thanos
+    attrs:
+      name: Thanos
+      group: Infrastructure
+      description: Long-term metrics storage
+      meta_launch_url: https://thanos.lama.tel
+      icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/thanos.png
+      policy_engine_mode: any
+
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application-frontend
+      group: !Find [authentik_core.group, [name, "users"]]
+    attrs:
+      order: 1
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application-frontend
+      group: !Find [authentik_core.group, [name, "roots"]]
+    attrs:
+      order: 2

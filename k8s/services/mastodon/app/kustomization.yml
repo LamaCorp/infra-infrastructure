@@ -1,0 +1,74 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: mastodon
+
+resources:
+  - web
+  - streaming
+  - sidekiq
+  - db-migrate
+  # - chewy-upgrade
+  - assets-precompile
+  - media-remove
+  - ingress.yml
+  - network-policy.yml
+  - secrets.yml
+
+configMapGenerator:
+  - name: mastodon-config
+    literals:
+      - LOCAL_DOMAIN=lama-corp.space
+      - WEB_DOMAIN=social.lama-corp.space
+      - AUTHORIZED_FETCH=false
+      - LIMITED_FEDERATION_MODE=false
+      - DISALLOW_UNAUTHENTICATED_API_ACCESS=false
+      - SINGLE_USER_MODE=false
+      - DEFAULT_LOCALE=fr
+
+      - RAILS_ENV=production
+      - NODE_ENV=production
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_LOG_LEVEL=info
+      - LOG_LEVEL=info
+      - TRUSTED_PROXY_IP=2001:67c:17fc:110::/60,172.28.128.0/22,::ffff:172.28.128.0/118
+      - STATSD_ADDR=localhost:9125
+
+      - SIDEKIQ_CONCURRENCY=5
+      - WEB_CONCURRENCY=2
+      - MAX_THREADS=5
+      - PERSISTENT_TIMEOUT=20
+      - PREPARED_STATEMENTS=true
+
+      - DB_HOST=postgresql.fsn.lama.tel
+      - DB_NAME=mastodon
+
+      - REDIS_HOST=redis.fsn.lama.tel
+      - REDIS_PORT=6388
+
+      - SMTP_SERVER=email-smtp.eu-west-3.amazonaws.com
+      - SMTP_PORT=587
+      - SMTP_TLS=true
+      - SMTP_FROM_ADDRESS=no-reply@social.lama-corp.space
+
+      - S3_ENABLED=true
+      - S3_ENDPOINT=https://s3.lama-corp.space
+      - S3_BUCKET=mastodon
+      - S3_HOSTNAME=s3.lama-corp.space
+      - CACHE_BUSTER_ENABLED=false
+
+      - OMNIAUTH_ONLY=true
+      - ONE_CLICK_SSO_LOGIN=true
+      - OIDC_ENABLED=true
+      - OIDC_DISPLAY_NAME=Lama Corp. Connect
+      - OIDC_ISSUER=https://auth.lama-corp.space/application/o/mastodon/
+      - OIDC_DISCOVERY=true
+      - OIDC_SCOPE=openid,profile,email
+      - OIDC_UID_FIELD=preferred_username
+      - OIDC_REDIRECT_URI=https://social.lama-corp.space/auth/auth/openid_connect/callback
+      - OIDC_SECURITY_ASSUME_EMAIL_IS_VERIFIED=true
+
+images:
+  - name: ghcr.io/mastodon/mastodon
+    newTag: v4.2.15

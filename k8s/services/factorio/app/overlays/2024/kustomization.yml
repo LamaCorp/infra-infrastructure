@@ -1,0 +1,18 @@
+---
+kind: Kustomization
+
+nameSuffix: "-2024"
+
+commonLabels:
+  app.kubernetes.io/version: "2024"
+
+resources:
+  - ../../base
+
+patches:
+  - path: service.yml
+  - path: deployment.yml
+
+images:
+  - name: factoriotools/factorio
+    newTag: 2.0.17

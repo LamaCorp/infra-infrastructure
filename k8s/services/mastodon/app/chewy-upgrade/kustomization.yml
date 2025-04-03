@@ -1,0 +1,13 @@
+---
+kind: Kustomization
+
+nameSuffix: -chewy-upgrade
+
+commonLabels:
+  app.kubernetes.io/component: chewy-upgrade
+
+resources:
+  - ../bases/job
+
+patches:
+  - path: job.yml

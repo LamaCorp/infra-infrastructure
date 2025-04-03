@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyseerr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+        - name: jellyseerr
+          image: ghcr.io/hotio/jellyseerr
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: media-config-env
+          ports:
+            - name: http
+              containerPort: 5055
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /app/config
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: jellyseerr-data
+      nodeSelector:
+        kubernetes.io/hostname: k3s-1.bar.lama.tel
+      tolerations:
+        - key: "role.lama.tel/media"
+          operator: "Exists"
+          effect: "NoExecute"
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"

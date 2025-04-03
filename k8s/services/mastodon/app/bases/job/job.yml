@@ -1,0 +1,34 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mastodon
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: HookSucceeded
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      securityContext:
+        runAsUser: 991
+        runAsGroup: 991
+        fsGroup: 991
+      containers:
+        - name: mastodon
+          image: ghcr.io/mastodon/mastodon
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-e", "-c"]
+          envFrom:
+            - configMapRef:
+                name: mastodon-config
+            - secretRef:
+                name: mastodon-secrets
+            - secretRef:
+                name: mastodon-postgres-credentials
+            - secretRef:
+                name: mastodon-s3-credentials
+            - secretRef:
+                name: mastodon-smtp-credentials
+            - secretRef:
+                name: mastodon-oidc-credentials

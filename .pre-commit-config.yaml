@@ -1,27 +1,36 @@
 ---
 repos:
   - repo: https://github.com/adrienverge/yamllint.git
-    rev: v1.32.0
+    rev: v1.37.0
     hooks:
       - id: yamllint
-  - repo: https://github.com/python/black
-    rev: 23.10.0
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
     hooks:
       - id: black
-        language_version: python3.10
-  - repo: https://github.com/pycqa/isort
-    rev: 5.12.0
+        language_version: python3.13
+  - repo: local
     hooks:
-      - id: isort
-        name: isort
+      - id: ruff
+        name: ruff
+        entry: ruff check --force-exclude
+        language: python
+        types_or: [python, pyi, jupyter]
+        require_serial: true
+      - id: ruff-format
+        name: ruff-format
+        entry: ruff format --force-exclude
+        language: python
+        types_or: [python, pyi, jupyter]
+        require_serial: true
   - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.22
+    rev: v0.1.28
     hooks:
       - id: terraform-fmt
       - id: shellcheck
         exclude: config.sh
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: check-json
       - id: pretty-format-json

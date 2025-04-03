@@ -1,0 +1,9 @@
+---
+kind: Kustomization
+
+resources:
+  - ../base
+
+  - gateway-eg-http-public.yml
+  - envoyproxy-eg-http-public.yml
+  - backendtrafficpolicy-eg-http-public.yml

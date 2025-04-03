@@ -1,0 +1,64 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stirling-pdf
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: stirling-pdf
+          image: frooodle/s-pdf
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: stirling-pdf-config-env
+            - secretRef:
+                name: stirling-pdf-oidc-credentials
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: data
+              mountPath: /configs
+              subPath: configs
+            - name: data
+              mountPath: /logs
+              subPath: logs
+            - name: training-data
+              mountPath: /usr/share/tessdata
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: stirling-pdf-data
+        - name: training-data
+          persistentVolumeClaim:
+            claimName: stirling-pdf-training-data

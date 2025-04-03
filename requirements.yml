@@ -1,39 +1,27 @@
 ---
 collections:
   - name: ansible.utils
-    version: 2.11.0
+    version: 4.1.0
   - name: community.crypto
-    version: 2.15.1
+    version: 2.22.0
   - name: community.docker
-    version: 3.4.8
+    version: 3.12.1
   - name: community.general
-    version: 7.4.0
-  - name: community.grafana
-    version: 1.5.4
+    version: 9.4.0
   - name: community.hashi_vault
-    version: 5.0.0
-  - name: openafs_contrib.openafs
-    version: 1.9.0
-  - name: sivel.toiletwater
-    version: 0.0.15
+    version: 6.2.0
+  - name: prometheus.prometheus
+    version: 0.17.1
   - name: git+https://gitlab.cri.epita.fr/cri/iac/ansible/collections/acme.git
     type: git
     version: 0.5.0
 
 roles:
-  - name: cloudalchemy.node_exporter
-    src: git+https://github.com/cloudalchemy/ansible-node-exporter.git
-    version: c2401cfed554906843520cbac7ae2a3a132c590e
-  - name: cri.gitlab_runner
-    src: git+https://gitlab.cri.epita.fr/cri/iac/ansible/roles/gitlab_runner.git
-    version: ec26994af10e7d5eb809a1cd19a66e50f6ce512f
   - name: cri.restic
-    src: git+https://gitlab.cri.epita.fr/cri/iac/ansible/roles/restic.git
-    version: afd7b7d0e0bda7621e9d0b0562a26c0c88a6c737
+    src: git+https://gitlab.com/byh0ki-org/infra/ansible/roles/restic.git
+    version: 3.1.0
   - name: geerlingguy.docker
-    version: 7.0.1
-  - name: geerlingguy.pip
-    version: 2.2.0
+    version: 7.4.7
   - name: ipr-cnrs.nftables
     src: git+https://github.com/ipr-cnrs/nftables.git
     version: bd11aac65b9c77bbcbbb5d4f9b5d24e74f456b67
@@ -46,13 +34,11 @@ roles:
     src: git+https://github.com/rissson/ansible-role-haproxy.git
     version: 2968ced132136ea061b4a74875522a97d7bf3f93
   - name: patrickjahns.promtail
-    version: 1.26.0
+    version: 1.31.0
   - name: stackhpc.libvirt-host
     version: v1.12.1
   - name: stackhpc.libvirt-vm
-    src: git+https://github.com/stackhpc/ansible-role-libvirt-vm.git
-    version: fc3687773232a211a57c4cc49c39c46b86c353de
-  - name: stackhpc.systemd_networkd
-    version: v1.0.3
-  - name: timorunge.sssd
-    version: 0.5.5
+    version: v1.16.1
+  - name: xanmanning.k3s
+    src: https://github.com/PyratLabs/ansible-role-k3s.git
+    version: v3.4.4

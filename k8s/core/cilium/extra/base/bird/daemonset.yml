@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: bird
+spec:
+  revisionHistoryLimit: 10
+  updateStrategy:
+    type: OnDelete
+  template:
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: bird
+              topologyKey: kubernetes.io/hostname
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      containers:
+        - name: bird
+          image: ghcr.io/akafeng/bird
+          imagePullPolicy: IfNotPresent
+          command:
+            - bash
+            - /config/start.sh
+          env:
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      nodeSelector:
+        kubernetes.io/os: linux
+      priorityClassName: system-node-critical
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 1
+      tolerations:
+        - operator: Exists
+      volumes:
+        - name: config
+          configMap:
+            name: bird-config

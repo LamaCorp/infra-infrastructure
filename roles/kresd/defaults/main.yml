@@ -1,5 +1,4 @@
 ---
-
 knot_resolver_systemd_instances: 1
 
 kresd_listeners:
@@ -14,6 +13,7 @@ kresd_listeners:
       freebind: true
 
 kresd_modules: []
+kresd_extra_modules_raw: ""
 
 kresd_prometheus:
   enabled: true
@@ -22,8 +22,8 @@ kresd_prometheus:
 kresd_cache:
   directory: /var/cache/knot-resolver
   min_ttl: 5
-  max_ttl: 518400  # 6 days
-  size: 200  # in MB
+  max_ttl: 518400 # 6 days
+  size: 200 # in MB
 
 kresd_additional_raw_config: ""
 

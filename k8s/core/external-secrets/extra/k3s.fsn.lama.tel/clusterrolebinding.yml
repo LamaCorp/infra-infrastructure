@@ -1,0 +1,113 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: vault-tokenreview
+  namespace: default
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: system:auth-delegator
+subjects:
+  - kind: ServiceAccount
+    namespace: argocd
+    name: default
+  - kind: ServiceAccount
+    namespace: core-cert-manager
+    name: default
+  - kind: ServiceAccount
+    namespace: core-external-dns
+    name: default
+  - kind: ServiceAccount
+    namespace: core-external-secrets
+    name: external-secrets
+  - kind: ServiceAccount
+    namespace: core-observability
+    name: default
+  - kind: ServiceAccount
+    namespace: core-velero
+    name: default
+  - kind: ServiceAccount
+    namespace: infra-acme
+    name: default
+  - kind: ServiceAccount
+    namespace: infra-observability
+    name: default
+  - kind: ServiceAccount
+    namespace: kube-system
+    name: default
+  - kind: ServiceAccount
+    namespace: services-atuin
+    name: default
+  - kind: ServiceAccount
+    namespace: services-authentik
+    name: default
+  - kind: ServiceAccount
+    namespace: services-authentik
+    name: authentik
+  - kind: ServiceAccount
+    namespace: services-cloudserver
+    name: default
+  - kind: ServiceAccount
+    namespace: services-eos
+    name: default
+  - kind: ServiceAccount
+    namespace: services-gatus-devoups
+    name: default
+  - kind: ServiceAccount
+    namespace: services-gatus-phowork
+    name: default
+  - kind: ServiceAccount
+    namespace: services-gatus-prologin
+    name: default
+  - kind: ServiceAccount
+    namespace: services-gatus-zarak
+    name: default
+  - kind: ServiceAccount
+    namespace: services-gitlab-runner
+    name: default
+  - kind: ServiceAccount
+    namespace: services-hanabi
+    name: default
+  - kind: ServiceAccount
+    namespace: services-hedgedoc
+    name: default
+  - kind: ServiceAccount
+    namespace: services-immich
+    name: default
+  - kind: ServiceAccount
+    namespace: services-lemmy
+    name: default
+  - kind: ServiceAccount
+    namespace: services-mastodon
+    name: default
+  - kind: ServiceAccount
+    namespace: services-matrix
+    name: default
+  - kind: ServiceAccount
+    namespace: services-mattermost
+    name: default
+  - kind: ServiceAccount
+    namespace: services-media
+    name: default
+  - kind: ServiceAccount
+    namespace: services-netbox
+    name: default
+  - kind: ServiceAccount
+    namespace: services-nextcloud
+    name: default
+  - kind: ServiceAccount
+    namespace: services-paperless-ngx-risson
+    name: default
+  - kind: ServiceAccount
+    namespace: services-stalwart
+    name: default
+  - kind: ServiceAccount
+    namespace: services-stirling-pdf
+    name: default
+  - kind: ServiceAccount
+    namespace: services-vaultwarden
+    name: default
+  - kind: ServiceAccount
+    namespace: services-your-spotify
+    name: default

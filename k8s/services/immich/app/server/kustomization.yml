@@ -1,0 +1,10 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: server
+
+resources:
+  - deployment.yml
+  - service.yml
+  - ingress.yml

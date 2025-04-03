@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mastodon
+spec:
+  template:
+    spec:
+      containers:
+        - name: mastodon
+          args:
+            - exec bundle exec puma -C config/puma.rb
+          env:
+            - name: BIND
+              value: "[::]"
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP

@@ -2,4 +2,5 @@
 Description=Run the textfile collector script {{ script_name }}
 
 [Service]
-ExecStart=/bin/sh -c '/usr/local/bin/"{{ script_name }}" | sponge "{{ node_exporter_textfile_dir }}/{{ script_name_no_ext }}.prom"'
+Type=oneshot
+ExecStart=/bin/sh -c '"/opt/node_exporter_textfile_collector_scripts/{{ script_name }}" | sponge "{{ node_exporter_textfile_dir }}/{{ script_name_no_ext }}.prom"'

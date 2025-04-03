@@ -1,0 +1,25 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-egress-kube-apiserver
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEntities:
+        - kube-apiserver
+  egress:
+    - toEntities:
+        - kube-apiserver
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-https
+spec:
+  endpointSelector: {}
+  egress:
+    - toPorts:
+        - ports:
+            - port: "443"
+              protocol: TCP

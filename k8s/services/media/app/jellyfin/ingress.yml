@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jellyfin
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-dns01
+spec:
+  ingressClassName: nginx-bar
+  rules:
+    - host: jellyfin.lama-corp.space
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jellyfin
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - jellyfin.lama-corp.space
+      secretName: jellyfin-tls

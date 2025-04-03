@@ -1,5 +1,0 @@
----
-dns_proxy_server_docker_repository: defreitas/dns-proxy-server
-dns_proxy_server_docker_tag: 3.16.0-snapshot
-
-dns_proxy_server_domain: docker

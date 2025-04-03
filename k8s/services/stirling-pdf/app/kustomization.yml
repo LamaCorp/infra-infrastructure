@@ -1,0 +1,40 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: stirling-pdf
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - network-policy.yml
+  - pvc.yml
+  - secrets.yml
+  - service.yml
+
+configMapGenerator:
+  - name: stirling-pdf-config-env
+    literals:
+      - SYSTEM_DEFAULTLOCALE=fr-FR
+      - SYSTEM_GOOGLEVISIBILITY=false
+      - SYSTEM_SHOWUPDATE=false
+      - SYSTEM_CUSTOMHTMLFILES=false
+
+      - UI_APPNAME=PDF
+      - UI_HOMEDESCRIPTION=Manipuler vos PDFs avec aisance
+      - UI_APPNAMENAVBAR=PDF
+
+      - METRICS_ENABLED=true
+
+      - SECURITY_ENABLELOGIN=true
+      - SECURITY_CSRFDISABLED=false
+      - SECURITY_OAUTH2_ENABLED=true
+      - SECURITY_OAUTH2_ISSUER=https://auth.lama-corp.space/application/o/stirling-pdf/
+      - SECURITY_OAUTH2_AUTOCREATEUSER=true
+      - SECURITY_OAUTH2_USEASUSERNAME=preferred_username
+      - SECURITY_OAUTH2_SCOPES=openid, profile, email
+      - SECURITY_OAUTH2_PROVIDER=Lama Corp. Connect
+
+images:
+  - name: frooodle/s-pdf
+    newTag: 0.26.1-fat

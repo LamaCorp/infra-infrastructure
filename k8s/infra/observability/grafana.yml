@@ -1,0 +1,157 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: infra-grafana
+  labels:
+    app: infra-grafana
+spec:
+  project: infra
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+  destination:
+    name: k3s.fsn.lama.tel
+    namespace: infra-observability
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 8.5.1
+    chart: grafana
+    helm:
+      releaseName: grafana
+      values: |
+        replicas: 1
+        grafana.ini:
+          analytics:
+            reporting_enabled: "False"
+            check_for_updates: "False"
+          features_toggles:
+            enable: dashboardPreviews scenes
+          server:
+            domain: grafana.lama.tel
+            enforce_domain: "True"
+            root_url: https://grafana.lama.tel
+          security:
+            disable_initial_admin_creation: "True"
+            cookie_secure: "True"
+          auth:
+            signout_redirect_url: https://auth.lama.tel/application/o/grafana/end-session/
+          auth.anonymous:
+            enabled: "True"
+            org_name: "Main Org."
+          auth.generic_oauth:
+            name: authentik
+            enabled: "True"
+            allow_sign_up: "True"
+            scopes: "openid email profile"
+            auth_url: https://auth.lama-corp.space/application/o/authorize/
+            token_url: https://auth.lama-corp.space/application/o/token/
+            api_url: https://auth.lama-corp.space/application/o/userinfo/
+            role_attribute_path: "contains(groups[*], 'roots') && 'Admin' || 'Viewer'"
+            allow_assign_grafana_admin: "True"
+            role_attribute_strict: "True"
+            use_pkce: "True"
+          users:
+            auto_assign_org: "True"
+            auto_assign_org_id: 1
+          database:
+            type: postgres
+            host: postgresql.fsn.lama.tel
+            name: grafana
+            ssl_mode: require
+        envValueFrom:
+          GF_DATABASE_USER:
+            secretKeyRef:
+              name: grafana-postgres-credentials
+              key: username
+          GF_DATABASE_PASSWORD:
+            secretKeyRef:
+              name: grafana-postgres-credentials
+              key: password
+          GF_AUTH_GENERIC_OAUTH_CLIENT_ID:
+            secretKeyRef:
+              name: grafana-oauth-credentials
+              key: client_id
+          GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+            secretKeyRef:
+              name: grafana-oauth-credentials
+              key: client_secret
+
+        annotations:
+          secret.reloader.stakater.com/reload: grafana-postgres-credentials,grafana-oauth-credentials
+
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            datasources:
+              - name: Thanos
+                type: prometheus
+                access: proxy
+                url: http://thanos-query-frontend.infra-observability:9090/
+                editable: false
+                isDefault: true
+              - name: Loki
+                type: loki
+                access: proxy
+                url: http://loki.infra-observability:3100/
+                editable: false
+                jsonData:
+                  httpHeaderName1: X-Scope-OrgID
+                secureJsonData:
+                  httpHeaderValue1: infra
+              - name: Alertmanager k3s.fsn.lama.tel
+                type: alertmanager
+                access: proxy
+                url: http://kube-prometheus-stack-alertmanager.core-observability:9093/
+                editable: false
+                jsonData:
+                  implementation: prometheus
+
+        sidecar:
+          dashboards:
+            enabled: true
+            labelValue: "1"
+            folderAnnotation: k8s-sidecar-target-directory
+            searchNamespace: ALL
+            provider:
+              foldersFromFilesStructure: true
+            multicluster:
+              global:
+                enabled: true
+              etcd:
+                enabled: true
+          datasources:
+            enabled: true
+            labelValue: "1"
+
+        plugins:
+          - grafana-polystat-panel
+          - grafana-worldmap-panel
+          - marcusolsson-treemap-panel
+
+        ingress:
+          enabled: true
+          pathType: Prefix
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+            nginx.ingress.kubernetes.io/affinity: cookie
+            nginx.ingress.kubernetes.io/affinity-mode: persistent
+          hosts:
+            - grafana.lama.tel
+          tls:
+            - hosts:
+                - grafana.lama.tel
+              secretName: grafana-tls
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      name: grafana
+      jsonPointers:
+        - /spec/template/metadata/annotations/checksum~1secret
+    - group: ""
+      kind: Secret
+      name: grafana
+      jsonPointers:
+        - /data/admin-password

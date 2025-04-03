@@ -1,0 +1,14 @@
+---
+kind: Kustomization
+
+nameSuffix: -streaming
+
+commonLabels:
+  app.kubernetes.io/component: streaming
+
+resources:
+  - ../bases/deployment
+  - service.yml
+
+patches:
+  - path: deployment.yml

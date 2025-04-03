@@ -1,110 +1,14 @@
 ---
-
 haproxy_frontends:
-  - name: http
-    address: "*:80"
+  - name: k3s_api
+    address: "*:6443"
     mode: tcp
-    backend: http
-  - name: https
-    address: "*:443"
-    mode: tcp
-    backend: https
-
-  - name: whois
-    address: "*:43"
-    mode: tcp
-    backend: whois
-  - name: rpki
-    address: "*:323"
-    mode: tcp
-    timeout_client: 960000ms  # 11 minutes
-    backend: rpki
-
-  - name: ldap
-    address: "*:389"
-    mode: tcp
-    backend: ldap
-  - name: ldaps
-    address: "*:636"
-    mode: tcp
-    backend: ldaps
-
-  - name: krb5
-    address: "*:88"
-    mode: tcp
-    backend: krb5
-  - name: kadmin
-    address: "*:464"
-    mode: tcp
-    backend: kadmin
-  - name: kpasswd
-    address: "*:749"
-    mode: tcp
-    backend: kpasswd
+    backend: k3s_api
 
 haproxy_backends:
-  - name: http
+  - name: k3s_api
     mode: tcp
     check: false
     servers:
-      - name: services
-        address: 172.28.1.20:80
-        extra_opts: send-proxy
-  - name: https
-    mode: tcp
-    check: false
-    servers:
-      - name: services
-        address: 172.28.1.20:443
-        extra_opts: send-proxy
-
-  - name: whois
-    mode: tcp
-    check: false
-    servers:
-      - name: whois
-        address: 172.28.1.20:43
-  - name: rpki
-    mode: tcp
-    check: false
-    servers:
-      - name: services
-        address: 172.28.1.20:323
-    timeout_server: 960000ms  # 11 minutes
-
-  - name: ldap
-    mode: tcp
-    check: false
-    servers:
-      - name: auth
-        address: 172.28.1.30:1389
-        extra_opts: send-proxy
-  - name: ldaps
-    mode: tcp
-    check: false
-    servers:
-      - name: auth
-        address: 172.28.1.30:1636
-        extra_opts: send-proxy
-
-  - name: krb5
-    mode: tcp
-    check: false
-    servers:
-      - name: auth
-        address: 172.28.1.30:188
-        extra_opts: send-proxy
-  - name: kadmin
-    mode: tcp
-    check: false
-    servers:
-      - name: auth
-        address: 172.28.1.30:1464
-        extra_opts: send-proxy
-  - name: kpasswd
-    mode: tcp
-    check: false
-    servers:
-      - name: auth
-        address: 172.28.1.30:1749
-        extra_opts: send-proxy
+      - name: k3s-1
+        address: 172.28.1.11:6443

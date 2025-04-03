@@ -1,0 +1,14 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: whoisd
+
+resources:
+  - deployment.yml
+  - network-policy.yml
+  - service.yml
+
+images:
+  - name: registry.gitlab.com/lama-corp/infra/services/whoisd
+    newTag: v0.2.0

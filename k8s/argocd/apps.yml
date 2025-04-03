@@ -1,0 +1,34 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: apps
+  labels:
+    app: apps
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+        revision: k8s
+        files:
+          - path: k8s/core/**/config.json
+          - path: k8s/infra/**/config.json
+          - path: k8s/services/**/config.json
+  template:
+    metadata:
+      name: apps-{{ normalize (index .path.segments 1) }}-{{ normalize (index .path.segments 2) }}
+      labels:
+        app: apps
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+      destination:
+        name: k3s.fsn.lama.tel
+        namespace: argocd
+      source:
+        repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+        targetRevision: HEAD
+        path: "{{ .path.path }}"

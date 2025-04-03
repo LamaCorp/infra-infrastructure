@@ -12,16 +12,13 @@ nft_define:
   prometheus exporter node:
     name: prometheus_exporter_node
     value: 9100
-  prometheus exporters nftables:
+  prometheus exporter nftables:
     name: prometheus_exporter_nftables
     value: 9630
-  prometheus exporter what active users:
-    name: prometheus_exporter_what_active_users
-    value: 9839
 
   subnet internal 4:
     name: subnet_internal_4
-    value: "172.28.0.0/16"
+    value: "{172.28.0.0/16, 209.112.97.240/28}"
   subnet customer 4:
     name: subnet_customer_4
     value: "172.29.0.0/16"
@@ -49,8 +46,12 @@ nft_input_rules:
   014 icmp ping: "{{ nft_templates.icmp_allow_ping }}"
 
   220 prometheus exporters:
-    - ip saddr $subnet_internal_4 tcp dport { $prometheus_exporter_node, $prometheus_exporter_nftables, $prometheus_exporter_what_active_users } accept
-    - ip6 saddr $subnet_internal_6 tcp dport { $prometheus_exporter_node, $prometheus_exporter_nftables, $prometheus_exporter_what_active_users } accept
+    - ip saddr $subnet_internal_4 tcp dport { $prometheus_exporter_node, $prometheus_exporter_nftables } accept
+    - ip6 saddr $subnet_internal_6 tcp dport { $prometheus_exporter_node, $prometheus_exporter_nftables } accept
+
+  230 iperf3:
+    - ip saddr $subnet_internal_4 tcp dport 5201 accept
+    - ip6 saddr $subnet_internal_6 tcp dport 5201 accept
 
   # Override to remove the log entry.
   900 log:

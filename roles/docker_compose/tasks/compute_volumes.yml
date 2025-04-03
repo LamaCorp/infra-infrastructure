@@ -1,5 +1,4 @@
 ---
-
 - name: Compute volumes list from services definition
   ansible.builtin.set_fact:
     docker_compose_volume_list: "{{ docker_compose_volume_list | d([]) + service.value.volumes | d([]) }}"
@@ -12,16 +11,25 @@
   ansible.builtin.set_fact:
     docker_compose_volume_list: "{{ docker_compose_volume_list | map('split', ':') | map('first') | select('match', '^[^/]') }}"
 
+- name: Check if volume exists
+  ansible.builtin.stat:
+    path: "{{ docker_compose_volumes_dir }}/{{ volume_dir }}"
+  register: docker_compose_volume_status_list
+  loop: "{{ docker_compose_volume_list }}"
+  loop_control:
+    loop_var: volume_dir
+
 - name: Create volume folders
   ansible.builtin.file:
-    path: "{{ docker_compose_volumes_dir }}/{{ volume_dir }}"
+    path: "{{ docker_compose_volumes_dir }}/{{ volume_status.volume_dir }}"
     state: directory
     owner: "{{ docker_compose_volumes_dir_owner }}"
     group: "{{ docker_compose_volumes_dir_group }}"
     mode: "{{ docker_compose_volumes_dir_mode }}"
-  loop: "{{ docker_compose_volume_list }}"
+  when: not volume_status.stat.exists
+  loop: "{{ docker_compose_volume_status_list.results }}"
   loop_control:
-    loop_var: volume_dir
+    loop_var: volume_status
 
 - name: Compute volumes from services definition
   ansible.builtin.set_fact:

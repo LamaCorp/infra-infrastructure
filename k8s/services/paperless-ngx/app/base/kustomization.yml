@@ -1,0 +1,71 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: paperless-ngx
+
+resources:
+  - server
+  - gotenberg
+  - tika
+  - network-policy.yml
+  - secrets.yml
+
+configMapGenerator:
+  - name: paperless-ngx-config
+    literals:
+      - HOME=/tmp
+
+      # - PAPERLESS_URL=FIXME
+      # - PAPERLESS_SECRET_KEY=FIXME
+      - USERMAP_UID=33
+      - USERMAP_GID=33
+      - PAPERLESS_APPS=allauth.socialaccount.providers.openid_connect
+
+      - PAPERLESS_TRUSTED_PROXIES=2001:67c:17fc:110::/60,172.28.128.0/22
+      - PAPERLESS_USE_X_FORWARD_HOST=true
+      - PAPERLESS_USE_X_FORWARD_PORT=true
+      - 'PAPERLESS_PROXY_SSL_HEADER=["HTTP_X_FORWARDED_PROTO", "https"]'
+      - PAPERLESS_ENABLE_COMPRESSION=false
+
+      - PAPERLESS_DBENGINE=postgresql
+      - PAPERLESS_DBHOST=postgresql.fsn.lama.tel
+      # - PAPERLESS_DBNAME=FIXME
+
+      # - PAPERLESS_REDIS=redis://redis.fsn.lama.tel:FIXME
+
+      - PAPERLESS_WEBSERVER_WORKERS=1
+      - PAPERLESS_TASK_WORKERS=2
+      - PAPERLESS_ENABLE_UPDATE_CHECK=false
+
+      - PAPERLESS_TIKA_ENABLED=true
+      - PAPERLESS_TIKA_ENDPOINT=http://tika:9998
+      - PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://gotenberg:3000
+
+      - PAPERLESS_OCR_LANGUAGE=fra+eng+deu
+      - PAPERLESS_TIME_ZONE=Europe/Paris
+
+      # - PAPERLESS_CONSUMPTION_DIR=/eos/service/svc-paperless-ngx-FIXME/consume
+      - PAPERLESS_DATA_DIR=/data
+      # - PAPERLESS_TRASH_DIR=/eos/service/svc-paperless-ngx-FIXME/media/trash
+      # - PAPERLESS_MEDIA_ROOT=/eos/service/svc-paperless-ngx-FIXME/media
+
+      - PAPERLESS_CONSUMER_DELETE_DUPLICATES=true
+      - PAPERLESS_CONSUMER_RECURSIVE=true
+      - PAPERLESS_CONSUMER_SUBDIRS_AS_TAGS=true
+      - PAPERLESS_CONSUMER_ENABLE_BARCODES=true
+      - PAPERLESS_CONSUMER_BARCODE_TIFF_SUPPORT=true
+      - PAPERLESS_CONSUMER_ENABLE_ASN_BARCODE=true
+      - PAPERLESS_CONSUMER_POLLING=60
+      - PAPERLESS_CONSUMER_BARCODE_UPSCALE=1.5
+      - PAPERLESS_CONSUMER_BARCODE_DPI=600
+      - PAPERLESS_CONSUMER_BARCODE_SCANNER=ZXING
+      - 'PAPERLESS_OCR_USER_ARGS={"invalidate_digital_signatures": true}'
+
+images:
+  - name: ghcr.io/paperless-ngx/paperless-ngx
+    newTag: 2.13.5
+  - name: gotenberg/gotenberg
+    newTag: 8.14.1
+  - name: apache/tika
+    newTag: 3.0.0.0-full

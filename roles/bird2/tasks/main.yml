@@ -3,6 +3,10 @@
   ansible.builtin.apt:
     name: bird2
 
+- name: Ensure bgpq4 package is installed
+  ansible.builtin.apt:
+    name: bgpq4
+
 - name: Setup some sysctls
   ansible.posix.sysctl:
     name: "{{ item.name }}"
@@ -13,6 +17,22 @@
     - name: net.core.rmem_default
       value: "4194304"
 
+- name: Compute BGP sessions list
+  ansible.builtin.set_fact:
+    bird2_bgp_sessions_list: "{{ bird2_bgp_sessions | make_bgp_sessions_list }}"
+
+- name: Compute BGP IRRs dict
+  ansible.builtin.set_fact:
+    bird2_bgp_irr_dict: "{{ bird2_bgp_irr_dict | d({}) | combine({session.irr + session.protocol: {'name': session.irr, 'formatted': session.irr_formatted, 'protocol_number': session.protocol_number, 'bgpq4_cmd': session.bgpq4_cmd}}) }}"
+  when: session.irr is defined
+  loop: "{{ bird2_bgp_sessions_list }}"
+  loop_control:
+    loop_var: session
+
+- name: Compute BGP IRRs list
+  ansible.builtin.set_fact:
+    bird2_bgp_irr_list: "{{ bird2_bgp_irr_dict | d({}) | dict2items | map(attribute='value') }}"
+
 - name: Ensure configuration is up-to-date
   ansible.builtin.template:
     src: "{{ item }}"
@@ -20,6 +40,8 @@
     owner: bird
     group: bird
     mode: 0640
+    trim_blocks: true
+    lstrip_blocks: true
   loop:
     - bird.conf
     - static.conf
@@ -28,6 +50,41 @@
     - ospf.conf
     - radv.conf
   notify: Reload bird
+
+- name: Ensure prefixes filters folder exists
+  ansible.builtin.file:
+    path: /etc/bird/filters/prefixes
+    state: directory
+    owner: bird
+    group: bird
+    mode: 0750
+    recurse: true
+
+- name: List currently installed bird prefixes filters units
+  ansible.builtin.find:
+    path: /etc/systemd/system
+    patterns: "bird-prefixes-filter-gen-*"
+  register: bird2_bgp_prefixes_filter_gen_units_currently_installed
+- name: Add currently installed bird prefixes filters units to dict
+  ansible.builtin.set_fact:
+    bird2_bgp_prefixes_filter_gen_units_to_keep: "{{ bird2_bgp_prefixes_filter_gen_units_to_keep | default({}) | combine({item: false}) }}"
+  loop: "{{ bird2_bgp_prefixes_filter_gen_units_currently_installed.files | map(attribute='path') | list }}"
+
+- name: List currently installed bird prefixes filters configuration files
+  ansible.builtin.find:
+    path: /etc/bird/filters/prefixes
+    patterns: "*.conf"
+  register: bird2_bgp_prefixes_filter_gen_configs_currently_installed
+- name: Add currently installed bird prefixes filters configuration files to dict
+  ansible.builtin.set_fact:
+    bird2_bgp_prefixes_filter_gen_configs_to_keep: "{{ bird2_bgp_prefixes_filter_gen_configs_to_keep | default({}) | combine({item: false}) }}"
+  loop: "{{ bird2_bgp_prefixes_filter_gen_configs_currently_installed.files | map(attribute='path') | list }}"
+
+- name: Configure bird prefixes filters
+  ansible.builtin.include_tasks: prefixes_filters.yml
+  loop: "{{ bird2_bgp_irr_list }}"
+  loop_control:
+    loop_var: irr
 
 - name: Ensure prometheus-bird-exporter is installed
   ansible.builtin.apt:
@@ -51,3 +108,21 @@
     name: bird
     state: started
     enabled: true
+
+- name: Remove all outdated bird BGP prefixes filters units
+  ansible.builtin.file:
+    path: "{{ item.key }}"
+    state: absent
+  when: item.value is not defined or not item.value
+  loop: "{{ bird2_bgp_prefixes_filter_gen_units_to_keep | d({}) | dict2items }}"
+
+- name: Reload systemd
+  ansible.builtin.systemd: # noqa no-handler
+    daemon_reload: true
+
+- name: Remove all outdated bird BGP prefixes filters configuration files
+  ansible.builtin.file:
+    path: "{{ item.key }}"
+    state: absent
+  when: item.value is not defined or not item.value
+  loop: "{{ bird2_bgp_prefixes_filter_gen_configs_to_keep | d({}) | dict2items }}"

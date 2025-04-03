@@ -1,0 +1,21 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tika
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: tika
+          image: apache/tika
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 9998
+              protocol: TCP

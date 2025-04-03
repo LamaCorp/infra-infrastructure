@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vaultwarden
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: warden.lama-corp.space
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vaultwarden
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - warden.lama-corp.space
+      secretName: vaultwarden-tls

@@ -6,8 +6,8 @@ promtail_config_clients:
   - url: "https://{{ promtail_loki_server_url }}/loki/api/v1/push"
     tenant_id: infra
     basic_auth:
-      username: "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/loki/basic-auth/infra')['username'] }}"
-      password: "{{ lookup('community.hashi_vault.hashi_vault', 'observability/data/loki/basic-auth/infra')['password'] }}"
+      username: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-global/data/core-observability/loki-auth')['username'] }}"
+      password: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-global/data/core-observability/loki-auth')['password'] }}"
     external_labels:
       hostname: "{{ inventory_hostname }}"
 
@@ -51,23 +51,6 @@ promtail_config_scrape_configs_raw: |
           compose_service:
       - output:
           source: log
-  {% endif %}
-  {% if inventory_hostname in groups['afs_cell'] %}
-  - job_name: openafs
-    static_configs:
-      - targets:
-          - localhost
-        labels:
-          job: openafs
-          __path__: /usr/local/var/openafs/logs/*
-    pipeline_stages:
-      - regex:
-          expression: "^(?P<time>\\w\\s\\w\\s\\d{2}\\s\\d{2}:\\d{2}:\\d{2}\\s\\d{4})\\s(?P<output>.*)"
-      - timestamp:
-          format: ANSIC
-          source: time
-      - output:
-          source: output
   {% endif %}
 
 promtail_config_scrape_configs_extra: []

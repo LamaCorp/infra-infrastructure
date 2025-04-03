@@ -1,0 +1,10 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: machine-learning
+
+resources:
+  - deployment.yml
+  - service.yml
+  - pvc.yml

@@ -1,0 +1,2 @@
+---
+chrony_ntp_servers: "{{ chrony_ntp_servers_core }}"

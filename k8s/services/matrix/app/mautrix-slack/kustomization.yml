@@ -1,0 +1,10 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: mautrix-slack
+
+resources:
+  - deployment.yml
+  - secrets.yml
+  - service.yml

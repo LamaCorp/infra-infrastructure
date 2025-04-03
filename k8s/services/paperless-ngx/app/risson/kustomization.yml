@@ -1,0 +1,19 @@
+---
+kind: Kustomization
+
+resources:
+  - ../base
+  - ingress.yml
+  - pvc.yml
+  - secrets.yml
+
+configMapGenerator:
+  - name: paperless-ngx-config
+    behavior: merge
+    literals:
+      - PAPERLESS_URL=https://paper.risson.space
+      - PAPERLESS_DBNAME=paperless_risson
+      - PAPERLESS_REDIS=redis://redis.fsn.lama.tel:6383
+      - PAPERLESS_CONSUMPTION_DIR=/user/risson/paperless/consume
+      - PAPERLESS_TRASH_DIR=/user/risson/paperless/media/trash
+      - PAPERLESS_MEDIA_ROOT=/user/risson/paperless/media

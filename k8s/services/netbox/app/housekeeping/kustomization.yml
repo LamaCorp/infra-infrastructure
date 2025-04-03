@@ -1,0 +1,13 @@
+---
+kind: Kustomization
+
+nameSuffix: -housekeeping
+
+commonLabels:
+  app.kubernetes.io/component: housekeeping
+
+resources:
+  - ../base
+
+patches:
+  - path: deployment.yml

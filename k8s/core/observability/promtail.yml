@@ -1,0 +1,78 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-promtail
+  labels:
+    app: core-promtail
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-promtail-{{ .name }}
+      labels:
+        app: core-promtail
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-observability
+      source:
+        repoURL: https://grafana.github.io/helm-charts
+        targetRevision: 6.16.5
+        chart: promtail
+        helm:
+          releaseName: promtail
+          values: |
+            config:
+              clients:
+                - url: https://loki.lama.tel/loki/api/v1/push
+                  tenant_id: infra
+                  basic_auth:
+                    username: "${LOKI_USERNAME}"
+                    password: "${LOKI_PASSWORD}"
+                  external_labels:
+                    cluster: {{ .name }}
+
+            extraArgs:
+              - -config.expand-env=true
+
+            extraEnvFrom:
+              - secretRef:
+                  name: loki-credentials
+
+            serviceMonitor:
+              enabled: true
+              prometheusRule:
+                enabled: true
+                rules:
+                  - alert: PromtailRequestErrors
+                    expr: 100 * sum(rate(promtail_request_duration_seconds_count{status_code=~"5..|failed"}[1m])) by (namespace, job, route, instance) / sum(rate(promtail_request_duration_seconds_count[1m])) by (namespace, job, route, instance) > 10
+                    for: 1h
+                    labels:
+                      severity: critical
+                    annotations:
+                      description: |
+                        The {{ "{{ $labels.job }}" }} {{ "{{ $labels.route }}" }} is experiencing
+                        {{ "{{ printf \"%.2f\" $value }}" }} errors.
+                        VALUE = {{ "{{ $value }}" }}
+                        LABELS = {{ "{{ $labels }}" }}
+                      summary: Promtail request errors (instance {{ "{{ $labels.instance }}" }})
+                  - alert: PromtailRequestLatency
+                    expr: histogram_quantile(0.99, sum(rate(promtail_request_duration_seconds_bucket[5m])) by (le)) > 1
+                    for: 1h
+                    labels:
+                      severity: warning
+                    annotations:
+                      summary: Promtail request latency (instance {{ "{{ $labels.instance }}" }})
+                      description: |
+                        The {{ "{{ $labels.job }}" }} {{ "{{ $labels.route }}" }} is experiencing
+                        {{ "{{ printf \"%.2f\" $value }}" }}s 99th percentile latency.
+                        VALUE = {{ "{{ $value }}" }}

@@ -1,7 +1,0 @@
----
-
-your_spotify_web_domain: ys.lama-corp.space
-your_spotify_api_domain: ys-api.lama-corp.space
-
-your_spotify_spotify_client_id: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/your_spotify/spotify-oauth')['client_id'] }}"
-your_spotify_spotify_client_secret: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/your_spotify/spotify-oauth')['client_secret'] }}"

@@ -1,0 +1,75 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hookshot-webhook
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: "/webhook/$2"
+spec:
+  rules:
+    - host: matrix.lama-corp.space
+      http:
+        paths:
+          - path: /hookshot/webhook($|/)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: hookshot
+                port:
+                  name: webhook
+  tls:
+    - hosts:
+        - matrix.lama-corp.space
+      secretName: hookshot-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hookshot-gitlab
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: "/$2"
+spec:
+  rules:
+    - host: matrix.lama-corp.space
+      http:
+        paths:
+          - path: /hookshot/gitlab($|/)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: hookshot
+                port:
+                  name: webhook
+  tls:
+    - hosts:
+        - matrix.lama-corp.space
+      secretName: hookshot-tls
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hookshot-widget
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: "/widgetapi/$2"
+spec:
+  rules:
+    - host: matrix.lama-corp.space
+      http:
+        paths:
+          - path: /hookshot/widgetapi($|/)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: hookshot
+                port:
+                  name: widget
+  tls:
+    - hosts:
+        - matrix.lama-corp.space
+      secretName: hookshot-tls

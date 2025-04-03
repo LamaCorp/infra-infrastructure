@@ -1,0 +1,30 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-metrics-server
+  labels:
+    app: core-metrics-server
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-metrics-server-{{ .name }}
+      labels:
+        app: core-metrics-server
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: kube-system
+      source:
+        repoURL: https://kubernetes-sigs.github.io/metrics-server
+        targetRevision: 3.12.1
+        chart: metrics-server
+        helm:
+          releaseName: metrics-server

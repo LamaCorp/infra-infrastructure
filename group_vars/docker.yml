@@ -1,5 +1,4 @@
 ---
-
 docker_install_compose_plugin: true
 docker_install_compose: true
 
@@ -13,7 +12,7 @@ docker_config_default:
   ipv6: true
   dns: "{{ network_nameservers }}"
 
-  experimental: true  # needed for metrics-addr
+  experimental: true # needed for metrics-addr
   log-driver: json-file
   log-opts:
     max-size: 10m
@@ -26,6 +25,3 @@ docker_config_no_network:
 docker_config: {}
 
 docker_daemon_options: "{{ docker_config_default | combine(docker_config, recursive=True) }}"
-
-
-dns_proxy_server_domain: "ctn.{{ inventory_hostname }}"

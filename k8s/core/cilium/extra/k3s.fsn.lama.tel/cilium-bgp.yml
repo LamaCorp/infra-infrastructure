@@ -1,0 +1,95 @@
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: default
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/os: linux
+  bgpInstances:
+    - name: default
+      localASN: 64512
+      peers:
+        - name: default-v4
+          peerASN: 64512
+          peerAddress: 127.0.0.1
+          peerConfigRef:
+            name: default-v4
+        - name: default-v6
+          peerASN: 64512
+          peerAddress: "::1"
+          peerConfigRef:
+            name: default-v6
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPNodeConfigOverride
+metadata:
+  name: default
+spec:
+  bgpInstances:
+    - name: default
+      routerID: 127.0.0.1
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeerConfig
+metadata:
+  name: default-v4
+spec:
+  transport:
+    peerPort: 180
+  timers:
+    connectRetryTimeSeconds: 12
+    holdTimeSeconds: 9
+    keepAliveTimeSeconds: 3
+  gracefulRestart:
+    enabled: true
+    restartTimeSeconds: 15
+  families:
+    - afi: ipv4
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPPeerConfig
+metadata:
+  name: default-v6
+spec:
+  transport:
+    peerPort: 180
+  timers:
+    connectRetryTimeSeconds: 12
+    holdTimeSeconds: 9
+    keepAliveTimeSeconds: 3
+  gracefulRestart:
+    enabled: true
+    restartTimeSeconds: 15
+  families:
+    - afi: ipv6
+      safi: unicast
+      advertisements:
+        matchLabels:
+          advertise: "bgp"
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPAdvertisement
+metadata:
+  name: default
+  labels:
+    advertise: bgp
+spec:
+  advertisements:
+    - advertisementType: "PodCIDR"
+    - advertisementType: "Service"
+      service:
+        addresses:
+          - LoadBalancerIP
+      selector:
+        matchExpressions:
+          # All services
+          - key: invalid
+            operator: NotIn
+            values:
+              - invalid

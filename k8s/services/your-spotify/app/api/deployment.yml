@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: your-spotify-api
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1674
+        runAsGroup: 1674
+        fsGroup: 1674
+      containers:
+        - name: api
+          image: yooooomi/your_spotify_server
+          env:
+            - name: API_ENDPOINT
+              value: https://ys-api.lama-corp.space
+            - name: CLIENT_ENDPOINT
+              value: https://ys.lama-corp.space
+            - name: MONGO_ENDPOINT
+              value: mongodb://mongodb:27017/your_spotify
+            - name: LOG_LEVEL
+              value: debug
+          envFrom:
+            - secretRef:
+                name: your-spotify-secrets
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP

@@ -1,0 +1,40 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thefractalspace
+spec:
+  replicas: 0
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: server
+          image: registry.gitlab.com/risson/thefractal.space/dockerize
+          imagePullPolicy: IfNotPresent
+          command:
+            - gunicorn
+          args:
+            - thefractalspace.app:app
+            - -b
+            - "[::]:8000"
+          env:
+            - name: FRACTALS_DIR
+              value: /cache
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: cache
+              mountPath: /cache
+          resources:
+            limits:
+              cpu: "6"
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: thefractalspace-cache

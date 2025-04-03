@@ -1,0 +1,14 @@
+---
+kind: Kustomization
+
+nameSuffix: -web
+
+commonLabels:
+  app.kubernetes.io/component: web
+
+resources:
+  - ../bases/deployment
+  - service.yml
+
+patches:
+  - path: deployment.yml

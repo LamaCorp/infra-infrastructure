@@ -1,0 +1,16 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: thefractalspace
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - network-policy.yml
+  - pvc.yml
+  - service.yml
+
+images:
+  - name: registry.gitlab.com/risson/thefractal.space/dockerize
+    newTag: 978d33cf52f0dd706c65da35608012861a0e6867

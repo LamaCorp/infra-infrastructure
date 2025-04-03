@@ -1,0 +1,52 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-machine-learning
+  annotations:
+    configmap.reloader.stakater.com/reload: "immich-config-env"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 10088
+        runAsGroup: 10088
+        fsGroup: 10088
+      containers:
+        - name: machine-learning
+          image: ghcr.io/immich-app/immich-machine-learning
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TRANSFORMERS_CACHE
+              value: /cache
+          envFrom:
+            - configMapRef:
+                name: immich-config-env
+          ports:
+            - name: http
+              containerPort: 3003
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /ping
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /ping
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: cache
+              mountPath: /cache
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: immich-machine-learning-cache

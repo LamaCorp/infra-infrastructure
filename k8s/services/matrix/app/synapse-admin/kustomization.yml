@@ -1,0 +1,10 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: synapse-admin
+
+resources:
+  - deployment.yml
+  - service.yml
+  - ingress.yml

@@ -1,5 +1,0 @@
----
-
-matrix_coturn_enabled: true
-
-matrix_coturn_turn_external_ip_address: 136.243.102.29

@@ -1,0 +1,159 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-cilium
+  labels:
+    app: core-cilium
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-cilium-{{ .name }}
+      labels:
+        app: core-cilium
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: kube-system
+      sources:
+        - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+          targetRevision: HEAD
+          path: k8s/core/cilium/extra/{{ .name }}
+        - repoURL: https://helm.cilium.io/
+          targetRevision: 1.17.2
+          chart: cilium
+          helm:
+            releaseName: cilium
+            values: |
+              upgradeCompatibility: "1.17"
+              cluster:
+                name: "c-{{ .name | replace "." "-" }}"
+                id: 1
+
+              ipv4:
+                enabled: true
+              ipv6:
+                enabled: true
+
+              enableIPv4Masquerade: true
+              ipv4NativeRoutingCIDR: "172.28.0.0/15"
+              enableIPv6Masquerade: false
+              ipMasqAgent:
+                enabled: true
+                config:
+                  nonMasqueradeCIDRs:
+                    - 10.0.0.0/8
+                    - 172.16.0.0/12
+                    - 192.168.0.0/16
+                    - 209.112.97.0/24
+                  masqLinkLocal: false
+
+              routingMode: native
+              endpointRoutes:
+                enabled: false
+
+              ipam:
+                mode: cluster-pool
+                operator:
+                  clusterPoolIPv4PodCIDRList:
+                    - 172.28.128.0/22
+                    - 172.28.136.0/22
+                  clusterPoolIPv4MaskSize: 24
+                  clusterPoolIPv6PodCIDRList:
+                    - 2001:67c:17fc:110::/60
+                  clusterPoolIPv6MaskSize: 64
+
+              kubeProxyReplacement: "true"
+
+              k8sServiceHost: k3s-1.fsn.lama.tel
+              k8sServicePort: 6443
+
+              annotateK8sNode: true
+
+              egressGateway:
+                enabled: true
+
+              bpf:
+                clockProbe: true
+                preallocateMaps: true
+                masquerade: true
+
+              bandwidthManager:
+                enabled: true
+                brr: true
+
+              bgpControlPlane:
+                enabled: true
+
+              pmtuDiscovery:
+                enabled: true
+
+              loadBalancer:
+                serviceTopology: true
+
+              envoy:
+                enabled: false
+
+              operator:
+                replicas: 1
+                prometheus:
+                  enabled: true
+                  serviceMonitor:
+                    enabled: true
+
+              prometheus:
+                enabled: true
+                serviceMonitor:
+                  enabled: true
+
+              hubble:
+                metrics:
+                  enabled:
+                    - dns
+                    - drop
+                    - tcp
+                    - flow
+                    - port-distribution
+                    - icmp
+                    - httpV2:exemplars=true;labelsContext=source_ip,source_namespace,source_workload,destination_ip,destination_namespace,destination_workload,traffic_direction
+                  serviceMonitor:
+                    enabled: true
+                  dashboards:
+                    enabled: true
+                redact:
+                  enabled: true
+                  http:
+                    urlQuery: true
+                    userInfo: true
+                    headers:
+                      deny:
+                        - Authorization
+                        - Proxy-Authorization
+                preferIpv6: true
+                peerService:
+                  clusterDomain: "c.{{ .name }}"
+                relay:
+                  enabled: true
+                  prometheus:
+                    enabled: true
+                    serviceMonitor:
+                      enabled: true
+                ui:
+                  enabled: true
+                  ingress:
+                    enabled: true
+                    annotations:
+                      cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+                    hosts:
+                      - "hubble.{{ .name }}"
+                    tls:
+                      - secretName: cilium-hubble-tls
+                        hosts:
+                          - "hubble.{{ .name }}"

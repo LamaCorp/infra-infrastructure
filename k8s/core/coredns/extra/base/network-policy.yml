@@ -1,0 +1,14 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-coredns-dns
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: coredns
+  ingress:
+    - toPorts:
+        - ports:
+            - port: "53"
+              protocol: ANY

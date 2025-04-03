@@ -1,0 +1,22 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: fst
+
+resources:
+  - service.yml
+  - statefulset.yml
+
+configMapGenerator:
+  - name: fst-scripts
+    files:
+      - scripts/fst_init.sh
+  - name: fst-config
+    files:
+      - config/xrd.cf.fst
+  - name: fst-sysconfig
+    literals:
+      - XRD_ROLES=fst
+      - EOS_FS_FULL_SIZE_IN_GB=5
+      # - EOS_GEOTAG=fsn::nucleus

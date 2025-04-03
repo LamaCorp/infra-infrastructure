@@ -1,0 +1,9 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: lemmy-ui
+
+resources:
+  - deployment.yml
+  - service.yml

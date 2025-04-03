@@ -1,0 +1,57 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: media
+
+resources:
+  - network-policy.yml
+  - pvc.yml
+  - secrets.yml
+
+  - bazarr
+  - jellyfin
+  - jellyseerr
+  - lidarr
+  - prowlarr
+  - qbittorrent
+  - radarr
+  - readarr
+  - recyclarr
+  - sabnzbd
+  - sonarr
+
+configMapGenerator:
+  - name: media-config-env
+    literals:
+      - PUID=10095
+      - PGID=10095
+      - UMASK=002
+      - TZ=Europe/Paris
+
+images:
+  - name: ghcr.io/hotio/bazarr
+    newTag: release-1.4.4
+  - name: ghcr.io/hotio/jellyfin
+    newTag: release-10.10.6
+  - name: ghcr.io/hotio/jellyseerr
+    newName: fallenbagel/jellyseerr
+    newTag: preview-OIDC
+  - name: ghcr.io/hotio/lidarr
+    newTag: release-2.5.3.4341
+  - name: ghcr.io/hotio/prowlarr
+    newTag: release-1.23.1.4708
+  - name: ghcr.io/hotio/qbittorrent
+    newTag: release-4.6.7
+  - name: ghcr.io/hotio/radarr
+    newTag: release-5.9.1.9070
+  - name: ghcr.io/hotio/readarr
+    newTag: testing-0.3.32.2587
+  - name: ghcr.io/recyclarr/recyclarr
+    newTag: 7.2.4
+  - name: ghcr.io/hotio/sabnzbd
+    newTag: release-4.3.3
+  - name: ghcr.io/hotio/sonarr
+    newTag: release-4.0.9.2244
+  - name: ghcr.io/qdm12/gluetun
+    newTag: v3.37.0

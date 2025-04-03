@@ -1,0 +1,9 @@
+---
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart nftables-exporter
+  ansible.builtin.service:
+    name: nftables-exporter
+    state: restarted

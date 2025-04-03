@@ -1,0 +1,16 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: routinator
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - network-policy.yml
+  - pvc.yml
+  - service.yml
+
+images:
+  - name: nlnetlabs/routinator
+    newTag: v0.13.1

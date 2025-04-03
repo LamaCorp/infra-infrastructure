@@ -1,0 +1,81 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabnzbd
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      # securityContext:
+      #   sysctls:
+      #     - name: net.ipv4.conf.all.src_valid_mark
+      #       value: "1"
+      #     - name: net.ipv6.conf.all.disable_ipv6
+      #       value: "1"
+      containers:
+        - name: sabnzbd
+          image: ghcr.io/hotio/sabnzbd
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: media-config-env
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /config
+            - name: media
+              mountPath: /media
+        # - name: gluetun
+        #   image: ghcr.io/qdm12/gluetun
+        #   imagePullPolicy: IfNotPresent
+        #   env:
+        #     - name: VPN_SERVICE_PROVIDER
+        #       value: custom
+        #     - name: VPN_TYPE
+        #       value: wireguard
+        #     - name: VPN_PORT_FORWARDING
+        #       value: "on"
+        #     - name: VPN_PORT_FORWARDING_PROVIDER
+        #       value: "protonvpn"
+        #     - name: TZ
+        #       value: Europe/Paris
+        #     - name: DNS_KEEP_NAMESERVER
+        #       value: "on"
+        #     - name: FIREWALL_OUTBOUND_SUBNETS
+        #       value: "172.28.132.0/22,172.28.128.0/22"
+        #     - name: FIREWALL_INPUT_PORTS
+        #       value: "8080"
+        #   securityContext:
+        #     capabilities:
+        #       add:
+        #         - NET_ADMIN
+        #   volumeMounts:
+        #     - name: vpn-creds
+        #       mountPath: /gluetun/wireguard/wg0.conf
+        #       subPath: wg0.conf
+      volumes:
+        - name: vpn-creds
+          secret:
+            secretName: sabnzbd-vpn-credentials
+        - name: data
+          persistentVolumeClaim:
+            claimName: sabnzbd-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+      nodeSelector:
+        kubernetes.io/hostname: k3s-1.bar.lama.tel
+      tolerations:
+        - key: "role.lama.tel/media"
+          operator: "Exists"
+          effect: "NoExecute"
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"

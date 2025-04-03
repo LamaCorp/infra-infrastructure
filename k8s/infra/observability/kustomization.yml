@@ -1,0 +1,9 @@
+---
+kind: Kustomization
+namespace: argocd
+
+resources:
+  - extra.yml
+  - grafana.yml
+  - loki.yml
+  - thanos.yml

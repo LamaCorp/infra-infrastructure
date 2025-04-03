@@ -1,0 +1,19 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netbox
+spec:
+  template:
+    spec:
+      containers:
+        - name: netbox
+          args:
+            - |
+              . /opt/netbox/venv/bin/activate
+              uv pip install netbox-bgp
+              exec /opt/netbox/docker-entrypoint.sh /opt/netbox/launch-netbox.sh
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP

@@ -1,0 +1,14 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: seaweedfs-master
+spec:
+  endpoints:
+    - interval: 30s
+      port: metrics
+      scrapeTimeout: 5s
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: seaweedfs
+      app.kubernetes.io/component: master

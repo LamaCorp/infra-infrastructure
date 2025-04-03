@@ -1,0 +1,23 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bird-lg-go
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 15724
+        runAsGroup: 15724
+        fsGroup: 15724
+      containers:
+        - name: bird-lg-go
+          image: ghcr.io/xddxdd/bird-lg-go
+          envFrom:
+            - configMapRef:
+                name: bird-lg-go-config
+          ports:
+            - name: http
+              containerPort: 5000
+              protocol: TCP

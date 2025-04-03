@@ -1,0 +1,11 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: mautrix-facebook
+
+resources:
+  - deployment.yml
+  - secrets.yml
+  - service.yml
+  - ingress.yml

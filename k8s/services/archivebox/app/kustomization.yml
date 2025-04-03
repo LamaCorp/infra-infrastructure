@@ -1,0 +1,25 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: archivebox
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - network-policy.yml
+  - pvc.yml
+  - service.yml
+
+configMapGenerator:
+  - name: archivebox-config
+    literals:
+      - PUBLIC_INDEX=True
+      - PUBLIC_SNAPSHOTS=True
+      - PUBLIC_ADD_VIEW=False
+      - REVERSE_PROXY_USER_HEADER=X-authentik-username
+      - REVERSE_PROXY_WHITELIST=172.28.128.0/22,2001:67c:17fc:110::/60
+
+images:
+  - name: archivebox/archivebox
+    newTag: 0.7.2

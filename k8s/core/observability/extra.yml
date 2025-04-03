@@ -1,0 +1,30 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-observability-extra
+  labels:
+    app: core-observability-extra
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-observability-extra-{{ .name }}
+      labels:
+        app: core-observability-extra
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-observability
+      source:
+        repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+        targetRevision: HEAD
+        path: "k8s/core/observability/extra/{{ .name }}"

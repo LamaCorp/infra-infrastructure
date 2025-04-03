@@ -1,0 +1,26 @@
+---
+apiVersion: kubevirt.io/v1
+kind: KubeVirt
+metadata:
+  name: kubevirt
+spec:
+  certificateRotateStrategy: {}
+  configuration:
+    developerConfiguration:
+      featureGates: []
+  customizeComponents:
+    patches:
+      - resourceType: Deployment
+        resourceName: virt-api
+        type: strategic
+        patch: '{"spec": {"replicas": 1, "template": {"spec": {"nodeSelector": {"role.lama.tel/kubevirt": "true"}, "tolerations": [{"key": "role.lama.tel/kubevirt", "operator": "Exists"}]}}}}'
+      - resourceType: Deployment
+        resourceName: virt-controller
+        type: strategic
+        patch: '{"spec": {"replicas": 1, "template": {"spec": {"nodeSelector": {"role.lama.tel/kubevirt": "true"}, "tolerations": [{"key": "role.lama.tel/kubevirt", "operator": "Exists"}]}}}}'
+      - resourceType: DaemonSet
+        resourceName: virt-handler
+        type: strategic
+        patch: '{"spec": {"template": {"spec": {"nodeSelector": {"role.lama.tel/kubevirt": "true"}, "tolerations": [{"key": "role.lama.tel/kubevirt", "operator": "Exists"}]}}}}'
+  imagePullPolicy: IfNotPresent
+  workloadUpdateStrategy: {}

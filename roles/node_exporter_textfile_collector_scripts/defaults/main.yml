@@ -1,7 +1,11 @@
 ---
-
-node_exporter_textfile_collector_scripts_revision: 8f6be63aa022c977bf21a86d1fe1d4e8d1d4cb2f
+node_exporter_textfile_collector_scripts_repository: https://github.com/prometheus-community/node-exporter-textfile-collector-scripts.git
+node_exporter_textfile_collector_scripts_revision: 18fcb1c3754673480a1ed9f70e3834ef05635332
 
 node_exporter_textfile_collector_scripts_systemd_time:
   OnBootSec: 1min
   OnUnitActiveSec: 5min
+
+node_exporter_textfile_collector_scripts_to_install:
+  - deleted_libraries.py
+  - smartmon.py

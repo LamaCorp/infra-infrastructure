@@ -1,0 +1,123 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-coredns
+  labels:
+    app: core-coredns
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-coredns-{{ .name }}
+      labels:
+        app: core-coredns
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: kube-system
+      sources:
+        - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+          targetRevision: HEAD
+          path: k8s/core/coredns/extra/{{ .name }}
+        - repoURL: https://coredns.github.io/helm
+          targetRevision: 1.32.0
+          chart: coredns
+          helm:
+            releaseName: coredns
+            values: |
+              fullnameOverride: coredns
+
+              k8sAppLabelOverride: kube-dns
+
+              servers:
+                - zones:
+                    - zone: .
+                  port: 53
+                  plugins:
+                    - name: errors
+                    - name: health
+                      configBlock: |-
+                        lameduck 10s
+                    - name: ready
+                    - name: acl
+                      configBlock: |-
+                        allow net {{ .metadata.annotations.podSubnet4 }} {{ .metadata.annotations.podSubnet6 }} {{ .metadata.annotations.extraPodSubnet4 }}
+                        block
+                    - name: prometheus
+                      parameters: :9153
+                    - name: forward
+                      parameters: . /etc/resolv.conf
+                    - name: cache
+                      parameters: 30
+                    - name: cancel
+                    - name: loop
+                    - name: reload
+                - zones:
+                    - zone: c.{{ .name }}.
+                    - zone: {{ .metadata.annotations.podSubnet4 }}
+                    - zone: {{ .metadata.annotations.svcSubnet4 }}
+                    - zone: {{ .metadata.annotations.podSubnet6 }}
+                    - zone: {{ .metadata.annotations.svcSubnet6 }}
+                    - zone: {{ .metadata.annotations.extraPodSubnet4 }}
+                  port: 53
+                  plugins:
+                    - name: errors
+                    - name: ready
+                    - name: header
+                      configBlock: |-
+                        response set aa
+                    - name: dnssec
+                      configBlock: |-
+                        key file /dnssec-keys/K
+                    - name: template
+                      parameters: IN NS
+                      configBlock: |-
+                        answer "{{ `{{ .Zone }}` }} 300 IN NS ns.dns.c.{{ .name }}."
+                    - name: template
+                      parameters: IN AAAA
+                      configBlock: |-
+                        match "ns.dns.c.{{ .name }}.$"
+                        answer "ns.dns.c.{{ .name }}. 300 IN AAAA 2001:67c:17fc:130::53"
+                        fallthrough
+                    - name: kubernetes
+                      parameters: c.{{ .name }} {{ .metadata.annotations.podSubnet4 }} {{ .metadata.annotations.svcSubnet4 }} {{ .metadata.annotations.podSubnet6 }} {{ .metadata.annotations.svcSubnet6 }} {{ .metadata.annotations.extraPodSubnet4 }}
+                      configBlock: |-
+                        pods verified
+                        ttl 300
+                    - name: prometheus
+                      parameters: :9153
+                    - name: cache
+                      parameters: 30
+                    - name: cancel
+                    - name: loop
+                    - name: reload
+                    - name: loadbalance
+
+              extraSecrets:
+                - name: coredns-dnssec-keys
+                  mountPath: /dnssec-keys
+                  defaultMode: 420
+
+              readinessProbe:
+                initialDelaySeconds: 5
+
+              service:
+                name: kube-dns
+                clusterIP: {{ .metadata.annotations.dnsIP6 }}
+                clusterIPs:
+                  - {{ .metadata.annotations.dnsIP6 }}
+                  - {{ .metadata.annotations.dnsIP4 }}
+                ipFamilyPolicy: RequireDualStack
+
+              prometheus:
+                service:
+                  enabled: true
+                monitor:
+                  enabled: true

@@ -1,32 +1,21 @@
 ---
-kresd_listeners:
-  - ip: "::1"
-    port: 53
-    opts:
-      kind: dns
-  - ip: "127.0.0.1"
-    port: 53
-    opts:
-      kind: dns
-  - ip: "2001:67c:17fc:ffff::1"
-    port: 53
-    opts:
-      kind: dns
-  - ip: "172.28.254.1"
-    port: 53
-    opts:
-      kind: dns
-
-bird2_router_id: 172.28.254.1
+bird2_router_id: 209.112.97.241
 
 bird2_bgp_preferred_source:
+  v4: 209.112.97.241
   v6: 2001:67c:17fc:ffff::1
+
+bird2_static_routes:
+  v4:
+    - 209.112.97.232/32 unreachable
+    - 209.112.97.233/32 unreachable
+    - 209.112.97.234/32 unreachable
 
 bird2_bgp_sessions:
   cores:
     defaults:
       local:
-        v4: 172.28.254.1
+        v4: 209.112.97.241
         v6: 2001:67c:17fc:ffff::1
       med_metric: true
     sessions:
@@ -34,28 +23,31 @@ bird2_bgp_sessions:
         alias: bar
         asn: 212024
         remote:
-          v4: 172.28.254.2
+          v4: 209.112.97.242
           v6: 2001:67c:17fc:ffff::2
       - description: PVL
         alias: pvl
         asn: 212024
         remote:
-          v4: 172.28.254.3
+          v4: 209.112.97.243
           v6: 2001:67c:17fc:ffff::3
       - description: FRA
         alias: fra
         asn: 212024
         remote:
-          v4: 172.28.254.4
+          v4: 209.112.97.244
           v6: 2001:67c:17fc:ffff::4
 
 bird2_ospf_sessions:
   - alias: ospf
+    export_static_routes: true
     areas:
       0.0.0.0:
         interfaces:
-          zt-lama: {}
-          br-svc: {}
+          zt-lama:
+            cost: 20
+          br-svc:
+            cost: 1
           br-mdw:
             stub: true
           br-cc:

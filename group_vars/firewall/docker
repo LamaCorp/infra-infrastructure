@@ -13,4 +13,9 @@ nft_input_group_rules:
 
 nft_forward_group_rules:
   890 docker forward:
-    - include "/etc/nftables.d/filter-forward-docker.nft"
+    - |
+      {% if docker_config.bridge != "none" %}
+      include "/etc/nftables.d/filter-forward-docker.nft"
+      {% else %}
+      # (none)
+      {% endif %}

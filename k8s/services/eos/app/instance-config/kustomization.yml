@@ -1,0 +1,14 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: instance-config
+
+resources:
+  # - cronjob.yml
+  - secrets.yml
+
+configMapGenerator:
+  - name: instance-config-scripts
+    files:
+      - scripts/create_users.sh

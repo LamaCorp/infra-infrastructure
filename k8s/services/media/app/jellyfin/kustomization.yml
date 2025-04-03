@@ -1,0 +1,11 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: jellyfin
+
+resources:
+  - deployment.yml
+  - service.yml
+  - ingress.yml
+  - pvc.yml

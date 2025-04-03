@@ -3,26 +3,43 @@ network_nameservers:
   - ::1
   - 127.0.0.1
 
+kresd_listen_address_6: "::"
+kresd_listen_address_4: "0.0.0.0"
+
 kresd_listeners:
+  - ip: "{{ kresd_listen_address_6 }}"
+    port: 53
+    opts:
+      kind: dns
+  - ip: "{{ kresd_listen_address_4 }}"
+    port: 53
+    opts:
+      kind: dns
   - ip: "::"
-    port: 53
+    port: 8453
     opts:
-      kind: dns
+      kind: webmgmt
   - ip: "0.0.0.0"
-    port: 53
+    port: 8453
     opts:
-      kind: dns
+      kind: webmgmt
+
+kresd_extra_modules_raw: |
+  predict = {
+    period = 0
+  },
+
+kresd_rpz_internal:
+  zone_content: |
+    $TTL 3600
+
+    nucleus.fsn.lama.tel.		A		209.112.97.241
+    gate-1.bar.lama.tel.		A		209.112.97.242
+    edge-1.pvl.lama.tel.		A		209.112.97.243
+    edge-2.fra.lama.tel.		A		209.112.97.244
 
 kresd_rpz:
-  internal:
-    zone_content: |
-      $TTL 3600
-
-      nucleus.fsn.lama.tel.		A		172.28.254.1
-      gate-1.bar.lama.tel.		A		172.28.254.2
-      edge-1.pvl.lama.tel.		A		172.28.254.3
-      edge-2.fra.lama.tel.		A		172.28.254.4
-      dl.psw.lama.tel.				A		172.28.254.6
+  internal: "{{ kresd_rpz_internal }}"
 
 kresd_policies:
   - type: rpz

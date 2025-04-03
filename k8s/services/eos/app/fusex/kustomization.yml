@@ -1,0 +1,14 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: fusex
+
+resources:
+  []
+  # - daemonset.yml
+
+configMapGenerator:
+  - name: fusex-config
+    files:
+      - config/fuse.eos.conf

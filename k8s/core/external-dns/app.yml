@@ -1,0 +1,72 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-external-dns
+  labels:
+    app: core-external-dns
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-external-dns-{{ .name }}
+      labels:
+        app: core-external-dns
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-external-dns
+      sources:
+        - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+          targetRevision: HEAD
+          path: k8s/core/external-dns/extra/{{ .name }}
+        - repoURL: https://kubernetes-sigs.github.io/external-dns
+          targetRevision: 1.15.0
+          chart: external-dns
+          helm:
+            releaseName: external-dns
+            values: |
+              interval: 1m
+              triggerLoopOnEvent: true
+
+              sources:
+                - service
+                - ingress
+                - gateway-httproute
+                - gateway-grpcroute
+                - gateway-tlsroute
+                - gateway-tcproute
+                - gateway-udproute
+
+              policy: sync
+              registry: txt
+              txtOwnerId: {{ .name }}
+              txtPrefix: external-dns.
+
+              provider: cloudflare
+
+              env:
+                - name: CF_API_TOKEN
+                  value: file:/cloudflare-credentials/api_token
+              extraVolumeMounts:
+                - name: cloudflare-credentials
+                  mountPath: /cloudflare-credentials
+                  readOnly: true
+              extraVolumes:
+                - name: cloudflare-credentials
+                  secret:
+                    secretName: cloudflare-credentials
+
+              deploymentAnnotations:
+                secret.reloader.stakater.com/reload: cloudflare-credentials
+
+              serviceMonitor:
+                enabled: true

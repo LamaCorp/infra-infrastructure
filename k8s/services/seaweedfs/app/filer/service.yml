@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seaweedfs-filer
+spec:
+  ipFamilyPolicy: RequireDualStack
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: http
+      port: 8888
+      targetPort: http
+      protocol: TCP
+    - name: grpc
+      port: 18888
+      targetPort: grpc
+      protocol: TCP
+    - name: metrics
+      port: 9327
+      targetPort: metrics
+      protocol: TCP

@@ -1,4 +1,10 @@
 ---
+bird2_kernel:
+  defaults:
+    merge_paths: true
+    persist: true
+    static_export: false
+
 bird2_bgp_rpki:
   host: rpki.lama.tel
   port: 323

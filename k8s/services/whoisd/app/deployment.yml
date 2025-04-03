@@ -1,0 +1,24 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoisd
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 3856
+        runAsGroup: 3856
+        fsGroup: 3856
+      containers:
+        - name: whoisd
+          image: registry.gitlab.com/lama-corp/infra/services/whoisd
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: WHOISD_LISTEN
+              value: ":1043"
+          ports:
+            - name: whois
+              containerPort: 1043
+              protocol: TCP

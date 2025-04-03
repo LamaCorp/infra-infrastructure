@@ -1,9 +1,0 @@
----
-
-thefractalspace_domain: thefractal.space
-
-thefractalbot_twitter_creds: "{{ lookup('community.hashi_vault.hashi_vault', 'apps/data/thefractalspace/twitter') }}"
-thefractalspace_bot_twitter_access_key: "{{ thefractalbot_twitter_creds['access_key'] }}"
-thefractalspace_bot_twitter_access_secret: "{{ thefractalbot_twitter_creds['access_secret'] }}"
-thefractalspace_bot_twitter_consumer_key: "{{ thefractalbot_twitter_creds['consumer_key'] }}"
-thefractalspace_bot_twitter_consumer_secret: "{{ thefractalbot_twitter_creds['consumer_secret'] }}"

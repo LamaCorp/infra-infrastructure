@@ -7,7 +7,7 @@ chrony_allow_hosts:
   - 172.29.0.0/16
   - 2a06:e881:7700::/40
 
-chrony_ntp_servers:
+chrony_ntp_servers_core:
   - server: 0.pool.ntp.org
     options:
       - option: iburst

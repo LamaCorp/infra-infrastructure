@@ -1,0 +1,50 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: eg-http-public
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-dns01
+    cert-manager.io/private-key-algorithm: ECDSA
+spec:
+  gatewayClassName: eg
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: eg-http-public
+    annotations:
+      io.cilium/lb-ipam-ips: 209.112.97.161,2001:67c:17fc:130::81,2001:67c:17fc:130::444
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      protocol: HTTPS
+      port: 443
+      hostname: "*.lama-corp.space"
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: eg-http-public-tls
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: http-to-https
+spec:
+  parentRefs:
+    - name: eg-http-public
+      sectionName: http
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            scheme: https
+            statusCode: 301

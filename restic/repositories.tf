@@ -35,6 +35,35 @@ locals {
       "user_root",
     ]
 
+    "homeassistant.iot.bar.lama.tel" = [
+      "homeassistant",
+      "user_root",
+    ]
+
+    "k3s-1.fsn.lama.tel" = [
+      "eos",
+      "local_path_provisioner",
+      "rancher",
+      "user_root",
+      "weed",
+    ]
+
+    "k3s-1.bar.lama.tel" = [
+      "local_path_provisioner",
+      "rancher",
+      "user_root",
+    ]
+    "k3s-2.bar.lama.tel" = [
+      "local_path_provisioner",
+      "rancher",
+      "user_root",
+    ]
+    "k3s-3.bar.lama.tel" = [
+      "local_path_provisioner",
+      "rancher",
+      "user_root",
+    ]
+
     "mail.fsn.lama.tel" = [
       "mail",
       "user_root",
@@ -42,6 +71,10 @@ locals {
 
     "nas-1.bar.lama.tel" = [
       "afs",
+      "user_root",
+    ]
+
+    "nas-2.bar.lama.tel" = [
       "user_root",
     ]
 
@@ -62,6 +95,10 @@ locals {
 
     "redis.fsn.lama.tel" = [
       "redis",
+      "user_root",
+    ]
+
+    "restic-prune.bar.lama.tel" = [
       "user_root",
     ]
 

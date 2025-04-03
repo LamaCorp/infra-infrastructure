@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: atuin
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1903
+        runAsGroup: 1903
+        fsGroup: 1903
+      containers:
+        - name: atuin
+          image: ghcr.io/atuinsh/atuin
+          args:
+            - server
+            - start
+          env:
+            - name: ATUIN_HOST
+              value: "::"
+            - name: ATUIN_PORT
+              value: "8888"
+            - name: ATUIN_OPEN_REGISTRATION
+              value: "true"
+            - name: ATUIN_MAX_HISTORY_LENGTH
+              value: "65536"
+            - name: ATUIN_MAX_RECORD_SIZE
+              value: "1099511627776"
+            - name: ATUIN_PAGE_SIZE
+              value: "8192"
+            - name: RUST_LOG
+              value: "info,atuin_server=debug"
+          envFrom:
+            - secretRef:
+                name: atuin-postgres-credentials
+          ports:
+            - name: http
+              containerPort: 8888
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: config
+          emptyDir: {}

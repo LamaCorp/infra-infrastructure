@@ -1,0 +1,4 @@
+---
+zerotier_config:
+  settings:
+    portMappingEnabled: false

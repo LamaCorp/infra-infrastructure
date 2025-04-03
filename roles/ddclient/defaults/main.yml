@@ -1,6 +1,0 @@
----
-
-ddclient_docker_repository: lscr.io/linuxserver/ddclient
-ddclient_docker_tag: 3.10.0
-
-ddclient_config: ""

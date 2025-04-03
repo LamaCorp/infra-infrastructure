@@ -1,0 +1,8 @@
+---
+kind: Kustomization
+namespace: argocd
+
+resources:
+  - extra.yml
+  - kube-prometheus-stack.yml
+  - promtail.yml

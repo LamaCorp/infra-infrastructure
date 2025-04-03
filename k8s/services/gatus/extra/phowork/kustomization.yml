@@ -1,0 +1,6 @@
+---
+kind: Kustomization
+
+resources:
+  - ../base
+  - secrets.yml

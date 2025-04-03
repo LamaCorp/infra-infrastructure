@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: paperless-ngx
+  annotations:
+    configmap.reloader.stakater.com/reload: "paperless-ngx-config"
+    secret.reloader.stakater.com/reload: "paperless-ngx-postgres-credentials"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 33
+        runAsGroup: 33
+        fsGroup: 33
+      initContainers:
+        - name: patch-supervisord
+          image: ghcr.io/paperless-ngx/paperless-ngx
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - "sed /^user/d /etc/supervisord.conf > /tmp/output/supervisord.conf"
+          volumeMounts:
+            - name: supervisord-config
+              mountPath: /tmp/output
+      containers:
+        - name: server
+          image: ghcr.io/paperless-ngx/paperless-ngx
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - "/usr/local/bin/supervisord -c /etc/supervisord.conf --logfile /data/log/supervisord.log --pidfile /tmp/supervisord.pid"
+          envFrom:
+            - configMapRef:
+                name: paperless-ngx-config
+            - secretRef:
+                name: paperless-ngx-secrets
+          env:
+            - name: PAPERLESS_DBUSER
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-ngx-postgres-credentials
+                  key: username
+            - name: PAPERLESS_DBPASS
+              valueFrom:
+                secretKeyRef:
+                  name: paperless-ngx-postgres-credentials
+                  key: password
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: supervisord-config
+              mountPath: /etc/supervisord.conf
+              subPath: supervisord.conf
+            - name: user
+              mountPath: /user
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: user
+          persistentVolumeClaim:
+            claimName: paperless-ngx-user
+        - name: supervisord-config
+          emptyDir: {}
+        - name: data
+          persistentVolumeClaim:
+            claimName: paperless-ngx-data

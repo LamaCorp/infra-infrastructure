@@ -1,0 +1,13 @@
+---
+kind: Kustomization
+
+nameSuffix: -media-remove
+
+commonLabels:
+  app.kubernetes.io/component: media-remove
+
+resources:
+  - ../bases/cronjob
+
+patches:
+  - path: cronjob.yml

@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: netbox
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: netbox.lama.tel
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: netbox-server
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - netbox.lama.tel
+      secretName: netbox-tls

@@ -1,0 +1,6 @@
+---
+kind: Kustomization
+
+resources:
+  []
+  # - fsn-nucleus-0

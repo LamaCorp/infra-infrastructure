@@ -1,0 +1,24 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-all
+spec:
+  endpointSelector: {}
+  egress:
+    - toEntities:
+        - all
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-factorio
+spec:
+  endpointSelector: {}
+  ingress:
+    - toPorts:
+        - ports:
+            - port: "34197"
+              protocol: UDP
+            - port: "27015"
+              protocol: TCP

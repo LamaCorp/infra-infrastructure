@@ -1,0 +1,16 @@
+---
+kind: Kustomization
+
+resources:
+  - cronjob.yml
+  - network-policy.yml
+  - pvc.yml
+  - secrets.yml
+
+  - collabora
+
+images:
+  - name: quay.io/curl/curl
+    newTag: 8.6.0
+  - name: collabora/code
+    newTag: 24.04.4.2.1

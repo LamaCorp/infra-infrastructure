@@ -1,0 +1,20 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-all
+spec:
+  endpointSelector: {}
+  egress:
+    - toEntities:
+        - all
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-cluster
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEntities:
+        - cluster

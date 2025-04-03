@@ -3,19 +3,23 @@ netplan_configuration:
   network:
     version: 2
     ethernets:
-      enp3s0: {}
-      enp4s0: {}
+      enp1s0: {}
+      enp2s0: {}
     bonds:
       bond0:
-        parameters:
-          mode: balance-alb
-          mii-monitor-interval: 100
         interfaces:
-          - enp3s0
-          - enp4s0
-        accept-ra: true
+          - enp1s0
+          - enp2s0
+        parameters:
+          mode: 802.3ad
+          lacp-rate: fast
+          transmit-hash-policy: layer3+4
+        accept-ra: false
         addresses:
           - 172.28.2.253/24
+          - 2001:67c:17fc:201::253/64
         routes:
           - to: 0.0.0.0/0
-            via: 172.28.2.1
+            via: 172.28.2.254
+          - to: ::/0
+            via: 2001:67c:17fc:201::1

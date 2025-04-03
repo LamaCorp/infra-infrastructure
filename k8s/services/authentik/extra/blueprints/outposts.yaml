@@ -1,0 +1,138 @@
+# yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+# yamllint disable
+---
+version: 1
+metadata:
+  name: Outposts
+entries:
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Apps - ArchiveBox
+      required: true
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Apps - EOS
+      required: true
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Apps - Home assistant
+      required: true
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Apps - k3s.fsn.lama.tel observability
+      required: true
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Apps - Media
+      required: true
+  - model: authentik_blueprints.metaapplyblueprint
+    attrs:
+      identifiers:
+        name: Apps - V-Core 3
+      required: true
+
+  - model: authentik_outposts.outpost
+    identifiers:
+      managed: goauthentik.io/outposts/embedded
+    attrs:
+      service_connection:
+        !Find [
+          authentik_outposts.outpostserviceconnection,
+          [name, "Local Kubernetes Cluster"],
+        ]
+      providers:
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-archivebox"],
+          ]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-media/bazarr"],
+          ]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-media/lidarr"],
+          ]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-media/prowlarr"],
+          ]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-media/radarr"],
+          ]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-media/readarr"],
+          ]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-media/sonarr"],
+          ]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-media/torrent"],
+          ]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-media/usenet"],
+          ]
+        - !Find [authentik_core.provider, [name, "v-core-3"]]
+        - !Find [authentik_core.provider, [name, "zigbee2mqtt"]]
+      config:
+        log_level: info
+        authentik_host: https://auth.lama-corp.space
+        kubernetes_ingress_annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+        object_naming_template: ak-outpost-%(name)s
+        kubernetes_ingress_secret_name: authentik-outpost-tls
+        kubernetes_disabled_components:
+          - deployment
+          - secret
+
+  - model: authentik_outposts.outpost
+    identifiers:
+      name: "Proxy Outpost lama.tel"
+    attrs:
+      type: proxy
+      service_connection:
+        !Find [
+          authentik_outposts.outpostserviceconnection,
+          [name, "Local Kubernetes Cluster"],
+        ]
+      providers:
+        - !Find [authentik_core.provider, [name, "thanos-bucketweb"]]
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/core-observability/alertmanager"],
+          ]
+      config:
+        log_level: info
+        authentik_host: https://auth.lama.tel
+        kubernetes_ingress_annotations:
+          cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+        kubernetes_ingress_secret_name: authentik-outpost-lama-tel-tls
+
+  - model: authentik_outposts.outpost
+    identifiers:
+      name: "LDAP Outpost"
+    attrs:
+      type: ldap
+      service_connection:
+        !Find [
+          authentik_outposts.outpostserviceconnection,
+          [name, "Local Kubernetes Cluster"],
+        ]
+      providers:
+        - !Find [
+            authentik_core.provider,
+            [name, "k8s/k3s.fsn.lama.tel/services-eos/ldap"],
+          ]
+      config:
+        log_level: info
+        authentik_host: https://auth.lama-corp.space

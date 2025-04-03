@@ -1,0 +1,6 @@
+---
+kind: Kustomization
+
+resources:
+  - gatewayclass.yml
+  - network-policy.yml

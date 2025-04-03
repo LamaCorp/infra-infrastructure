@@ -1,0 +1,56 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-cert-manager
+  labels:
+    app: core-cert-manager
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-cert-manager-{{ .name }}
+      labels:
+        app: core-cert-manager
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-cert-manager
+      sources:
+        - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+          targetRevision: HEAD
+          path: k8s/core/cert-manager/extra/{{ .name }}
+        - repoURL: https://charts.jetstack.io
+          targetRevision: v1.17.1
+          chart: cert-manager
+          helm:
+            releaseName: cert-manager
+            values: |
+              crds:
+                enabled: true
+
+              config:
+                enableGatewayAPI: true
+
+              dns01RecursiveNameserversOnly: true
+              dns01RecursiveNameservers: "[2606:4700:4700::1111]:53,[2606:4700:4700::1001]:53,1.1.1.1:53,1.0.0.1:53"
+              extraArgs:
+                - "--acme-http01-solver-nameservers=[2606:4700:4700::1111]:53,[2606:4700:4700::1001]:53,1.1.1.1:53,1.0.0.1:53"
+
+              prometheus:
+                servicemonitor:
+                  enabled: true
+      ignoreDifferences:
+        - group: apiextensions.k8s.io
+          kind: CustomResourceDefinition
+          jsonPointers:
+            - /spec/validation/openAPIV3Schema/properties/spec/properties/solver/properties/dns01/properties/webhook/properties/config/x-kubernetes-preserve-unknown-fields
+            - /spec/validation/openAPIV3Schema/properties/spec/properties/acme/properties/solvers/items/properties/dns01/properties/webhook/properties/config/x-kubernetes-preserve-unknown-fields

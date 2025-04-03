@@ -20,20 +20,12 @@ netplan_configuration:
           macaddress: c0:03:c2:32:5c:a5
         set-name: enp19s0
         addresses:
+          - 80.81.194.242/21
+          - 2001:7f8::3:3c3:0:1/64
+      enp27s0:
+        match:
+          macaddress: 00:50:56:9e:01:7a
+        set-name: enp27s0
+        addresses:
           - 5.196.188.52/25
           - 2001:7f8:d9:3::0003:3c38:4/64
-    tunnels:
-      4ixp:
-        mode: ip6gretap
-        macaddress: 62:39:bc:a4:d8:43
-        local: 2a09:4c0:303:c232::5ca5
-        remote: 2a09:4c0:100:5eb1::7aef
-        addresses:
-          - 2001:7f8:d0::3:3c38:1/64
-      bgp-exch:
-        mode: gretap
-        local: 194.50.92.165
-        remote: 45.13.105.239
-        addresses:
-          - 100.66.53.11/22
-          - 2a0e:8f01:1000:14::10b/64

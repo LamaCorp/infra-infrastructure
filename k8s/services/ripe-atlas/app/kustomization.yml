@@ -1,0 +1,10 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: ripe-atlas
+
+resources:
+  - deployment.yml
+  - network-policy.yml
+  - pvc.yml

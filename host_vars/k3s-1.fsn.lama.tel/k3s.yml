@@ -1,0 +1,37 @@
+---
+k3s_etcd_datastore: true
+k3s_control_node: true
+k3s_use_unsupported_config: true
+
+k3s_server:
+  tls-san:
+    - 136.243.102.29
+    - api.k3s.fsn.lama.tel
+  flannel-backend: none
+  disable-network-policy: true
+  disable-kube-proxy: true
+  docker: false
+  cluster-cidr: 2001:67c:17fc:110::/60,172.28.128.0/22
+  service-cidr: 2001:67c:17fc:120::/108,172.28.132.0/22
+  cluster-dns: 2001:67c:17fc:120::53,172.28.132.53
+  cluster-domain: c.k3s.fsn.lama.tel
+  disable:
+    - coredns
+    - local-storage
+    - metrics-server
+    - servicelb
+    - traefik
+  disable-helm-controller: true
+  kube-controller-manager-arg:
+    - "bind-address=0.0.0.0"
+  kube-scheduler-arg:
+    - "bind-address=0.0.0.0"
+  etcd-arg:
+    - "listen-metrics-urls=http://0.0.0.0:2381"
+  container-runtime-endpoint: unix:///run/containerd/containerd.sock
+  node-label:
+    - topology.kubernetes.io/region=fsn
+    - topology.kubernetes.io/zone=nucleus
+  kubelet-arg:
+    - allowed-unsafe-sysctls=net.ipv4.conf.all.src_valid_mark
+    - allowed-unsafe-sysctls=net.ipv6.conf.all.disable_ipv6

@@ -1,0 +1,46 @@
+{
+  "backup": {
+    "database": {
+      "enabled": false
+    }
+  },
+  "logging": {
+    "enabled": true,
+    "level": "verbose"
+  },
+  "machineLearning": {
+    "enabled": true,
+    "urls": [
+      "http://immich-machine-learning:3003"
+    ]
+  },
+  "newVersionCheck": {
+    "enabled": false
+  },
+  "oauth": {
+    "autoLaunch": true,
+    "autoRegister": true,
+    "buttonText": "Lama Corp. Connect",
+    "clientId": "{{ .client_id }}",
+    "clientSecret": "{{ .client_secret }}",
+    "enabled": true,
+    "issuerUrl": "https://auth.lama-corp.space/application/o/immich/",
+    "mobileOverrideEnabled": false,
+    "mobileRedirectUri": "",
+    "scope": "openid email profile",
+    "signingAlgorithm": "RS256",
+    "storageLabelClaim": "preferred_username"
+  },
+  "passwordLogin": {
+    "enabled": false
+  },
+  "server": {
+    "externalDomain": "https://photos.lama-corp.space",
+    "loginPageMessage": ""
+  },
+  "storageTemplate": {
+    "enabled": true,
+    "hashVerificationEnabled": true,
+    "template": "{{ `{{y}}` }}/{{ `{{MM}}` }}/{{ `{{y}}` }}-{{ `{{MM}}` }}-{{ `{{dd}}` }}/{{ `{{filename}}` }}"
+  }
+}

@@ -2,10 +2,10 @@
 Description=Run the textfile collector script {{ script_name }}
 
 [Timer]
-Unit={{ script_name_no_ext }}.service
 {% for time in node_exporter_textfile_collector_scripts_systemd_time | dict2items %}
 {{ time.key }}={{ time.value }}
 {% endfor %}
+Persistent=true
 
 [Install]
 WantedBy=multi-user.target

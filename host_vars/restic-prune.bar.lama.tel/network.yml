@@ -1,0 +1,13 @@
+---
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      eno1:
+        accept-ra: true
+        addresses:
+          - 172.28.2.20/24
+          - 2001:67c:17fc:201::20/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.28.2.254

@@ -1,0 +1,8 @@
+---
+kind: Kustomization
+
+resources:
+  - network-policy.yml
+
+  - overlays/2022
+  - overlays/2024

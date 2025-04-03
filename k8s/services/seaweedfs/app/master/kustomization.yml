@@ -1,0 +1,16 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: master
+
+resources:
+  - service-monitor.yml
+  - service.yml
+  - statefulset.yml
+
+configMapGenerator:
+  - name: seaweedfs-master-config
+    files:
+      - ./config/master.toml
+      - ./config/shell.toml

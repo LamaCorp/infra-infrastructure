@@ -1,0 +1,32 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: microbin
+spec:
+  replicas: 1
+  template:
+    spec:
+      enableServiceLinks: false
+      securityContext:
+        runAsUser: 1483
+        runAsGroup: 1483
+        fsGroup: 1483
+      containers:
+        - name: microbin
+          image: danielszabo99/microbin
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: microbin-config
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /app/microbin_data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: microbin-data

@@ -1,0 +1,212 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: services-nextcloud
+  labels:
+    app: services-nextcloud
+spec:
+  project: services
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+  destination:
+    name: k3s.fsn.lama.tel
+    namespace: services-nextcloud
+  sources:
+    - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+      targetRevision: HEAD
+      path: k8s/services/nextcloud/extra
+    - repoURL: https://nextcloud.github.io/helm/
+      targetRevision: 6.0.1
+      chart: nextcloud
+      helm:
+        releaseName: nextcloud
+        values: |
+          replicaCount: 1
+          nextcloud:
+            host: cloud.lama-corp.space
+            existingSecret:
+              enabled: true
+              secretName: nextcloud-secrets
+              usernameKey: username
+              passwordKey: password
+            update: 1
+
+            configs:
+              extra.config.php: |-
+                <?php
+                $CONFIG = array(
+                  'default_language' => 'en',
+                  'default_phone_region' => 'FR',
+                  'default_timezone' => 'Europe/Paris',
+                  'knowledgebaseenabled' => false,
+                  'skeletondirectory' => '',
+                  'templatedirectory' => '',
+                );
+              storage.config.php: |-
+                <?php
+                $CONFIG = array(
+                  'localstorage.allowsymlinks' => false,
+                );
+              proxy.config.php: |-
+                <?php
+                $CONFIG = array (
+                  'trusted_proxies' => array(
+                    0 => '127.0.0.1',
+                    1 => '172.28.128.0/22',
+                    2 => '2001:67c:17fc:110::/60',
+                  ),
+                  'forwarded_for_headers' => array('HTTP_X_FORWARDED_FOR'),
+                );
+              oidc.config.php: |-
+                <?php
+                $CONFIG = array(
+                  'allow_user_to_change_display_name' => false,
+                  'lost_password_link' => 'disabled',
+                  'oidc_login_provider_url' => 'https://auth.lama-corp.space/application/o/nextcloud/',
+                  'oidc_login_client_id' => getenv('OIDC_CLIENT_ID'),
+                  'oidc_login_client_secret' => getenv('OIDC_CLIENT_SECRET'),
+                  'oidc_login_auto_redirect' => true,
+                  'oidc_login_logout_url' => 'https://auth.lama-corp.space/application/o/nextcloud/end-session/',
+                  'oidc_login_end_session_redirect' => true,
+                  'oidc_login_default_quota' => '0',
+                  'oidc_login_button_text' => 'Lama Corp. Connect',
+                  'oidc_login_hide_password_form' => true,
+                  'oidc_login_use_id_token' => true,
+                  'oidc_login_attributes' => array(
+                    'id' => 'sub',
+                    'name' => 'name',
+                    'mail' => 'email',
+                    'quota' => 'quota',
+                    'home' => 'homeDirectory',
+                    'groups' => 'groups',
+                    'photoURL' => 'avatar',
+                    'is_admin' => 'is_admin',
+                  ),
+                  'oidc_login_use_external_storage' => true,
+                  'oidc_login_scope' => 'openid profile email nextcloud',
+                  'oidc_login_disable_registration' => false,
+                  'oidc_create_groups' => true,
+                  'oidc_login_webdav_enabled' => true,
+                  'oidc_login_update_avatar' => true,
+                  'oidc_login_code_challenge_method' => 'S256',
+                );
+            extraEnv:
+              - name: MAIL_FROM_ADDRESS
+                value: no-reply
+              - name: MAIL_DOMAIN
+                value: cloud.lama-corp.space
+              - name: SMTP_SECURE
+                value: tls
+              - name: SMTP_PORT
+                value: "587"
+              - name: SMTP_AUTHTYPE
+                value: LOGIN
+              - name: SMTP_HOST
+                value: email-smtp.eu-west-3.amazonaws.com
+              - name: SMTP_NAME
+                valueFrom:
+                  secretKeyRef:
+                    name: nextcloud-smtp-credentials
+                    key: username
+              - name: SMTP_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: nextcloud-smtp-credentials
+                    key: password
+
+              - name: REDIS_HOST
+                value: redis.fsn.lama.tel
+              - name: REDIS_HOST_PORT
+                value: "6382"
+
+              - name: OIDC_CLIENT_ID
+                valueFrom:
+                  secretKeyRef:
+                    name: nextcloud-oidc-credentials
+                    key: client_id
+              - name: OIDC_CLIENT_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: nextcloud-oidc-credentials
+                    key: client_secret
+
+              - name: PHP_MEMORY_LIMIT
+                value: 4G
+
+            extraVolumeMounts:
+              - name: group
+                mountPath: /group
+              - name: user
+                mountPath: /user
+            extraVolumes:
+              - name: group
+                persistentVolumeClaim:
+                  claimName: nextcloud-data-group
+              - name: user
+                persistentVolumeClaim:
+                  claimName: nextcloud-data
+
+          deploymentAnnotations:
+            reloader.stakater.com/auto: "true"
+          persistence:
+            enabled: true
+            size: 8Gi
+            nextcloudData:
+              enabled: false
+
+          startupProbe:
+            enabled: true
+
+          internalDatabase:
+            enabled: false
+          externalDatabase:
+            enabled: true
+            type: postgresql
+            host: postgresql.fsn.lama.tel
+            database: nextcloud
+            existingSecret:
+              enabled: true
+              secretName: nextcloud-postgres-credentials
+              usernameKey: username
+              passwordKey: password
+
+          ingress:
+            enabled: true
+            annotations:
+              nginx.ingress.kubernetes.io/enable-cors: "true"
+              nginx.ingress.kubernetes.io/cors-allow-headers: "X-Forwarded-For"
+              nginx.ingress.kubernetes.io/proxy-body-size: "0"
+              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+              nginx.ingress.kubernetes.io/server-snippet: |-
+                server_tokens off;
+                proxy_hide_header X-Powered-By;
+                rewrite ^/.well-known/webfinger /index.php/.well-known/webfinger last;
+                rewrite ^/.well-known/nodeinfo /index.php/.well-known/nodeinfo last;
+                rewrite ^/.well-known/host-meta /public.php?service=host-meta last;
+                rewrite ^/.well-known/host-meta.json /public.php?service=host-meta-json;
+                location = /.well-known/carddav {
+                  return 301 $scheme://$host/remote.php/dav;
+                }
+                location = /.well-known/caldav {
+                  return 301 $scheme://$host/remote.php/dav;
+                }
+                location = /robots.txt {
+                  allow all;
+                  log_not_found off;
+                  access_log off;
+                }
+                location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)/ {
+                  deny all;
+                }
+                location ~ ^/(?:autotest|occ|issue|indie|db_|console) {
+                  deny all;
+                }
+            host: cloud.lama-corp.space
+            tls:
+              - hosts:
+                  - cloud.lama-corp.space
+                secretName: nextcloud-tls

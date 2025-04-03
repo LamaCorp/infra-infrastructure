@@ -1,0 +1,22 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-all
+spec:
+  endpointSelector: {}
+  egress:
+    - toEntities:
+        - all
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-whois
+spec:
+  endpointSelector: {}
+  ingress:
+    - toPorts:
+        - ports:
+            - port: "1043"
+              protocol: TCP

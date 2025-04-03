@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pictrs
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 27831
+        runAsGroup: 27831
+        fsGroup: 27831
+      containers:
+        - name: pictrs
+          image: asonix/pictrs
+          env:
+            - name: PICTRS__SERVER__API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: lemmy-pictrs
+                  key: api_key
+            - name: PICTRS__STORE__ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pictrs-s3-credentials
+                  key: access_key
+            - name: PICTRS__STORE__SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: pictrs-s3-credentials
+                  key: access_key
+          envFrom:
+            - configMapRef:
+                name: pictrs-config
+            - secretRef:
+                name: pictrs-postgres-credentials
+          volumeMounts:
+            - name: data
+              mountPath: /mnt/database
+              subPath: database
+            - name: data
+              mountPath: /mnt/media
+              subPath: media
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          # livenessProbe:
+          #   httpGet:
+          #     port: http
+          #     path: /healthz
+          # readinessProbe:
+          #   httpGet:
+          #     port: http
+          #     path: /healthz
+          # startupProbe:
+          #   httpGet:
+          #     port: http
+          #     path: /healthz
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: lemmy-pictrs-data

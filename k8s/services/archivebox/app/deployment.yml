@@ -1,0 +1,39 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: archivebox
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  template:
+    spec:
+      initContainers:
+        - name: init-archivebox
+          image: archivebox/archivebox
+          args: ["init"]
+          envFrom:
+            - configMapRef:
+                name: archivebox-config
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      containers:
+        - name: archivebox
+          image: archivebox/archivebox
+          args: ["server", "--quick-init", "[::]:8000"]
+          envFrom:
+            - configMapRef:
+                name: archivebox-config
+          ports:
+            - name: http
+              containerPort: 8000
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: archivebox-data

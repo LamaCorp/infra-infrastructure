@@ -1,0 +1,12 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: sabnzbd
+
+resources:
+  - deployment.yml
+  - service.yml
+  - ingress.yml
+  - pvc.yml
+  - secrets.yml

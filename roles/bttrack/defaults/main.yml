@@ -1,4 +1,0 @@
----
-
-bttrack_docker_repository: registry.cri.epita.fr/cri/docker/bttrack/master
-bttrack_docker_tag: "65508097"

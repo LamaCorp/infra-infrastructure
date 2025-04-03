@@ -1,0 +1,109 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-velero
+  labels:
+    app: core-velero
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-velero-{{ .name }}
+      labels:
+        app: core-velero
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-velero
+      sources:
+        - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+          targetRevision: HEAD
+          path: k8s/core/velero/extra/{{ .name }}
+        - repoURL: https://vmware-tanzu.github.io/helm-charts
+          targetRevision: 7.2.1
+          chart: velero
+          helm:
+            releaseName: velero
+            values: |
+              initContainers:
+                - name: velero-plugin-for-aws
+                  image: velero/velero-plugin-for-aws:v1.10.1
+                  imagePullPolicy: IfNotPresent
+                  volumeMounts:
+                    - mountPath: /target
+                      name: plugins
+
+              credentials:
+                existingSecret: velero-s3-credentials
+
+              configuration:
+                backupStorageLocation:
+                  - name: default
+                    provider: aws
+                    bucket: velero
+                    config:
+                      region: us-east-1
+                      s3Url: https://s3.lama-corp.space
+                volumeSnapshotLocation: []
+                defaultBackupTTL: 720h # 30 days
+
+              schedules:
+                daily:
+                  disabled: false
+                  schedule: "21 2 * * *"
+                  template:
+                    includedNamespaces:
+                      - "*"
+                    includedResources:
+                      - "*"
+                    includeClusterResources: true
+                    ttl: 720h # 30 days
+
+              resources:
+                requests:
+                  cpu: 10m
+                  memory: 10Mi
+                limits:
+                  # Ludicrous value because it is set by the chart
+                  # See https://github.com/vmware-tanzu/helm-charts/pull/499
+                  cpu: "42"
+                  memory: 4Gi
+
+              metrics:
+                serviceMonitor:
+                  enabled: true
+                prometheusRule:
+                  enabled: true
+                  spec:
+                    - alert: VeleroBackupPartialFailures
+                      annotations:
+                        message: Velero backup {{ "{{ $labels.schedule }}" }} has {{ "{{ $value | humanizePercentage }}" }} partialy failed backups.
+                      expr: |-
+                        velero_backup_partial_failure_total{schedule!=""} / velero_backup_attempt_total{schedule!=""} > 0.25
+                      for: 15m
+                      labels:
+                        severity: warning
+                    - alert: VeleroBackupFailures
+                      annotations:
+                        message: Velero backup {{ "{{ $labels.schedule }}" }} has {{ "{{ $value | humanizePercentage }}" }} failed backups.
+                      expr: |-
+                        velero_backup_failure_total{schedule!=""} / velero_backup_attempt_total{schedule!=""} > 0.25
+                      for: 15m
+                      labels:
+                        severity: warning
+      ignoreDifferences:
+        - group: apiextensions.k8s.io
+          kind: CustomResourceDefinition
+          jqPathExpressions:
+            - .metadata.labels."app.kubernetes.io/name"
+            - .spec.versions[]?.schema.openAPIV3Schema.properties.spec.properties.metadata
+            - .spec.versions[]?.schema.openAPIV3Schema.properties.spec.properties.template.properties.metadata

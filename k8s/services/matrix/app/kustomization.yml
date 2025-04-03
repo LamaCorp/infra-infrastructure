@@ -1,0 +1,35 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: matrix
+
+resources:
+  - appservices.yml
+  - network-policy.yml
+  - secrets.yml
+
+  - hookshot
+  - maubot
+  - mautrix-facebook
+  - mautrix-slack
+  - media-repo
+  - synapse
+  - synapse-admin
+  - synapse-auto-compressor
+
+images:
+  - name: ghcr.io/matrix-org/rust-synapse-compress-state
+    newTag: v0.1.4
+  - name: ghcr.io/etkecc/synapse-admin
+    newTag: v0.10.3-etke35
+  - name: turt2live/matrix-media-repo
+    newTag: v1.3.7
+  - name: halfshot/matrix-hookshot
+    newTag: 6.0.1
+  - name: dock.mau.dev/mautrix/facebook
+    newTag: v0.5.1
+  - name: dock.mau.dev/mautrix/slack
+    newTag: v0.1.4
+  - name: dock.mau.dev/maubot/maubot
+    newTag: v0.5.0

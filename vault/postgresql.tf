@@ -1,8 +1,3 @@
-resource "vault_mount" "postgresql" {
-  path = "postgresql"
-  type = "kv-v2"
-}
-
 locals {
   postgresql_users = toset([
     "atuin",
@@ -29,7 +24,6 @@ locals {
     "readarr",
     "upsilon",
     "vaultwarden",
-    "vikunja",
   ])
 }
 

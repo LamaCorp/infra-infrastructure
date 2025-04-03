@@ -1,0 +1,35 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lemmy-ui
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 27831
+        runAsGroup: 27831
+        fsGroup: 27831
+      containers:
+        - name: lemmy-ui
+          image: dessalines/lemmy-ui:0.19.9
+          envFrom:
+            - configMapRef:
+                name: lemmy-ui-config
+          ports:
+            - name: http
+              containerPort: 1234
+              protocol: TCP
+          # Cannot enable those, lemmy-ui doesn't support IPv6 properly
+          # See https://github.com/LemmyNet/lemmy-ui/issues/2374
+          # livenessProbe:
+          #   httpGet:
+          #     port: http
+          #     path: /robots.txt
+          # readinessProbe:
+          #   httpGet:
+          #     port: http
+          #     path: /robots.txt

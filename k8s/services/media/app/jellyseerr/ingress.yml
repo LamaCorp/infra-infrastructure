@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jellyseerr
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: jellyseerr.lama-corp.space
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jellyseerr
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - jellyseerr.lama-corp.space
+      secretName: jellyseerr-tls

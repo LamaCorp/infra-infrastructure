@@ -1,0 +1,32 @@
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: seaweedfs-user-services-paperless-ngx-risson-paperless-ngx-user
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 16Ti
+  csi:
+    driver: seaweedfs-csi-driver
+    volumeHandle: seaweedfs-user-services-paperless-ngx-risson-paperless-ngx-user
+    volumeAttributes:
+      collection: default
+      path: /user
+  persistentVolumeReclaimPolicy: Retain
+  volumeMode: Filesystem
+  storageClassName: seaweedfs
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: paperless-ngx-user
+spec:
+  storageClassName: seaweedfs
+  volumeName: seaweedfs-user-services-paperless-ngx-risson-paperless-ngx-user
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 16Ti

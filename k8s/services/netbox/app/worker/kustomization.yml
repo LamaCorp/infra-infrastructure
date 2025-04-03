@@ -1,0 +1,13 @@
+---
+kind: Kustomization
+
+nameSuffix: -worker
+
+commonLabels:
+  app.kubernetes.io/component: worker
+
+resources:
+  - ../base
+
+patches:
+  - path: deployment.yml

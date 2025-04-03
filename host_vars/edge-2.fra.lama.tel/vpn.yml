@@ -1,0 +1,7 @@
+---
+zerotier_config:
+  settings:
+    portMappingEnabled: false
+    interfacePrefixBlacklist:
+      - enp19s0
+      - enp27s0

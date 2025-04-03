@@ -1,0 +1,34 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: microbin
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - pvc.yml
+  - service.yml
+
+configMapGenerator:
+  - name: microbin-config
+    literals:
+      - "MICROBIN_BIND=::"
+      - MICROBIN_ADMIN_USERNAME=
+      - MICROBIN_EDITABLE=true
+      - MICROBIN_PRIVATE=true
+      - MICROBIN_PUBLIC_PATH=https://bin.lama-corp.space
+      - MICROBIN_THREADS=2
+      - MICROBIN_ENABLE_BURN_AFTER=true
+      - MICROBIN_QR=true
+      - MICROBIN_ETERNAL_PASTA=false
+      - MICROBIN_DEFAULT_EXPIRY=1week
+      - MICROBIN_ENCRYPTION_CLIENT_SIDE=true
+      - MICROBIN_ENCRYPTION_SERVER_SIDE=true
+      - MICROBIN_DISABLE_UPDATE_CHECKING=true
+      - MICROBIN_DISABLE_TELEMETRY=true
+      - MICROBIN_LIST_SERVER=false
+
+images:
+  - name: danielszabo99/microbin
+    newTag: 2.0.4

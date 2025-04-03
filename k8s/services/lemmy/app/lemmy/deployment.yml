@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lemmy
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 27831
+        runAsGroup: 27831
+        fsGroup: 27831
+      containers:
+        - name: lemmy
+          image: dessalines/lemmy
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          ports:
+            - name: http
+              containerPort: 8536
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /
+          startupProbe:
+            httpGet:
+              port: http
+              path: /
+      volumes:
+        - name: config
+          secret:
+            secretName: lemmy-config

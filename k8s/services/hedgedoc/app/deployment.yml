@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hedgedoc
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1573
+        runAsGroup: 1573
+        fsGroup: 1573
+      containers:
+        - name: hedgedoc
+          image: quay.io/hedgedoc/hedgedoc
+          env:
+            - name: CMD_HOST
+              value: "::"
+          envFrom:
+            - configMapRef:
+                name: hedgedoc-config
+            - secretRef:
+                name: hedgedoc-postgres-credentials
+            - secretRef:
+                name: hedgedoc-oidc-credentials
+            - secretRef:
+                name: hedgedoc-s3-credentials
+            - secretRef:
+                name: hedgedoc-secrets
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP

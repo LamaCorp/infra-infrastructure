@@ -1,0 +1,13 @@
+---
+kind: Kustomization
+
+nameSuffix: -sidekiq
+
+commonLabels:
+  app.kubernetes.io/component: sidekiq
+
+resources:
+  - ../bases/deployment
+
+patches:
+  - path: deployment.yml

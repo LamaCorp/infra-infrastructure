@@ -1,0 +1,15 @@
+---
+kind: Kustomization
+
+nameSuffix: -server
+
+commonLabels:
+  app.kubernetes.io/component: server
+
+resources:
+  - ../base
+  - service.yml
+  - ingress.yml
+
+patches:
+  - path: deployment.yml

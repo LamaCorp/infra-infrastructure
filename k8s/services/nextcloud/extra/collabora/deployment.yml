@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collabora
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: collabora
+          image: collabora/code
+          env:
+            - name: domain
+              value: cloud.lama-corp.space
+            - name: extra_params
+              value: "--o:ssl.enable=false --o:ssl.termination=true"
+          ports:
+            - name: http
+              containerPort: 9980
+              protocol: TCP
+          securityContext:
+            capabilities:
+              add:
+                - MKNOD

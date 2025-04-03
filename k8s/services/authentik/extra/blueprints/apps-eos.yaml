@@ -1,0 +1,127 @@
+# yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+# yamllint disable
+---
+version: 1
+metadata:
+  name: Apps - EOS
+entries:
+  - id: user
+    model: authentik_core.user
+    identifiers:
+      username: svc-eos
+    attrs:
+      name: EOS
+      email: no-reply@eos.lama-corp.space
+      path: services/lama-corp
+      type: service_account
+  - model: authentik_core.token
+    identifiers:
+      identifier: svc-eos-ldap
+    attrs:
+      description: k8s/k3s.fsn.lama.tel/services-eos/ldap
+      user: !KeyOf user
+      intent: app_password
+      expiring: false
+
+  - id: user-restic
+    model: authentik_core.user
+    identifiers:
+      username: svc-restic
+    attrs:
+      name: Restic
+      email: no-reply@restic.lama-corp.space
+      path: services/lama-corp
+      type: service_account
+  - model: authentik_core.token
+    identifiers:
+      identifier: svc-restic-eos
+    attrs:
+      description: k8s/k3s.fsn.lama.tel/services-eos/restic
+      user: !KeyOf user-restic
+      intent: app_password
+      expiring: false
+
+  - id: group
+    model: authentik_core.group
+    identifiers:
+      name: svc-eos-ldapsearch
+    attrs:
+      users:
+        - !KeyOf user
+
+  - id: provider
+    model: authentik_providers_ldap.ldapprovider
+    identifiers:
+      name: k8s/k3s.fsn.lama.tel/services-eos/ldap
+    attrs:
+      authorization_flow:
+        !Find [authentik_flows.flow, [slug, "default-authentication-flow"]]
+
+      bind_mode: cached
+      search_mode: cached
+
+      base_dn: "dc=eos,dc=lama-corp,dc=space"
+      search_group: !KeyOf group
+
+      uid_start_number: 10000
+      gid_start_number: 10000
+
+  - id: application
+    model: authentik_core.application
+    identifiers:
+      slug: eos
+    attrs:
+      name: EOS
+      group: Services
+      meta_description: Storage
+      icon: https://eos-web.web.cern.ch/eos-web/assets/images/eos-icon-white-713x824.png
+      provider: !KeyOf provider
+      policy_engine_mode: any
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      user: !Find [authentik_core.user, [username, "svc-immich"]]
+    attrs:
+      order: 0
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      user: !Find [authentik_core.user, [username, "svc-media"]]
+    attrs:
+      order: 0
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      user: !Find [authentik_core.user, [username, "svc-nextcloud"]]
+    attrs:
+      order: 0
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      user: !Find [authentik_core.user, [username, "svc-paperless-ngx-risson"]]
+    attrs:
+      order: 0
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      user: !KeyOf user-restic
+    attrs:
+      order: 0
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      user: !KeyOf user
+    attrs:
+      order: 10
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      group: !Find [authentik_core.group, [name, "roots"]]
+    attrs:
+      order: 20
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application
+      group: !Find [authentik_core.group, [name, "users"]]
+    attrs:
+      order: 20

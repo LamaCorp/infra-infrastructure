@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=https://goauthentik.io/blueprints/schema.json
+# yamllint disable
+---
+version: 1
+metadata:
+  name: Apps - k3s.fsn.lama.tel observability
+entries:
+  - id: provider-alertmanager
+    model: authentik_providers_proxy.proxyprovider
+    identifiers:
+      name: k8s/k3s.fsn.lama.tel/core-observability/alertmanager
+    attrs:
+      authorization_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-authorization-implicit-consent"],
+        ]
+
+      mode: forward_single
+      external_host: https://alertmanager.k3s.fsn.lama.tel
+
+      access_token_validity: hours=24
+
+  - id: application-alertmanager
+    model: authentik_core.application
+    identifiers:
+      slug: k3s-fsn-lama-tel-observability-alertmanager
+    attrs:
+      name: k3s.fsn.lama.tel Alertmanager
+      group: Infrastructure
+      description: Alerts
+      icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/alertmanager.png
+      provider: !KeyOf provider-alertmanager
+      policy_engine_mode: any
+
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application-alertmanager
+      group: !Find [authentik_core.group, [name, "roots"]]
+    attrs:
+      order: 1
+
+  - id: application-prometheus
+    model: authentik_core.application
+    identifiers:
+      slug: k3s-fsn-lama-tel-observability-prometheus
+    attrs:
+      name: k3s.fsn.lama.tel Prometheus
+      group: Infrastructure
+      description: Metrics aggregator
+      meta_launch_url: https://prometheus.k3s.fsn.lama.tel
+      icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prometheus.png
+      policy_engine_mode: any
+
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application-prometheus
+      group: !Find [authentik_core.group, [name, "users"]]
+    attrs:
+      order: 1
+  - model: authentik_policies.policybinding
+    identifiers:
+      target: !KeyOf application-prometheus
+      group: !Find [authentik_core.group, [name, "roots"]]
+    attrs:
+      order: 2

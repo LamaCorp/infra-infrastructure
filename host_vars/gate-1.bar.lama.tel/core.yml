@@ -1,14 +1,21 @@
 ---
-bird2_router_id: 172.28.254.2
+bird2_router_id: 209.112.97.242
 
 bird2_bgp_preferred_source:
+  v4: 209.112.97.242
   v6: 2001:67c:17fc:ffff::2
+
+bird2_static_routes:
+  v4:
+    - 209.112.97.235/32 unreachable
+    - 209.112.97.236/32 unreachable
+    - 209.112.97.237/32 unreachable
 
 bird2_bgp_sessions:
   cores:
     defaults:
       local:
-        v4: 172.28.254.2
+        v4: 209.112.97.242
         v6: 2001:67c:17fc:ffff::2
       med_metric: true
     sessions:
@@ -16,32 +23,50 @@ bird2_bgp_sessions:
         alias: fsn
         asn: 212024
         remote:
-          v4: 172.28.254.1
+          v4: 209.112.97.241
           v6: 2001:67c:17fc:ffff::1
       - description: PVL
         alias: pvl
         asn: 212024
         remote:
-          v4: 172.28.254.3
+          v4: 209.112.97.243
           v6: 2001:67c:17fc:ffff::3
       - description: FRA
         alias: fra
         asn: 212024
         remote:
-          v4: 172.28.254.4
+          v4: 209.112.97.244
           v6: 2001:67c:17fc:ffff::4
 
 bird2_ospf_sessions:
   - alias: ospf
-    stub_router: true
+    export_static_routes: true
     areas:
       0.0.0.0:
         stubnets:
           v6:
-            - prefix: 2a01:cb10:1d5:9500::/56
+            - prefix: 2a01:cb10::/30
               hidden: true
               summary: true
         interfaces:
-          zt-lama: {}
+          zt-lama:
+            cost: 50
           eno1:
+            cost: 1
+          "bar-*":
             stub: true
+
+bird2_radv_sessions:
+  - alias: radv6
+    interfaces:
+      eno1:
+        mtu: 1500
+      bar-iot:
+        mtu: 1500
+      bar-music:
+        mtu: 1500
+      bar-cctv:
+        mtu: 1500
+    rdnss:
+      - ns:
+          - 2001:67c:17fc:ffff::2

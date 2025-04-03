@@ -1,0 +1,15 @@
+---
+nft_define_group:
+  ospf interfaces:
+    name: ospf_interfaces
+    value: "Override me"
+
+nft_input_group_rules:
+  100 ospf:
+    - meta iifname $ospf_interfaces ip6 nexthdr ospf accept
+  600 k8s:
+    - "ip saddr {$subnet_internal_4} tcp dport { 10250, 10257, 10259, 10260, 2381 } accept"
+    - "ip6 saddr {$subnet_internal_6} tcp dport { 10250, 10257, 10259, 10260, 2381 } accept"
+  700 cilium:
+    - "ip saddr {$subnet_internal_4} tcp dport { 4240, 4244, 4245, 4250, 4251, 6006, 6061, 6062, 9878, 9879, 9890, 9891, 9893, 9962, 9963, 9964, 9965 } accept"
+    - "ip6 saddr {$subnet_internal_6} tcp dport { 4240, 4244, 4245, 4250, 4251, 6006, 6061, 6062, 9878, 9879, 9890, 9891, 9893, 9962, 9963, 9964, 9965 } accept"

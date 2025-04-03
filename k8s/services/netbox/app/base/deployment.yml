@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: netbox
+  annotations:
+    configmap.reloader.stakater.com/reload: "netbox-oauth-custom-pipline"
+    secret.reloader.stakater.com/reload: "netbox-config"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 0
+        runAsGroup: 0
+        fsGroup: 0
+      containers:
+        - name: netbox
+          image: ghcr.io/netbox-community/netbox
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-e", "-c"]
+          env:
+            - name: SKIP_SUPERUSER
+              value: "true"
+          volumeMounts:
+            - name: data
+              mountPath: /opt/netbox/netbox/media
+              subPath: media
+            - name: data
+              mountPath: /opt/netbox/netbox/reports
+              subPath: reports
+            - name: data
+              mountPath: /opt/netbox/netbox/scripts
+              subPath: scripts
+            - name: config
+              mountPath: /etc/netbox/config
+              readOnly: true
+            - name: oauth-custom-pipeline
+              mountPath: /opt/netbox/netbox/netbox/custom_pipeline.py
+              subPath: custom_pipeline.py
+              readOnly: true
+      volumes:
+        - name: config
+          secret:
+            secretName: netbox-config
+        - name: oauth-custom-pipeline
+          configMap:
+            name: netbox-oauth-custom-pipline
+        - name: data
+          persistentVolumeClaim:
+            claimName: netbox-data

@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: immich-microservices
+  annotations:
+    configmap.reloader.stakater.com/reload: "immich-config-env"
+    secret.reloader.stakater.com/reload: "immich-postgres-credentials,immich-config"
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 10088
+        runAsGroup: 10088
+        fsGroup: 10088
+      containers:
+        - name: microservices
+          image: ghcr.io/immich-app/immich-server
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: IMMICH_WORKERS_EXCLUDE
+              value: "api"
+          envFrom:
+            - configMapRef:
+                name: immich-config-env
+          volumeMounts:
+            - name: library
+              mountPath: /data
+            - name: postgres-creds
+              mountPath: /postgres-creds
+            - name: config
+              mountPath: /config
+      volumes:
+        - name: library
+          persistentVolumeClaim:
+            claimName: immich-library
+        - name: postgres-creds
+          secret:
+            secretName: immich-postgres-credentials
+        - name: config
+          secret:
+            secretName: immich-config

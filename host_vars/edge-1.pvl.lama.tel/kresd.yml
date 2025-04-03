@@ -1,0 +1,3 @@
+---
+kresd_listen_address_6: "::1"
+kresd_listen_address_4: "127.0.0.1"

@@ -1,0 +1,16 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: synapse-admin
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+        - name: synapse-admin
+          image: ghcr.io/etkecc/synapse-admin
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP

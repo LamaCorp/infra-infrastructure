@@ -1,0 +1,97 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: services-gatus-prologin
+  labels:
+    app: services-gatus-prologin
+spec:
+  project: services
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+  destination:
+    name: k3s.fsn.lama.tel
+    namespace: services-gatus-prologin
+  sources:
+    - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+      targetRevision: HEAD
+      path: k8s/services/gatus/extra/prologin
+    - repoURL: https://twin.github.io/helm-charts
+      targetRevision: 1.2.0
+      chart: gatus
+      helm:
+        releaseName: gatus
+        values: |
+          image:
+            tag: v5.16.0
+
+          annotations:
+            reloader.stakater.com/auto: "true"
+
+          # Does envFrom secret named gatus
+          secrets: true
+
+          ingress:
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+              external-dns.alpha.kubernetes.io/controller: ignored
+            hosts:
+              - status.prologin.org
+            tls:
+              - hosts:
+                  - status.prologin.org
+                secretName: gatus-tls
+
+          serviceMonitor:
+            enabled: true
+
+          config:
+            web:
+              address: "[::]"
+            metrics: true
+
+            storage:
+              type: postgres
+              path: "postgres://${DB_USER}:${DB_PASS}@postgresql.fsn.lama.tel:5432/gatus_prologin?sslmode=require"
+
+            ui:
+              title: Prologin
+              header: Prologin external infrastructure monitoring
+              logo: https://prologin.org/static/img/logo_cube.png
+              link: https://prologin.org
+
+            alerting:
+              discord:
+                webhook-url: "${DISCORD_WEBHOOK_URL}"
+                default-alert:
+                  enabled: true
+                  failure-threshold: 3
+                  success-threshold: 2
+                  send-on-resolved: true
+
+            .defaults: &defaults
+              interval: 30s
+              alerts:
+                - type: discord
+
+            .https-endpoint: &https-endpoint
+              <<: *defaults
+              conditions:
+                - "[STATUS] == 200"
+                - "[RESPONSE_TIME] <= 1000"
+                - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+            endpoints:
+
+              ###
+              # Critical
+              ###
+
+              - name: Prologin.org
+                <<: *https-endpoint
+                group: critical
+                url: https://prologin.org

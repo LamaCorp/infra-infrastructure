@@ -1,0 +1,19 @@
+---
+nftables_exporter_host_arch_map:
+  aarch64: arm64
+  x86_64: amd64
+nftables_exporter_host_arch: "{{ nftables_exporter_host_arch_map[ansible_architecture] }}"
+
+nftables_exporter_version: v0.4.0
+nftables_exporter_checksum_map:
+  arm64: 81dcfa1822a39d166784cae6e83c9d934961ed2becdaffcfbccecc6711775b57
+  amd64: b4a75744f97e7c1ee9ead1e8f11c9092597558b8cbe4f1a563149efc98b0b9ef
+nftables_exporter_checksum: "{{ nftables_exporter_checksum_map[nftables_exporter_host_arch] }}"
+
+nftables_exporter_default_config:
+  bind_to: "[::]:9630"
+  url_path: "/metrics"
+  nft_location: /sbin/nft
+  log_level: warn
+nftables_exporter_config: {}
+nftables_exporter_computed_config: "{{ nftables_exporter_default_config | combine(nftables_exporter_config) }}"

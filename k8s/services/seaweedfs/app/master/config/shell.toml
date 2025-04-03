@@ -1,0 +1,6 @@
+[cluster]
+default = "c1"
+
+[cluster.c1]
+master = "seaweedfs-master:9333"
+filer = "seaweedfs-filer:8888"

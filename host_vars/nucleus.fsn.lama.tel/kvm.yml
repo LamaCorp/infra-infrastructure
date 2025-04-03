@@ -1,5 +1,4 @@
 ---
-
 libvirt_host_pools:
   - name: images
     type: dir
@@ -7,27 +6,15 @@ libvirt_host_pools:
     mode: 755
     owner: root
     group: root
-  - name: auth
+  - name: k3s-1
     type: dir
-    path: /vms/auth
+    path: /vms/k3s-1
     mode: 755
     owner: root
     group: root
-  - name: games
+  - name: k3s-1-etcd
     type: dir
-    path: /vms/games
-    mode: 755
-    owner: root
-    group: root
-  - name: gitlab-runner
-    type: dir
-    path: /vms/gitlab-runner
-    mode: 755
-    owner: root
-    group: root
-  - name: mail
-    type: dir
-    path: /vms/mail
+    path: /vms/k3s-1/etcd
     mode: 755
     owner: root
     group: root
@@ -49,110 +36,35 @@ libvirt_host_pools:
     mode: 755
     owner: root
     group: root
-  - name: secure-services
-    type: dir
-    path: /vms/secure-services
-    mode: 755
-    owner: root
-    group: root
-  - name: services
-    type: dir
-    path: /vms/services
-    mode: 755
-    owner: root
-    group: root
-  - name: services-big-files
-    type: dir
-    path: /vms/services/big-files
-    mode: 755
-    owner: root
-    group: root
 
 libvirt_vms:
   - state: present
-    name: auth
-    vcpus: 2
-    memory_mb: 2048
+    name: k3s-1
+    vcpus: 16
+    memory_mb: 98304
     enable_spice: true
     volumes:
-      - pool: auth
+      - pool: k3s-1
         name: os
-        capacity: 10G
-        discard: unmap
-      - pool: auth
-        name: storage
-        capacity: 20G
-        discard: unmap
-    interfaces:
-      - type: bridge
-        source:
-          dev: br-mdw
-        mac: 52:54:00:19:71:4e
-    boot_firmware: efi
-    start: true
-    autostart: true
-
-  - state: present
-    name: games
-    vcpus: 8
-    memory_mb: 8192
-    enable_spice: true
-    volumes:
-      - pool: games
-        name: os
-        capacity: 50G
-        discard: unmap
-      - pool: games
-        name: storage
         capacity: 100G
+        discard: unmap
+      - pool: k3s-1
+        name: storage
+        capacity: 1024G
+        discard: unmap
+      - pool: k3s-1
+        name: fst-fsn-default-0
+        capacity: 1024G
+        discard: unmap
+      - pool: k3s-1-etcd
+        name: etcd
+        capacity: 10G
         discard: unmap
     interfaces:
       - type: bridge
         source:
           dev: br-svc
-        mac: 52:54:00:6e:f4:86
-    boot_firmware: efi
-    start: true
-    autostart: true
-
-  - state: present
-    name: gitlab-runner
-    vcpus: 16
-    memory_mb: 8192
-    enable_spice: true
-    volumes:
-      - pool: gitlab-runner
-        name: os
-        capacity: 100G
-        discard: unmap
-    interfaces:
-      - type: bridge
-        source:
-          dev: br-cc
-        mac: 52:54:00:06:78:01
-    boot_firmware: efi
-    start: true
-    autostart: true
-
-  - state: present
-    name: mail
-    vcpus: 2
-    memory_mb: 4096
-    enable_spice: true
-    volumes:
-      - pool: mail
-        name: os
-        capacity: 20G
-        discard: unmap
-      - pool: mail
-        name: storage
-        capacity: 50G
-        discard: unmap
-    interfaces:
-      - type: bridge
-        source:
-          dev: br-mdw
-        mac: 52:54:00:77:16:12
+        mac: 52:54:00:f5:5a:2a
     boot_firmware: efi
     start: true
     autostart: true
@@ -174,7 +86,7 @@ libvirt_vms:
     interfaces:
       - type: bridge
         source:
-          dev: br-svc
+          dev: br-cc
         mac: 52:54:00:e0:d1:60
     boot_firmware: efi
     start: true
@@ -192,7 +104,7 @@ libvirt_vms:
         discard: unmap
       - pool: postgresql
         name: storage
-        capacity: 100G
+        capacity: 500G
         discard: unmap
     interfaces:
       - type: bridge
@@ -222,60 +134,6 @@ libvirt_vms:
         source:
           dev: br-mdw
         mac: 52:54:00:01:f3:d1
-    boot_firmware: efi
-    start: true
-    autostart: true
-
-  - state: present
-    name: secure-services
-    vcpus: 2
-    memory_mb: 2048
-    enable_spice: true
-    volumes:
-      - pool: secure-services
-        name: os
-        capacity: 10G
-        discard: unmap
-      - pool: secure-services
-        name: storage
-        capacity: 20G
-        discard: unmap
-    interfaces:
-      - type: bridge
-        source:
-          dev: br-mdw
-        mac: 52:54:00:dd:7e:7b
-    boot_firmware: efi
-    start: true
-    autostart: true
-
-  - state: present
-    name: services
-    vcpus: 16
-    memory_mb: 32768
-    enable_spice: true
-    volumes:
-      - pool: services
-        name: os
-        capacity: 100G
-        discard: unmap
-      - pool: services
-        name: storage
-        capacity: 200G
-        discard: unmap
-      - pool: services-big-files
-        name: nextcloud
-        capacity: 500G
-        discard: unmap
-      - pool: services-big-files
-        name: s3
-        capacity: 100G
-        discard: unmap
-    interfaces:
-      - type: bridge
-        source:
-          dev: br-svc
-        mac: 52:54:00:1f:f1:ce
     boot_firmware: efi
     start: true
     autostart: true

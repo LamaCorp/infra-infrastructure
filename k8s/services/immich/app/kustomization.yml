@@ -1,0 +1,39 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: immich
+
+resources:
+  - server
+  - microservices
+  - machine-learning
+  - network-policy.yml
+  - pvc.yml
+  - secrets.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: immich-config-env
+    literals:
+      - DB_HOSTNAME=postgresql.fsn.lama.tel
+      - DB_DATABASE_NAME=immich
+      - DB_USERNAME_FILE=/postgres-creds/username
+      - DB_PASSWORD_FILE=/postgres-creds/password
+      - REDIS_HOSTNAME=redis.fsn.lama.tel
+      - REDIS_PORT=6386
+      - IMMICH_MEDIA_LOCATION=/data
+      - IMMICH_CONFIG_FILE=/config/immich.json
+      - TZ=Europe/Paris
+  - name: immich-config
+    files:
+      # See https://github.com/immich-app/immich/blob/main/server/src/config.ts
+      - ./config/immich.json
+
+images:
+  - name: ghcr.io/immich-app/immich-server
+    newTag: v1.131.3
+  - name: ghcr.io/immich-app/immich-machine-learning
+    newTag: v1.131.3

@@ -1,5 +1,4 @@
 ---
-
 network_nameservers:
   - 1.1.1.1
   - 1.0.0.1
@@ -7,6 +6,7 @@ network_nameservers:
 systemd_networkd_apply_config: true
 systemd_networkd_enable_resolved: false
 systemd_networkd_symlink_resolv_conf: false
+systemd_networkd_manage_nsswitch_config: false
 
 netplan_config_file: /etc/netplan/00-network.yaml
 netplan_remove_existing: true

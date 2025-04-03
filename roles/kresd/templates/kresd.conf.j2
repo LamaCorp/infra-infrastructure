@@ -13,6 +13,7 @@ modules = {
 {% for module in kresd_modules %}
     '{{ module }}',
 {% endfor %}
+    {{ kresd_extra_modules_raw | indent(4) }}
 }
 
 

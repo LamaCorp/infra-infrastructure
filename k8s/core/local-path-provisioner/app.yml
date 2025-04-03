@@ -1,0 +1,45 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-local-path-provisioner
+  labels:
+    app: core-local-path-provisioner
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-local-path-provisioner-{{ .name }}
+      labels:
+        app: core-local-path-provisioner
+    spec:
+      project: default
+      syncPolicy:
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: kube-system
+      sources:
+        - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+          targetRevision: HEAD
+          path: k8s/core/local-path-provisioner/extra
+        - repoURL: https://github.com/rancher/local-path-provisioner.git
+          path: deploy/chart/local-path-provisioner
+          targetRevision: v0.0.31
+          helm:
+            releaseName: local-path-provisioner
+            values: |
+              image:
+                repository: rancher/local-path-provisioner
+                tag: v0.0.31
+
+              storageClass:
+                create: false
+
+              nodePathMap:
+                - node: DEFAULT_PATH_FOR_NON_LISTED_NODES
+                  paths:
+                    - /srv/local-path-provisioner

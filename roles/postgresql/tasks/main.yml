@@ -1,5 +1,4 @@
 ---
-
 - name: Add signing key for PostgreSQL repo
   ansible.builtin.apt_key:
     url: https://www.postgresql.org/media/keys/ACCC4CF8.asc
@@ -14,6 +13,14 @@
     name:
       - "postgresql-{{ postgresql_version }}"
       - python3-psycopg2
+
+- name: Disable memory overcommit
+  ansible.posix.sysctl:
+    name: vm.overcommit_memory
+    value: 2
+    state: present
+    reload: true
+    sysctl_set: true
 
 - name: Template PostgreSQL configuration
   ansible.builtin.template:
@@ -43,7 +50,7 @@
     - name: Create users
       community.postgresql.postgresql_user:
         name: "{{ user.name }}"
-        password: "{{ user.settings.password }}"
+        password: "{{ user.settings.password | d(omit) }}"
       loop: "{{ postgresql_users | dict2items(key_name='name', value_name='settings') }}"
       loop_control:
         loop_var: user

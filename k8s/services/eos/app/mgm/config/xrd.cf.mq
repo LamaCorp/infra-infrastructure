@@ -1,0 +1,36 @@
+##### Broker OFS ##########################################
+xrootd.fslib libXrdMqOfs.so
+all.export /eos/ nolock
+all.role server
+xrootd.async off nosf
+
+##### SSS authentication ##################################
+xrootd.seclib libXrdSec.so
+sec.protocol sss -c /etc/eos.keytab -s /etc/eos.keytab
+sec.protbind * only sss
+
+##### Allow up to 1024 threads ############################
+xrd.sched mint 16 maxt 1024 idle 128
+
+##### Run on port 1097 ####################################
+xrd.port 1097
+
+##### Keep-alive + idle timeout ###########################
+xrd.network keepalive
+xrd.timeout idle 120
+
+##### Queueing ############################################
+mq.maxmessagebacklog 100000
+mq.maxqueuebacklog 50000
+mq.rejectqueuebacklog 100000
+
+##### Trace levels (low|medium|high) ######################
+mq.trace low
+
+###########################################################
+mq.queue /eos/
+
+##### QuarkDB #############################################
+mq.qdbcluster qdb.services-eos.svc.c.k3s.fsn.lama.tel:7777
+mq.qdbpassword_file /etc/eos.keytab
+###########################################################

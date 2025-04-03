@@ -1,0 +1,12 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: seaweedfs-volume
+spec:
+  template:
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: nas-1.bar.lama.tel
+      tolerations:
+        - operator: Exists

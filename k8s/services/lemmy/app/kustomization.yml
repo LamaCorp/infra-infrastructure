@@ -1,0 +1,50 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: lemmy
+
+resources:
+  - network-policy.yml
+  - secrets.yml
+  - lemmy
+  - pictrs
+  - lemmy-ui
+  - httproute.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: lemmy-config
+    files:
+      - ./config/config.hjson
+  - name: pictrs-config
+    literals:
+      - PICTRS__SERVER__ADDRESS=[::]:8080
+      - PICTRS__MEDIA__VIDEO_CODEC=vp9
+      - PICTRS__MEDIA__GIF__MAX_WIDTH=256
+      - PICTRS__MEDIA__GIF__MAX_HEIGHT=256
+      - PICTRS__MEDIA__GIF__MAX_AREA=65536
+      - PICTRS__MEDIA__GIF__MAX_FRAME_COUNT=400
+      - PICTRS__REPO__TYPE=postgres
+      - PICTRS__STORE__TYPE=object_storage
+      - PICTRS__STORE__ENDPOINT=https://s3.lama-corp.space
+      - PICTRS__STORE__USE_PATH_STYLE=false
+      - PICTRS__STORE__BUCKET_NAME=lemmy-pictrs
+      - PICTRS__STORE__REGION=us-east-1
+      - PICTRS__TRACING__LOGGING__TARGETS=debug
+      - RUST_BACKTRACE=full
+  - name: lemmy-ui-config
+    literals:
+      - LEMMY_UI_LEMMY_INTERNAL_HOST=lemmy:80
+      - LEMMY_UI_LEMMY_EXTERNAL_HOST=lemmy.lama-corp.space
+      - LEMMY_UI_HTTPS=true
+
+images:
+  - name: dessalines/lemmy
+    newTag: 0.19.9
+  - name: asonix/pictrs
+    newTag: 0.5.16
+  - name: dessalines/lemmy-ui
+    newTag: 0.19.9

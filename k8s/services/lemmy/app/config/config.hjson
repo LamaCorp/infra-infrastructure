@@ -1,0 +1,30 @@
+{
+  database: {
+    uri: "postgresql://{{ .postgres_username }}:{{ .postgres_password }}@postgresql.fsn.lama.tel/lemmy?sslmode=require"
+  }
+  pictrs: {
+    url: "http://pictrs/"
+    api_key: "{{ .pictrs_api_key }}"
+  }
+  email: {
+    smtp_server: "email-smtp.eu-west-3.amazonaws.com:587"
+    smtp_login: "{{ .smtp_username }}"
+    smtp_password: "{{ .smtp_password }}"
+    smtp_from_address: "noreply@lemmy.lama-corp.space"
+    tls_type: "starttls"
+  }
+  setup: {
+    admin_username: "admin"
+    admin_password: "{{ .admin_password }}"
+    site_name: "Lemmy | Lama Corp."
+    admin_email: "root@lama-corp.space"
+  }
+  hostname: "lemmy.lama-corp.space"
+  bind: "::"
+  port: 8536
+  tls_enabled: true
+  prometheus: {
+    bind: "::"
+    port: 10002
+  }
+}

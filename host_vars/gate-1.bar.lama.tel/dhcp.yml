@@ -12,20 +12,18 @@ kea_dhcp4_config:
     interfaces-config:
       interfaces:
         - eno1
+        - bar-client
+        - bar-iot
+        - bar-music
+        - bar-cctv
       dhcp-socket-type: raw
     lease-database:
       persist: true
       lfc-interval: 0
+    calculate-tee-times: true
+    valid-lifetime: 86400
     next-server: 172.28.2.254
     option-data:
-      - name: routers
-        data: 172.28.2.1
-      - name: domain-name-servers
-        data: "172.28.2.254"
-      - name: domain-name
-        data: "bar.lama.tel"
-      - name: ntp-servers
-        data: 172.28.2.254
       - name: no-pxedhcp
         code: 176
         space: ipxe
@@ -60,34 +58,129 @@ kea_dhcp4_config:
         space: ipxe
         encapsulate: ""
     subnet4:
-      - subnet: 172.28.2.0/24
+      - id: 1
+        subnet: 172.28.2.0/24
         pools:
-          - pool: "172.28.2.100 - 172.28.2.199"
-        # option-data:
-        #   - name: static-routes
-        #     data: 172.28.0.0,172.28.2.254
+          - pool: 172.28.2.100 - 172.28.2.199
+        option-data:
+          - name: routers
+            data: 172.28.2.254
+          - name: domain-name-servers
+            data: 172.28.2.254
+          - name: domain-name
+            data: bar.lama.tel
+          - name: ntp-servers
+            data: 172.28.2.254
+        reservations:
+          - hw-address: e4:38:83:e7:22:d8
+            ip-address: 172.28.2.240
+            hostname: wifi-1
+          - hw-address: e4:38:83:e7:21:38
+            ip-address: 172.28.2.241
+            hostname: wifi0
+      - id: 2050
+        subnet: 172.29.2.0/24
+        pools:
+          - pool: 172.29.2.100 - 172.29.2.199
+        option-data:
+          - name: classless-static-route
+            data: 209.112.97.0/24 - 172.29.2.254, 172.28.0.0/15 - 172.29.2.254, 0.0.0.0/0 - 172.29.2.1
+          - name: routers
+            data: 172.29.2.1
+          - name: domain-name-servers
+            data: 172.29.2.254
+          - name: domain-name
+            data: client.bar.lama.tel
+          - name: ntp-servers
+            data: 172.29.2.254
         reservations:
           - hw-address: d8:3a:dd:11:23:8b
-            ip-address: 172.28.2.210
+            ip-address: 172.29.2.210
             hostname: v-core-3
           - hw-address: 00:09:82:17:1c:c0
-            ip-address: 172.28.2.220
+            ip-address: 172.29.2.220
             hostname: loewe-tv
           - hw-address: 08:df:1f:08:49:34
-            ip-address: 172.28.2.221
+            ip-address: 172.29.2.221
             hostname: bose-office
           - hw-address: 48:d6:d5:27:2b:b4
-            ip-address: 172.28.2.222
+            ip-address: 172.29.2.222
             hostname: chromecast-tv
           - hw-address: 88:51:fb:1b:21:f4
-            ip-address: 172.28.2.230
+            ip-address: 172.29.2.230
             hostname: hp-office
-          - hw-address: 44:fe:3b:1b:ed:3e
-            ip-address: 172.28.2.240
-            hostname: wifi-floor0
-          - hw-address: 00:e0:4c:90:a8:52
-            ip-address: 172.28.2.241
-            hostname: wifi-floor-1
-          - hw-address: da:41:14:98:20:f0
-            ip-address: 172.28.2.253
-            hostname: nas-1
+          - hw-address: b8:27:eb:23:aa:a8
+            ip-address: 172.29.2.51
+            hostname: arrosoir
+      - id: 2092
+        subnet: 172.29.192.0/24
+        pools:
+          - pool: 172.29.192.200 - 172.29.192.220
+        option-data:
+          - name: routers
+            data: 172.29.192.254
+          - name: domain-name-servers
+            data: 172.29.192.254
+          - name: domain-name
+            data: iot.bar.lama.tel
+          - name: ntp-servers
+            data: 172.29.192.254
+        reservations:
+          - hw-address: e4:65:b8:d9:0d:9f
+            ip-address: 172.29.192.10
+            hostname: slzb-06p10-0
+          - hw-address: b8:74:24:2e:c3:3f
+            ip-address: 172.29.192.64
+            hostname: viessmann-6221
+          - hw-address: c0:e4:34:41:5e:46
+            ip-address: 172.29.192.65
+            hostname: roomba-1
+          - hw-address: 54:ef:44:56:11:0a
+            ip-address: 172.29.192.66
+            hostname: presense-sensor-chambre-marc
+          - hw-address: ac:48:2d:13:f2:6e
+            ip-address: 172.29.192.67
+            hostname: apsystems-ecu-c
+      - id: 2093
+        subnet: 172.29.193.0/24
+        pools:
+          - pool: 172.29.193.200 - 172.29.193.220
+        option-data:
+          - name: routers
+            data: 172.29.193.254
+          - name: domain-name-servers
+            data: 172.29.193.254
+          - name: domain-name
+            data: music.bar.lama.tel
+          - name: ntp-servers
+            data: 172.29.193.254
+        reservations: []
+      - id: 2094
+        subnet: 172.29.194.0/24
+        pools:
+          - pool: 172.29.194.200 - 172.29.194.220
+        option-data:
+          - name: routers
+            data: 172.29.194.254
+          - name: domain-name-servers
+            data: 172.29.194.254
+          - name: domain-name
+            data: cctv.bar.lama.tel
+          - name: ntp-servers
+            data: 172.29.194.254
+        reservations:
+          - hw-address: ec:71:db:a9:1f:b7
+            ip-address: 172.29.194.10
+            hostname: avant
+          - hw-address: ec:71:db:4c:cd:69
+            ip-address: 172.29.194.11
+            hostname: entree
+          - hw-address: ec:71:db:65:f3:3c
+            ip-address: 172.29.194.12
+            hostname: cote
+          - hw-address: ec:71:db:bd:82:ab
+            ip-address: 172.29.194.13
+            hostname: arriere
+          - hw-address: ec:71:db:34:00:ea
+            ip-address: 172.29.194.14
+            hostname: terrasse-bas

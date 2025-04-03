@@ -1,0 +1,64 @@
+---
+backup_restic_creds_local_path_provisioner: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/local_path_provisioner') }}"
+backup_restic_creds_rancher: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/rancher') }}"
+backup_restic_creds_weed: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/weed') }}"
+
+backup_restic_list_raw:
+  - name: local_path_provisioner
+    enabled: true
+    repo_password: "{{ backup_restic_creds_local_path_provisioner['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_local_path_provisioner['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_local_path_provisioner['backup_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_local_path_provisioner['backup_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_local_path_provisioner['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_local_path_provisioner['prune_secret_key'] }}"
+    to_include:
+      - /srv/local-path-provisioner
+    backup_systemd_timers:
+      minute: 40
+      hour: 05
+    prune_systemd_timers:
+      minute: 49
+      hour: 17
+  - name: rancher
+    enabled: true
+    repo_password: "{{ backup_restic_creds_rancher['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_rancher['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_rancher['backup_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_rancher['backup_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_rancher['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_rancher['prune_secret_key'] }}"
+    to_include:
+      - /etc/rancher
+      - /var/lib/rancher
+    backup_systemd_timers:
+      minute: 40
+      hour: 06
+    prune_systemd_timers:
+      minute: 12
+      hour: 17
+  - name: weed
+    enabled: true
+    repo_password: "{{ backup_restic_creds_weed['repo_password'] }}"
+    backend:
+      type: wasabi
+      s3_bucket_name: "{{ backup_restic_creds_weed['bucket_name'] }}"
+      s3_access_key: "{{ backup_restic_creds_weed['backup_access_key'] }}"
+      s3_secret_key: "{{ backup_restic_creds_weed['backup_secret_key'] }}"
+      s3_prune_access_key: "{{ backup_restic_creds_weed['prune_access_key'] }}"
+      s3_prune_secret_key: "{{ backup_restic_creds_weed['prune_secret_key'] }}"
+    # backup_cmd: "cri_backup --ignore-inode"
+    to_include:
+      - /weed/group
+      - /weed/service
+      - /weed/user
+    backup_systemd_timers:
+      minute: 40
+      hour: 03
+    prune_systemd_timers:
+      minute: 49
+      hour: 14

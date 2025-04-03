@@ -14,6 +14,4 @@ load_secrets() {
 }
 
 load_secrets "secrets/vars"
-
-export GRAFANA_USER="$(vault kv get -field=username observability/grafana/admin)"
-export GRAFANA_PASSWORD="$(vault kv get -field=password observability/grafana/admin)"
+load_secrets "gitlab/secrets/vars"

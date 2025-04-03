@@ -2,7 +2,7 @@
 backup_restic_default_schedule_type: "systemd-timers"
 backup_restic_default_prune_schedule_type: "systemd-timers"
 backup_restic_default_compression_level: max
-backup_restic_prune_host: secure-services.fsn.lama.tel
+backup_restic_prune_host: restic-prune.bar.lama.tel
 backup_restic_default_s3_host: s3.eu-central-1.wasabisys.com
 
 backup_restic_default_backup_data_integrity_check: "simple"

@@ -1,7 +1,0 @@
----
-
-- name: Restart node exporter what active users service
-  ansible.builtin.systemd:
-    name: "{{ node_exporter_what_active_users_binary_name }}.service"
-    state: restarted
-    daemon_reload: true

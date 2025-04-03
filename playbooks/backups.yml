@@ -1,11 +1,18 @@
 #!/usr/bin/env ansible-playbook
 ---
-
 - name: Base
   import_playbook: base.yml
 
 - name: "Backups: setup prune host"
   hosts: restic_prune
+  pre_tasks:
+    - name: Ensure cache directory exist
+      ansible.builtin.file:
+        path: /srv/restic/cache
+        state: directory
+        owner: root
+        group: root
+        mode: 0700
   roles:
     - cri.restic
   tags:

@@ -1,0 +1,25 @@
+---
+nft_input_host_rules:
+  # Allow broadcast and multicast
+  010 drop unwanted: []
+  011 drop unwanted ipv6: []
+
+  500 homeassistant:
+    - ip saddr {$subnet_internal_4} tcp dport 8123 accept
+    - ip6 saddr {$subnet_internal_6} tcp dport 8123 accept
+
+  501 mqtt:
+    - ip saddr {$subnet_internal_4, 172.29.192.0/24} tcp dport 1883 accept
+    - ip6 saddr {$subnet_internal_6, 2a06:e881:7701:192::/64} tcp dport 1883 accept
+
+  502 zigbee2mqtt:
+    - ip saddr {$subnet_internal_4} tcp dport 8080 accept
+    - ip6 saddr {$subnet_internal_6} tcp dport 8080 accept
+
+  503 mdns:
+    - ip saddr 172.29.192.0/24 udp dport 5353 accept
+    - ip6 saddr 2a06:e881:7701:192::/64 udp dport 5353 accept
+
+  504 ssdp and upnp:
+    - ip saddr 172.29.192.0/24 udp dport 1900 accept
+    - ip6 saddr 2a06:e881:7701:192::/64 udp dport 1900 accept

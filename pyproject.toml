@@ -1,26 +1,20 @@
-[tool.poetry]
-name = "lama-corp-infrastructure"
-version = "1.0.0"
-description = ""
-authors = [
-  "Marc 'risson' Schmitt <risson@lama-corp.space>",
+[project]
+name = "infrastructure"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = "==3.13.*"
+dependencies = [
+    "ansible==11.4.0",
+    "ansible-lint==25.1.3",
+    "black==25.1.0",
+    "hvac==2.3.0",
+    "jmespath==1.0.1",
+    "pre-commit==4.2.0",
+    "ruff==0.11.2",
+    "xmltodict==0.14.2",
+    "yamllint==1.37.0",
 ]
-license = "AGPL-3.0"
 
-[tool.poetry.dependencies]
-python = "^3.10"
-ansible = "^8"
-hvac = "*"
-jmespath = "*"
-xmltodict = "*"
-
-[tool.poetry.dev-dependencies]
-ansible-lint = { version = "*", markers = "platform_system != 'Windows'" }
-black = "*"
-isort = "*"
-pre-commit = "*"
-yamllint = "*"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+compile-bytecode = true

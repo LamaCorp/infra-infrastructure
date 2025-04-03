@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: synapse-admin
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: admin.matrix.lama-corp.space
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: synapse-admin
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - admin.matrix.lama-corp.space
+      secretName: synapse-admin-tls

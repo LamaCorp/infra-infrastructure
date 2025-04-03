@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: collabora
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: office.lama-corp.space
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: collabora
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - office.lama-corp.space
+      secretName: collabora-tls

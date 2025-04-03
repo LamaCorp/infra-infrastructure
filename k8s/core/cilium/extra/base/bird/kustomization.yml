@@ -1,0 +1,18 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: bird
+
+resources:
+  - daemonset.yml
+
+configMapGenerator:
+  - name: bird-config
+    files:
+      - config/start.sh
+      - config/bird.conf
+
+images:
+  - name: ghcr.io/akafeng/bird
+    newTag: "2.14"

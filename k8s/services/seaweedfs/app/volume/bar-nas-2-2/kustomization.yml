@@ -1,0 +1,21 @@
+---
+kind: Kustomization
+
+nameSuffix: -bar-nas-2-2
+
+commonLabels:
+  app.kubernetes.io/instance: bar-nas-2-2
+
+resources:
+  - ../base
+
+patches:
+  - path: statefulset.yml
+
+configMapGenerator:
+  - name: seaweedfs-volume-config-env
+    behavior: merge
+    literals:
+      - VOLUME_DATACENTER=bar
+      - VOLUME_RACK=rack1
+      - VOLUME_CLASS=ssd

@@ -1,0 +1,5 @@
+xrd.port 7777
+xrd.protocol redis:7777 /usr/lib64/libXrdQuarkDB.so
+redis.password_file /etc/eos.keytab
+redis.database /var/quarkdb/node-0
+redis.mode standalone

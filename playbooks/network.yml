@@ -64,7 +64,6 @@
         state: restarted
       when: systemd_networkd_config_update.changed
   roles:
-    - stackhpc.systemd_networkd
     - mrlesmithjr.netplan
   tags:
     - netplan
@@ -72,7 +71,7 @@
 
 - name: Firewall
   hosts: all
-  tasks:
+  pre_tasks:
     - name: Activate IP forwarding
       ansible.posix.sysctl:
         name: "{{ item.key }}"
@@ -113,17 +112,8 @@
     - firewall
     - nftables
 
-- name: Nftables prometheus exporter
-  hosts: all
-  roles:
-    - node_exporter_nftables
-  tags:
-    - firewall
-    - nftables
-    - observability
-
 - name: Routers
-  hosts: router
+  hosts: core
   roles:
     - role: bird2
       tags:
@@ -133,3 +123,11 @@
         - lg
   tags:
     - router
+
+- name: VPN
+  hosts: core
+  roles:
+    - zerotier
+  tags:
+    - zerotier
+    - vpn

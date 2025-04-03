@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mautrix-facebook
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: matrix.lama-corp.space
+      http:
+        paths:
+          - path: /mautrix-facebook
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: mautrix-facebook
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - matrix.lama-corp.space
+      secretName: mautrix-facebook-tls

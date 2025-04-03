@@ -3,19 +3,15 @@
 - name: Base
   import_playbook: base.yml
 
-- name: Observability
-  hosts: observability
-  pre_tasks:
-    - name: Compute Prometheus rules
-      ansible.builtin.set_fact:
-        prometheus_rules: "{{ prometheus_rules | default({}) | combine(rules, recursive=True, list_merge='append') }}"
-      loop: "{{ prometheus_rules_list | default([]) }}"
-      loop_control:
-        loop_var: rules
+- name: Common prometheus exporters
+  hosts: all
   roles:
-    - observability
+    - prometheus.prometheus.node_exporter
+    - node_exporter_textfile_collector_scripts
+    - nftables_exporter
   tags:
     - observability
+    - exporters
 
 - name: Promtail
   hosts: all

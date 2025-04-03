@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bird-lg-go
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: lg.lama.tel
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bird-lg-go
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - lg.lama.tel
+      secretName: bird-lg-go-tls

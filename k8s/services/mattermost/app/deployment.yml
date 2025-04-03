@@ -1,0 +1,87 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mattermost
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  strategy:
+    type: Recreate
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 22268
+        runAsGroup: 22268
+        fsGroup: 22268
+      containers:
+        - name: mattermost
+          image: mattermost/mattermost-team-edition
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: mattermost-config
+            - secretRef:
+                name: mattermost-postgres-credentials
+            - secretRef:
+                name: mattermost-s3-credentials
+            - secretRef:
+                name: mattermost-smtp-credentials
+            - secretRef:
+                name: mattermost-oidc-credentials
+          ports:
+            - name: http
+              containerPort: 8065
+              protocol: TCP
+          startupProbe:
+            httpGet:
+              port: http
+              path: /healthz
+            initialDelaySeconds: 3
+            failureThreshold: 30
+            timeoutSeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              port: http
+              path: /api/v4/system/ping
+            initialDelaySeconds: 1
+            failureThreshold: 3
+            timeoutSeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              port: http
+              path: /api/v4/system/ping
+            initialDelaySeconds: 5
+            failureThreshold: 3
+            timeoutSeconds: 5
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /mattermost/data
+            - name: logs
+              mountPath: /mattermost/logs
+            - name: plugins
+              mountPath: /mattermost/plugins
+            - name: client-plugins
+              mountPath: /mattermost/client-plugins
+            - name: bleve-indexes
+              mountPath: /mattermost/bleve-indexes
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mattermost-data
+        - name: logs
+          persistentVolumeClaim:
+            claimName: mattermost-logs
+        - name: plugins
+          persistentVolumeClaim:
+            claimName: mattermost-plugins
+        - name: client-plugins
+          persistentVolumeClaim:
+            claimName: mattermost-client-plugins
+        - name: bleve-indexes
+          persistentVolumeClaim:
+            claimName: mattermost-bleve-indexes

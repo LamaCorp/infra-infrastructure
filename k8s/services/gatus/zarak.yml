@@ -1,0 +1,84 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: services-gatus-zarak
+  labels:
+    app: services-gatus-zarak
+spec:
+  project: services
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+  destination:
+    name: k3s.fsn.lama.tel
+    namespace: services-gatus-zarak
+  sources:
+    - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+      targetRevision: HEAD
+      path: k8s/services/gatus/extra/zarak
+    - repoURL: https://twin.github.io/helm-charts
+      targetRevision: 1.2.0
+      chart: gatus
+      helm:
+        releaseName: gatus
+        values: |
+          image:
+            tag: v5.16.0
+
+          annotations:
+            reloader.stakater.com/auto: "true"
+
+          # Does envFrom secret named gatus
+          secrets: true
+
+          ingress:
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+            hosts:
+              - zarak.devou.ps
+            tls:
+              - hosts:
+                  - zarak.devou.ps
+                secretName: gatus-tls
+
+          serviceMonitor:
+            enabled: true
+
+          config:
+            web:
+              address: "[::]"
+            metrics: true
+
+            storage:
+              type: postgres
+              path: "postgres://${DB_USER}:${DB_PASS}@postgresql.fsn.lama.tel:5432/gatus_zarak?sslmode=require"
+
+            ui:
+              title: Zarak
+              header: Zarak external infrastructure monitoring
+              logo: https://zarak.fr/resources/cyril-avatar.jpg
+              link: https://zarak.fr
+
+            .defaults: &defaults
+              interval: 30s
+
+            .https-endpoint: &https-endpoint
+              <<: *defaults
+              conditions:
+                - "[STATUS] == 200"
+                - "[RESPONSE_TIME] <= 2000"
+                - "[CERTIFICATE_EXPIRATION] > 168h" # 7 days
+
+            endpoints:
+
+              - name: zarak.fr
+                <<: *https-endpoint
+                url: https://zarak.fr
+
+              - name: cyrilduval.fr
+                <<: *https-endpoint
+                url: https://cyrilduval.fr

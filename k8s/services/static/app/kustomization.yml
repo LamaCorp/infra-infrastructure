@@ -1,0 +1,21 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: static
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - pvc.yml
+  - service.yml
+
+configMapGenerator:
+  - name: static-config
+    files:
+      - config/nginx.conf
+      - config/default.conf
+
+images:
+  - name: nginx
+    newTag: 1.25.3

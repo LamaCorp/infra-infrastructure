@@ -1,9 +1,4 @@
 ---
-# acme
-
-acme_vault_certs_vault_path: "acme/certs/${ACME_DOMAIN}"
-acme_vault_approle_path: "acme-approle"
-
 # common
 
 root_password_hashed: "$6$RQ1LcccPWB/NO5V.$TWZLJnGGSF1CarIAZhT5YiK.mTLLrbnnVIxwzkCOXa39.WtSjLW7m99ARoPg8iyMzid7EUetecBBbqahyLWfH/"
@@ -43,5 +38,6 @@ vault_version: 1.13.0
 
 node_exporter_textfile_collector_scripts_to_install:
   - apt_info.py
+  - chrony.py
   - deleted_libraries.py
-  - smartmon.sh
+  - smartmon.py

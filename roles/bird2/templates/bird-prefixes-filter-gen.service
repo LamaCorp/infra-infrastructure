@@ -1,0 +1,6 @@
+[Unit]
+Description=Generate bird prefixes filters for IRR {{ irr.name }} IPv{{ irr.protocol_number }}
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -e -c 'mv /etc/bird/filters/prefixes/{{ irr.formatted }}_{{ irr.protocol_number }}.conf /etc/bird/filters/prefixes/{{ irr.formatted }}_{{ irr.protocol_number }}.conf.$(date +%%s).bak || true; echo -n "define " > /etc/bird/filters/prefixes/{{ irr.formatted }}_{{ irr.protocol_number }}.conf && {{ irr.bgpq4_cmd }} >> /etc/bird/filters/prefixes/{{ irr.formatted }}_{{ irr.protocol_number }}.conf && (systemctl reload bird.service || true)'

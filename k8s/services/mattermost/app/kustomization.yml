@@ -1,0 +1,41 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: mattermost
+
+resources:
+  - deployment.yml
+  - network-policy.yml
+  - secrets.yml
+  - service.yml
+  - ingress.yml
+  - pvc.yml
+
+configMapGenerator:
+  - name: mattermost-config
+    literals:
+      - MM_GITLABSETTINGS_ENABLE=true
+      - MM_GITLABSETTINGS_AUTHENDPOINT=https://auth.lama-corp.space/application/o/authorize/
+      - MM_GITLABSETTINGS_TOKENENDPOINT=https://auth.lama-corp.space/application/o/token/
+      - MM_GITLABSETTINGS_USERAPIENDPOINT=https://auth.lama-corp.space/application/o/userinfo/
+      - MM_GITLABSETTINGS_DISCOVERYENDPOINT=https://auth.lama-corp.space/application/o/mattermost/.well-known/openid-configuration
+      - MM_GITLABSETTINGS_BUTTONTEXT=Lama Corp. Connect
+      - MM_EMAILSETTINGS_FEEDBACKNAME=Notifications - Chat | Lama Corp.
+      - MM_EMAILSETTINGS_FEEDBACKEMAIL=no-reply@chat.lama-corp.space
+      - MM_EMAILSETTINGS_REPLYTOADDRESS=root@lama-corp.space
+      - MM_EMAILSETTINGS_FEEDBACKORGANIZATION=Lama Corp.
+      - MM_EMAILSETTINGS_ENABLESMTPAUTH=true
+      - MM_EMAILSETTINGS_SMTPSERVER=email-smtp.eu-west-3.amazonaws.com
+      - MM_EMAILSETTINGS_SMTPPORT=587
+      - MM_EMAILSETTINGS_CONNECTIONSECURITY=STARTTLS
+      - MM_FILESETTINGS_DRIVERNAME=amazons3
+      - MM_FILESETTINGS_AMAZONS3BUCKET=mattermost
+      - MM_FILESETTINGS_AMAZONS3ENDPOINT=s3.lama-corp.space
+      - MM_FILESETTINGS_AMAZONS3SSL=true
+      - MM_SQLSETTINGS_DRIVERNAME=postgres
+      - MM_SERVICESETTINGS_SITEURL=https://chat.lama-corp.space
+
+images:
+  - name: mattermost/mattermost-team-edition
+    newTag: 9.11.11

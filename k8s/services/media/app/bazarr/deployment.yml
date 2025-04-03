@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bazarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+        - name: bazarr
+          image: ghcr.io/hotio/bazarr
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: media-config-env
+          ports:
+            - name: http
+              containerPort: 6767
+              protocol: TCP
+          volumeMounts:
+            - name: media
+              mountPath: /media
+            - name: data
+              mountPath: /config
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: bazarr-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+      nodeSelector:
+        kubernetes.io/hostname: k3s-1.bar.lama.tel
+      tolerations:
+        - key: "role.lama.tel/media"
+          operator: "Exists"
+          effect: "NoExecute"
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"

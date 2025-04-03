@@ -1,0 +1,13 @@
+---
+homeassistant_docker_repository: ghcr.io/home-assistant/home-assistant
+homeassistant_docker_tag: 2024.8.3
+
+homeassistant_default_environment: {}
+homeassistant_environment: {}
+homeassistant_environment_computed: "{{ homeassistant_default_environment | combine(homeassistant_environment) }}"
+
+mosquitto_docker_repository: eclipse-mosquitto
+mosquitto_docker_tag: 2.0.18
+
+zigbee2mqtt_docker_repository: ghcr.io/koenkk/zigbee2mqtt
+zigbee2mqtt_docker_tag: 1.40.0

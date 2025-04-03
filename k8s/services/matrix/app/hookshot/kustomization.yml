@@ -1,0 +1,11 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: hookshot
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - secrets.yml
+  - service.yml

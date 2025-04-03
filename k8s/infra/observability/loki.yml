@@ -1,0 +1,121 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: infra-loki
+  labels:
+    app: infra-loki
+spec:
+  project: infra
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+  destination:
+    name: k3s.fsn.lama.tel
+    namespace: infra-observability
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    targetRevision: 5.41.4
+    chart: loki
+    helm:
+      releaseName: loki
+      values: |
+        global:
+          clusterDomain: c.k3s.fsn.lama.tel
+        loki:
+          analytics:
+            reporting_enabled: false
+          auth_enabled: true
+          storage:
+            type: s3
+            s3:
+              endpoint: s3.lama-corp.space
+              access_key_id: ${AWS_ACCESS_KEY_ID}
+              secret_access_key: ${AWS_SECRET_ACCESS_KEY}
+            bucketNames:
+              chunks: loki
+              ruler: loki
+              admin: loki
+          limits_config:
+            enforce_metric_name: false
+            ingestion_rate_mb: 10
+            ingestion_burst_size_mb: 20
+            reject_old_samples: false
+            reject_old_samples_max_age: 168h
+          ingester:
+            chunk_idle_period: 5m
+            chunk_retain_period: 1m
+
+          commonConfig:
+            replication_factor: 1
+
+          schemaConfig:
+            configs:
+              - from: 2022-01-30
+                store: boltdb-shipper
+                schema: v11
+                object_store: s3
+                index:
+                  period: 24h
+                  prefix: index_
+              - from: 2023-12-26
+                store: boltdb-shipper
+                schema: v12
+                object_store: s3
+                index:
+                  period: 24h
+                  prefix: index_
+
+        tableManager:
+          retention_deletes_enabled: true
+          retention_period: 43800h  # 5 years
+
+        memberlist:
+          service:
+            publishNotReadyAddresses: true
+
+        singleBinary:
+          replicas: 1
+          annotations:
+            secret.reloader.stakater.com/reload: loki-s3-credentials
+          extraArgs:
+            - -config.expand-env=true
+          extraEnvFrom:
+            - secretRef:
+                name: loki-s3-credentials
+
+        ingress:
+          enabled: true
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+            nginx.ingress.kubernetes.io/proxy-body-size: 20m
+            nginx.ingress.kubernetes.io/auth-type: basic
+            nginx.ingress.kubernetes.io/auth-secret: loki-auth-map
+            nginx.ingress.kubernetes.io/auth-secret-type: auth-map
+          hosts:
+            - loki.lama.tel
+          tls:
+            - hosts:
+                - loki.lama.tel
+              secretName: loki-tls
+
+        gateway:
+          enabled: false
+
+        monitoring:
+          serviceMonitor:
+            metricsInstance:
+              enabled: false
+          rules:
+            alerting: true
+          selfMonitoring:
+            enabled: false
+            grafanaAgent:
+              installOperator: false
+          lokiCanary:
+            enabled: false
+
+        test:
+          enabled: false

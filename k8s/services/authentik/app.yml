@@ -1,0 +1,111 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: services-authentik
+  labels:
+    app: services-authentik
+spec:
+  project: services
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+  destination:
+    name: k3s.fsn.lama.tel
+    namespace: services-authentik
+  sources:
+    - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+      targetRevision: HEAD
+      path: k8s/services/authentik/extra
+    - repoURL: https://charts.goauthentik.io
+      targetRevision: 2025.2.3
+      chart: authentik
+      helm:
+        releaseName: authentik
+        values: |
+          authentik:
+            postgresql:
+              host: postgresql.fsn.lama.tel
+              user: file:///postgres-creds/username
+              password: file:///postgres-creds/password
+              name: authentik
+            redis:
+              host: redis.fsn.lama.tel
+              port: 6380
+            email:
+              host: email-smtp.eu-west-3.amazonaws.com
+              port: 587
+              username: file:///smtp-creds/username
+              password: file:///smtp-creds/password
+              use_tls: true
+              from: "Auth - Lama Corp. <no-reply@auth.lama-corp.space>"
+            secret_key: file:///secrets/secret-key
+            listen:
+              trusted_proxy_cidrs: "172.28.128.0/22,2001:67c:17fc:110::/60"
+            compliance:
+              fips:
+                enabled: true
+
+          blueprints:
+            configMaps:
+              - authentik-blueprints
+
+          global:
+            env:
+              - name: AUTHENTIK_BOOTSTRAP_EMAIL
+                value: root@lama-corp.space
+              - name: AUTHENTIK_BOOTSTRAP_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: authentik-bootstrap
+                    key: password
+              - name: AUTHENTIK_BOOTSTRAP_TOKEN
+                valueFrom:
+                  secretKeyRef:
+                    name: authentik-bootstrap
+                    key: token
+            envFrom:
+              - secretRef:
+                  name: authentik-blueprint-secrets
+            volumeMounts:
+              - name: secrets
+                mountPath: /secrets
+              - name: postgres-creds
+                mountPath: /postgres-creds
+              - name: smtp-creds
+                mountPath: /smtp-creds
+            volumes:
+              - name: secrets
+                secret:
+                  secretName: authentik-secrets
+              - name: postgres-creds
+                secret:
+                  secretName: authentik-postgres-credentials
+              - name: smtp-creds
+                secret:
+                  secretName: authentik-smtp-credentials
+            deploymentAnnotations:
+              secret.reloader.stakater.com/reload: authentik-secrets,authentik-postgres-credentials
+
+          server:
+            ingress:
+              enabled: true
+              annotations:
+                cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+              hosts:
+                - auth.lama-corp.space
+                - auth.lama.tel
+              tls:
+                - hosts:
+                    - auth.lama-corp.space
+                    - auth.lama.tel
+                  secretName: authentik-tls
+            metrics:
+              serviceMonitor:
+                enabled: true
+
+          prometheus:
+            rules:
+              enabled: true

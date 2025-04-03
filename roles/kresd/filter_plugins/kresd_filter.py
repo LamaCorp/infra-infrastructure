@@ -68,8 +68,8 @@ class FilterModule:
         Check object validity from a mapping of fields and types
         """
         for _field_name, _field in kresd_object_fields.items():
-            if not _field_name in _object and (
-                not "required" in _field or _field["required"]
+            if _field_name not in _object and (
+                "required" not in _field or _field["required"]
             ):
                 raise ValueError(
                     to_native(
@@ -175,7 +175,7 @@ class FilterModule:
         _policies = []
         VALID_POLICY_ACTIONS = ["pass", "deny"]
         for policy in kresd_view["policies"]:
-            if not (policy["action"] in VALID_POLICY_ACTIONS):
+            if policy["action"] not in VALID_POLICY_ACTIONS:
                 raise ValueError(
                     to_native(
                         "kresd policy action must be one of {}".format(

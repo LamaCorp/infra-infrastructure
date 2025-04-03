@@ -1,0 +1,26 @@
+---
+kresd_rpz:
+  internal: "{{ kresd_rpz_internal }}"
+
+  homeassistant:
+    zone_content: |
+      $TTL 3600
+
+      homeassistant.local.    A   172.29.192.1
+
+  unifi:
+    zone_content: |
+      $TTL 3600
+
+      unifi.  A   172.28.2.254
+
+kresd_policies:
+  - type: rpz
+    action: deny
+    rpz: internal
+  - type: rpz
+    action: deny
+    rpz: homeassistant
+  - type: rpz
+    action: deny
+    rpz: unifi

@@ -1,0 +1,14 @@
+{% for domain in domains %}
+server {
+  listen       8000;
+  listen       [::]:8000;
+  server_name  {{ domain.name }} {{ domain.extra_names | d([]) | join(' ') }};
+  port_in_redirect  off;
+
+  location / {
+    root   /data/{{ domain.name }};
+    index  index.html index.htm;
+    autoindex {{ 'on' if domain.autoindex | d(false) else 'off' }};
+  }
+}
+{% endfor %}

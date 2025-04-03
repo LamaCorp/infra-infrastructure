@@ -1,13 +1,25 @@
 ---
+- name: Install required packages
+  ansible.builtin.apt:
+    install_recommends: false
+    update_cache: true
+    state: present
+    name:
+      - git
+      - moreutils
+      - python3-prometheus-client
+      - smartmontools
 
-- name: Prerequisites
-  ansible.builtin.import_tasks: prerequisites.yml
+- name: Download the desired revision of the scripts
+  ansible.builtin.git:
+    repo: "{{ node_exporter_textfile_collector_scripts_repository }}"
+    update: true
+    version: "{{ node_exporter_textfile_collector_scripts_revision }}"
+    dest: /opt/node_exporter_textfile_collector_scripts
 
-- name: Download
-  ansible.builtin.import_tasks: download.yml
-
-- name: Install
-  ansible.builtin.import_tasks: install.yml
-
-- name: Start and Schedule
-  ansible.builtin.import_tasks: schedule.yml
+- name: Schedule each collector scripts
+  ansible.builtin.include_tasks: schedule_each.yml
+  vars:
+    script_name: "{{ item }}"
+    script_name_no_ext: "{{ item.split('.') | first }}"
+  loop: "{{ node_exporter_textfile_collector_scripts_to_install }}"

@@ -1,7 +1,4 @@
 ---
-
-version: '3.7'
-
 services:
   minio_gateway:
     hostname: minio-gateway

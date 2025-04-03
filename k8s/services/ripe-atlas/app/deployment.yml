@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ripe-atlas
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+        - name: probe
+          image: jamesits/ripe-atlas
+          imagePullPolicy: Always
+          env:
+            - name: RXTXRPT
+              value: "yes"
+          volumeMounts:
+            - name: etc
+              mountPath: /var/atlas-probe/etc
+            - name: status
+              mountPath: /var/atlas-probe/status
+          resources:
+            requests:
+              memory: 64Mi
+            limits:
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - CHOWN
+                - SETUID
+                - SETGID
+                - DAC_OVERRIDE
+                - NET_RAW
+      volumes:
+        - name: etc
+          persistentVolumeClaim:
+            claimName: ripe-atlas-etc
+        - name: status
+          persistentVolumeClaim:
+            claimName: ripe-atlas-status

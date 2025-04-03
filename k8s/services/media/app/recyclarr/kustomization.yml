@@ -1,0 +1,33 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: recyclarr
+
+resources:
+  - deployment.yml
+  - pvc.yml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: recyclarr-config
+    files:
+      - config/recyclarr.yml
+  - name: recyclarr-includes
+    files:
+      - ./includes/radarr-hd-bluray-web.yml
+      - ./includes/radarr-uhd-bluray-web.yml
+      - ./includes/radarr-remux-web-1080p.yml
+      - ./includes/radarr-remux-web-2160p.yml
+      - ./includes/radarr-anime.yml
+      - ./includes/radarr-french-hd-bluray-web-multi.yml
+      - ./includes/radarr-french-uhd-bluray-web-multi.yml
+      - ./includes/radarr-french-remux-web-1080p-multi.yml
+      - ./includes/radarr-french-remux-web-2160p-multi.yml
+      - ./includes/sonarr-web-1080p.yml
+      - ./includes/sonarr-web-2160p.yml
+      - ./includes/sonarr-anime.yml
+      - ./includes/sonarr-french-web-1080p-multi.yml
+      - ./includes/sonarr-french-web-2160p-multi.yml

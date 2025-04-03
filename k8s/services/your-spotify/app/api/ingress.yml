@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: your-spotify-api
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: ys-api.lama-corp.space
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: your-spotify-api
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - ys-api.lama-corp.space
+      secretName: your-spotify-api-tls

@@ -1,0 +1,151 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: services-matrix
+  labels:
+    app: services-matrix
+spec:
+  project: services
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+  destination:
+    name: k3s.fsn.lama.tel
+    namespace: services-matrix
+  sources:
+    - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+      targetRevision: HEAD
+      path: k8s/services/matrix/app
+    - repoURL: https://ananace.gitlab.io/charts
+      targetRevision: 3.11.0
+      chart: matrix-synapse
+      helm:
+        releaseName: synapse
+        values: |
+          fullnameOverride: synapse
+          serverName: lama-corp.space
+          publicServerName: matrix.lama-corp.space
+
+          signingkey:
+            job:
+              enabled: false
+            existingSecret: synapse-signing-key
+            existingSecretKey: key
+
+          config:
+            publicBaseurl: https://matrix.lama-corp.space
+            reportStats: true
+            trustedKeyServers:
+              - server_name: matrix.org
+          extraConfig:
+            allow_public_rooms_over_federation: true
+            allow_public_rooms_without_auth: false
+            auto_join_rooms:
+              - "#everyone:lama-corp.space"
+            encryption_enabled_by_default_for_room_type: invite
+            password_config:
+              enabled: false
+            presence:
+              enabled: true
+            enable_media_repo: false
+            app_service_config_files:
+              - /synapse/config/appservices/hookshot.yaml
+              - /synapse/config/appservices/mautrix-facebook.yaml
+              - /synapse/config/appservices/mautrix-slack.yaml
+
+          synapse:
+            strategy:
+              type: Recreate
+            extraCommands:
+              - apt-get update -yqq && apt-get install -yqq git
+              - pip install synapse-s3-storage-provider git+https://github.com/devture/matrix-synapse-shared-secret-auth.git
+            extraVolumes:
+              - name: extra-secrets
+                secret:
+                  secretName: synapse-secrets
+              - name: appservices
+                secret:
+                  secretName: matrix-appservices
+            extraVolumeMounts:
+              - name: extra-secrets
+                mountPath: /synapse/config/conf.d/extra-secrets.yaml
+                subPath: config.yaml
+                readOnly: true
+              - name: appservices
+                mountPath: /synapse/config/appservices
+                readOnly: true
+
+          postgresql:
+            enabled: false
+          externalPostgresql:
+            host: postgresql.fsn.lama.tel
+            username: matrix_synapse
+            existingSecret: synapse-postgres-credentials
+            existingSecretPasswordKey: password
+            database: matrix_synapse
+
+          redis:
+            enabled: false
+            usePassword: false
+            auth:
+              enabled: false
+              password: ""
+          externalRedis:
+            host: redis.fsn.lama.tel
+            port: 6384
+
+          persistence:
+            enabled: false
+
+          ingress:
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+              nginx.ingress.kubernetes.io/proxy-body-size: 50m
+            includeServerName: false
+            csHosts:
+              - matrix.lama-corp.space
+            hosts:
+              - matrix.lama-corp.space
+            tls:
+              - hosts:
+                  - matrix.lama-corp.space
+                secretName: synapse-tls
+    - repoURL: https://ananace.gitlab.io/charts
+      targetRevision: 1.3.38
+      chart: element-web
+      helm:
+        releaseName: element
+        values: |
+          fullnameOverride: element
+          defaultServer:
+            url: https://matrix.lama-corp.space
+            name: lama-corp.space
+          config:
+            brand: Lama Corp. Matrix
+            default_country_code: FR
+            default_theme: dark
+            disable_guests: true
+            disable_3pid_login: true
+            permalink_prefix: https://element.lama-corp.space
+            room_directory:
+              servers:
+                - lama-corp.space
+                - matrix.org
+                - nixos.org
+            jitsi:
+              preferred_domain: meet.jit.si
+
+          ingress:
+            enabled: true
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+            hosts:
+              - element.lama-corp.space
+            tls:
+              - hosts:
+                  - element.lama-corp.space
+                secretName: element-tls

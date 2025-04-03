@@ -1,0 +1,9 @@
+---
+nft_define_host:
+  ospf interfaces:
+    name: ospf_interfaces
+    value: "eno1"
+
+nft_forward_host_rules:
+  200 allow external:
+    - oif eno1 accept

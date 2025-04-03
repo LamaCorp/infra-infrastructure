@@ -1,0 +1,7 @@
+---
+kind: Kustomization
+
+resources:
+  - bird
+  - cluster-network-policy.yml
+  - network-policy.yml

@@ -1,0 +1,13 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-egress-kube-apiserver
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEntities:
+        - kube-apiserver
+  egress:
+    - toEntities:
+        - kube-apiserver

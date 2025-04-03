@@ -1,0 +1,23 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: routinator
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+spec:
+  rules:
+    - host: routinator.lama.tel
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: routinator
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - routinator.lama.tel
+      secretName: routinator-tls

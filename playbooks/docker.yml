@@ -5,20 +5,12 @@
 
 - name: Docker
   hosts: docker
-  vars:
-    pip_install_packages:
-      - docker
-      - docker-compose
   roles:
-    - geerlingguy.pip
     - geerlingguy.docker
-    - role: docker2nftables
-      when:
-        - (docker_daemon_options.bridge | d('docker0')) != 'none'
-        - inventory_hostname not in groups['gitlab_runner']
-    - role: dns_proxy_server
-      when:
-        - (docker_daemon_options.bridge | d("docker0")) != 'none'
-        - inventory_hostname not in groups['gitlab_runner']
+  post_tasks:
+    - name: Install Python docker and docker-compose bindings
+      ansible.builtin.apt:
+        name:
+          - python3-docker
   tags:
     - docker

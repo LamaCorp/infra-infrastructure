@@ -1,5 +1,4 @@
 ---
-
 nft_define_group:
   bgp neighbors 4:
     name: bgp_neighbors_4
@@ -10,22 +9,46 @@ nft_define_group:
 
   ospf interfaces:
     name: ospf_interfaces
-    value: eno1
+    value: zt-lama
+
+  bird lg proxy:
+    name: bird_lg_proxy
+    value: 8990
+  prometheus exporter bird:
+    name: prometheus_exporter_bird
+    value: 9324
+  prometheus exporter kresd:
+    name: prometheus_exporter_kresd
+    value: 8453
 
 
 nft_input_group_rules:
   013 icmpv6 redirects:
     - meta l4proto ipv6-icmp icmpv6 type nd-redirect counter drop
 
-  300 vpn:
-    - tcp dport 655 accept
-    - udp dport 655 accept
-
-  310 bgp:
+  100 vpn:
+    - tcp dport 9993 accept
+    - udp dport 9993 accept
+  101 ospf:
+    - meta iifname $ospf_interfaces ip6 nexthdr ospf accept
+  101 bgp:
     - ip saddr $bgp_neighbors_4 tcp dport 179 counter accept
     - ip6 saddr $bgp_neighbors_6 tcp dport 179 counter accept
 
-  350 dns:
+  120 cri:
+    - ip6 saddr 2001:67c:17fc:fc41::/64 counter drop
+
+  220 bird lg proxy:
+    - ip saddr $subnet_internal_4 tcp dport {$bird_lg_proxy} accept
+    - ip6 saddr $subnet_internal_6 tcp dport {$bird_lg_proxy} accept
+  220 prometheus exporter bird:
+    - ip saddr $subnet_internal_4 tcp dport {$prometheus_exporter_bird} accept
+    - ip6 saddr $subnet_internal_6 tcp dport {$prometheus_exporter_bird} accept
+  220 prometheus exporter kresd:
+    - ip saddr $subnet_internal_4 tcp dport {$prometheus_exporter_kresd} accept
+    - ip6 saddr $subnet_internal_6 tcp dport {$prometheus_exporter_kresd} accept
+
+  350 dns resolver:
     - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 53 accept
     - ip saddr {$subnet_internal_4, $subnet_customer_4} tcp dport 53 accept
     - ip6 saddr {$subnet_internal_6, $subnet_customer_6} udp dport 53 accept
@@ -41,3 +64,6 @@ nft_input_group_rules:
 nft_forward_group_rules:
   000 policy:
     - type filter hook forward priority 0; policy accept;
+
+  120 cri:
+    - ip6 saddr 2001:67c:17fc:fc41::/64 counter drop

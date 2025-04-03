@@ -21,7 +21,7 @@ class FilterModule:
     def make_bgp_sessions_list(self, bgp_sessions):
         sessions = []
         for type_ in self.session_types.keys():
-            if not type_ in bgp_sessions:
+            if type_ not in bgp_sessions:
                 continue
 
             defaults = bgp_sessions.get("defaults", {})
@@ -32,21 +32,27 @@ class FilterModule:
                 data.update(session)
                 data["type"] = self.session_types[type_]
 
+                if "irr" in data:
+                    data["irr_formatted"] = data["irr"]
+                    chars_to_replace = (":", "-", " ")
+                    for char in chars_to_replace:
+                        data["irr_formatted"] = data["irr_formatted"].replace(char, "_")
+
                 if "v4" in data.get("remote", {}):
                     data["protocol_number"] = 4
                     data["protocol"] = "v4"
                     if "irr" in data:
-                        data[
-                            "bgpq3_cmd"
-                        ] = f"bgpq3 -b -A -m 24 -4 -l AS_SET_FOR_{data['asn']}_{data['alias'].upper()}_4 {data['irr']}"
+                        data["bgpq4_cmd"] = (
+                            f"bgpq4 -b -A -m 24 -4 -l AS_SET_FOR_{data['irr_formatted']}_4 {data['irr']}"
+                        )
                     sessions.append(deepcopy(data))
                 if "v6" in data.get("remote", {}):
                     data["protocol_number"] = 6
                     data["protocol"] = "v6"
                     if "irr" in data:
-                        data[
-                            "bgpq3_cmd"
-                        ] = f"bgpq3 -b -A -m 48 -6 -l AS_SET_FOR_{data['asn']}_{data['alias'].upper()}_6 {data['irr']}"
+                        data["bgpq4_cmd"] = (
+                            f"bgpq4 -b -A -m 48 -6 -l AS_SET_FOR_{data['irr_formatted']}_6 {data['irr']}"
+                        )
                     sessions.append(deepcopy(data))
 
         return sessions

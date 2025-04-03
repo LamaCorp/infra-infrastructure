@@ -1,3 +1,0 @@
----
-
-docker_config: "{{ docker_config_no_network }}"

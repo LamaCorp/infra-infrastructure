@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: routinator
+spec:
+  ipFamilyPolicy: RequireDualStack
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: routinator-rpki
+  annotations:
+    io.cilium/lb-ipam-ips: 209.112.97.164,2001:67c:17fc:130::323
+    external-dns.alpha.kubernetes.io/hostname: rpki.lama.tel
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ipFamilyPolicy: RequireDualStack
+  ports:
+    - name: rpki
+      port: 323
+      targetPort: rpki
+      protocol: TCP

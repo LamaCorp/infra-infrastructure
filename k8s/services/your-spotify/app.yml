@@ -1,0 +1,34 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: services-your-spotify
+  labels:
+    app: services-your-spotify
+spec:
+  project: services
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    automated:
+      prune: true
+  destination:
+    name: k3s.fsn.lama.tel
+    namespace: services-your-spotify
+  sources:
+    - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+      targetRevision: HEAD
+      path: k8s/services/your-spotify/app
+    - repoURL: https://charts.bitnami.com/bitnami
+      targetRevision: 13.18.5
+      chart: mongodb
+      helm:
+        releaseName: mongodb
+        values: |
+          architecture: standalone
+          auth:
+            enabled: false
+          enableIPv6: true
+          persistence:
+            enabled: true
+            size: 2Gi

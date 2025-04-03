@@ -1,0 +1,39 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-egress-all
+spec:
+  endpointSelector: {}
+  egress:
+    - toEntities:
+        - all
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-http-https
+spec:
+  endpointSelector: {}
+  ingress:
+    - toPorts:
+        - ports:
+            - port: "10080"
+              protocol: TCP
+            - port: "10443"
+              protocol: TCP
+            - port: "10443"
+              protocol: UDP
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-egress-namespace
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - {}
+  egress:
+    - toEndpoints:
+        - {}

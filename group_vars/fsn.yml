@@ -1,7 +1,7 @@
 ---
 network_nameservers:
   - 2001:67c:17fc:ffff::1
-  - 172.28.254.1
+  - 209.112.97.241
 
 bird2_bgp_region_id: 276 # Germany
 bird2_bgp_site_id: 1

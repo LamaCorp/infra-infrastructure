@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: readarr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+        - name: readarr
+          image: ghcr.io/hotio/readarr
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: media-config-env
+          ports:
+            - name: http
+              containerPort: 8787
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /config
+            - name: media
+              mountPath: /media
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: readarr-data
+        - name: media
+          persistentVolumeClaim:
+            claimName: media
+      nodeSelector:
+        kubernetes.io/hostname: k3s-1.bar.lama.tel
+      tolerations:
+        - key: "role.lama.tel/media"
+          operator: "Exists"
+          effect: "NoExecute"
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"

@@ -1,0 +1,42 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: hedgedoc
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - network-policy.yml
+  - secrets.yml
+  - service.yml
+
+configMapGenerator:
+  - name: hedgedoc-config
+    literals:
+      - CMD_DOMAIN=md.lama-corp.space
+      - CMD_ALLOW_ORIGIN=md.lama-corp.space
+      - CMD_PROTOCOL_USESSL=true
+      - CMD_HSTS_ENABLE=false
+      - NODE_TLS_REJECT_UNAUTHORIZED=0
+
+      - CMD_EMAIL=false
+      - CMD_ALLOW_ANONYMOUS=true
+      - CMD_ALLOW_ANONYMOUS_EDITS=true
+
+      - CMD_IMAGE_UPLOAD_TYPE=s3
+      - CMD_S3_ENDPOINT=s3.lama-corp.space
+      - CMD_S3_BUCKET=hedgedoc
+
+      - CMD_OAUTH2_AUTHORIZATION_URL=https://auth.lama-corp.space/application/o/authorize/
+      - CMD_OAUTH2_USER_PROFILE_URL=https://auth.lama-corp.space/application/o/userinfo/
+      - CMD_OAUTH2_TOKEN_URL=https://auth.lama-corp.space/application/o/token/
+      - CMD_OAUTH2_PROVIDERNAME=Lama Corp. Connect
+      - CMD_OAUTH2_SCOPE=openid email profile
+      - CMD_OAUTH2_USER_PROFILE_USERNAME_ATTR=preferred_username
+      - CMD_OAUTH2_USER_PROFILE_EMAIL_ATTR=email
+      - CMD_OAUTH2_USER_PROFILE_DISPLAY_NAME_ATTR=name
+
+images:
+  - name: quay.io/hedgedoc/hedgedoc
+    newTag: 1.9.9

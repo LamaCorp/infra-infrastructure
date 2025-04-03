@@ -1,0 +1,25 @@
+---
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      enp3s0: {}
+      enp4s0: {}
+    bonds:
+      bond0:
+        interfaces:
+          - enp3s0
+          - enp4s0
+        parameters:
+          mode: 802.3ad
+          lacp-rate: fast
+          transmit-hash-policy: layer3+4
+        accept-ra: false
+        addresses:
+          - 172.28.2.252/24
+          - 2001:67c:17fc:201::252/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.28.2.254
+          - to: ::/0
+            via: 2001:67c:17fc:201::1

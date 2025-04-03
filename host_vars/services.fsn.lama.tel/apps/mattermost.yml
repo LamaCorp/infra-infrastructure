@@ -1,7 +1,0 @@
----
-
-mattermost_domain: chat.lama-corp.space
-
-mattermost_postgresql_database: mattermost
-mattermost_postgresql_user: mattermost
-mattermost_postgresql_password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/mattermost')['password'] }}"

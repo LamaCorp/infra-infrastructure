@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recyclarr
+  annotations:
+    configmap.reloader.stakater.com/reload: "recyclarr-config"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: recyclarr
+          image: ghcr.io/recyclarr/recyclarr
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: media-config-env
+          volumeMounts:
+            - name: data
+              mountPath: /config
+            - name: config
+              mountPath: /config/recyclarr.yml
+              subPath: recyclarr.yml
+              readOnly: true
+            - name: includes
+              mountPath: /config/includes
+              readOnly: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: recyclarr-data
+        - name: config
+          configMap:
+            name: recyclarr-config
+        - name: includes
+          configMap:
+            name: recyclarr-includes
+      nodeSelector:
+        kubernetes.io/hostname: k3s-1.bar.lama.tel
+      tolerations:
+        - key: "role.lama.tel/media"
+          operator: "Exists"
+          effect: "NoExecute"
+      dnsConfig:
+        options:
+          - name: ndots
+            value: "1"

@@ -1,0 +1,26 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mgm
+spec:
+  ipFamilyPolicy: RequireDualStack
+  clusterIP: None
+  publishNotReadyAddresses: true
+  ports:
+    - name: xrootd-mgm
+      port: 1094
+      targetPort: xrootd-mgm
+      protocol: TCP
+    - name: https
+      port: 8443
+      targetPort: https
+      protocol: TCP
+    - name: fusex
+      port: 1100
+      targetPort: fusex
+      protocol: TCP
+    - name: xrootd-mq
+      port: 1097
+      targetPort: xrootd-mq
+      protocol: TCP

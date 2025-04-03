@@ -1,0 +1,31 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: synapse-auto-compressor
+spec:
+  schedule: "35 4 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: synapse-auto-compressor
+              image: ghcr.io/matrix-org/rust-synapse-compress-state
+              env:
+                - name: DB_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: synapse-postgres-credentials
+                      key: username
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: synapse-postgres-credentials
+                      key: password
+              command:
+                - /bin/sh
+                - -c
+              args:
+                - synapse_auto_compressor -c 500 -n 100 -p "host=postgresql.fsn.lama.tel user=$DB_USER password=$DB_PASSWORD dbname=matrix_synapse"

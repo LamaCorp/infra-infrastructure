@@ -5,13 +5,10 @@ exclude_paths:
   # for the CI
   - ../../../../../root/.cache
 
-  - roles/buluma.snmpd
-  - roles/cloudalchemy.node_exporter
-  - roles/cri.gitlab_runner
-  - roles/cri.nftables
+  - k8s/
+
   - roles/cri.restic
   - roles/geerlingguy.docker
-  - roles/geerlingguy.pip
   - roles/ipr-cnrs.nftables
   - roles/matrix-docker-ansible-deploy
   - roles/mrlesmithjr.chrony
@@ -20,8 +17,7 @@ exclude_paths:
   - roles/patrickjahns.promtail
   - roles/stackhpc.libvirt-host
   - roles/stackhpc.libvirt-vm
-  - roles/stackhpc.systemd_networkd
-  - roles/timorunge.sssd
+  - roles/xanmanning.k3s
 
 use_default_rules: true
 

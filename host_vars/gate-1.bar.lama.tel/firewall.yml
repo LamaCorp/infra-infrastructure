@@ -2,11 +2,68 @@
 nft_define_host:
   bgp neighbors 4:
     name: bgp_neighbors_4
-    value: "{172.28.254.3, 172.28.254.4}"
+    value: "{209.112.97.240/28}"
   bgp neighbors 6:
     name: bgp_neighbors_6
     value: "{2001:67c:17fc:ffff::/64}"
 
   ospf interfaces:
     name: ospf_interfaces
-    value: "{zt-lama}"
+    value: "{zt-lama, eno1}"
+
+nft_input_host_rules:
+  # Allow broadcast and multicast
+  010 drop unwanted: []
+  011 drop unwanted ipv6: []
+
+  500 unifi:
+    - ip saddr {$subnet_internal_4} tcp dport 8080 accept
+    - ip6 saddr {$subnet_internal_6} tcp dport 8080 accept
+    - ip saddr {$subnet_internal_4} tcp dport 8443 accept
+    - ip6 saddr {$subnet_internal_6} tcp dport 8443 accept
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 3478 accept
+    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} udp dport 3478 accept
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 10001 accept
+    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} udp dport 10001 accept
+
+  510 tftp:
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 69 accept
+    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} udp dport 69 accept
+
+  520 mail printer:
+    - ip saddr 172.29.2.230 tcp dport 25 accept
+
+nft_forward_host_rules:
+  000 policy:
+    - type filter hook forward priority 0; policy drop;
+
+  300 allow homeassistant:
+    - meta iifname bar-iot ether saddr 2c:cf:67:6f:8c:d0 accept
+  301 allow iot viessman:
+    - meta iifname bar-iot ether saddr b8:74:24:2e:c3:3f ip daddr != {$subnet_internal_4, $subnet_customer_4} accept
+    - meta iifname bar-iot ether saddr b8:74:24:2e:c3:3f ip6 daddr != {$subnet_internal_6, $subnet_customer_6} accept
+  302 allow iot apsystems:
+    - meta iifname bar-iot ether saddr ac:48:2d:13:f2:6e ip daddr != {$subnet_internal_4, $subnet_customer_4} accept
+    - meta iifname bar-iot ether saddr ac:48:2d:13:f2:6e ip6 daddr != {$subnet_internal_6, $subnet_customer_6} accept
+  399 bar-* drop:
+    - meta iifname bar-iot drop
+    - meta iifname bar-cctv drop
+
+  400 allow to vpn:
+    - meta oifname zt-lama accept
+  410 allow to outside:
+    - meta oifname bar-client accept
+  420 allow to servers:
+    - meta oifname eno1 accept
+  430 allow from servers:
+    - ip saddr $subnet_internal_4 accept
+    - ip6 saddr $subnet_internal_6 accept
+
+nft__nat_host_postrouting_rules:
+  100 external connectivity:
+    - meta oif bar-client ip daddr != { 172.29.2.0/24 } counter masquerade
+    - meta iif eno1 oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter snat to 209.112.97.235
+    - meta iif bar-music oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter snat to 209.112.97.236
+    - meta iif {bar-iot,bar-cctv} oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter snat to 209.112.97.237
+    # TODO: drop these
+    - meta oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter masquerade

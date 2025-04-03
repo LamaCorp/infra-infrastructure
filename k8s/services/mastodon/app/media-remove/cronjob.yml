@@ -1,0 +1,17 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mastodon
+spec:
+  schedule: "49 5 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: mastodon
+              args:
+                - |
+                  bin/tootctl media remove --days=1
+                  bin/tootctl preview_cards remove --days=1

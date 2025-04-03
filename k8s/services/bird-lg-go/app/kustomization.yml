@@ -1,0 +1,25 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: bird-lg-go
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - network-policy.yml
+  - service.yml
+
+configMapGenerator:
+  - name: bird-lg-go-config
+    literals:
+      - BIRDLG_NAVBAR_BRAND=AS212024
+      - BIRDLG_PROXY_PORT=8990
+      - BIRDLG_SERVERS=edge-1.pvl.lama.tel,edge-2.fra.lama.tel,nucleus.fsn.lama.tel,gate-1.bar.lama.tel
+      - BIRDLG_TITLE_BRAND=AS212024 Looking glass
+      - BIRDLG_WHOIS=whois.lama.tel
+      - BIRDLG_TRUST_PROXY_HEADERS=true
+
+images:
+  - name: ghcr.io/xddxdd/bird-lg-go
+    newTag: frontend-develop-0fdde8afc7a63cc7e1d928b024ac8e2256e1fa74

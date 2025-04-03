@@ -1,0 +1,7 @@
+---
+kind: Kustomization
+
+resources:
+  - home-assistant
+  - v-core-3
+  - zigbee2mqtt

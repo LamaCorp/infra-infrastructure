@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: fusex
+spec:
+  updateStrategy:
+    type: OnDelete
+  template:
+    spec:
+      hostPID: true
+      hostNetwork: true
+      hostIPC: true
+      dnsPolicy: Default
+      terminationGracePeriodSeconds: 60
+      priorityClassName: system-cluster-critical
+      containers:
+        - name: fusex
+          image: gitlab-registry.cern.ch/dss/eos/eos-ci
+          imagePullPolicy: IfNotPresent
+          command: ["/usr/bin/eosxd3"]
+          args:
+            - -f
+            - -ofsname=eos
+          env:
+            - name: EOS_MGM_URL
+              value: root://mgm.services-eos.svc.c.k3s.fsn.lama.tel
+            - name: XRD_NODELAY
+              value: "1"
+          securityContext:
+            privileged: true
+            capabilities:
+              add:
+                - SYS_ADMIN
+                - NET_ADMIN
+          livenessProbe:
+            exec:
+              command:
+                - /bin/ps
+                - -C
+                - eosxd3
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          volumeMounts:
+            - name: config
+              mountPath: /etc/eos
+              readOnly: true
+            - name: host-etc
+              mountPath: /etc/krb5.conf
+              subPath: krb5.conf
+              readOnly: true
+            - name: eos
+              mountPath: /eos
+              mountPropagation: Bidirectional
+            - name: dev-fuse
+              mountPath: /dev/fuse
+            - name: var-cache
+              mountPath: /var/cache
+      volumes:
+        - name: config
+          configMap:
+            name: fusex-config
+            defaultMode: 0644
+        - name: host-etc
+          hostPath:
+            path: /etc
+        - name: eos
+          hostPath:
+            path: /eos
+            type: DirectoryOrCreate
+        - name: dev-fuse
+          hostPath:
+            path: /dev/fuse
+        - name: var-cache
+          hostPath:
+            path: /var/cache

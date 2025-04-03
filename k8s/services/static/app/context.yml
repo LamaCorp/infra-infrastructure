@@ -1,0 +1,53 @@
+---
+domains:
+  - name: lama-corp.space
+    slug: lama-corp-space
+    extra_names:
+      - www.lama-corp.space
+
+  - name: rplace.space
+    slug: rplace-space
+    autoindex: true
+
+  - name: doyouhavegoodbackups.com
+    slug: doyouhavegoodbackups-com
+
+  - name: as212024.net
+    slug: as212024-net
+
+  - name: acdc.risson.space
+    slug: acdc-risson-space
+    autoindex: true
+    extra_names:
+      - acdc.marcerisson.space
+      - acdc.risson.me
+  - name: cats.acdc.risson.space
+    slug: cats-acdc-risson-space
+    extra_names:
+      - cats.acdc.epita.fr
+      - cats.acdc.marcerisson.space
+      - cats.acdc.risson.me
+  - name: jdmi.risson.space
+    slug: jdmi-risson-space
+    extra_names:
+      - jdmi.marcerisson.space
+      - jdmi.risson.me
+  - name: risson.space
+    slug: risson-space
+    extra_names:
+      - www.risson.space
+      - marcerisson.space
+      - www.marcerisson.space
+      - risson.me
+      - www.risson.me
+  - name: scoreboard-seedbox-cri.risson.space
+    slug: scoreboard-seedbox-cri-risson-space
+    extra_names:
+      - scoreboard-seedbox-cri.marcerisson.space
+      - scoreboard-seedbox-cri.risson.me
+  - name: workshop.risson.space
+    slug: workshop-risson-space
+    autoindex: true
+    extra_names:
+      - workshop.marcerisson.space
+      - workshop.risson.me

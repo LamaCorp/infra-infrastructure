@@ -1,0 +1,123 @@
+---
+global:
+  networkPolicy:
+    create: true
+
+configs:
+  cm:
+    url: https://argocd.lama.tel
+    statusbadge.enabled: true
+    application.resourceTrackingMethod: annotation
+    server.rbac.log.enforce.enable: true
+    exec.enabled: true
+    admin.enabled: false
+    oidc.config: |
+      name: Lama Corp. Connect
+      issuer: https://auth.lama.tel/application/o/argocd/
+      clientID: $oidc.authentik.clientID
+      clientSecret: $oidc.authentik.clientSecret
+      requestedIDTokenClaims:
+        groups:
+          essential: true
+      requestedScopes:
+        - openid
+        - profile
+        - email
+
+  params:
+    applicationsetcontroller.enable.progressive.syncs: true
+
+  rbac:
+    policy.default: role:readonly
+    policy.csv: |
+      g, roots, role:admin
+
+  secret:
+    createSecret: true
+
+controller:
+  replicas: 1
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+    rules:
+      enabled: true
+      spec:
+        - alert: ArgoAppMissing
+          expr: |
+            absent(argocd_app_info) == 1
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "[Argo CD] No reported applications"
+            description: >
+              Argo CD has not reported any applications data for the past 15 minutes which
+              means that it must be down or not functioning properly.  This needs to be
+              resolved for this cloud to continue to maintain state.
+        - alert: ArgoAppNotSynced
+          expr: |
+            argocd_app_info{sync_status!="Synced"} == 1
+          for: 12h
+          labels:
+            severity: warning
+          annotations:
+            summary: "[{{$labels.name}}] Application not synchronized"
+            description: >
+              The application [{{$labels.name}}] has not been synchronized for over
+              12 hours which means that the state of this cloud has drifted away from the
+              state inside Git.
+
+server:
+  replicas: 1
+  extensions:
+    enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    hostname: argocd.lama.tel
+    tls: true
+
+repoServer:
+  replicas: 1
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+applicationSet:
+  replicas: 1
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+    hostname: appset.argocd.lama.tel
+    tls: true
+
+notifications:
+  enabled: true
+  argocdUrl: https://argocd.lama.tel
+  notifiers: {}
+  triggers: {}
+  templates: {}
+  secret:
+    create: false
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+dex:
+  enabled: false

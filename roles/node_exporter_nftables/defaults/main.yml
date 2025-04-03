@@ -1,6 +1,0 @@
----
-node_exporter_nftables_download_url: https://github.com/metal-stack/nftables-exporter/releases/download/v0.2.6/nftables-exporter.tgz
-
-node_exporter_nftables_port: 9630
-
-node_exporter_nftables_binary_name: node_exporter_nftables

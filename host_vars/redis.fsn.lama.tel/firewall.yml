@@ -1,10 +1,4 @@
 ---
-
-nft_define_host:
-  ospf interfaces:
-    name: ospf_interfaces
-    value: ens3
-
 nft_redis_ports: "{{ redis_instances | d([]) | map(attribute='port') | join(',') }}"
 
 nft_input_host_rules:

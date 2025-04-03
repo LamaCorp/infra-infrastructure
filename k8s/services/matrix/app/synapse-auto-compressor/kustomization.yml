@@ -1,0 +1,8 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: synapse-auto-compressor
+
+resources:
+  - cronjob.yml

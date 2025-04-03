@@ -1,0 +1,10 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: pictrs
+
+resources:
+  - deployment.yml
+  - service.yml
+  - pvc.yml

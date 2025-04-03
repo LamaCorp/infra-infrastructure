@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: routinator
+spec:
+  replicas: 1
+  template:
+    spec:
+      securityContext:
+        runAsUser: 1012
+        runAsGroup: 1012
+        fsGroup: 1012
+      containers:
+        - name: server
+          image: nlnetlabs/routinator
+          imagePullPolicy: IfNotPresent
+          args:
+            - server
+            - "--http"
+            - "[::]:8323"
+            - "--rtr"
+            - "[::]:3323"
+          ports:
+            - name: http
+              containerPort: 8323
+              protocol: TCP
+            - name: rpki
+              containerPort: 3323
+              protocol: TCP
+          volumeMounts:
+            - name: cache
+              mountPath: /home/routinator/.rpki-cache
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: routinator-cache

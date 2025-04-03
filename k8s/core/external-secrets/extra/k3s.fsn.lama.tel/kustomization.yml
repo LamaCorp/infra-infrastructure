@@ -1,0 +1,8 @@
+---
+kind: Kustomization
+
+resources:
+  - ../base
+  - clustersecretstore-vault-global.yml
+  - clustersecretstore-vault.yml
+  - clusterrolebinding.yml

@@ -50,6 +50,7 @@
 bird2_kernel:
   defaults:
     learn: false
+    static_export: true
     bgp_export: true
     ospf_export: true
     persist: false
@@ -58,6 +59,17 @@ bird2_kernel:
 #   persist: true
 # v6:
 #   merge_paths: true
+
+# Define any static routes that you would like to define in BIRD here.
+# If you're originating routes on this BIRD instance that aren't learned
+# elsewhere, you'll need to add "unreachable" static routes in order for them
+# to be originated.
+bird2_static_routes:
+  {}
+  # v4:
+  #   - '198.51.100.0/24 unreachable'
+  # v6:
+  #   - '2001:db8::/32 unreachable'
 
 # The ISO 3166-1 country code of where the border router is operating. This is
 # used for BGP community support.
@@ -101,17 +113,6 @@ bird2_bgp_blacklist:
   #   - '203.0.113.0/23+'   # DE-CIX New York in this example
   # v6:
   #   - 'fd00:504:36::/64+' # DE-CIX New York in this example
-
-# Define any static routes that you would like to define in BIRD here.
-# If you're originating routes on this BIRD instance that aren't learned
-# elsewhere, you'll need to add "unreachable" static routes in order for them
-# to be originated.
-bird2_bgp_static_routes:
-  {}
-  # v4:
-  #   - '198.51.100.0/24 unreachable'
-  # v6:
-  #   - '2001:db8::/32 unreachable'
 
 # The RPKI RTR address and port for dropping RPKI invalids.
 # bird2_bgp_rpki:

@@ -1,4 +1,0 @@
----
-gitlab_runner_version: 15.11.0
-gitlab_runner_lama_corp_registration_token: "{{ lookup('community.hashi_vault.hashi_vault', 'infra/data/gitlab-runner/registration-tokens/lama-corp')['token'] }}"
-backup_restic_list: []

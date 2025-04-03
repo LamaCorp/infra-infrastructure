@@ -1,5 +1,4 @@
 ---
-
 netplan_configuration:
   network:
     version: 2
@@ -26,6 +25,8 @@ netplan_configuration:
         routing-policy:
           - from: 2a05:f480:1c00:9ee::/64
             table: 101
+          - to: 2001:19f0:6801:7c4::/64
+            table: 101
     tunnels:
       wg-cri:
         mode: wireguard
@@ -33,22 +34,23 @@ netplan_configuration:
         port: 51821
         addresses:
           - fd3c:c1c4:bbff:9a64::ee1/64
+          - 2001:67c:17fc:fc41::21:2024/64
         peers:
-          # Phowork
+          # Phowork, AS212270
           - keys:
               public: E1EBL3208LQ6xt3NmxSQdkgmrPMH6bjO0tTDdASJPR8=
             allowed-ips:
               - fd3c:c1c4:bbff:9a64::cafe/128
+              - 2001:67c:17fc:fc41::21:2270/128
               - 2a0f:9240:2000::/48
               - 2a0e:b107:f50::/44
             keepalive: 60
             endpoint: "[2001:19f0:6801:7c4:5400:3ff:fe47:7968]:51823"
-          # Delicious muffins
+          # Alex, AS215581
           - keys:
-              public: GHq5ONIpnsgdrBar2fvIgWCfPWK5wKi4LUmF6MBjIjU=
+              public: LaeAl7cv2EDtHxaNezUU5jZ0MV/XgusAMHT32X7liFQ=
             allowed-ips:
-              - fd3c:c1c4:bbff:9a64::4251/128
-              - 2001:67c:229c::/48
-              - 2a06:3881:7800::/40
+              - 2001:67c:17fc:fc41::21:5581/128
+              - 2a13:cc82::/48
             keepalive: 60
-            endpoint: "[2a05:f480:1c00:e18:5400:3ff:fe21:317a]:51820"
+            # endpoint:

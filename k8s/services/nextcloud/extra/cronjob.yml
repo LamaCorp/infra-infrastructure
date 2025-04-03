@@ -1,0 +1,18 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron
+spec:
+  schedule: "* * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: cron
+              image: quay.io/curl/curl
+              imagePullPolicy: IfNotPresent
+              args:
+                - https://cloud.lama-corp.space/cron.php

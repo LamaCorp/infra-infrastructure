@@ -1,0 +1,24 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: media-repo
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod-http01
+    nginx.ingress.kubernetes.io/upstream-vhost: "lama-corp.space"
+spec:
+  rules:
+    - host: matrix.lama-corp.space
+      http:
+        paths:
+          - path: /_matrix/media
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: media-repo
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - matrix.lama-corp.space
+      secretName: media-repo-tls

@@ -1,0 +1,10 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: factorio
+
+resources:
+  - deployment.yml
+  - service.yml
+  - pvc.yml

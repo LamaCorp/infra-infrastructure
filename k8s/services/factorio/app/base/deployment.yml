@@ -1,0 +1,33 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: factorio
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      securityContext:
+        runAsUser: 845
+        runAsGroup: 845
+        fsGroup: 845
+      containers:
+        - name: factorio
+          image: factoriotools/factorio
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: factorio-udp
+              containerPort: 34197
+              protocol: UDP
+            - name: factorio-tcp
+              containerPort: 27015
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /factorio
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: factorio-data
