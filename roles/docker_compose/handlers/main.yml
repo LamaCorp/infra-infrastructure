@@ -1,8 +1,7 @@
 ---
-
 - name: Restart docker-compose
-  community.docker.docker_compose:
+  community.docker.docker_compose_v2:
     project_src: "{{ docker_compose_project_dir }}"
-    pull: true
-    state: present
-    restarted: true
+    pull: missing
+    state: restarted
+    remove_orphans: true
