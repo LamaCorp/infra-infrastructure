@@ -1,6 +1,6 @@
 ---
 homeassistant_docker_repository: ghcr.io/home-assistant/home-assistant
-homeassistant_docker_tag: 2024.8.3
+homeassistant_docker_tag: 2025.4.0
 
 homeassistant_default_environment: {}
 homeassistant_environment: {}
