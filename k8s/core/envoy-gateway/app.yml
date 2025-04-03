@@ -24,7 +24,7 @@ spec:
         namespace: core-eg
       source:
         repoURL: docker.io/envoyproxy
-        targetRevision: v1.3.0
+        targetRevision: 1.3.2
         chart: gateway-helm
         helm:
           releaseName: envoy-gateway
