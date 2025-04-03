@@ -2,7 +2,7 @@ terraform {
   required_providers {
     htpasswd = {
       source  = "loafoe/htpasswd"
-      version = "1.0.4"
+      version = "1.2.1"
     }
     random = {
       source  = "hashicorp/random"
