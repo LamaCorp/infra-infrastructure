@@ -44,7 +44,7 @@ spec:
                     - name: errors
                     - name: health
                       configBlock: |-
-                        lameduck 10s
+                        lameduck 5s
                     - name: ready
                     - name: acl
                       configBlock: |-
