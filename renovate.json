@@ -1,8 +1,23 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "argocd": {
+    "fileMatch": [
+      "^k8s/.+\\.ya?ml"
+    ]
+  },
   "extends": [
     "local>lama-corp/infra/services/renovate//renovate-presets.json"
   ],
+  "kubernetes": {
+    "fileMatch": [
+      "^k8s/.+\\.ya?ml$"
+    ]
+  },
+  "kustomize": {
+    "fileMatch": [
+      "^k8s/.+/kustomization\\.ya?ml$"
+    ]
+  },
   "regexManagers": [
     {
       "datasourceTemplate": "docker",
@@ -11,6 +26,26 @@
       ],
       "matchStrings": [
         ".*docker_repository:\\s*(?<depName>.*?)\\s*.*docker_tag:\\s*(?<currentValue>.*?)\\s"
+      ]
+    },
+    {
+      "datasourceTemplate": "docker",
+      "fileMatch": [
+        "^k8s/.+\\.ya?ml$"
+      ],
+      "matchStrings": [
+        "image:\n *repository: (?<depName>.+?)\n *tag: (?<currentValue>.+?)",
+        "image: (?<depName>[^:]+?):(?<currentValue>.*?)"
+      ]
+    },
+    {
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "k3s-io/k3s",
+      "fileMatch": [
+        "^group_vars/k3s\\.yml$"
+      ],
+      "matchStrings": [
+        "k3s_release_version: (?<currentValue>.*?)\\n"
       ]
     }
   ]
