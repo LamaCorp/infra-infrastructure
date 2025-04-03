@@ -71,4 +71,4 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/mastodon/mastodon
-    newTag: v4.2.15
+    newTag: v4.2.20
