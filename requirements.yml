@@ -24,7 +24,7 @@ roles:
     src: git+https://github.com/ipr-cnrs/nftables.git
     version: bd11aac65b9c77bbcbbb5d4f9b5d24e74f456b67
   - name: mrlesmithjr.chrony
-    version: v0.1.5
+    version: v0.1.6
   - name: mrlesmithjr.netplan
     src: git+https://github.com/mrlesmithjr/ansible-netplan.git
     version: 26a29593f0412b3d79bd9abeab661b435a19e4e9
