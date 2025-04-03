@@ -19,7 +19,7 @@ spec:
     - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
       targetRevision: HEAD
       path: k8s/services/your-spotify/app
-    - repoURL: https://charts.bitnami.com/bitnami
+    - repoURL: registry-1.docker.io/bitnamicharts
       targetRevision: 13.18.5
       chart: mongodb
       helm:

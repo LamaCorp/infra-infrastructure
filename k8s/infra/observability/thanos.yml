@@ -16,7 +16,7 @@ spec:
     name: k3s.fsn.lama.tel
     namespace: infra-observability
   source:
-    repoURL: https://charts.bitnami.com/bitnami
+    repoURL: registry-1.docker.io/bitnamicharts
     targetRevision: 15.14.1
     chart: thanos
     helm:
