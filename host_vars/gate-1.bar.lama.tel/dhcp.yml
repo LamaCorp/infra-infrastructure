@@ -141,6 +141,9 @@ kea_dhcp4_config:
           - hw-address: ac:48:2d:13:f2:6e
             ip-address: 172.29.192.67
             hostname: apsystems-ecu-c
+          - hw-address: c8:c9:a3:8f:d9:ec
+            ip-address: 172.29.192.68
+            hostname: everbluemeters
       - id: 2093
         subnet: 172.29.193.0/24
         pools:
