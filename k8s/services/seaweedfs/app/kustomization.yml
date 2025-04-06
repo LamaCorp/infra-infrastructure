@@ -12,4 +12,4 @@ resources:
 
 images:
   - name: chrislusf/seaweedfs
-    newTag: 3.69_full
+    newTag: 3.85_full
