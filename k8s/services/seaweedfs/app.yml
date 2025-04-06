@@ -30,7 +30,7 @@ spec:
           isDefaultStorageClass: false
 
           seaweedfsCsiPlugin:
-            image: chrislusf/seaweedfs-csi-driver:v1.2.0
+            image: chrislusf/seaweedfs-csi-driver:v1.2.7
 
           node:
             updateStrategy:
