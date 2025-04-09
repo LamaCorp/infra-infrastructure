@@ -115,7 +115,7 @@ spec:
                   - matrix.lama-corp.space
                 secretName: synapse-tls
     - repoURL: https://ananace.gitlab.io/charts
-      targetRevision: 1.4.6
+      targetRevision: 1.4.7
       chart: element-web
       helm:
         releaseName: element
