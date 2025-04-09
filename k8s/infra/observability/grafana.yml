@@ -17,7 +17,7 @@ spec:
     namespace: infra-observability
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 8.11.3
+    targetRevision: 8.11.4
     chart: grafana
     helm:
       releaseName: grafana
