@@ -37,4 +37,4 @@ configMapGenerator:
 
 images:
   - name: frooodle/s-pdf
-    newTag: 0.45.2-fat
+    newTag: 0.45.4-fat
