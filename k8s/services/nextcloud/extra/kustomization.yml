@@ -13,4 +13,4 @@ images:
   - name: quay.io/curl/curl
     newTag: 8.13.0
   - name: collabora/code
-    newTag: 24.04.13.2.1
+    newTag: 24.04.13.3.1
