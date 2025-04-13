@@ -9,7 +9,7 @@ collections:
   - name: community.hashi_vault
     version: 6.2.0
   - name: prometheus.prometheus
-    version: 0.26.0
+    version: 0.26.1
   - name: git+https://gitlab.cri.epita.fr/cri/iac/ansible/collections/acme.git
     type: git
     version: 0.5.0
