@@ -29,7 +29,7 @@ spec:
           targetRevision: HEAD
           path: k8s/core/external-dns/extra/{{ .name }}
         - repoURL: https://kubernetes-sigs.github.io/external-dns
-          targetRevision: 1.16.1
+          targetRevision: 1.15.0
           chart: external-dns
           helm:
             releaseName: external-dns
@@ -45,13 +45,6 @@ spec:
                 - gateway-tlsroute
                 - gateway-tcproute
                 - gateway-udproute
-                - crd
-
-              extraArgs:
-                - --crd-source-apiversion
-                - externaldns.k8s.io/v1alpha1
-                - --crd-source-kind
-                - DNSEndpoint
 
               policy: sync
               registry: txt
@@ -77,35 +70,3 @@ spec:
 
               serviceMonitor:
                 enabled: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: ApplicationSet
-metadata:
-  name: core-external-dns-crds
-  labels:
-    app: core-external-dns
-spec:
-  goTemplate: true
-  generators:
-    - clusters: {}
-  template:
-    metadata:
-      name: core-external-dns-crds-{{ .name }}
-      labels:
-        app: core-external-dns
-    spec:
-      project: default
-      syncPolicy:
-        syncOptions:
-          - CreateNamespace=true
-        automated:
-          prune: true
-      destination:
-        name: "{{ .name }}"
-        namespace: core-external-dns
-      source:
-        repoURL: https://github.com/kubernetes-sigs/external-dns.git
-        targetRevision: v0.16.1
-        path: docs/sources/crd
-        directory:
-          include: crd-manifest.yaml
