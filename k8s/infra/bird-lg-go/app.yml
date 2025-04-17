@@ -2,11 +2,11 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: services-bird-lg-go
+  name: infra-bird-lg-go
   labels:
-    app: services-bird-lg-go
+    app: infra-bird-lg-go
 spec:
-  project: services
+  project: infra
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
@@ -14,8 +14,8 @@ spec:
       prune: true
   destination:
     name: k3s.fsn.lama.tel
-    namespace: services-bird-lg-go
+    namespace: infra-bird-lg-go
   source:
     repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
     targetRevision: HEAD
-    path: k8s/services/bird-lg-go/app
+    path: k8s/infra/bird-lg-go/app
