@@ -31,6 +31,10 @@ spec:
           skipCrds: true
           values: |
             kubernetesClusterDomain: "c.{{ .name }}"
+            global:
+              images:
+                envoyGateway:
+                  image: registry.gitlab.com/lama-corp/infra/infrastructure/envoyproxy/gateway:v1.3.2-patch5671
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
