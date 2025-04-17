@@ -10,7 +10,7 @@ spec:
   generators:
     - git:
         repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
-        revision: k8s
+        revision: HEAD
         files:
           - path: k8s/core/**/config.json
           - path: k8s/infra/**/config.json
