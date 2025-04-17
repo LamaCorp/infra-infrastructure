@@ -28,10 +28,10 @@ subjects:
     namespace: core-velero
     name: default
   - kind: ServiceAccount
-    namespace: infra-acme
+    namespace: infra-observability
     name: default
   - kind: ServiceAccount
-    namespace: infra-observability
+    namespace: infra-powerdns
     name: default
   - kind: ServiceAccount
     namespace: kube-system
