@@ -22,6 +22,13 @@ resource "vault_generic_secret" "k8s-global_core-external-dns_cloudflare" {
   })
 }
 
+resource "vault_generic_secret" "k8s-global_core-external-dns_tsig" {
+  path = "${vault_mount.k8s-global.path}/core-external-dns/tsig"
+  data_json = jsonencode({
+    secret = random_bytes.k8s-k3s-fsn-lama-tel_infra-knot-dns_keys["k8s_external-dns"].base64
+  })
+}
+
 resource "vault_generic_secret" "k8s-global_core-observability_alertmanager_discord-webhooks" {
   path         = "${vault_mount.k8s-global.path}/core-observability/alertmanager/discord-webhooks"
   disable_read = true

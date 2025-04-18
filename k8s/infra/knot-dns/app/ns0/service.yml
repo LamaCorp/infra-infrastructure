@@ -1,0 +1,21 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: knot-dns
+  annotations:
+    io.cilium/lb-ipam-ips: 209.112.97.53,2001:67c:17fc::53
+    external-dns.alpha.kubernetes.io/hostname: ns0.as212024.net
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ipFamilyPolicy: RequireDualStack
+  ports:
+    - name: dns-udp
+      port: 53
+      targetPort: dns-udp
+      protocol: UDP
+    - name: dns-tcp
+      port: 53
+      targetPort: dns-tcp
+      protocol: TCP

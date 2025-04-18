@@ -1,0 +1,8 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: knot-dns
+
+resources:
+  - ns0

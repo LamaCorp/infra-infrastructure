@@ -1,7 +1,6 @@
 locals {
   zones = toset([
     "lama-corp.space",
-    "lama.tel",
     "risson.space",
   ])
 }

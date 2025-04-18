@@ -29,7 +29,7 @@ spec:
           targetRevision: HEAD
           path: k8s/core/external-dns/extra/{{ .name }}
         - repoURL: https://kubernetes-sigs.github.io/external-dns
-          targetRevision: 1.15.0
+          targetRevision: 1.16.1
           chart: external-dns
           helm:
             releaseName: external-dns
@@ -51,22 +51,48 @@ spec:
               txtOwnerId: {{ .name }}
               txtPrefix: external-dns.
 
-              provider: cloudflare
+              provider: rfc2136
 
               env:
-                - name: CF_API_TOKEN
-                  value: file:/cloudflare-credentials/api_token
-              extraVolumeMounts:
-                - name: cloudflare-credentials
-                  mountPath: /cloudflare-credentials
-                  readOnly: true
-              extraVolumes:
-                - name: cloudflare-credentials
-                  secret:
-                    secretName: cloudflare-credentials
+                - name: TSIG_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: tsig-key
+                      key: secret
+
+              extraArgs:
+                - --rfc2136-host=2001:67c:17fc::53
+                - --rfc2136-port=53
+                - --rfc2136-tsig-keyname=k8s_external-dns
+                - --rfc2136-tsig-secret=$(TSIG_SECRET)
+                - --rfc2136-tsig-secret-alg=hmac-sha512
+                - --rfc2136-tsig-axfr
+                - --rfc2136-min-ttl=300s
+                - --rfc2136-zone=as212024.net
+                - --rfc2136-zone=devou.ps
+                - --rfc2136-zone=doyouhavegoodbackups.com
+                - --rfc2136-zone=lama-corp.space
+                - --rfc2136-zone=lama.tel
+                - --rfc2136-zone=marcerisson.space
+                - --rfc2136-zone=risson.me
+                - --rfc2136-zone=risson.net
+                - --rfc2136-zone=risson.space
+                - --rfc2136-zone=rplace.space
+                - --rfc2136-zone=thefractal.space
+                - --domain-filter=as212024.net
+                - --domain-filter=devou.ps
+                - --domain-filter=doyouhavegoodbackups.com
+                - --domain-filter=lama-corp.space
+                - --domain-filter=lama.tel
+                - --domain-filter=marcerisson.space
+                - --domain-filter=risson.me
+                - --domain-filter=risson.net
+                - --domain-filter=risson.space
+                - --domain-filter=rplace.space
+                - --domain-filter=thefractal.space
 
               deploymentAnnotations:
-                secret.reloader.stakater.com/reload: cloudflare-credentials
+                secret.reloader.stakater.com/reload: tsig-key
 
               serviceMonitor:
                 enabled: true

@@ -15,6 +15,17 @@ netplan_configuration:
             via: 194.50.92.254
           - to: ::/0
             via: 2a09:4c0:303:c232::5cfe
+          - to: 0.0.0.0/0
+            via: 194.50.92.254
+            table: 101
+          - to: ::/0
+            via: 2a09:4c0:303:c232::5cfe
+            table: 101
+        routing-policy:
+          - from: 194.50.92.165/32
+            table: 101
+          - from: 2a09:4c0:303:c232::/64
+            table: 101
       enp19s0:
         match:
           macaddress: c0:03:c2:32:5c:a5

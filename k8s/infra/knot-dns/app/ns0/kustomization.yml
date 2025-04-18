@@ -1,0 +1,21 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/component: ns0
+
+resources:
+  - deployment.yml
+  - network-policy.yml
+  - pvc.yml
+  - service.yml
+  - secrets.yml
+
+configMapGenerator:
+  - files:
+      - config/knot.conf
+    name: knot-dns-config
+
+images:
+  - name: cznic/knot
+    newTag: v3.4.6

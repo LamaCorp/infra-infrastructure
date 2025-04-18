@@ -23,3 +23,8 @@ spec:
         - ports:
             - port: "443"
               protocol: TCP
+    - toEndpoints:
+        - matchLabels:
+            app.kubernetes.io/name: knot-dns
+            app.kubernetes.io/component: ns0
+            k8s:io.kubernetes.pod.namespace: infra-knot-dns

@@ -1,0 +1,50 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: knot-dns
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      securityContext:
+        runAsUser: 53
+        runAsGroup: 53
+        fsGroup: 53
+      containers:
+        - name: knot-dns
+          image: cznic/knot
+          command: [knotd]
+          ports:
+            - name: dns-udp
+              containerPort: 5353
+              protocol: UDP
+            - name: dns-tcp
+              containerPort: 5353
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: keys
+              mountPath: /config/keys
+              readOnly: true
+            - name: rundir
+              mountPath: /rundir
+            - name: data
+              mountPath: /storage
+      volumes:
+        - name: config
+          configMap:
+            name: knot-dns-config
+            defaultMode: 420
+        - name: keys
+          secret:
+            secretName: knot-dns-keys
+        - name: rundir
+          emptyDir: {}
+        - name: data
+          persistentVolumeClaim:
+            claimName: knot-dns-data
