@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: happydomain
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      securityContext:
+        runAsUser: 15353
+        runAsGroup: 65533
+        fsGroup: 65533
+      containers:
+        - name: happydomain
+          image: happydomain/happydomain
+          imagePullPolicy: Always
+          envFrom:
+            - configMapRef:
+                name: happydomain-config
+            - secretRef:
+                name: happydomain-oidc-credentials
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: happydomain-data
+      enableServiceLinks: false

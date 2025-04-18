@@ -1,0 +1,27 @@
+---
+kind: Kustomization
+
+commonLabels:
+  app.kubernetes.io/name: happydomain
+
+resources:
+  - deployment.yml
+  - ingress.yml
+  - network-policy.yml
+  - pvc.yml
+  - secrets.yml
+  - service.yml
+
+configMapGenerator:
+  - name: happydomain-config
+    literals:
+      - HAPPYDOMAIN_STORAGE_ENGINE=leveldb
+      - HAPPYDOMAIN_LEVELDB_PATH=/data
+      - HAPPYDOMAIN_EXTERNALURL=https://dns.lama.tel
+      - HAPPYDOMAIN_DISABLE_EMBEDDED_LOGIN=true
+      - HAPPYDOMAIN_DISABLE_REGISTRATION=true
+      - HAPPYDOMAIN_OIDC_PROVIDER_URL=https://auth.lama.tel/application/o/happydomain/
+
+images:
+  - name: happydomain/happydomain
+    newTag: latest
