@@ -16,6 +16,7 @@ configMapGenerator:
       - ./blueprints/apps-argocd.yaml
       - ./blueprints/apps-eos.yaml
       - ./blueprints/apps-grafana.yaml
+      - ./blueprints/apps-happydomain.yaml
       - ./blueprints/apps-hedgedoc.yaml
       - ./blueprints/apps-home-assistant.yaml
       - ./blueprints/apps-immich.yaml
