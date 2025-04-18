@@ -1,14 +1,8 @@
 locals {
   zones = toset([
-    "as212024.net",
-    "devou.ps",
     "lama-corp.space",
     "lama.tel",
-    "marcerisson.space",
-    "risson.me",
     "risson.space",
-    "rplace.space",
-    "thefractal.space",
   ])
 }
 

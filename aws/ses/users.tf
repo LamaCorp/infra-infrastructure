@@ -20,17 +20,14 @@ locals {
       k8s_cluster    = "k3s.fsn.lama.tel"
       k8s_namespaces = ["services-mattermost"]
     }
-    netbox = {}
     nextcloud = {
       k8s_cluster    = "k3s.fsn.lama.tel"
       k8s_namespaces = ["services-nextcloud"]
     }
-    upsilon = {}
     vaultwarden = {
       k8s_cluster    = "k3s.fsn.lama.tel"
       k8s_namespaces = ["services-vaultwarden"]
     }
-    vikunja = {}
   }
 }
 
