@@ -22,7 +22,6 @@ locals {
     "prowlarr",
     "radarr",
     "readarr",
-    "upsilon",
     "vaultwarden",
   ])
 }

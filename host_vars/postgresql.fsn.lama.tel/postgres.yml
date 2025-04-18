@@ -32,10 +32,6 @@ postgresql_users:
     password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/postgresql.fsn.lama.tel/postgres')['password'] }}"
 
   stalwart: {}
-
-  upsilon:
-    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/upsilon')['password'] }}"
-
   vaultwarden: {}
 
 postgresql_dbs:
@@ -62,12 +58,11 @@ postgresql_dbs:
   nextcloud: nextcloud
   paperless_risson: paperless_risson
   stalwart: stalwart
-  upsilon: upsilon
   vaultwarden: vaultwarden
 
 postgresql_config:
-  ssl_cert_file: "'{{ acme_vault_client_cert_dir }}/postgresql.fsn.lama.tel/fullchain.pem'"
-  ssl_key_file: "'{{ acme_vault_client_cert_dir }}/postgresql.fsn.lama.tel/key.pem'"
+  ssl_cert_file: "'/srv/acme/postgresql.fsn.lama.tel/fullchain.pem'"
+  ssl_key_file: "'/srv/acme/postgresql.fsn.lama.tel/key.pem'"
 
   # See https://pgtune.leopard.in.ua/
   # and https://wiki.postgresql.org/wiki/Tuning_Your_PostgreSQL_Server
