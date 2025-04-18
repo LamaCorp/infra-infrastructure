@@ -1,0 +1,5 @@
+---
+- name: Reload knot
+  ansible.builtin.service:
+    name: knot
+    state: reloaded

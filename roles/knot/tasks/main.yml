@@ -1,0 +1,6 @@
+---
+- name: Install knot
+  ansible.builtin.import_tasks: install.yml
+
+- name: Configure knot
+  ansible.builtin.import_tasks: config.yml

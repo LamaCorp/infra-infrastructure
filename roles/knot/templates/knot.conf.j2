@@ -1,0 +1,72 @@
+{{ ansible_managed | comment }}
+
+# See knot.conf(5) or refer to the server documentation.
+
+server:
+  rundir: "{{ knot_server_rundir }}"
+  user: "{{ knot_server_user }}:{{ knot_server_group }}"
+  identity: "{{ knot_server_identity }}"
+  nsid: "{{ knot_server_nsid }}"
+{% for addr in knot_server_listen %}
+  listen: "{{ addr }}"
+{% endfor %}
+
+database:
+  storage: "{{ knot_database_directory }}"
+
+log:
+{% for target in knot_log_targets %}
+  - target: "{{ target.target }}"
+    any: "{{ target.level }}"
+{% endfor %}
+
+key:
+{% for id, key in knot_key.items() %}
+  - id: "{{ id }}"
+    algorithm: "{{ key.algorithm }}"
+    secret: "{{ key.secret }}"
+{% endfor %}
+
+
+remote:
+{% for id, remote in knot_remote.items() %}
+  - id: "{{ id }}"
+    {% for address in remote.address | d([]) %}
+    address: "{{ address }}"
+    {% endfor %}
+    {% if remote.key is defined %}
+    key: "{{ remote.key }}"
+    {% endif %}
+{% endfor %}
+
+acl:
+{% for id, acl in knot_acl.items() %}
+  - id: "{{ id }}"
+    {% if acl.key is defined %}
+    key: "{{ acl.key }}"
+    {% endif %}
+    {% for address in remote.address | d([]) %}
+    address: "{{ address }}"
+    {% endfor %}
+    {% for action in remote.action | d([]) %}
+    action: "{{ action }}"
+    {% endfor %}
+{% endfor %}
+
+template:
+{% for id, template in knot_template.items() %}
+  - id: "{{ id }}"
+    storage: "{{ template.storage }}"
+    file: "{{ template.file }}"
+    {% if template.master is defined %}
+    master: "{{ template.master }}"
+    {% endif %}
+    {% for acl in template.acl | d([]) %}
+    acl: "{{ acl }}"
+    {% endfor %}
+{% endfor %}
+
+zone:
+{% for zone in knot_zone %}
+  - domain: "{{ zone.domain }}"
+{% endfor %}

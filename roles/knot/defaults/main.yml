@@ -1,0 +1,53 @@
+---
+knot_repository_url: "https://deb.knot-dns.cz/knot/"
+knot_repository_distribution: "{{ ansible_facts.distribution_release }}"
+
+knot_server_rundir: /run/knot
+knot_server_user: knot
+knot_server_group: knot
+
+knot_server_identity: "{{ ansible_facts.hostname }}"
+knot_server_nsid: "{{ ansible_facts.hostname }}"
+knot_server_version: ""
+
+knot_server_listen:
+  - "::@53"
+  - 0.0.0.0@53
+
+knot_database_directory: /var/lib/knot
+
+knot_log_targets:
+  - target: syslog
+    level: info
+
+knot_key:
+  {}
+  # ns1:
+  #   id: ns1
+  #   algorithm: hmac-sha256
+  #   secret: mySecret
+
+knot_remote:
+  {}
+  # ns1:
+  #   id: ns1
+  #   address: []
+  #   key: ns1
+
+knot_acl:
+  {}
+  # acl:
+  #   key: ns1
+  #   address: []
+  #   action: []
+
+knot_template:
+  default:
+    storage: "{{ knot_database_directory }}/zones"
+    file: "%s.zone"
+    master: ~
+    acl: []
+
+knot_zone:
+  []
+  # - domain: example.org

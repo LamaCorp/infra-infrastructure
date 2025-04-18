@@ -9,6 +9,9 @@
 - name: Network
   import_playbook: network.yml
 
+- name: DNS
+  import_playbook: dns.yml
+
 - name: KVM
   import_playbook: kvm.yml
 

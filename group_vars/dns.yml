@@ -1,0 +1,47 @@
+---
+knot_server_identity: "ns{{ knot_id }}.as212024.net"
+knot_server_nsid: "ns{{ knot_id }}.as212024.net"
+
+knot_key_raw: |
+  "ns{{ knot_id }}_xfr":
+    algorithm: hmac-sha512
+    secret: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-k3s.fsn.lama.tel/data/infra-knot-dns/keys/ns' + knot_id + '_xfr')['key'] }}"
+  "ns{{ knot_id }}_notify":
+    algorithm: hmac-sha512
+    secret: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-k3s.fsn.lama.tel/data/infra-knot-dns/keys/ns' + knot_id + '_notify')['key'] }}"
+
+knot_key: "{{ knot_key_raw | from_yaml }}"
+
+knot_remote:
+  ns0:
+    address:
+      - 2001:67c:17fc::53
+      - 209.112.97.53
+    key: "ns{{ knot_id }}_xfr"
+
+knot_acl:
+  ns0_notify:
+    key: "ns{{ knot_id }}_notify"
+    action:
+      - notify
+
+knot_template:
+  default:
+    storage: /var/lib/knot/zones
+    file: "%s.zone"
+    master: ns0
+    acl:
+      - ns0_notify
+
+knot_zone:
+  - domain: as212024.net
+  - domain: devou.ps
+  - domain: doyouhavegoodbackups.com
+  - domain: lama-corp.space
+  - domain: lama.tel
+  - domain: marcerisson.space
+  - domain: risson.me
+  - domain: risson.net
+  - domain: risson.space
+  - domain: rplace.space
+  - domain: thefractal.space

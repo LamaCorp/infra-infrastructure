@@ -1,0 +1,16 @@
+---
+- name: Install knot repository
+  ansible.builtin.deb822_repository:
+    name: knot
+    types: deb
+    uris: "{{ knot_repository_url }}"
+    suites: "{{ knot_repository_distribution }}"
+    components: main
+    signed_by: https://deb.knot-dns.cz/apt.gpg
+
+- name: Install dependencies
+  ansible.builtin.package:
+    name:
+      - knot
+      - knot-dnsutils
+      - knot-dnssecutils

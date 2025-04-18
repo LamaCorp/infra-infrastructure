@@ -1,0 +1,25 @@
+---
+- name: Create knot zone directory
+  ansible.builtin.file:
+    path: "{{ knot_database_directory }}/zones"
+    state: directory
+    owner: knot
+    group: knot
+    mode: 0750
+
+- name: Render knot master config
+  ansible.builtin.template:
+    src: knot.conf.j2
+    dest: /etc/knot/knot.conf
+    owner: knot
+    group: knot
+    mode: 0640
+    trim_blocks: true
+    lstrip_blocks: true
+  notify: Reload knot
+
+- name: Start and enable knot
+  ansible.builtin.service:
+    name: knot
+    state: started
+    enabled: true
