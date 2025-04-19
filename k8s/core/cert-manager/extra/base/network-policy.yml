@@ -31,3 +31,5 @@ spec:
         - ports:
             - port: "53"
               protocol: ANY
+            - port: "5353"
+              protocol: ANY
