@@ -21,6 +21,7 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
+            app.kubernetes.io/instance: cert-manager
             k8s:io.kubernetes.pod.namespace: core-cert-manager
         - matchLabels:
             app.kubernetes.io/name: external-dns
