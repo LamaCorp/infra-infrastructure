@@ -18,7 +18,7 @@ spec:
           - cluster: k3s.fsn.lama.tel
             name: bar
             default: false
-            lbIpamIps: 2001:67c:17fc:130::81,2001:67c:17fc:130::444,209.112.97.162
+            lbIpamIps: 2001:67c:17fc:130::82,209.112.97.162
             tolerations:
               - key: "role.lama.tel/media"
                 operator: "Exists"
