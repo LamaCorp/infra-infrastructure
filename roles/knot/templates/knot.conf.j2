@@ -38,6 +38,9 @@ remote:
     {% if remote.key is defined %}
     key: "{{ remote.key }}"
     {% endif %}
+    {% for via in remote.via | d([]) %}
+    via: "{{ via }}"
+    {% endfor %}
 {% endfor %}
 
 acl:
@@ -46,10 +49,10 @@ acl:
     {% if acl.key is defined %}
     key: "{{ acl.key }}"
     {% endif %}
-    {% for address in remote.address | d([]) %}
+    {% for address in acl.address | d([]) %}
     address: "{{ address }}"
     {% endfor %}
-    {% for action in remote.action | d([]) %}
+    {% for action in acl.action | d([]) %}
     action: "{{ action }}"
     {% endfor %}
 {% endfor %}

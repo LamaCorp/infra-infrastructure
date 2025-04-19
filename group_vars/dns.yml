@@ -17,6 +17,7 @@ knot_remote:
     address:
       - 2001:67c:17fc::53
       - 209.112.97.53
+    via: "{{ knot_remote_via }}"
     key: "ns{{ knot_id }}_xfr"
 
 knot_acl:

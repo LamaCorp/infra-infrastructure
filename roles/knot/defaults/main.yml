@@ -32,6 +32,7 @@ knot_remote:
   # ns1:
   #   id: ns1
   #   address: []
+  #   via: []
   #   key: ns1
 
 knot_acl:
