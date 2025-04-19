@@ -33,6 +33,11 @@ knot_template:
     master: ns0
     acl:
       - ns0_notify
+    global_module:
+      - mod-cookies
+      - mod-stats/all
+    module:
+      - mod-stats/all
 
 knot_zone:
   - domain: catalog.

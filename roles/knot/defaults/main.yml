@@ -48,6 +48,8 @@ knot_template:
     file: "%s.zone"
     master: ~
     acl: []
+    global_module:
+      - mod-stats/all
 
 knot_zone:
   []

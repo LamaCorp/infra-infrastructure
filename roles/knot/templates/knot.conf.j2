@@ -28,6 +28,16 @@ key:
     secret: "{{ key.secret }}"
 {% endfor %}
 
+mod-stats:
+  - id: all
+    edns-presence: on
+    flag-presence: on
+    request-edns-option: on
+    response-edns-option: on
+    reply-nodata: on
+    query-type: on
+    query-size: on
+    reply-size: on
 
 remote:
 {% for id, remote in knot_remote.items() %}
@@ -67,6 +77,12 @@ template:
     {% endif %}
     {% for acl in template.acl | d([]) %}
     acl: "{{ acl }}"
+    {% endfor %}
+    {% for mod in template.global_module | d([]) %}
+    global-module: "{{ mod }}"
+    {% endfor %}
+    {% for mod in template.module | d([]) %}
+    module: "{{ mod }}"
     {% endfor %}
 {% endfor %}
 
