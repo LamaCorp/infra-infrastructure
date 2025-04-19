@@ -6,14 +6,6 @@ resource "vault_mount" "k8s-global" {
   }
 }
 
-resource "vault_generic_secret" "k8s-global_core-cert-manager_cloudflare" {
-  path         = "${vault_mount.k8s-global.path}/core-cert-manager/cloudflare"
-  disable_read = true
-  data_json = jsonencode({
-    api_token = "FIXME: Create an API token with Zone Read, DNS Edit and access to all zones"
-  })
-}
-
 resource "vault_generic_secret" "k8s-global_core-observability_alertmanager_discord-webhooks" {
   path         = "${vault_mount.k8s-global.path}/core-observability/alertmanager/discord-webhooks"
   disable_read = true
