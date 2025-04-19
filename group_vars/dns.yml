@@ -1,6 +1,6 @@
 ---
 knot_server_identity: "ns{{ knot_id }}.as212024.net"
-knot_server_nsid: "ns{{ knot_id }}.as212024.net"
+knot_server_nsid: "{{ knot_server_identity }}"
 
 knot_key_raw: |
   "ns{{ knot_id }}_xfr":

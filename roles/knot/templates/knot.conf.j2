@@ -7,6 +7,7 @@ server:
   user: "{{ knot_server_user }}:{{ knot_server_group }}"
   identity: "{{ knot_server_identity }}"
   nsid: "{{ knot_server_nsid }}"
+  version: "{{ knot_server_version }}"
 {% for addr in knot_server_listen %}
   listen: "{{ addr }}"
 {% endfor %}
