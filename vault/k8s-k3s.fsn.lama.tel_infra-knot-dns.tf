@@ -1,7 +1,8 @@
 locals {
   k8s-k3s-fsn-lama-tel_infra-knot-dns_keys = toset([
     "happydomain",
-    "k8s_external-dns",
+    "k8s_k3s-fsn-lama-tel_core-cert-manager",
+    "k8s_k3s-fsn-lama-tel_core-external-dns",
     "ns1_xfr",
     "ns1_notify",
     "ns2_xfr",

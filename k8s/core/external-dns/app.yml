@@ -63,7 +63,7 @@ spec:
               extraArgs:
                 - --rfc2136-host=2001:67c:17fc::53
                 - --rfc2136-port=53
-                - --rfc2136-tsig-keyname=k8s_external-dns
+                - --rfc2136-tsig-keyname=k8s_{{ .name | replace "." "-" }}_core-external-dns
                 - --rfc2136-tsig-secret=$(TSIG_SECRET)
                 - --rfc2136-tsig-secret-alg=hmac-sha512
                 - --rfc2136-tsig-axfr

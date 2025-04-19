@@ -3,4 +3,5 @@ kind: Kustomization
 
 resources:
   - ../base
+  - cluster-issuer.yml
   - secrets.yml
