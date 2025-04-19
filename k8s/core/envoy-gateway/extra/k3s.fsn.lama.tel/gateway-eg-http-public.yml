@@ -28,20 +28,20 @@ spec:
       tls:
         mode: Terminate
         certificateRefs:
-          - name: eg-http-public-as212024-net-ecdsa
-          - name: eg-http-public-as212024-net-rsa
-          - name: eg-http-public-doyouhavegoodbackups-com-ecdsa
-          - name: eg-http-public-doyouhavegoodbackups-com-rsa
-          - name: eg-http-public-lama-corp-space-ecdsa
-          - name: eg-http-public-lama-corp-space-rsa
-          - name: eg-http-public-marcerisson-space-ecdsa
-          - name: eg-http-public-marcerisson-space-rsa
-          - name: eg-http-public-risson-me-ecdsa
-          - name: eg-http-public-risson-me-rsa
-          - name: eg-http-public-risson-space-ecdsa
-          - name: eg-http-public-risson-space-rsa
-          - name: eg-http-public-rplace-space-ecdsa
-          - name: eg-http-public-rplace-space-rsa
+          - name: eg-http-public-as212024-net-ecdsa-tls
+          - name: eg-http-public-as212024-net-rsa-tls
+          - name: eg-http-public-doyouhavegoodbackups-com-ecdsa-tls
+          - name: eg-http-public-doyouhavegoodbackups-com-rsa-tls
+          - name: eg-http-public-lama-corp-space-ecdsa-tls
+          - name: eg-http-public-lama-corp-space-rsa-tls
+          - name: eg-http-public-marcerisson-space-ecdsa-tls
+          - name: eg-http-public-marcerisson-space-rsa-tls
+          - name: eg-http-public-risson-me-ecdsa-tls
+          - name: eg-http-public-risson-me-rsa-tls
+          - name: eg-http-public-risson-space-ecdsa-tls
+          - name: eg-http-public-risson-space-rsa-tls
+          - name: eg-http-public-rplace-space-ecdsa-tls
+          - name: eg-http-public-rplace-space-rsa-tls
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
