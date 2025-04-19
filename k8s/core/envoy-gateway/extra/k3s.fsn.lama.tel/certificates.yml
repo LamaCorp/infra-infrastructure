@@ -1,0 +1,277 @@
+# This is an ugly workaround for
+# https://github.com/cert-manager/cert-manager/issues/7473
+# Until then we'll generate wildcard certificates where needed
+# and hopefully, switch to 6-days certificates ASAP
+# https://github.com/cert-manager/cert-manager/issues/7695
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-as212024-net-rsa
+spec:
+  secretName: eg-http-public-as212024-net-rsa-tls
+  privateKey:
+    algorithm: RSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "as212024.net"
+    - "*.as212024.net"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-as212024-net-ecdsa
+spec:
+  secretName: eg-http-public-as212024-net-ecdsa-tls
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "as212024.net"
+    - "*.as212024.net"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-doyouhavegoodbackups-com-rsa
+spec:
+  secretName: eg-http-public-doyouhavegoodbackups-com-rsa-tls
+  privateKey:
+    algorithm: RSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "doyouhavegoodbackups.com"
+    - "*.doyouhavegoodbackups.com"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-doyouhavegoodbackups-com-ecdsa
+spec:
+  secretName: eg-http-public-doyouhavegoodbackups-com-ecdsa-tls
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "doyouhavegoodbackups.com"
+    - "*.doyouhavegoodbackups.com"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-lama-corp-space-rsa
+spec:
+  secretName: eg-http-public-lama-corp-space-rsa-tls
+  privateKey:
+    algorithm: RSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "lama-corp.space"
+    - "*.lama-corp.space"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-lama-corp-space-ecdsa
+spec:
+  secretName: eg-http-public-lama-corp-space-ecdsa-tls
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "lama-corp.space"
+    - "*.lama-corp.space"
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: eg-http-public-lama-tel-rsa
+# spec:
+#   secretName: eg-http-public-lama-tel-rsa-tls
+#   privateKey:
+#     algorithm: RSA
+#     rotationPolicy: Always
+#   issuerRef:
+#     group: cert-manager.io
+#     kind: ClusterIssuer
+#     name: letsencrypt-prod-dns01
+#   dnsNames:
+#     - "lama.tel"
+#     - "*.lama.tel"
+# ---
+# apiVersion: cert-manager.io/v1
+# kind: Certificate
+# metadata:
+#   name: eg-http-public-lama-tel-ecdsa
+# spec:
+#   secretName: eg-http-public-lama-tel-ecdsa-tls
+#   privateKey:
+#     algorithm: ECDSA
+#     rotationPolicy: Always
+#   issuerRef:
+#     group: cert-manager.io
+#     kind: ClusterIssuer
+#     name: letsencrypt-prod-dns01
+#   dnsNames:
+#     - "lama.tel"
+#     - "*.lama.tel"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-marcerisson-space-rsa
+spec:
+  secretName: eg-http-public-marcerisson-space-rsa-tls
+  privateKey:
+    algorithm: RSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "marcerisson.space"
+    - "*.marcerisson.space"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-marcerisson-space-ecdsa
+spec:
+  secretName: eg-http-public-marcerisson-space-ecdsa-tls
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "marcerisson.space"
+    - "*.marcerisson.space"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-risson-me-rsa
+spec:
+  secretName: eg-http-public-risson-me-rsa-tls
+  privateKey:
+    algorithm: RSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "risson.me"
+    - "*.risson.me"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-risson-me-ecdsa
+spec:
+  secretName: eg-http-public-risson-me-ecdsa-tls
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "risson.me"
+    - "*.risson.me"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-risson-space-rsa
+spec:
+  secretName: eg-http-public-risson-space-rsa-tls
+  privateKey:
+    algorithm: RSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "risson.space"
+    - "*.risson.space"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-risson-space-ecdsa
+spec:
+  secretName: eg-http-public-risson-space-ecdsa-tls
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "risson.space"
+    - "*.risson.space"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-rplace-space-rsa
+spec:
+  secretName: eg-http-public-rplace-space-rsa-tls
+  privateKey:
+    algorithm: RSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "rplace.space"
+    - "*.rplace.space"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-rplace-space-ecdsa
+spec:
+  secretName: eg-http-public-rplace-space-ecdsa-tls
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "rplace.space"
+    - "*.rplace.space"

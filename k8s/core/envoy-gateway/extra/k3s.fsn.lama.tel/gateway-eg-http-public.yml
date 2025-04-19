@@ -3,9 +3,6 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
 metadata:
   name: eg-http-public
-  annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod-dns01
-    cert-manager.io/private-key-algorithm: ECDSA
 spec:
   gatewayClassName: eg
   infrastructure:
@@ -25,14 +22,26 @@ spec:
     - name: https
       protocol: HTTPS
       port: 443
-      hostname: "*.lama-corp.space"
       allowedRoutes:
         namespaces:
           from: All
       tls:
         mode: Terminate
         certificateRefs:
-          - name: eg-http-public-tls
+          - name: eg-http-public-as212024-net-ecdsa
+          - name: eg-http-public-as212024-net-rsa
+          - name: eg-http-public-doyouhavegoodbackups-com-ecdsa
+          - name: eg-http-public-doyouhavegoodbackups-com-rsa
+          - name: eg-http-public-lama-corp-space-ecdsa
+          - name: eg-http-public-lama-corp-space-rsa
+          - name: eg-http-public-marcerisson-space-ecdsa
+          - name: eg-http-public-marcerisson-space-rsa
+          - name: eg-http-public-risson-me-ecdsa
+          - name: eg-http-public-risson-me-rsa
+          - name: eg-http-public-risson-space-ecdsa
+          - name: eg-http-public-risson-space-rsa
+          - name: eg-http-public-rplace-space-ecdsa
+          - name: eg-http-public-rplace-space-rsa
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
