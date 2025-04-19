@@ -35,14 +35,6 @@ knot_template:
       - ns0_notify
 
 knot_zone:
-  - domain: as212024.net
-  - domain: devou.ps
-  - domain: doyouhavegoodbackups.com
-  - domain: lama-corp.space
-  - domain: lama.tel
-  - domain: marcerisson.space
-  - domain: risson.me
-  - domain: risson.net
-  - domain: risson.space
-  - domain: rplace.space
-  - domain: thefractal.space
+  - domain: catalog.
+    catalog_role: interpret
+    catalog_template: default

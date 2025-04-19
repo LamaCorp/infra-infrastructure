@@ -73,4 +73,10 @@ template:
 zone:
 {% for zone in knot_zone %}
   - domain: "{{ zone.domain }}"
+    {% if zone.catalog_role is defined %}
+    catalog-role: "{{ zone.catalog_role }}"
+    {% endif %}
+    {% if zone.catalog_template is defined %}
+    catalog-template: "{{ zone.catalog_template }}"
+    {% endif %}
 {% endfor %}

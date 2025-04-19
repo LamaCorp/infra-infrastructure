@@ -52,3 +52,5 @@ knot_template:
 knot_zone:
   []
   # - domain: example.org
+  #   catalog_role: interpret
+  #   catalog_template: default
