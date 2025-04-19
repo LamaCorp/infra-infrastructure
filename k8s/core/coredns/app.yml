@@ -36,6 +36,8 @@ spec:
 
               k8sAppLabelOverride: kube-dns
 
+              replicaCount: 2
+
               servers:
                 - zones:
                     - zone: .
@@ -81,10 +83,16 @@ spec:
                       configBlock: |-
                         answer "{{ `{{ .Zone }}` }} 300 IN NS ns.dns.c.{{ .name }}."
                     - name: template
+                      parameters: IN A
+                      configBlock: |-
+                        match "ns.dns.c.{{ .name }}.$"
+                        answer "ns.dns.c.{{ .name }}. 300 IN A {{ .metadata.annotations.dnsPublicIP4 }}"
+                        fallthrough
+                    - name: template
                       parameters: IN AAAA
                       configBlock: |-
                         match "ns.dns.c.{{ .name }}.$"
-                        answer "ns.dns.c.{{ .name }}. 300 IN AAAA 2001:67c:17fc:130::53"
+                        answer "ns.dns.c.{{ .name }}. 300 IN AAAA {{ .metadata.annotations.dnsPublicIP6 }}"
                         fallthrough
                     - name: kubernetes
                       parameters: c.{{ .name }} {{ .metadata.annotations.podSubnet4 }} {{ .metadata.annotations.svcSubnet4 }} {{ .metadata.annotations.podSubnet6 }} {{ .metadata.annotations.svcSubnet6 }} {{ .metadata.annotations.extraPodSubnet4 }}

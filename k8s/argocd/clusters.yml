@@ -14,6 +14,8 @@ metadata:
     dnsIP4: 172.28.132.53
     dnsIP6: 2001:67c:17fc:120::53
     controllerEndpoint: 2001:67c:17fc:101::11
+    dnsPublicIP4: 209.112.97.160
+    dnsPublicIP6: 2001:67c:17fc:130::53
 stringData:
   name: k3s.fsn.lama.tel
   server: https://kubernetes.default.svc
