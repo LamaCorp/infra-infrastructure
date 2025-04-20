@@ -17,7 +17,7 @@ entries:
         ]
 
       mode: forward_single
-      external_host: https://thanos-bucketweb.lama.tel
+      external_host: https://thanos-bucketweb.as212024.net
 
       access_token_validity: hours=24
 
@@ -48,7 +48,7 @@ entries:
       name: Thanos
       group: Infrastructure
       description: Long-term metrics storage
-      meta_launch_url: https://thanos.lama.tel
+      meta_launch_url: https://thanos.as212024.net
       icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/thanos.png
       policy_engine_mode: any
 
