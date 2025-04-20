@@ -5,7 +5,7 @@ global:
 
 configs:
   cm:
-    url: https://argocd.lama.tel
+    url: https://argocd.as212024.net
     statusbadge.enabled: true
     application.resourceTrackingMethod: annotation
     server.rbac.log.enforce.enable: true
@@ -83,7 +83,7 @@ server:
       cert-manager.io/cluster-issuer: letsencrypt-prod-http01
       nginx.ingress.kubernetes.io/ssl-passthrough: "true"
       nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    hostname: argocd.lama.tel
+    hostname: argocd.as212024.net
     tls: true
 
 repoServer:
@@ -103,12 +103,12 @@ applicationSet:
     enabled: true
     annotations:
       cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-    hostname: appset.argocd.lama.tel
+    hostname: argocd-appset.as212024.net
     tls: true
 
 notifications:
   enabled: true
-  argocdUrl: https://argocd.lama.tel
+  argocdUrl: https://argocd.as212024.net
   notifiers: {}
   triggers: {}
   templates: {}
