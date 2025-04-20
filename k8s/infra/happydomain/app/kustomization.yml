@@ -20,7 +20,7 @@ configMapGenerator:
       - HAPPYDOMAIN_EXTERNALURL=https://dns.as212024.net
       - HAPPYDOMAIN_DISABLE_EMBEDDED_LOGIN=true
       - HAPPYDOMAIN_DISABLE_REGISTRATION=true
-      - HAPPYDOMAIN_OIDC_PROVIDER_URL=https://auth.lama.tel/application/o/happydomain/
+      - HAPPYDOMAIN_OIDC_PROVIDER_URL=https://auth.as212024.net/application/o/happydomain/
 
 images:
   - name: happydomain/happydomain
