@@ -6,5 +6,5 @@ bird2_kernel:
     static_export: false
 
 bird2_bgp_rpki:
-  host: rpki.lama.tel
+  host: rpki.as212024.net
   port: 323
