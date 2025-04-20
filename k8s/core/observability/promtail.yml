@@ -33,7 +33,7 @@ spec:
           values: |
             config:
               clients:
-                - url: https://loki.lama.tel/loki/api/v1/push
+                - url: https://loki.as212024.net/loki/api/v1/push
                   tenant_id: infra
                   basic_auth:
                     username: "${LOKI_USERNAME}"

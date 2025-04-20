@@ -1,5 +1,5 @@
 ---
-promtail_loki_server_url: loki.lama.tel
+promtail_loki_server_url: loki.as212024.net
 promtail_system_user: root
 
 promtail_config_clients:

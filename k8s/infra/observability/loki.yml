@@ -95,10 +95,10 @@ spec:
             nginx.ingress.kubernetes.io/auth-secret: loki-auth-map
             nginx.ingress.kubernetes.io/auth-secret-type: auth-map
           hosts:
-            - loki.lama.tel
+            - loki.as212024.net
           tls:
             - hosts:
-                - loki.lama.tel
+                - loki.as212024.net
               secretName: loki-tls
 
         gateway:
