@@ -13,6 +13,6 @@ netplan_remove_existing: true
 
 netplan_renderer: networkd
 
-whois_server: whois.lama.tel
+whois_server: whois.as212024.net
 
 bird2_asn: 212024
