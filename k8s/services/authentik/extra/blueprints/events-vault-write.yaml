@@ -10,7 +10,7 @@ entries:
       name: vault-write
     attrs:
       expression: |
-        vault_host = "https://vault.lama.tel"
+        vault_host = "https://vault.as212024.net"
         vault_auth_path = "k8s-k3s.fsn.lama.tel"
         vault_auth_role = "authentik"
         vault_kv_store = "authentik"
