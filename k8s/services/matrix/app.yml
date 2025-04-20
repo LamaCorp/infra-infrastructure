@@ -94,7 +94,7 @@ spec:
               enabled: false
               password: ""
           externalRedis:
-            host: redis.fsn.lama.tel
+            host: redis.fsn.as212024.net
             port: 6384
 
           persistence:

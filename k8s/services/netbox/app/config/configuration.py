@@ -14,12 +14,12 @@ DATABASE = {
 
 REDIS = {
     "tasks": {
-        "HOST": "redis.fsn.lama.tel",
+        "HOST": "redis.fsn.as212024.net",
         "PORT": 6385,
         "DATABASE": 0,
     },
     "caching": {
-        "HOST": "redis.fsn.lama.tel",
+        "HOST": "redis.fsn.as212024.net",
         "PORT": 6385,
         "DATABASE": 1,
     },

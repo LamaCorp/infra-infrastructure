@@ -13,7 +13,7 @@ configMapGenerator:
     literals:
       - PAPERLESS_URL=https://paper.risson.space
       - PAPERLESS_DBNAME=paperless_risson
-      - PAPERLESS_REDIS=redis://redis.fsn.lama.tel:6383
+      - PAPERLESS_REDIS=redis://redis.fsn.as212024.net:6383
       - PAPERLESS_CONSUMPTION_DIR=/user/risson/paperless/consume
       - PAPERLESS_TRASH_DIR=/user/risson/paperless/media/trash
       - PAPERLESS_MEDIA_ROOT=/user/risson/paperless/media

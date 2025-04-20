@@ -119,7 +119,7 @@ spec:
                     key: password
 
               - name: REDIS_HOST
-                value: redis.fsn.lama.tel
+                value: redis.fsn.as212024.net
               - name: REDIS_HOST_PORT
                 value: "6382"
 

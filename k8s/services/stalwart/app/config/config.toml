@@ -113,7 +113,7 @@ frequency = "0 1 *"
 [store.redis]
 type = "redis"
 redis-type = "single"
-urls = "redis://redis.fsn.lama.tel:6379#insecure"
+urls = "redis://redis.fsn.as212024.net:6379#insecure"
 compression = "none"
 [store.redis.purge]
 frequency = "0 1 *"
