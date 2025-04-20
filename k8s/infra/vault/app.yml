@@ -83,10 +83,10 @@ spec:
                 cert-manager.io/cluster-issuer: letsencrypt-prod-http01
                 nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
               hosts:
-                - host: vault.lama.tel
+                - host: vault.as212024.net
               tls:
                 - hosts:
-                    - vault.lama.tel
+                    - vault.as212024.net
                   secretName: vault-tls
 
           serverTelemetry:

@@ -23,8 +23,6 @@ resource "vault_jwt_auth_backend_role" "authentik" {
   allowed_redirect_uris = [
     "https://vault.as212024.net/ui/vault/auth/authentik/oidc/callback",
     "https://vault.as212024.net/oidc/callback",
-    "https://vault.lama.tel/ui/vault/auth/authentik/oidc/callback",
-    "https://vault.lama.tel/oidc/callback",
     "http://localhost:8250/oidc/callback",
   ]
 }

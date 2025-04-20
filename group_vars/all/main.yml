@@ -31,7 +31,7 @@ node_exporter_enabled_collectors:
 
 # vault
 
-vault_addr: https://vault.lama.tel:443
+vault_addr: https://vault.as212024.net:443
 vault_version: 1.13.0
 
 # textfile collectors

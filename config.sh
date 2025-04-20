@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export VAULT_ADDR="https://vault.lama.tel:443"
+export VAULT_ADDR="https://vault.as212024.net:443"
 
 load_secrets() {
   secrets_path="${1}"
