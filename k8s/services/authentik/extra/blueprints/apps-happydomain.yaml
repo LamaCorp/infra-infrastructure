@@ -23,7 +23,7 @@ entries:
 
       client_type: confidential
       redirect_uris:
-        - url: https://dns.lama.tel/auth/callback
+        - url: https://dns.as212024.net/auth/callback
           matching_mode: strict
 
       access_code_validity: minutes=1
