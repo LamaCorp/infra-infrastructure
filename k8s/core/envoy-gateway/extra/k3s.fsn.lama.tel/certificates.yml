@@ -139,40 +139,6 @@ spec:
 #   dnsNames:
 #     - "lama.tel"
 #     - "*.lama.tel"
-# Another workaround here for DNSSEC being broken on lama.tel currently
-# so we temporarly fallback on http01
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: eg-http-public-lama-tel-rsa
-spec:
-  secretName: eg-http-public-lama-tel-rsa-tls
-  privateKey:
-    algorithm: RSA
-    rotationPolicy: Always
-  issuerRef:
-    group: cert-manager.io
-    kind: ClusterIssuer
-    name: letsencrypt-prod-http01-eg
-  dnsNames:
-    - "lg.lama.tel"
----
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: eg-http-public-lama-tel-ecdsa
-spec:
-  secretName: eg-http-public-lama-tel-ecdsa-tls
-  privateKey:
-    algorithm: ECDSA
-    rotationPolicy: Always
-  issuerRef:
-    group: cert-manager.io
-    kind: ClusterIssuer
-    name: letsencrypt-prod-http01-eg
-  dnsNames:
-    - "lg.lama.tel"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate

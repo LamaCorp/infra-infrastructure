@@ -34,8 +34,6 @@ spec:
           - name: eg-http-public-doyouhavegoodbackups-com-rsa-tls
           - name: eg-http-public-lama-corp-space-ecdsa-tls
           - name: eg-http-public-lama-corp-space-rsa-tls
-          # - name: eg-http-public-lama-tel-ecdsa-tls
-          # - name: eg-http-public-lama-tel-rsa-tls
           - name: eg-http-public-marcerisson-space-ecdsa-tls
           - name: eg-http-public-marcerisson-space-rsa-tls
           - name: eg-http-public-risson-me-ecdsa-tls
