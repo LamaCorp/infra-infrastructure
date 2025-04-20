@@ -97,7 +97,7 @@ entries:
 
   - model: authentik_outposts.outpost
     identifiers:
-      name: "Proxy Outpost lama.tel"
+      name: "Proxy Outpost as212024.net"
     attrs:
       type: proxy
       service_connection:
@@ -113,10 +113,10 @@ entries:
           ]
       config:
         log_level: info
-        authentik_host: https://auth.lama.tel
+        authentik_host: https://auth.as212024.net
         kubernetes_ingress_annotations:
           cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-        kubernetes_ingress_secret_name: authentik-outpost-lama-tel-tls
+        kubernetes_ingress_secret_name: authentik-outpost-as212024-net-tls
 
   - model: authentik_outposts.outpost
     identifiers:

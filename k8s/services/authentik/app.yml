@@ -96,11 +96,11 @@ spec:
                 cert-manager.io/cluster-issuer: letsencrypt-prod-http01
               hosts:
                 - auth.lama-corp.space
-                - auth.lama.tel
+                - auth.as212024.net
               tls:
                 - hosts:
                     - auth.lama-corp.space
-                    - auth.lama.tel
+                    - auth.as212024.net
                   secretName: authentik-tls
             metrics:
               serviceMonitor:

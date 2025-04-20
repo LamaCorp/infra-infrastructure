@@ -2,7 +2,6 @@
 kind: Kustomization
 
 resources:
-  - ingress.yml
   - network-policy.yml
   - secrets.yml
   - kdc

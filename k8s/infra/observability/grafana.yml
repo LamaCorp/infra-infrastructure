@@ -37,7 +37,7 @@ spec:
             disable_initial_admin_creation: "True"
             cookie_secure: "True"
           auth:
-            signout_redirect_url: https://auth.lama.tel/application/o/grafana/end-session/
+            signout_redirect_url: https://auth.as212024.net/application/o/grafana/end-session/
           auth.anonymous:
             enabled: "True"
             org_name: "Main Org."
@@ -46,9 +46,9 @@ spec:
             enabled: "True"
             allow_sign_up: "True"
             scopes: "openid email profile"
-            auth_url: https://auth.lama-corp.space/application/o/authorize/
-            token_url: https://auth.lama-corp.space/application/o/token/
-            api_url: https://auth.lama-corp.space/application/o/userinfo/
+            auth_url: https://auth.as212024.net/application/o/authorize/
+            token_url: https://auth.as212024.net/application/o/token/
+            api_url: https://auth.as212024.net/application/o/userinfo/
             role_attribute_path: "contains(groups[*], 'roots') && 'Admin' || 'Viewer'"
             allow_assign_grafana_admin: "True"
             role_attribute_strict: "True"
