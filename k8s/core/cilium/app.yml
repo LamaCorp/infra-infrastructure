@@ -152,8 +152,8 @@ spec:
                     annotations:
                       cert-manager.io/cluster-issuer: letsencrypt-prod-http01
                     hosts:
-                      - "hubble.{{ .name }}"
+                      - "hubble.{{ .name | replace "lama.tel" "as212024.net" }}"
                     tls:
                       - secretName: cilium-hubble-tls
                         hosts:
-                          - "hubble.{{ .name }}"
+                          - "hubble.{{ .name | replace "lama.tel" "as212024.net" }}"
