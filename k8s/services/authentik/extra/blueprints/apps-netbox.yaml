@@ -23,7 +23,7 @@ entries:
 
       client_type: confidential
       redirect_uris:
-        - url: https://netbox.lama.tel/oauth/complete/oidc/
+        - url: https://netbox.as212024.net/oauth/complete/oidc/
           matching_mode: strict
 
       access_code_validity: minutes=1

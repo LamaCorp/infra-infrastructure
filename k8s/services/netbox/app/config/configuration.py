@@ -1,6 +1,6 @@
 """Netbox configuration"""
 
-ALLOWED_HOSTS = ["netbox.lama.tel"]
+ALLOWED_HOSTS = ["netbox.as212024.net"]
 
 DATABASE = {
     "NAME": "netbox",
@@ -41,10 +41,10 @@ TIME_ZONE = "Europe/Paris"
 REMOTE_AUTH_ENABLED = True
 REMOTE_AUTH_BACKEND = "social_core.backends.open_id_connect.OpenIdConnectAuth"
 
-SOCIAL_AUTH_OIDC_ENDPOINT = "https://auth.lama-corp.space/application/o/netbox/"
+SOCIAL_AUTH_OIDC_ENDPOINT = "https://auth.as212024.net/application/o/netbox/"
 SOCIAL_AUTH_OIDC_KEY = "{{ .client_id }}"
 SOCIAL_AUTH_OIDC_SECRET = "{{ .client_secret }}"
-LOGOUT_REDIRECT_URL = "https://auth.lama-corp.space/application/o/netbox/end-session/"
+LOGOUT_REDIRECT_URL = "https://auth.as212024.net/application/o/netbox/end-session/"
 SOCIAL_AUTH_OIDC_SCOPE = ["openid", "profile", "email", "roles"]
 
 SOCIAL_AUTH_PIPELINE = (
