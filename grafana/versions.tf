@@ -20,6 +20,6 @@ data "vault_generic_secret" "observability_grafana_admin" {
 }
 
 provider "grafana" {
-  url  = "https://grafana.lama.tel"
+  url  = "https://grafana.as212024.net"
   auth = "${data.vault_generic_secret.observability_grafana_admin.data["username"]}:${data.vault_generic_secret.observability_grafana_admin.data["password"]}"
 }

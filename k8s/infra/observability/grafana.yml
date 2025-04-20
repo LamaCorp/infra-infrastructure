@@ -30,9 +30,9 @@ spec:
           features_toggles:
             enable: dashboardPreviews scenes
           server:
-            domain: grafana.lama.tel
+            domain: grafana.as212024.net
             enforce_domain: "True"
-            root_url: https://grafana.lama.tel
+            root_url: https://grafana.as212024.net
           security:
             disable_initial_admin_creation: "True"
             cookie_secure: "True"
@@ -139,10 +139,10 @@ spec:
             nginx.ingress.kubernetes.io/affinity: cookie
             nginx.ingress.kubernetes.io/affinity-mode: persistent
           hosts:
-            - grafana.lama.tel
+            - grafana.as212024.net
           tls:
             - hosts:
-                - grafana.lama.tel
+                - grafana.as212024.net
               secretName: grafana-tls
   ignoreDifferences:
     - group: apps
