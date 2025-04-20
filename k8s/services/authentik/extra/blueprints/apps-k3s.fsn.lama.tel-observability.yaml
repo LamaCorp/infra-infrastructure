@@ -17,7 +17,7 @@ entries:
         ]
 
       mode: forward_single
-      external_host: https://alertmanager.k3s.fsn.lama.tel
+      external_host: https://alertmanager.k3s.fsn.as212024.net
 
       access_token_validity: hours=24
 
@@ -48,19 +48,13 @@ entries:
       name: k3s.fsn.lama.tel Prometheus
       group: Infrastructure
       description: Metrics aggregator
-      meta_launch_url: https://prometheus.k3s.fsn.lama.tel
+      meta_launch_url: https://prometheus.k3s.fsn.as212024.net
       icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/prometheus.png
       policy_engine_mode: any
 
   - model: authentik_policies.policybinding
     identifiers:
       target: !KeyOf application-prometheus
-      group: !Find [authentik_core.group, [name, "users"]]
-    attrs:
-      order: 1
-  - model: authentik_policies.policybinding
-    identifiers:
-      target: !KeyOf application-prometheus
       group: !Find [authentik_core.group, [name, "roots"]]
     attrs:
-      order: 2
+      order: 1

@@ -93,10 +93,10 @@ spec:
                   nginx.ingress.kubernetes.io/protocol: h2c
                   nginx.ingress.kubernetes.io/proxy-read-timeout: "160"
                 hosts:
-                  - thanos.{{ .name }}
+                  - thanos.{{ .name | replace "lama.tel" "as212024.net" }}
                 tls:
                   - hosts:
-                      - thanos.{{ .name }}
+                      - thanos.{{ .name | replace "lama.tel" "as212024.net" }}
                     secretName: thanos-tls
               ingress:
                 enabled: true
@@ -104,10 +104,10 @@ spec:
                 annotations:
                   cert-manager.io/cluster-issuer: letsencrypt-prod-http01
                 hosts:
-                  - prometheus.{{ .name }}
+                  - prometheus.{{ .name | replace "lama.tel" "as212024.net" }}
                 tls:
                   - hosts:
-                      - prometheus.{{ .name }}
+                      - prometheus.{{ .name | replace "lama.tel" "as212024.net" }}
                     secretName: prometheus-tls
 
             alertmanager:
@@ -238,10 +238,10 @@ spec:
                   nginx.ingress.kubernetes.io/auth-snippet: |
                     proxy_set_header X-Forwarded-Host $http_host;
                 hosts:
-                  - alertmanager.{{ .name }}
+                  - alertmanager.{{ .name | replace "lama.tel" "as212024.net" }}
                 tls:
                   - hosts:
-                      - alertmanager.{{ .name }}
+                      - alertmanager.{{ .name | replace "lama.tel" "as212024.net" }}
                     secretName: alertmanager-tls
 
             grafana:
