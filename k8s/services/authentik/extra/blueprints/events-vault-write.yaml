@@ -61,7 +61,7 @@ entries:
                         "method": requests.post,
                         "path": f"auth/authentik/config",
                         "payload": {
-                            "oidc_discovery_url": "https://auth.lama.tel/application/o/vault/",
+                            "oidc_discovery_url": "https://auth.as212024.net/application/o/vault/",
                             "oidc_client_id": provider.client_id,
                             "oidc_client_secret": provider.client_secret,
                             "default_role": "authentik",
