@@ -99,7 +99,7 @@ default-language = "en"
 
 [store.postgresql]
 type = "postgresql"
-host = "postgresql.fsn.lama.tel"
+host = "postgresql.fsn.as212024.net"
 database = "stalwart"
 user = "%{file:/postgres-creds/username}%"
 password = "%{file:/postgres-creds/password}%"

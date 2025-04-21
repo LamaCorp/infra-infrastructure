@@ -6,7 +6,7 @@ DATABASE = {
     "NAME": "netbox",
     "USER": "{{ .username }}",
     "PASSWORD": "{{ .password }}",
-    "HOST": "postgresql.fsn.lama.tel",
+    "HOST": "postgresql.fsn.as212024.net",
     "OPTIONS": {
         "sslmode": "prefer",
     },

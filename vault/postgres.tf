@@ -1,6 +1,6 @@
 locals {
   postgres_clusters = {
-    "postgresql.fsn.lama.tel" = {
+    "postgresql.fsn.as212024.net" = {
       static_roles = {
         "k3s.fsn.lama.tel_infra-observability_grafana" = {
           postgres_role = "grafana"

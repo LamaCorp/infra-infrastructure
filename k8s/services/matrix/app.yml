@@ -81,7 +81,7 @@ spec:
           postgresql:
             enabled: false
           externalPostgresql:
-            host: postgresql.fsn.lama.tel
+            host: postgresql.fsn.as212024.net
             username: matrix_synapse
             existingSecret: synapse-postgres-credentials
             existingSecretPasswordKey: password

@@ -166,7 +166,7 @@ spec:
           externalDatabase:
             enabled: true
             type: postgresql
-            host: postgresql.fsn.lama.tel
+            host: postgresql.fsn.as212024.net
             database: nextcloud
             existingSecret:
               enabled: true

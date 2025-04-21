@@ -41,7 +41,7 @@ configMapGenerator:
       - PERSISTENT_TIMEOUT=20
       - PREPARED_STATEMENTS=true
 
-      - DB_HOST=postgresql.fsn.lama.tel
+      - DB_HOST=postgresql.fsn.as212024.net
       - DB_NAME=mastodon
 
       - REDIS_HOST=redis.fsn.as212024.net

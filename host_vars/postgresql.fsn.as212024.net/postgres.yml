@@ -2,6 +2,9 @@
 postgresql_version: 15
 
 postgresql_users:
+  postgres:
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/postgresql.fsn.as212024.net/postgres')['password'] }}"
+
   atuin: {}
   authentik: {}
   gatus_devoups: {}
@@ -13,10 +16,6 @@ postgresql_users:
   immich: {}
   lemmy: {}
   lemmy_pictrs: {}
-
-  mailman:
-    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/users/mailman')['password'] }}"
-
   mastodon: {}
   matrix_maubot: {}
   matrix_mautrix_facebook: {}
@@ -27,10 +26,6 @@ postgresql_users:
   netbox: {}
   nextcloud: {}
   paperless_risson: {}
-
-  postgres:
-    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/postgresql.fsn.lama.tel/postgres')['password'] }}"
-
   stalwart: {}
   vaultwarden: {}
 
@@ -46,7 +41,7 @@ postgresql_dbs:
   immich: immich
   lemmy: lemmy
   lemmy_pictrs: lemmy_pictrs
-  mailman: mailman
+  mailman: postgres
   mastodon: mastodon
   matrix_maubot: matrix_maubot
   matrix_mautrix_facebook: matrix_mautrix_facebook
@@ -61,8 +56,8 @@ postgresql_dbs:
   vaultwarden: vaultwarden
 
 postgresql_config:
-  ssl_cert_file: "'/srv/acme/postgresql.fsn.lama.tel/fullchain.pem'"
-  ssl_key_file: "'/srv/acme/postgresql.fsn.lama.tel/key.pem'"
+  ssl_cert_file: "'/srv/acme/postgresql.fsn.as212024.net/fullchain.pem'"
+  ssl_key_file: "'/srv/acme/postgresql.fsn.as212024.net/key.pem'"
 
   # See https://pgtune.leopard.in.ua/
   # and https://wiki.postgresql.org/wiki/Tuning_Your_PostgreSQL_Server
