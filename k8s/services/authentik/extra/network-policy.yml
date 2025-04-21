@@ -20,8 +20,6 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
-            k8s:io.kubernetes.pod.namespace: services-eos
-        - matchLabels:
             k8s:io.kubernetes.pod.namespace: services-stalwart
       toPorts:
         - ports:

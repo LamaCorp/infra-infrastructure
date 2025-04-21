@@ -13,11 +13,6 @@ entries:
   - model: authentik_blueprints.metaapplyblueprint
     attrs:
       identifiers:
-        name: Apps - EOS
-      required: true
-  - model: authentik_blueprints.metaapplyblueprint
-    attrs:
-      identifiers:
         name: Apps - Home assistant
       required: true
   - model: authentik_blueprints.metaapplyblueprint
@@ -129,10 +124,6 @@ entries:
           [name, "Local Kubernetes Cluster"],
         ]
       providers:
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.lama.tel/services-eos/ldap"],
-          ]
         - !Find [
             authentik_core.provider,
             [name, "k8s/k3s.fsn.lama.tel/services-stalwart/ldap"],

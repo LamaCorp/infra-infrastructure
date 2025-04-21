@@ -14,7 +14,6 @@ configMapGenerator:
     files:
       - ./blueprints/apps-archivebox.yaml
       - ./blueprints/apps-argocd.yaml
-      - ./blueprints/apps-eos.yaml
       - ./blueprints/apps-grafana.yaml
       - ./blueprints/apps-happydomain.yaml
       - ./blueprints/apps-hedgedoc.yaml
@@ -35,7 +34,6 @@ configMapGenerator:
       - ./blueprints/brands.yaml
       - ./blueprints/events-vault-write.yaml
       - ./blueprints/flows-default-provider-authorization-one-time-consent.yaml
-      - ./blueprints/groups.yaml
       - ./blueprints/notifications.yaml
       - ./blueprints/oauth-scopes.yaml
       - ./blueprints/outposts.yaml

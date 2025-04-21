@@ -5,24 +5,6 @@ version: 1
 metadata:
   name: Apps - Paperless NGX risson
 entries:
-  - id: user
-    model: authentik_core.user
-    identifiers:
-      username: svc-paperless-ngx-risson
-    attrs:
-      name: Paperless NGX risson
-      email: no-reply@paper.risson.space
-      path: services/lama-corp
-      type: service_account
-  - model: authentik_core.token
-    identifiers:
-      identifier: svc-paperless-ngx-risson-eos
-    attrs:
-      description: k8s/k3s.fsn.lama.tel/services-paperless-ngx-risson/eos
-      user: !KeyOf user
-      intent: app_password
-      expiring: false
-
   - id: provider
     model: authentik_providers_oauth2.oauth2provider
     identifiers:
