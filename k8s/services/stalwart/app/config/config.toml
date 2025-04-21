@@ -50,7 +50,7 @@ protocol = "smtp"
 greeting = "Lama Corp. ESMTL at your service"
 tls.implicit = true
 
-[acme.letsencrypt-main]
+[acme.letsencrypt-lama-corp-space]
 directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
@@ -62,24 +62,54 @@ domains = [
 ]
 cache = "/opt/stalwart-mail/etc/acme"
 default = true
-[acme.letsencrypt-others]
+
+[acme.letsencrypt-as212024-net]
 directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
-domains = [
-  "mail.as212024.net",
-  "mail.lama.tel",
-  "mail.marcerisson.space",
-  "mail.risson.me",
-  "mail.risson.space",
-  "mail.thefractal.space",
-  "mta-sts.as212024.net",
-  "mta-sts.lama.tel",
-  "mta-sts.marcerisson.space",
-  "mta-sts.risson.me",
-  "mta-sts.risson.space",
-  "mta-sts.thefractal.space",
-]
+domains = ["mail.as212024.net", "mta-sts.as212024.net"]
+cache = "/opt/stalwart-mail/etc/acme"
+default = false
+[acme.letsencrypt-lama-tel]
+directory = "https://acme-v02.api.letsencrypt.org/directory"
+challenge = "tls-alpn-01"
+contact = ["root@lama-corp.space"]
+domains = ["mail.lama.tel", "mta-sts.lama.tel"]
+cache = "/opt/stalwart-mail/etc/acme"
+default = false
+[acme.letsencrypt-marcerisson-space]
+directory = "https://acme-v02.api.letsencrypt.org/directory"
+challenge = "tls-alpn-01"
+contact = ["root@lama-corp.space"]
+domains = ["mail.marcerisson.space", "mta-sts.marcerisson.space"]
+cache = "/opt/stalwart-mail/etc/acme"
+default = false
+[acme.letsencrypt-risson-me]
+directory = "https://acme-v02.api.letsencrypt.org/directory"
+challenge = "tls-alpn-01"
+contact = ["root@lama-corp.space"]
+domains = ["mail.risson.me", "mta-sts.risson.me"]
+cache = "/opt/stalwart-mail/etc/acme"
+default = false
+[acme.letsencrypt-risson-net]
+directory = "https://acme-v02.api.letsencrypt.org/directory"
+challenge = "tls-alpn-01"
+contact = ["root@lama-corp.space"]
+domains = ["mail.risson.net", "mta-sts.risson.net"]
+cache = "/opt/stalwart-mail/etc/acme"
+default = false
+[acme.letsencrypt-risson-space]
+directory = "https://acme-v02.api.letsencrypt.org/directory"
+challenge = "tls-alpn-01"
+contact = ["root@lama-corp.space"]
+domains = ["mail.risson.space", "mta-sts.risson.space"]
+cache = "/opt/stalwart-mail/etc/acme"
+default = false
+[acme.letsencrypt-thefractal-space]
+directory = "https://acme-v02.api.letsencrypt.org/directory"
+challenge = "tls-alpn-01"
+contact = ["root@lama-corp.space"]
+domains = ["mail.thefractal.space", "mta-sts.thefractal.space"]
 cache = "/opt/stalwart-mail/etc/acme"
 default = false
 
