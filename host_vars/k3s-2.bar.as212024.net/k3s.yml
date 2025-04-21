@@ -6,9 +6,8 @@ k3s_agent:
   node-label:
     - topology.kubernetes.io/region=bar
     - topology.kubernetes.io/zone=rack5
-    - role.lama.tel/kubevirt=true
   node-taint:
-    - role.lama.tel/kubevirt=true:NoExecute
+    - role.lama.tel/media=true:NoExecute
   kubelet-arg:
     - allowed-unsafe-sysctls=net.ipv4.conf.all.src_valid_mark
     - allowed-unsafe-sysctls=net.ipv6.conf.all.disable_ipv6

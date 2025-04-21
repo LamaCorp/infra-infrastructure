@@ -70,7 +70,7 @@ spec:
           persistentVolumeClaim:
             claimName: media
       nodeSelector:
-        kubernetes.io/hostname: k3s-1.bar.lama.tel
+        kubernetes.io/hostname: k3s-1.bar.as212024.net
       tolerations:
         - key: "role.lama.tel/media"
           operator: "Exists"

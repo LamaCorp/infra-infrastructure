@@ -27,7 +27,7 @@ spec:
                 operator: Exists
                 effect: NoSchedule
             nodeSelector: |
-              kubernetes.io/hostname: k3s-2.bar.lama.tel
+              kubernetes.io/hostname: k3s-2.bar.as212024.net
   template:
     metadata:
       name: core-ingress-nginx-{{ .cluster }}-{{ .name }}
