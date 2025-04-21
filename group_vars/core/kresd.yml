@@ -33,10 +33,14 @@ kresd_rpz_internal:
   zone_content: |
     $TTL 3600
 
-    nucleus.fsn.lama.tel.		A		209.112.97.241
-    gate-1.bar.lama.tel.		A		209.112.97.242
-    edge-1.pvl.lama.tel.		A		209.112.97.243
-    edge-2.fra.lama.tel.		A		209.112.97.244
+    nucleus.fsn.as212024.net.		A		209.112.97.241
+    gate-1.bar.as212024.net.		A		209.112.97.242
+    edge-1.pvl.as212024.net.		A		209.112.97.243
+    edge-2.fra.as212024.net.		A		209.112.97.244
+    nucleus.fsn.as212024.net.		AAAA		2001:67c:17fc:ffff::1
+    gate-1.bar.as212024.net.		AAAA		2001:67c:17fc:ffff::2
+    edge-1.pvl.as212024.net.		AAAA		2001:67c:17fc:ffff::3
+    edge-2.fra.as212024.net.		AAAA		2001:67c:17fc:ffff::4
 
 kresd_rpz:
   internal: "{{ kresd_rpz_internal }}"
