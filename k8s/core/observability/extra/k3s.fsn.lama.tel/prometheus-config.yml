@@ -14,7 +14,7 @@
         - nas-1.bar.lama.tel:9100
         - nas-2.bar.lama.tel:9100
         - nucleus.fsn.as212024.net:9100
-        - pine.fsn.lama.tel:9100
+        - pine.fsn.as212024.net:9100
         - postgresql.fsn.as212024.net:9100
         - recorder.bar.lama.tel:9100
         - redis.fsn.as212024.net:9100
@@ -32,7 +32,7 @@
         - nas-1.bar.lama.tel:9630
         - nas-2.bar.lama.tel:9630
         - nucleus.fsn.as212024.net:9630
-        - pine.fsn.lama.tel:9630
+        - pine.fsn.as212024.net:9630
         - postgresql.fsn.as212024.net:9630
         - recorder.bar.lama.tel:9630
         - redis.fsn.as212024.net:9630
@@ -58,7 +58,7 @@
     - targets:
         - gate-1.bar.as212024.net:9323
         - homeassistant.iot.bar.lama.tel:9323
-        - pine.fsn.lama.tel:9323
+        - pine.fsn.as212024.net:9323
         - recorder.bar.lama.tel:9323
 
 - job_name: postgres
