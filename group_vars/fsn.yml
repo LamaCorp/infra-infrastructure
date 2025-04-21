@@ -7,7 +7,7 @@ bird2_bgp_region_id: 276 # Germany
 bird2_bgp_site_id: 1
 
 chrony_ntp_servers:
-  - server: nucleus.fsn.lama.tel
+  - server: nucleus.fsn.as212024.net
     options:
       - option: iburst
       - option: minpoll
