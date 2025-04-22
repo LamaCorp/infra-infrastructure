@@ -5,7 +5,7 @@ metadata:
   name: zigbee2mqtt
 spec:
   type: ExternalName
-  externalName: homeassistant.bar.lama.tel
+  externalName: homeassistant.bar.risson.net
   ports:
     - name: http
       protocol: TCP

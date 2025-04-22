@@ -4,9 +4,10 @@
   import_playbook: ../base.yml
 
 - name: Home assistant
-  hosts: homeassistant.iot.bar.lama.tel
+  hosts: homeassistant.bar.risson.net
   roles:
     - homeassistant
   tags:
     - apps
     - homeassistant
+    - home-assistant

@@ -7,7 +7,7 @@
         - edge-1.pvl.as212024.net:9100
         - edge-2.fra.as212024.net:9100
         - gate-1.bar.as212024.net:9100
-        - homeassistant.iot.bar.lama.tel:9100
+        - homeassistant.bar.risson.net:9100
         - k3s-1.bar.as212024.net:9100
         - k3s-1.fsn.lama.tel:9100
         - k3s-2.bar.as212024.net:9100
@@ -25,7 +25,7 @@
         - edge-1.pvl.as212024.net:9630
         - edge-2.fra.as212024.net:9630
         - gate-1.bar.as212024.net:9630
-        - homeassistant.iot.bar.lama.tel:9630
+        - homeassistant.bar.risson.net:9630
         - k3s-1.bar.as212024.net:9630
         - k3s-1.fsn.lama.tel:9630
         - k3s-2.bar.as212024.net:9630
@@ -57,7 +57,7 @@
   static_configs:
     - targets:
         - gate-1.bar.as212024.net:9323
-        - homeassistant.iot.bar.lama.tel:9323
+        - homeassistant.bar.risson.net:9323
         - pine.fsn.as212024.net:9323
         - recorder.bar.risson.net:9323
 
