@@ -6,7 +6,7 @@ k3s_use_unsupported_config: true
 k3s_server:
   tls-san:
     - 136.243.102.29
-    - api.k3s.fsn.lama.tel
+    - api.k3s.fsn.as212024.net
   flannel-backend: none
   disable-network-policy: true
   disable-kube-proxy: true
