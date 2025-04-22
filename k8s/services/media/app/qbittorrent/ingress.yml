@@ -6,7 +6,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod-http01
     nginx.ingress.kubernetes.io/auth-url: |-
-      http://ak-outpost-authentik-embedded-outpost.services-authentik.svc:9000/outpost.goauthentik.io/auth/nginx
+      http://ak-outpost-authentik-embedded-outpost.services-authentik.svc.c.k3s.fsn.lama.tel:9000/outpost.goauthentik.io/auth/nginx
     nginx.ingress.kubernetes.io/auth-signin: |-
       https://torrent.lama-corp.space/outpost.goauthentik.io/start?rd=$escaped_request_uri
     nginx.ingress.kubernetes.io/auth-response-headers: |-
