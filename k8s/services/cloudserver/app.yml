@@ -13,7 +13,7 @@ spec:
     automated:
       prune: true
   destination:
-    name: k3s.fsn.lama.tel
+    name: k3s.fsn.as212024.net
     namespace: services-cloudserver
   source:
     repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git

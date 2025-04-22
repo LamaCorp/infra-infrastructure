@@ -10,12 +10,12 @@ spec:
   generators:
     - list:
         elements:
-          - cluster: k3s.fsn.lama.tel
+          - cluster: k3s.fsn.as212024.net
             name: public
             default: true
             lbIpamIps: 2001:67c:17fc:130::80,2001:67c:17fc:130::443,148.251.148.235
             tolerations: []
-          - cluster: k3s.fsn.lama.tel
+          - cluster: k3s.fsn.as212024.net
             name: bar
             default: false
             lbIpamIps: 2001:67c:17fc:130::82,209.112.97.162

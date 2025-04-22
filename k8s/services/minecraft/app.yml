@@ -36,7 +36,7 @@ spec:
         automated:
           prune: true
       destination:
-        name: k3s.fsn.lama.tel
+        name: k3s.fsn.as212024.net
         namespace: services-minecraft
       source:
         repoURL: https://itzg.github.io/minecraft-server-charts/

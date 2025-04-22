@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: argocd-cluster-k3s-fsn-lama-tel
+  name: argocd-cluster-k3s-fsn-as212024-net
   labels:
     argocd.argoproj.io/secret-type: "cluster"
   annotations:
@@ -17,5 +17,5 @@ metadata:
     dnsPublicIP4: 209.112.97.160
     dnsPublicIP6: 2001:67c:17fc:130::53
 stringData:
-  name: k3s.fsn.lama.tel
+  name: k3s.fsn.as212024.net
   server: https://kubernetes.default.svc
