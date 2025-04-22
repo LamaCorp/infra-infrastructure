@@ -14,7 +14,7 @@ spec:
       - dns01:
           rfc2136:
             nameserver: "[2001:67c:17fc::53]:53"
-            tsigKeyName: k8s_k3s-fsn-lama-tel_core-cert-manager
+            tsigKeyName: k8s_k3s-fsn-as212024-net_core-cert-manager
             tsigAlgorithm: HMACSHA512
             tsigSecretSecretRef:
               name: tsig-key
