@@ -101,7 +101,7 @@ spec:
                   httpHeaderName1: X-Scope-OrgID
                 secureJsonData:
                   httpHeaderValue1: infra
-              - name: Alertmanager k3s.fsn.lama.tel
+              - name: Alertmanager k3s.fsn.as212024.net
                 type: alertmanager
                 access: proxy
                 url: http://kube-prometheus-stack-alertmanager.core-observability:9093/
