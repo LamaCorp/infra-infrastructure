@@ -5,7 +5,7 @@ metadata:
   name: v-core-3
 spec:
   type: ExternalName
-  externalName: v-core-3.bar.lama.tel
+  externalName: v-core-3.client.bar.risson.net
   ports:
     - name: http
       protocol: TCP
