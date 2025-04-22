@@ -41,7 +41,7 @@ spec:
       nodeSelector:
         kubernetes.io/hostname: k3s-2.bar.as212024.net
       tolerations:
-        - key: "role.lama.tel/media"
+        - key: "role.k8s.as212024.net/media"
           operator: "Exists"
           effect: "NoExecute"
         - key: nvidia.com/gpu

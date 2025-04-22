@@ -20,7 +20,7 @@ spec:
             default: false
             lbIpamIps: 2001:67c:17fc:130::82,209.112.97.162
             tolerations:
-              - key: "role.lama.tel/media"
+              - key: "role.k8s.as212024.net/media"
                 operator: "Exists"
                 effect: "NoExecute"
               - key: nvidia.com/gpu

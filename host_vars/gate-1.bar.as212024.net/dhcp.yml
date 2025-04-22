@@ -68,7 +68,7 @@ kea_dhcp4_config:
           - name: domain-name-servers
             data: 172.28.2.254
           - name: domain-name
-            data: bar.lama.tel
+            data: bar.as212024.net
           - name: ntp-servers
             data: 172.28.2.254
         reservations:
@@ -90,7 +90,7 @@ kea_dhcp4_config:
           - name: domain-name-servers
             data: 172.29.2.254
           - name: domain-name
-            data: client.bar.lama.tel
+            data: client.bar.risson.net
           - name: ntp-servers
             data: 172.29.2.254
         reservations:
@@ -122,7 +122,7 @@ kea_dhcp4_config:
           - name: domain-name-servers
             data: 172.29.192.254
           - name: domain-name
-            data: iot.bar.lama.tel
+            data: iot.bar.risson.net
           - name: ntp-servers
             data: 172.29.192.254
         reservations:
@@ -154,7 +154,7 @@ kea_dhcp4_config:
           - name: domain-name-servers
             data: 172.29.193.254
           - name: domain-name
-            data: music.bar.lama.tel
+            data: music.bar.risson.net
           - name: ntp-servers
             data: 172.29.193.254
         reservations: []
@@ -168,7 +168,7 @@ kea_dhcp4_config:
           - name: domain-name-servers
             data: 172.29.194.254
           - name: domain-name
-            data: cctv.bar.lama.tel
+            data: cctv.bar.risson.net
           - name: ntp-servers
             data: 172.29.194.254
         reservations:

@@ -89,3 +89,7 @@ spec:
         - name: data
           hostPath:
             path: /srv/seaweedfs-volume
+      tolerations:
+        - key: "role.k8s.as212024.net/storage"
+          operator: "Exists"
+          effect: "NoExecute"

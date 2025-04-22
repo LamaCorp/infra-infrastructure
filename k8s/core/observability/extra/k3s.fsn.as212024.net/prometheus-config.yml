@@ -9,7 +9,7 @@
         - gate-1.bar.as212024.net:9100
         - homeassistant.bar.risson.net:9100
         - k3s-1.bar.as212024.net:9100
-        - k3s-1.fsn.lama.tel:9100
+        - k3s-1.fsn.as21024.net:9100
         - k3s-2.bar.as212024.net:9100
         - nas-1.bar.as212024.net:9100
         - nas-2.bar.as212024.net:9100
@@ -27,7 +27,7 @@
         - gate-1.bar.as212024.net:9630
         - homeassistant.bar.risson.net:9630
         - k3s-1.bar.as212024.net:9630
-        - k3s-1.fsn.lama.tel:9630
+        - k3s-1.fsn.as212024.net:9630
         - k3s-2.bar.as212024.net:9630
         - nas-1.bar.as212024.net:9630
         - nas-2.bar.as212024.net:9630

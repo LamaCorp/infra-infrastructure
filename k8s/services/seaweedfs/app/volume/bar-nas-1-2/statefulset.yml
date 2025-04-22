@@ -8,5 +8,3 @@ spec:
     spec:
       nodeSelector:
         kubernetes.io/hostname: nas-1.bar.as212024.net
-      tolerations:
-        - operator: Exists

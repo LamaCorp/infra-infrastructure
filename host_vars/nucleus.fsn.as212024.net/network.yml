@@ -45,7 +45,7 @@ netplan_configuration:
           - 2001:67c:17fc:101::53/64
         routes:
           - to: 148.251.148.232/32
-            via: 172.28.1.11 # k3s-1.fsn.lama.tel
+            via: 172.28.1.11 # k3s-1.fsn.as212024.net
       br-mdw:
         addresses:
           - 172.28.1.126/26
