@@ -8,7 +8,7 @@ entries:
   - id: provider-bazarr
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/bazarr
+      name: k8s/k3s.fsn.as212024.net/services-media/bazarr
     attrs:
       authorization_flow:
         !Find [
@@ -39,7 +39,7 @@ entries:
   - id: provider-lidarr
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/lidarr
+      name: k8s/k3s.fsn.as212024.net/services-media/lidarr
     attrs:
       authorization_flow:
         !Find [
@@ -70,7 +70,7 @@ entries:
   - id: provider-prowlarr
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/prowlarr
+      name: k8s/k3s.fsn.as212024.net/services-media/prowlarr
     attrs:
       authorization_flow:
         !Find [
@@ -101,7 +101,7 @@ entries:
   - id: provider-radarr
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/radarr
+      name: k8s/k3s.fsn.as212024.net/services-media/radarr
     attrs:
       authorization_flow:
         !Find [
@@ -132,7 +132,7 @@ entries:
   - id: provider-readarr
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/readarr
+      name: k8s/k3s.fsn.as212024.net/services-media/readarr
     attrs:
       authorization_flow:
         !Find [
@@ -163,7 +163,7 @@ entries:
   - id: provider-sonarr
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/sonarr
+      name: k8s/k3s.fsn.as212024.net/services-media/sonarr
     attrs:
       authorization_flow:
         !Find [
@@ -194,7 +194,7 @@ entries:
   - id: provider-torrent
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/torrent
+      name: k8s/k3s.fsn.as212024.net/services-media/torrent
     attrs:
       authorization_flow:
         !Find [
@@ -225,7 +225,7 @@ entries:
   - id: provider-usenet
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/usenet
+      name: k8s/k3s.fsn.as212024.net/services-media/usenet
     attrs:
       authorization_flow:
         !Find [
@@ -256,7 +256,7 @@ entries:
   - id: provider-jellyfin
     model: authentik_providers_oauth2.oauth2provider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/jellyfin
+      name: k8s/k3s.fsn.as212024.net/services-media/jellyfin
     attrs:
       authorization_flow:
         !Find [
@@ -322,7 +322,7 @@ entries:
   - id: provider-jellyseerr
     model: authentik_providers_oauth2.oauth2provider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-media/jellyseerr
+      name: k8s/k3s.fsn.as212024.net/services-media/jellyseerr
     attrs:
       authorization_flow:
         !Find [

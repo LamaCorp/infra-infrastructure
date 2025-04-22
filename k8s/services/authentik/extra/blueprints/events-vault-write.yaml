@@ -55,7 +55,7 @@ entries:
                     },
                 },
             ]
-            if provider.name == "vault":
+            if provider.name == "k8s/k3s.fsn.as212024.net/infra-vault":
                 calls += [
                     {
                         "method": requests.post,

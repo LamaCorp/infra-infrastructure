@@ -8,7 +8,7 @@ entries:
   - id: provider
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: k8s/k3s.fsn.lama.tel/services-archivebox
+      name: k8s/k3s.fsn.as212024.net/services-archivebox
     attrs:
       authorization_flow:
         !Find [

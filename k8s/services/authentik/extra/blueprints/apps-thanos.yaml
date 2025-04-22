@@ -8,7 +8,7 @@ entries:
   - id: provider
     model: authentik_providers_proxy.proxyprovider
     identifiers:
-      name: thanos-bucketweb
+      name: k8s/k3s.fsn.as212024/infra-observability/thanos-bucketweb
     attrs:
       authorization_flow:
         !Find [
