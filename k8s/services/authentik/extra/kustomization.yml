@@ -19,7 +19,7 @@ configMapGenerator:
       - ./blueprints/apps-hedgedoc.yaml
       - ./blueprints/apps-home-assistant.yaml
       - ./blueprints/apps-immich.yaml
-      - ./blueprints/apps-k3s.fsn.lama.tel-observability.yaml
+      - ./blueprints/apps-k3s.fsn.as212024.net-observability.yaml
       - ./blueprints/apps-mastodon.yaml
       - ./blueprints/apps-matrix.yaml
       - ./blueprints/apps-mattermost.yaml
