@@ -1,6 +1,0 @@
----
-kind: Kustomization
-namespace: kubevirt
-
-resources:
-  - ../base

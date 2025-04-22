@@ -43,7 +43,6 @@
           cargo
           git
           jq
-          kubevirt
           openssl
           python313Full
           rustc
