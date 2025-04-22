@@ -5,10 +5,10 @@ knot_server_nsid: "{{ knot_server_identity }}"
 knot_key_raw: |
   "ns{{ knot_id }}_xfr":
     algorithm: hmac-sha512
-    secret: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-k3s.fsn.lama.tel/data/infra-knot-dns/keys/ns' + knot_id + '_xfr')['key'] }}"
+    secret: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-k3s.fsn.as212024.net/data/infra-knot-dns/keys/ns' + knot_id + '_xfr')['key'] }}"
   "ns{{ knot_id }}_notify":
     algorithm: hmac-sha512
-    secret: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-k3s.fsn.lama.tel/data/infra-knot-dns/keys/ns' + knot_id + '_notify')['key'] }}"
+    secret: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-k3s.fsn.as212024.net/data/infra-knot-dns/keys/ns' + knot_id + '_notify')['key'] }}"
 
 knot_key: "{{ knot_key_raw | from_yaml }}"
 

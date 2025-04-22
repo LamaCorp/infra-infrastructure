@@ -1,31 +1,31 @@
 locals {
   senders = {
     authentik = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-authentik"]
     }
     lemmy = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-lemmy"]
     }
     mastodon = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-mastodon"]
     }
     matrix = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-matrix"]
     }
     mattermost = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-mattermost"]
     }
     nextcloud = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-nextcloud"]
     }
     vaultwarden = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-vaultwarden"]
     }
   }

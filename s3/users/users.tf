@@ -1,27 +1,27 @@
 locals {
   users = {
     hedgedoc = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-hedgedoc"]
     }
     lemmy = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-lemmy"]
     }
     loki = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["infra-observability"]
     }
     mastodon = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-mastodon"]
     }
     matrix = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-matrix"]
     }
     mattermost = {
-      k8s_cluster    = "k3s.fsn.lama.tel"
+      k8s_cluster    = "k3s.fsn.as212024.net"
       k8s_namespaces = ["services-mattermost"]
     }
     nix-cache = {}
@@ -87,15 +87,6 @@ resource "random_password" "secret_key" {
   special  = false
 }
 
-resource "vault_generic_secret" "s3_users" {
-  for_each = local.users_computed
-  path     = "s3/users/${each.key}"
-  data_json = jsonencode(merge(each.value, {
-    access_key = random_password.access_key[each.key].result
-    secret_key = random_password.secret_key[each.key].result
-  }))
-}
-
 resource "vault_generic_secret" "s3_users_k8s" {
   for_each = merge([
     for k, v in local.users_computed : {
@@ -112,8 +103,8 @@ resource "vault_generic_secret" "s3_users_k8s" {
   }))
 }
 
-resource "vault_generic_secret" "k8s-k3s-fsn-lama-tel_services-cloudserver_authdata" {
-  path = "k8s-k3s.fsn.lama.tel/services-cloudserver/authdata"
+resource "vault_generic_secret" "k8s-k3s-fsn-as212024-net_services-cloudserver_authdata" {
+  path = "k8s-k3s.fsn.as212024.net/services-cloudserver/authdata"
   data_json = jsonencode({
     "authdata.json" = jsonencode({
       accounts = [
