@@ -2,7 +2,7 @@ locals {
   k8s-clusters = {
     "k3s.fsn.as212024.net" = {
       endpoint       = "https://kubernetes.default.svc:443"
-      ca_cert_base64 = "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJkekNDQVIyZ0F3SUJBZ0lCQURBS0JnZ3Foa2pPUFFRREFqQWpNU0V3SHdZRFZRUUREQmhyTTNNdGMyVnkKZG1WeUxXTmhRREUzTURFME9UZzJPVEV3SGhjTk1qTXhNakF5TURZek1UTXhXaGNOTXpNeE1USTVNRFl6TVRNeApXakFqTVNFd0h3WURWUVFEREJock0zTXRjMlZ5ZG1WeUxXTmhRREUzTURFME9UZzJPVEV3V1RBVEJnY3Foa2pPClBRSUJCZ2dxaGtqT1BRTUJCd05DQUFSQmsveFZMQWdzSDRBMlJhNGQzMlhWYW42eldhNGdxeVA5SzErWDI4WmsKakZwK21PV2cvL2pGblk1NEU3TU9YWktCZmFPRmVjWlhhREFQcExyM1BiRkVvMEl3UURBT0JnTlZIUThCQWY4RQpCQU1DQXFRd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBZEJnTlZIUTRFRmdRVXhOaXdkQUtWT2ZWTlZydDhpZ0JxCjRta0NORnN3Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUlnS3czOEtybzBQQ0F0NDNLRlI4Ry9HMHRyaXVkaDZnSnkKd0NMVjVCVlg1aHNDSVFEdUJ4U0tLb2dFakR3WmtvYzF0RHczQUt6RnRnUkJwcHM5d2Raa2lHNkxLUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K"
+      ca_cert_base64 = "LS0tLS1CRUdJTiBFQyBQUklWQVRFIEtFWS0tLS0tCk1IY0NBUUVFSUtXZEFqVjdOSDVCT29XUW9lMFh6eUhZRTZDNTBoZXBhVUg0Mi9pQkMyS1pvQW9HQ0NxR1NNNDkKQXdFSG9VUURRZ0FFUVpQOFZTd0lMQitBTmtXdUhkOWwxV3ArczFtdUlLc2ovU3RmbDl2R1pJeGFmcGpsb1AvNAp4WjJPZUJPekRsMlNnWDJqaFhuR1YyZ3dENlM2OXoyeFJBPT0KLS0tLS1FTkQgRUMgUFJJVkFURSBLRVktLS0tLQo="
       extra_roles = {
         authentik = {
           sa_names      = ["authentik"]
@@ -17,6 +17,11 @@ locals {
           EOF
         }
       }
+      pod_cidrs = [
+        "172.28.128.0/22",
+        "172.28.136.0/22",
+        "2001:67c:17fc:110::/60",
+      ]
     }
   }
 
@@ -25,6 +30,7 @@ locals {
       for role_name, role in try(cluster.extra_roles, {}) : "${cluster_name}_${role_name}" => merge(role, {
         cluster_name = cluster_name
         role_name    = role_name
+        pod_cidrs    = try(cluster.pod_cidrs, [])
       })
     }
   ]...)
@@ -121,7 +127,7 @@ resource "vault_kubernetes_auth_backend_role" "k8s-clusters_common" {
   bound_service_account_namespaces = ["*"]
   token_policies                   = [vault_policy.k8s-clusters_common[each.key].name]
   token_ttl                        = 24 * 60 * 60 # 24h
-  token_bound_cidrs                = []
+  token_bound_cidrs                = try(each.value.pod_cidrs, [])
 }
 
 resource "vault_policy" "k8s-clusters_extra-roles" {
@@ -138,5 +144,5 @@ resource "vault_kubernetes_auth_backend_role" "k8s-clusters_extra-roles" {
   bound_service_account_namespaces = each.value.sa_namespaces
   token_policies                   = [vault_policy.k8s-clusters_extra-roles[each.key].name]
   token_ttl                        = 24 * 60 * 60 # 24h
-  token_bound_cidrs                = []
+  token_bound_cidrs                = each.value.pod_cidrs
 }
