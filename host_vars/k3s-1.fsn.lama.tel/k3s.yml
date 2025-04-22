@@ -14,7 +14,7 @@ k3s_server:
   cluster-cidr: 2001:67c:17fc:110::/60,172.28.128.0/22
   service-cidr: 2001:67c:17fc:120::/108,172.28.132.0/22
   cluster-dns: 2001:67c:17fc:120::53,172.28.132.53
-  cluster-domain: c.k3s.fsn.lama.tel
+  cluster-domain: c.k3s.fsn.as212024.net
   disable:
     - coredns
     - local-storage
