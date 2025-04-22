@@ -89,7 +89,7 @@ spec:
               - name: Thanos
                 type: prometheus
                 access: proxy
-                url: http://thanos-query-frontend.infra-observability:9090/
+                url: http://thanos-query-frontend.infra-observability.svc:9090/
                 editable: false
                 isDefault: true
               - name: Loki
@@ -101,10 +101,10 @@ spec:
                   httpHeaderName1: X-Scope-OrgID
                 secureJsonData:
                   httpHeaderValue1: infra
-              - name: Alertmanager k3s.fsn.lama.tel
+              - name: Alertmanager k3s.fsn.as212024.net
                 type: alertmanager
                 access: proxy
-                url: http://kube-prometheus-stack-alertmanager.core-observability:9093/
+                url: http://kube-prometheus-stack-alertmanager.core-observability.svc:9093/
                 editable: false
                 jsonData:
                   implementation: prometheus
