@@ -93,10 +93,10 @@ spec:
                   nginx.ingress.kubernetes.io/protocol: h2c
                   nginx.ingress.kubernetes.io/proxy-read-timeout: "160"
                 hosts:
-                  - thanos.{{ .name | replace "lama.tel" "as212024.net" }}
+                  - thanos.{{ .name }}
                 tls:
                   - hosts:
-                      - thanos.{{ .name | replace "lama.tel" "as212024.net" }}
+                      - thanos.{{ .name }}
                     secretName: thanos-tls
               ingress:
                 enabled: true
@@ -104,10 +104,10 @@ spec:
                 annotations:
                   cert-manager.io/cluster-issuer: letsencrypt-prod-http01
                 hosts:
-                  - prometheus.{{ .name | replace "lama.tel" "as212024.net" }}
+                  - prometheus.{{ .name }}
                 tls:
                   - hosts:
-                      - prometheus.{{ .name | replace "lama.tel" "as212024.net" }}
+                      - prometheus.{{ .name }}
                     secretName: prometheus-tls
 
             alertmanager:
@@ -230,7 +230,7 @@ spec:
                 annotations:
                   cert-manager.io/cluster-issuer: letsencrypt-prod-http01
                   nginx.ingress.kubernetes.io/auth-url: |-
-                    http://ak-outpost-proxy-outpost-as212024net.services-authentik.svc.c.k3s.fsn.lama.tel:9000/outpost.goauthentik.io/auth/nginx
+                    http://ak-outpost-proxy-outpost-as212024net.services-authentik.svc.c.k3s.fsn.as212024.net:9000/outpost.goauthentik.io/auth/nginx
                   nginx.ingress.kubernetes.io/auth-signin: |-
                     https://alertmanager.{{ .name }}/outpost.goauthentik.io/start?rd=$escaped_request_uri
                   nginx.ingress.kubernetes.io/auth-response-headers: |-
@@ -238,10 +238,10 @@ spec:
                   nginx.ingress.kubernetes.io/auth-snippet: |
                     proxy_set_header X-Forwarded-Host $http_host;
                 hosts:
-                  - alertmanager.{{ .name | replace "lama.tel" "as212024.net" }}
+                  - alertmanager.{{ .name }}
                 tls:
                   - hosts:
-                      - alertmanager.{{ .name | replace "lama.tel" "as212024.net" }}
+                      - alertmanager.{{ .name }}
                     secretName: alertmanager-tls
 
             grafana:
