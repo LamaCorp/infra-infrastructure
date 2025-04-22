@@ -2,73 +2,73 @@ locals {
   postgres_clusters = {
     "postgresql.fsn.as212024.net" = {
       static_roles = {
-        "k3s.fsn.lama.tel_infra-observability_grafana" = {
+        "k3s.fsn.as212024.net_infra-observability_grafana" = {
           postgres_role = "grafana"
         }
-        "k3s.fsn.lama.tel_services-atuin" = {
+        "k3s.fsn.as212024.net_services-atuin" = {
           postgres_role = "atuin"
         }
-        "k3s.fsn.lama.tel_services-authentik" = {
+        "k3s.fsn.as212024.net_services-authentik" = {
           postgres_role = "authentik"
         }
-        "k3s.fsn.lama.tel_services-gatus-devoups" = {
+        "k3s.fsn.as212024.net_services-gatus-devoups" = {
           postgres_role = "gatus_devoups"
         }
-        "k3s.fsn.lama.tel_services-gatus-phowork" = {
+        "k3s.fsn.as212024.net_services-gatus-phowork" = {
           postgres_role = "gatus_phowork"
         }
-        "k3s.fsn.lama.tel_services-gatus-prologin" = {
+        "k3s.fsn.as212024.net_services-gatus-prologin" = {
           postgres_role = "gatus_prologin"
         }
-        "k3s.fsn.lama.tel_services-gatus-zarak" = {
+        "k3s.fsn.as212024.net_services-gatus-zarak" = {
           postgres_role = "gatus_zarak"
         }
-        "k3s.fsn.lama.tel_services-hedgedoc" = {
+        "k3s.fsn.as212024.net_services-hedgedoc" = {
           postgres_role = "hedgedoc"
         }
-        "k3s.fsn.lama.tel_services-immich" = {
+        "k3s.fsn.as212024.net_services-immich" = {
           postgres_role = "immich"
         }
-        "k3s.fsn.lama.tel_services-lemmy_lemmy" = {
+        "k3s.fsn.as212024.net_services-lemmy_lemmy" = {
           postgres_role = "lemmy"
         }
-        "k3s.fsn.lama.tel_services-lemmy_lemmy-pictrs" = {
+        "k3s.fsn.as212024.net_services-lemmy_lemmy-pictrs" = {
           postgres_role = "lemmy_pictrs"
         }
-        "k3s.fsn.lama.tel_services-mastodon" = {
+        "k3s.fsn.as212024.net_services-mastodon" = {
           postgres_role = "mastodon"
         }
-        "k3s.fsn.lama.tel_services-matrix_maubot" = {
+        "k3s.fsn.as212024.net_services-matrix_maubot" = {
           postgres_role = "matrix_maubot"
         }
-        "k3s.fsn.lama.tel_services-matrix_mautrix-facebook" = {
+        "k3s.fsn.as212024.net_services-matrix_mautrix-facebook" = {
           postgres_role = "matrix_mautrix_facebook"
         }
-        "k3s.fsn.lama.tel_services-matrix_mautrix-slack" = {
+        "k3s.fsn.as212024.net_services-matrix_mautrix-slack" = {
           postgres_role = "matrix_mautrix_slack"
         }
-        "k3s.fsn.lama.tel_services-matrix_media-repo" = {
+        "k3s.fsn.as212024.net_services-matrix_media-repo" = {
           postgres_role = "matrix_media_repo"
         }
-        "k3s.fsn.lama.tel_services-matrix_synapse" = {
+        "k3s.fsn.as212024.net_services-matrix_synapse" = {
           postgres_role = "matrix_synapse"
         }
-        "k3s.fsn.lama.tel_services-mattermost" = {
+        "k3s.fsn.as212024.net_services-mattermost" = {
           postgres_role = "mattermost"
         }
-        "k3s.fsn.lama.tel_services-netbox" = {
+        "k3s.fsn.as212024.net_services-netbox" = {
           postgres_role = "netbox"
         }
-        "k3s.fsn.lama.tel_services-nextcloud" = {
+        "k3s.fsn.as212024.net_services-nextcloud" = {
           postgres_role = "nextcloud"
         }
-        "k3s.fsn.lama.tel_services-paperless-ngx-risson" = {
+        "k3s.fsn.as212024.net_services-paperless-ngx-risson" = {
           postgres_role = "paperless_risson"
         }
-        "k3s.fsn.lama.tel_services-stalwart" = {
+        "k3s.fsn.as212024.net_services-stalwart" = {
           postgres_role = "stalwart"
         }
-        "k3s.fsn.lama.tel_services-vaultwarden" = {
+        "k3s.fsn.as212024.net_services-vaultwarden" = {
           postgres_role = "vaultwarden"
         }
       }

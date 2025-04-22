@@ -19,6 +19,6 @@ resource "vault_generic_secret" "k8s-global_core-observability_loki-auth" {
   path = "${vault_mount.k8s-global.path}/core-observability/loki-auth"
   data_json = jsonencode({
     username = "infra"
-    password = random_password.k8s-k3s-fsn-lama-tel_infra-observability_loki-auth-map["infra"].result
+    password = random_password.k8s-k3s-fsn-as212024-net_infra-observability_loki-auth-map["infra"].result
   })
 }
