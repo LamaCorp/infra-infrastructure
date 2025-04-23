@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: core-external-dns
+  name: core-external-dns-gw
   labels:
     app: core-external-dns
 spec:
@@ -11,7 +11,7 @@ spec:
     - clusters: {}
   template:
     metadata:
-      name: core-external-dns-{{ .name }}
+      name: core-external-dns-gw-{{ .name }}
       labels:
         app: core-external-dns
     spec:
@@ -24,83 +24,198 @@ spec:
       destination:
         name: "{{ .name }}"
         namespace: core-external-dns
-      sources:
-        - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
-          targetRevision: HEAD
-          path: k8s/core/external-dns/extra/{{ .name }}
-        - repoURL: https://kubernetes-sigs.github.io/external-dns
-          targetRevision: 1.16.1
-          chart: external-dns
-          helm:
-            releaseName: external-dns
-            values: |
-              interval: 1m
-              triggerLoopOnEvent: true
+      source:
+        repoURL: https://kubernetes-sigs.github.io/external-dns
+        targetRevision: 1.16.1
+        chart: external-dns
+        helm:
+          releaseName: external-dns-gw
+          values: |
+            interval: 1m
+            triggerLoopOnEvent: true
 
-              sources:
-                - service
-                - ingress
-                - gateway-httproute
-                - gateway-grpcroute
-                - gateway-tlsroute
-                - gateway-tcproute
-                - gateway-udproute
+            sources:
+              - ingress
+              - gateway-httproute
+              - gateway-grpcroute
+              - gateway-tlsroute
+              - gateway-tcproute
+              - gateway-udproute
 
-              policy: sync
-              registry: txt
-              txtOwnerId: {{ .name }}
-              txtPrefix: external-dns.
+            policy: sync
+            registry: txt
+            txtOwnerId: {{ .name }}-gw
+            txtPrefix: external-dns.
 
-              provider: rfc2136
+            provider: rfc2136
 
-              env:
-                - name: TSIG_SECRET
-                  valueFrom:
-                    secretKeyRef:
-                      name: tsig-key
-                      key: secret
+            env:
+              - name: TSIG_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: tsig-key
+                    key: secret
 
-              extraArgs:
-                - --rfc2136-host=2001:67c:17fc::53
-                - --rfc2136-port=53
-                - --rfc2136-tsig-keyname=k8s_{{ .name | replace "." "-" }}_core-external-dns
-                - --rfc2136-tsig-secret=$(TSIG_SECRET)
-                - --rfc2136-tsig-secret-alg=hmac-sha512
-                - --rfc2136-tsig-axfr
-                - --rfc2136-min-ttl=300s
-                - --rfc2136-zone=as212024.net
-                - --rfc2136-zone=devou.ps
-                - --rfc2136-zone=doyouhavegoodbackups.com
-                - --rfc2136-zone=lama-corp.space
-                - --rfc2136-zone=lama.tel
-                - --rfc2136-zone=marcerisson.space
-                - --rfc2136-zone=risson.me
-                - --rfc2136-zone=risson.net
-                - --rfc2136-zone=risson.space
-                - --rfc2136-zone=rplace.space
-                - --rfc2136-zone=thefractal.space
-                - --domain-filter=as212024.net
-                - --domain-filter=devou.ps
-                - --domain-filter=doyouhavegoodbackups.com
-                - --domain-filter=lama-corp.space
-                - --domain-filter=lama.tel
-                - --domain-filter=marcerisson.space
-                - --domain-filter=risson.me
-                - --domain-filter=risson.net
-                - --domain-filter=risson.space
-                - --domain-filter=rplace.space
-                - --domain-filter=thefractal.space
+            extraArgs:
+              - --rfc2136-host=2001:67c:17fc::53
+              - --rfc2136-port=53
+              - --rfc2136-tsig-keyname=k8s_{{ .name | replace "." "-" }}_core-external-dns
+              - --rfc2136-tsig-secret=$(TSIG_SECRET)
+              - --rfc2136-tsig-secret-alg=hmac-sha512
+              - --rfc2136-tsig-axfr
+              - --rfc2136-min-ttl=300s
+              - --rfc2136-zone=as212024.net
+              - --rfc2136-zone=devou.ps
+              - --rfc2136-zone=doyouhavegoodbackups.com
+              - --rfc2136-zone=lama-corp.space
+              - --rfc2136-zone=lama.tel
+              - --rfc2136-zone=marcerisson.space
+              - --rfc2136-zone=risson.me
+              - --rfc2136-zone=risson.net
+              - --rfc2136-zone=risson.space
+              - --rfc2136-zone=rplace.space
+              - --rfc2136-zone=thefractal.space
+              - --domain-filter=as212024.net
+              - --domain-filter=devou.ps
+              - --domain-filter=doyouhavegoodbackups.com
+              - --domain-filter=lama-corp.space
+              - --domain-filter=lama.tel
+              - --domain-filter=marcerisson.space
+              - --domain-filter=risson.me
+              - --domain-filter=risson.net
+              - --domain-filter=risson.space
+              - --domain-filter=rplace.space
+              - --domain-filter=thefractal.space
 
-                - --rfc2136-create-ptr
-                - --rfc2136-zone=97.112.209.in-addr.arpa
-                - --rfc2136-zone=c.f.7.1.c.7.6.0.1.0.0.2.ip6.arpa
-                - --rfc2136-zone=7.7.1.8.8.e.6.0.a.2.ip6.arpa
-                - --domain-filter=97.112.209.in-addr.arpa
-                - --domain-filter=c.f.7.1.c.7.6.0.1.0.0.2.ip6.arpa
-                - --domain-filter=7.7.1.8.8.e.6.0.a.2.ip6.arpa
+            deploymentAnnotations:
+              secret.reloader.stakater.com/reload: tsig-key
 
-              deploymentAnnotations:
-                secret.reloader.stakater.com/reload: tsig-key
+            serviceMonitor:
+              enabled: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-external-dns-svc
+  labels:
+    app: core-external-dns
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-external-dns-svc-{{ .name }}
+      labels:
+        app: core-external-dns
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-external-dns
+      source:
+        repoURL: https://kubernetes-sigs.github.io/external-dns
+        targetRevision: 1.16.1
+        chart: external-dns
+        helm:
+          releaseName: external-dns-svc
+          values: |
+            interval: 1m
+            triggerLoopOnEvent: true
 
-              serviceMonitor:
-                enabled: true
+            sources:
+              - service
+
+            policy: sync
+            registry: txt
+            txtOwnerId: {{ .name }}-svc
+            txtPrefix: external-dns.
+
+            provider: rfc2136
+
+            env:
+              - name: TSIG_SECRET
+                valueFrom:
+                  secretKeyRef:
+                    name: tsig-key
+                    key: secret
+
+            extraArgs:
+              - --rfc2136-host=2001:67c:17fc::53
+              - --rfc2136-port=53
+              - --rfc2136-tsig-keyname=k8s_{{ .name | replace "." "-" }}_core-external-dns
+              - --rfc2136-tsig-secret=$(TSIG_SECRET)
+              - --rfc2136-tsig-secret-alg=hmac-sha512
+              - --rfc2136-tsig-axfr
+              - --rfc2136-min-ttl=300s
+              - --rfc2136-zone=as212024.net
+              - --rfc2136-zone=devou.ps
+              - --rfc2136-zone=doyouhavegoodbackups.com
+              - --rfc2136-zone=lama-corp.space
+              - --rfc2136-zone=lama.tel
+              - --rfc2136-zone=marcerisson.space
+              - --rfc2136-zone=risson.me
+              - --rfc2136-zone=risson.net
+              - --rfc2136-zone=risson.space
+              - --rfc2136-zone=rplace.space
+              - --rfc2136-zone=thefractal.space
+              - --domain-filter=as212024.net
+              - --domain-filter=devou.ps
+              - --domain-filter=doyouhavegoodbackups.com
+              - --domain-filter=lama-corp.space
+              - --domain-filter=lama.tel
+              - --domain-filter=marcerisson.space
+              - --domain-filter=risson.me
+              - --domain-filter=risson.net
+              - --domain-filter=risson.space
+              - --domain-filter=rplace.space
+              - --domain-filter=thefractal.space
+
+              - --rfc2136-create-ptr
+              - --rfc2136-zone=97.112.209.in-addr.arpa
+              - --rfc2136-zone=c.f.7.1.c.7.6.0.1.0.0.2.ip6.arpa
+              - --rfc2136-zone=7.7.1.8.8.e.6.0.a.2.ip6.arpa
+              - --domain-filter=97.112.209.in-addr.arpa
+              - --domain-filter=c.f.7.1.c.7.6.0.1.0.0.2.ip6.arpa
+              - --domain-filter=7.7.1.8.8.e.6.0.a.2.ip6.arpa
+
+            deploymentAnnotations:
+              secret.reloader.stakater.com/reload: tsig-key
+
+            serviceMonitor:
+              enabled: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-external-dns-extra
+  labels:
+    app: core-external-dns
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-external-dns-extra-{{ .name }}
+      labels:
+        app: core-external-dns
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-external-dns
+      source:
+        repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
+        targetRevision: HEAD
+        path: k8s/core/external-dns/extra/{{ .name }}
