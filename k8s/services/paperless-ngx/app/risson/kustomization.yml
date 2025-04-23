@@ -3,7 +3,7 @@ kind: Kustomization
 
 resources:
   - ../base
-  - ingress.yml
+  - httproute.yml
   - pvc.yml
   - secrets.yml
 
