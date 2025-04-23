@@ -75,9 +75,9 @@ spec:
                     - name: header
                       configBlock: |-
                         response set aa
-                    - name: dnssec
-                      configBlock: |-
-                        key file /dnssec-keys/K
+                    # - name: dnssec
+                    #   configBlock: |-
+                    #     key file /dnssec-keys/K
                     - name: template
                       parameters: IN NS
                       configBlock: |-
@@ -108,10 +108,10 @@ spec:
                     - name: reload
                     - name: loadbalance
 
-              extraSecrets:
-                - name: coredns-dnssec-keys
-                  mountPath: /dnssec-keys
-                  defaultMode: 420
+              # extraSecrets:
+              #   - name: coredns-dnssec-keys
+              #     mountPath: /dnssec-keys
+              #     defaultMode: 420
 
               readinessProbe:
                 initialDelaySeconds: 5
