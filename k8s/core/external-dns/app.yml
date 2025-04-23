@@ -45,7 +45,7 @@ spec:
             policy: sync
             registry: txt
             txtOwnerId: {{ .name }}-gw
-            txtPrefix: external-dns.
+            txtPrefix: external-dns-
 
             provider: rfc2136
 
@@ -134,7 +134,7 @@ spec:
             policy: sync
             registry: txt
             txtOwnerId: {{ .name }}-svc
-            txtPrefix: external-dns.
+            txtPrefix: external-dns-
 
             provider: rfc2136
 
