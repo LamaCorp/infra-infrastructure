@@ -8,3 +8,7 @@ resources:
   - deployment.yml
   - network-policy.yml
   - pvc.yml
+
+images:
+  - name: jamesits/ripe-atlas
+    newTag: "5110"
