@@ -18,9 +18,11 @@ spec:
               value: "yes"
           volumeMounts:
             - name: etc
-              mountPath: /var/atlas-probe/etc
-            - name: status
-              mountPath: /var/atlas-probe/status
+              mountPath: /etc/ripe-atlas
+            - name: run
+              mountPath: /run/ripe-atlas
+            - name: spool
+              mountPath: /var/spool/ripe-atlas
           resources:
             requests:
               memory: 64Mi
@@ -32,15 +34,20 @@ spec:
               drop:
                 - ALL
               add:
-                - CHOWN
+                - NET_RAW
+                - KILL
                 - SETUID
                 - SETGID
+                - CHOWN
+                - FOWNER
                 - DAC_OVERRIDE
-                - NET_RAW
       volumes:
         - name: etc
           persistentVolumeClaim:
             claimName: ripe-atlas-etc
-        - name: status
+        - name: run
           persistentVolumeClaim:
-            claimName: ripe-atlas-status
+            claimName: ripe-atlas-run
+        - name: spool
+          persistentVolumeClaim:
+            claimName: ripe-atlas-spool
