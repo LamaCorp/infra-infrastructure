@@ -4,9 +4,13 @@ kind: Kustomization
 resources:
   - ../base
 
+  - backendtrafficpolicy.yml
+  - clienttrafficpolicy.yml
+  - httproute-http-to-https.yml
+
   - gateway-eg-http-public.yml
+  - gateway-eg-http-bar.yml
   - envoyproxy-eg-http-public.yml
-  - backendtrafficpolicy-eg-http-public.yml
-  - clienttrafficpolicy-eg-http-public.yml
+  - envoyproxy-eg-http-bar.yml
 
   - certificates.yml

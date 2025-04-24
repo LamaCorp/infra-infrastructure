@@ -14,20 +14,6 @@ spec:
             name: public
             default: true
             lbIpamIps: 2001:67c:17fc:130::80,2001:67c:17fc:130::443,148.251.148.235
-            tolerations: []
-          - cluster: k3s.fsn.as212024.net
-            name: bar
-            default: false
-            lbIpamIps: 2001:67c:17fc:130::82,209.112.97.162
-            tolerations:
-              - key: "role.k8s.as212024.net/media"
-                operator: "Exists"
-                effect: "NoExecute"
-              - key: nvidia.com/gpu
-                operator: Exists
-                effect: NoSchedule
-            nodeSelector: |
-              kubernetes.io/hostname: k3s-2.bar.as212024.net
   template:
     metadata:
       name: core-ingress-nginx-{{ .cluster }}-{{ .name }}
@@ -72,10 +58,6 @@ spec:
                   - IPv6
               admissionWebhooks:
                 enabled: false
-              tolerations: {{ toRawJson .tolerations }}
-              nodeSelector:
-                kubernetes.io/os: linux
-                {{ default "" .nodeSelector }}
               config:
                 use-http2: "true"
                 use-gzip: "true"

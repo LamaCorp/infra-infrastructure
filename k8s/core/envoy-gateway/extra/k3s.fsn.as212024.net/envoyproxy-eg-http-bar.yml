@@ -1,0 +1,39 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: eg-http-bar
+spec:
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyDeployment:
+        replicas: 1
+        strategy:
+          type: RollingUpdate
+          rollingUpdate:
+            maxSurge: 25%
+            maxUnavailable: 25%
+        patch:
+          type: StrategicMerge
+          value:
+            spec:
+              template:
+                spec:
+                  nodeSelector:
+                    kubernetes.io/hostname: k3s-2.bar.as212024.net
+                  tolerations:
+                    - key: "role.k8s.as212024.net/media"
+                      operator: "Exists"
+                      effect: "NoExecute"
+                    - key: nvidia.com/gpu
+                      operator: Exists
+                      effect: NoSchedule
+      envoyService:
+        externalTrafficPolicy: Local
+      envoyPDB:
+        minAvailable: 1
+  logging:
+    level:
+      default: info
+  ipFamily: IPv4

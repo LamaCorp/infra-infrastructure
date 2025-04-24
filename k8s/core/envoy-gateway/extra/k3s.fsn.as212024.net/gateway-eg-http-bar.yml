@@ -1,0 +1,33 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: eg-http-bar
+spec:
+  gatewayClassName: eg
+  infrastructure:
+    parametersRef:
+      group: gateway.envoyproxy.io
+      kind: EnvoyProxy
+      name: eg-http-bar
+    annotations:
+      io.cilium/lb-ipam-ips: 209.112.97.162
+      external-dns.alpha.kubernetes.io/hostname: gw-eg-http-bar.k3s.fsn.as212024.net
+  listeners:
+    - name: http
+      protocol: HTTP
+      port: 80
+      allowedRoutes:
+        namespaces:
+          from: All
+    - name: https
+      protocol: HTTPS
+      port: 443
+      allowedRoutes:
+        namespaces:
+          from: All
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: eg-http-public-lama-corp-space-ecdsa-tls
+          - name: eg-http-public-lama-corp-space-rsa-tls

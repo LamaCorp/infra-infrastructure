@@ -7,5 +7,5 @@ commonLabels:
 resources:
   - deployment.yml
   - service.yml
-  - ingress.yml
+  - httproute.yml
   - pvc.yml
