@@ -9,7 +9,7 @@ commonLabels:
 resources:
   - ../base
   - service.yml
-  - ingress.yml
+  - httproute.yml
 
 patches:
   - path: deployment.yml
