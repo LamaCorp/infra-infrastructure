@@ -1,0 +1,22 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: microbin
+spec:
+  parentRefs:
+    - name: eg-http-public
+      namespace: core-eg
+      sectionName: https
+  hostnames:
+    - bin.lama-corp.space
+    - bin.risson.space
+    - bin.marcerisson.space
+    - bin.risson.me
+  rules:
+    - matches:
+        - path:
+            value: "/"
+      backendRefs:
+        - name: microbin
+          port: 80
