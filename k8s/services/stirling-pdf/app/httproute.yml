@@ -17,3 +17,5 @@ spec:
       backendRefs:
         - name: stirling-pdf
           port: 80
+      timeouts:
+        request: 600s
