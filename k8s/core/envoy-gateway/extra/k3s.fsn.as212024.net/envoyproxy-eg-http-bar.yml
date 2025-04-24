@@ -36,4 +36,4 @@ spec:
   logging:
     level:
       default: info
-  ipFamily: IPv4
+  ipFamily: DualStack
