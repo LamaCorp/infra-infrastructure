@@ -56,6 +56,10 @@ backup_restic_list_raw:
       - /weed/group
       - /weed/service
       - /weed/user
+    to_exclude:
+      - /weed/service/immich/backups
+      - /weed/service/immich/encoded-video
+      - /weed/service/immich/thumbs
     backup_systemd_timers:
       minute: 40
       hour: 03
