@@ -9,7 +9,7 @@ resources:
   - network-policy.yml
   - secrets.yml
   - service.yml
-  - ingress.yml
+  - httproute.yml
   - pvc.yml
 
 configMapGenerator:
