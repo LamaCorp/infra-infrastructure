@@ -1,0 +1,19 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: your-spotify-api
+spec:
+  parentRefs:
+    - name: eg-http-public
+      namespace: core-eg
+      sectionName: https
+  hostnames:
+    - ys-api.lama-corp.space
+  rules:
+    - matches:
+        - path:
+            value: "/"
+      backendRefs:
+        - name: your-spotify-api
+          port: 80
