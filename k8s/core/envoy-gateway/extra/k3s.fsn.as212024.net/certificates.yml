@@ -88,6 +88,7 @@ spec:
   dnsNames:
     - "lama-corp.space"
     - "*.lama-corp.space"
+    - "*.s3.lama-corp.space"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -105,6 +106,7 @@ spec:
   dnsNames:
     - "lama-corp.space"
     - "*.lama-corp.space"
+    - "*.s3.lama-corp.space"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
