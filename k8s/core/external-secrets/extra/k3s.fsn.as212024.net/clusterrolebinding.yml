@@ -52,6 +52,9 @@ subjects:
     namespace: services-cloudserver
     name: default
   - kind: ServiceAccount
+    namespace: services-external
+    name: default
+  - kind: ServiceAccount
     namespace: services-gatus-devoups
     name: default
   - kind: ServiceAccount
