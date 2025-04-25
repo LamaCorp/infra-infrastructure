@@ -38,6 +38,7 @@ spec:
   dnsNames:
     - "as212024.net"
     - "*.as212024.net"
+    - "*.k3s.fsn.as212024.net"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
