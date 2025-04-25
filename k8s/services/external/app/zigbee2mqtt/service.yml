@@ -24,3 +24,4 @@ ports:
 endpoints:
   - addresses:
       - homeassistant.bar.risson.net
+    conditions: {}
