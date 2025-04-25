@@ -13,11 +13,6 @@ entries:
   - model: authentik_blueprints.metaapplyblueprint
     attrs:
       identifiers:
-        name: Apps - Home assistant
-      required: true
-  - model: authentik_blueprints.metaapplyblueprint
-    attrs:
-      identifiers:
         name: Apps - k3s.fsn.as212024.net observability
       required: true
   - model: authentik_blueprints.metaapplyblueprint
@@ -83,7 +78,6 @@ entries:
             [name, "k8s/k3s.fsn.as212024.net/services-media/usenet"],
           ]
         - !Find [authentik_core.provider, [name, "v-core-3"]]
-        - !Find [authentik_core.provider, [name, "zigbee2mqtt"]]
       config:
         log_level: info
         authentik_host: https://auth.lama-corp.space
