@@ -6,7 +6,7 @@ metadata:
   name: Apps - Media
 entries:
   - id: provider-bazarr
-    model: authentik_providers_proxy.proxyprovider
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
       name: k8s/k3s.fsn.as212024.net/services-media/bazarr
     attrs:
@@ -15,9 +15,32 @@ entries:
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
-      mode: forward_single
-      external_host: https://bazarr.lama-corp.space
-      access_token_validity: hours=24
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
+
+      client_type: confidential
+      client_id: bazarr
+      redirect_uris:
+        - url: https://bazarr.lama-corp.space/oauth2/callback
+          matching_mode: strict
+
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
   - id: application-bazarr
     model: authentik_core.application
     identifiers:
@@ -37,7 +60,7 @@ entries:
       order: 1
 
   - id: provider-lidarr
-    model: authentik_providers_proxy.proxyprovider
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
       name: k8s/k3s.fsn.as212024.net/services-media/lidarr
     attrs:
@@ -46,9 +69,32 @@ entries:
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
-      mode: forward_single
-      external_host: https://lidarr.lama-corp.space
-      access_token_validity: hours=24
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
+
+      client_type: confidential
+      client_id: bazarr
+      redirect_uris:
+        - url: https://lidarr.lama-corp.space/oauth2/callback
+          matching_mode: strict
+
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
   - id: application-lidarr
     model: authentik_core.application
     identifiers:
@@ -68,7 +114,7 @@ entries:
       order: 1
 
   - id: provider-prowlarr
-    model: authentik_providers_proxy.proxyprovider
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
       name: k8s/k3s.fsn.as212024.net/services-media/prowlarr
     attrs:
@@ -77,9 +123,32 @@ entries:
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
-      mode: forward_single
-      external_host: https://prowlarr.lama-corp.space
-      access_token_validity: hours=24
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
+
+      client_type: confidential
+      client_id: bazarr
+      redirect_uris:
+        - url: https://prowlarr.lama-corp.space/oauth2/callback
+          matching_mode: strict
+
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
   - id: application-prowlarr
     model: authentik_core.application
     identifiers:
@@ -99,7 +168,7 @@ entries:
       order: 1
 
   - id: provider-radarr
-    model: authentik_providers_proxy.proxyprovider
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
       name: k8s/k3s.fsn.as212024.net/services-media/radarr
     attrs:
@@ -108,9 +177,32 @@ entries:
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
-      mode: forward_single
-      external_host: https://radarr.lama-corp.space
-      access_token_validity: hours=24
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
+
+      client_type: confidential
+      client_id: bazarr
+      redirect_uris:
+        - url: https://radarr.lama-corp.space/oauth2/callback
+          matching_mode: strict
+
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
   - id: application-radarr
     model: authentik_core.application
     identifiers:
@@ -130,7 +222,7 @@ entries:
       order: 1
 
   - id: provider-readarr
-    model: authentik_providers_proxy.proxyprovider
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
       name: k8s/k3s.fsn.as212024.net/services-media/readarr
     attrs:
@@ -139,9 +231,32 @@ entries:
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
-      mode: forward_single
-      external_host: https://readarr.lama-corp.space
-      access_token_validity: hours=24
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
+
+      client_type: confidential
+      client_id: bazarr
+      redirect_uris:
+        - url: https://readarr.lama-corp.space/oauth2/callback
+          matching_mode: strict
+
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
   - id: application-readarr
     model: authentik_core.application
     identifiers:
@@ -161,7 +276,7 @@ entries:
       order: 1
 
   - id: provider-sonarr
-    model: authentik_providers_proxy.proxyprovider
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
       name: k8s/k3s.fsn.as212024.net/services-media/sonarr
     attrs:
@@ -170,9 +285,32 @@ entries:
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
-      mode: forward_single
-      external_host: https://sonarr.lama-corp.space
-      access_token_validity: hours=24
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
+
+      client_type: confidential
+      client_id: bazarr
+      redirect_uris:
+        - url: https://sonarr.lama-corp.space/oauth2/callback
+          matching_mode: strict
+
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
   - id: application-sonarr
     model: authentik_core.application
     identifiers:
@@ -191,25 +329,48 @@ entries:
     attrs:
       order: 1
 
-  - id: provider-torrent
-    model: authentik_providers_proxy.proxyprovider
+  - id: provider-qbittorrent
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
-      name: k8s/k3s.fsn.as212024.net/services-media/torrent
+      name: k8s/k3s.fsn.as212024.net/services-media/qbittorrent
     attrs:
       authorization_flow:
         !Find [
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
-      mode: forward_single
-      external_host: https://torrent.lama-corp.space
-      access_token_validity: hours=24
-  - id: application-torrent
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
+
+      client_type: confidential
+      client_id: qbittorrent
+      redirect_uris:
+        - url: https://qbittorrent.lama-corp.space/oauth2/callback
+          matching_mode: strict
+
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
+  - id: application-qbittorrent
     model: authentik_core.application
     identifiers:
-      slug: torrent
+      slug: qbittorrent
     attrs:
-      name: Torrent
+      name: qBittorrent
       group: Media
       description: Torrent management
       icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/qbittorrent.png
@@ -217,30 +378,53 @@ entries:
       policy_engine_mode: any
   - model: authentik_policies.policybinding
     identifiers:
-      target: !KeyOf application-torrent
+      target: !KeyOf application-qbittorrent
       group: !Find [authentik_core.group, [name, "roots"]]
     attrs:
       order: 1
 
-  - id: provider-usenet
-    model: authentik_providers_proxy.proxyprovider
+  - id: provider-sabnzbd
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
-      name: k8s/k3s.fsn.as212024.net/services-media/usenet
+      name: k8s/k3s.fsn.as212024.net/services-media/sabnzbd
     attrs:
       authorization_flow:
         !Find [
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
-      mode: forward_single
-      external_host: https://usenet.lama-corp.space
-      access_token_validity: hours=24
-  - id: application-usenet
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
+
+      client_type: confidential
+      client_id: sabnzbd
+      redirect_uris:
+        - url: https://sabnzbd.lama-corp.space/oauth2/callback
+          matching_mode: strict
+
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
+  - id: application-sabnzbd
     model: authentik_core.application
     identifiers:
-      slug: usenet
+      slug: sabnzbd
     attrs:
-      name: Usenet
+      name: SABnzbd
       group: Media
       description: Usenet management
       icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png
@@ -248,7 +432,7 @@ entries:
       policy_engine_mode: any
   - model: authentik_policies.policybinding
     identifiers:
-      target: !KeyOf application-usenet
+      target: !KeyOf application-sabnzbd
       group: !Find [authentik_core.group, [name, "roots"]]
     attrs:
       order: 1

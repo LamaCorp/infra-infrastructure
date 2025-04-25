@@ -1,0 +1,38 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: sabnzbd
+spec:
+  parentRefs:
+    - name: eg-http-public
+      namespace: core-eg
+      sectionName: https
+  hostnames:
+    - sabnzbd.lama-corp.space
+  rules:
+    - matches:
+        - path:
+            value: "/"
+      backendRefs:
+        - name: sabnzbd
+          port: 80
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: sabnzbd
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: sabnzbd
+  oidc:
+    provider:
+      issuer: https://auth.lama-corp.space/application/o/sabnzbd/
+    clientID: sabnzbd
+    clientSecret:
+      name: sabnzbd-oidc-credentials
+    scopes:
+      - offline_access
+    refreshToken: true

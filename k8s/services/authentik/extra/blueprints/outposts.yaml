@@ -18,11 +18,6 @@ entries:
   - model: authentik_blueprints.metaapplyblueprint
     attrs:
       identifiers:
-        name: Apps - Media
-      required: true
-  - model: authentik_blueprints.metaapplyblueprint
-    attrs:
-      identifiers:
         name: Apps - Thanos
       required: true
   - model: authentik_blueprints.metaapplyblueprint
@@ -44,38 +39,6 @@ entries:
         - !Find [
             authentik_core.provider,
             [name, "k8s/k3s.fsn.as212024.net/services-archivebox"],
-          ]
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.as212024.net/services-media/bazarr"],
-          ]
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.as212024.net/services-media/lidarr"],
-          ]
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.as212024.net/services-media/prowlarr"],
-          ]
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.as212024.net/services-media/radarr"],
-          ]
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.as212024.net/services-media/readarr"],
-          ]
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.as212024.net/services-media/sonarr"],
-          ]
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.as212024.net/services-media/torrent"],
-          ]
-        - !Find [
-            authentik_core.provider,
-            [name, "k8s/k3s.fsn.as212024.net/services-media/usenet"],
           ]
         - !Find [authentik_core.provider, [name, "v-core-3"]]
       config:
