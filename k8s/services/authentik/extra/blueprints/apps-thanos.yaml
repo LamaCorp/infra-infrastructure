@@ -5,8 +5,8 @@ version: 1
 metadata:
   name: Apps - Thanos
 entries:
-  - id: provider
-    model: authentik_providers_proxy.proxyprovider
+  - id: provider-bucketweb
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
       name: k8s/k3s.fsn.as212024/infra-observability/thanos-bucketweb
     attrs:
@@ -15,16 +15,37 @@ entries:
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
       invalidation_flow:
         !Find [
           authentik_flows.flow,
           [slug, "default-provider-invalidation-flow"],
         ]
 
-      mode: forward_single
-      external_host: https://thanos-bucketweb.as212024.net
+      client_type: confidential
+      client_id: thanos-bucketweb
+      redirect_uris:
+        - url: https://thanos-bucketweb.as212024.net/oauth2/callback
+          matching_mode: strict
 
-      access_token_validity: hours=24
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
 
   - id: application-bucketweb
     model: authentik_core.application
@@ -35,7 +56,7 @@ entries:
       group: Infrastructure
       description: Thanos bucket overview
       icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/thanos.png
-      provider: !KeyOf provider
+      provider: !KeyOf provider-bucketweb
       policy_engine_mode: any
 
   - model: authentik_policies.policybinding
@@ -60,12 +81,6 @@ entries:
   - model: authentik_policies.policybinding
     identifiers:
       target: !KeyOf application-frontend
-      group: !Find [authentik_core.group, [name, "users"]]
-    attrs:
-      order: 1
-  - model: authentik_policies.policybinding
-    identifiers:
-      target: !KeyOf application-frontend
       group: !Find [authentik_core.group, [name, "roots"]]
     attrs:
-      order: 2
+      order: 1

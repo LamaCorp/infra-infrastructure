@@ -72,15 +72,15 @@ spec:
               key: password
           GF_AUTH_GENERIC_OAUTH_CLIENT_ID:
             secretKeyRef:
-              name: grafana-oauth-credentials
+              name: grafana-oidc-credentials
               key: client_id
           GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
             secretKeyRef:
-              name: grafana-oauth-credentials
+              name: grafana-oidc-credentials
               key: client_secret
 
         annotations:
-          secret.reloader.stakater.com/reload: grafana-postgres-credentials,grafana-oauth-credentials
+          secret.reloader.stakater.com/reload: grafana-postgres-credentials,grafana-oidc-credentials
 
         datasources:
           datasources.yaml:
