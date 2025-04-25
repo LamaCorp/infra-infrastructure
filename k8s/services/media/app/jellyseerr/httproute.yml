@@ -2,14 +2,14 @@
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: jellyseer
+  name: jellyseerr
 spec:
   parentRefs:
     - name: eg-http-public
       namespace: core-eg
       sectionName: https
   hostnames:
-    - jellyseer.lama-corp.space
+    - jellyseerr.lama-corp.space
   rules:
     - matches:
         - path:
