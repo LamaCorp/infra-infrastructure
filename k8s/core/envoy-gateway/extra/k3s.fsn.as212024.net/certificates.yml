@@ -226,6 +226,7 @@ spec:
   dnsNames:
     - "risson.space"
     - "*.risson.space"
+    - "*.home.risson.space"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
@@ -243,6 +244,7 @@ spec:
   dnsNames:
     - "risson.space"
     - "*.risson.space"
+    - "*.home.risson.space"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
