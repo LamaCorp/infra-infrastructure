@@ -23,6 +23,7 @@ configs:
         - openid
         - profile
         - email
+    server.insecure: true
 
   params:
     applicationsetcontroller.enable.progressive.syncs: true
