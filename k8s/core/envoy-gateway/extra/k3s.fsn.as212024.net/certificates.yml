@@ -245,6 +245,7 @@ spec:
     - "risson.space"
     - "*.risson.space"
     - "*.home.risson.space"
+    - "*.workshop.risson.space"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
