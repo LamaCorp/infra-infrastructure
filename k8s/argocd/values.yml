@@ -77,14 +77,6 @@ server:
     enabled: true
     serviceMonitor:
       enabled: true
-  ingress:
-    enabled: true
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    hostname: argocd.as212024.net
-    tls: true
 
 repoServer:
   replicas: 1
@@ -99,12 +91,6 @@ applicationSet:
     enabled: true
     serviceMonitor:
       enabled: true
-  ingress:
-    enabled: true
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-    hostname: argocd-appset.as212024.net
-    tls: true
 
 notifications:
   enabled: true

@@ -9,3 +9,4 @@ resources:
   - projects.yml
   - network-policy.yml
   - secrets.yml
+  - httproute.yml
