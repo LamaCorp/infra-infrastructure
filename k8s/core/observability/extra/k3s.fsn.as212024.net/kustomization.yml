@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - ../base
   - secrets.yml
+  - httproute.yml
 
 generatorOptions:
   disableNameSuffixHash: true

@@ -1,0 +1,19 @@
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: kube-prometheus-stack-alertmanager
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: kube-prometheus-stack-alertmanager
+  oidc:
+    provider:
+      issuer: https://auth.as212024.net/application/o/k3s-fsn-as212024-net-observability-alertmanager/
+    clientID: alertmanager
+    clientSecret:
+      name: alertmanager-oidc-credentials
+    scopes:
+      - offline_access
+    refreshToken: true
