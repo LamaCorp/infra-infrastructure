@@ -409,7 +409,7 @@ entries:
       group: Media
       description: Torrent management
       icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/qbittorrent.png
-      provider: !KeyOf provider-torrent
+      provider: !KeyOf provider-qbittorrent
       policy_engine_mode: any
   - model: authentik_policies.policybinding
     identifiers:
@@ -468,7 +468,7 @@ entries:
       group: Media
       description: Usenet management
       icon: https://cdn.jsdelivr.net/gh/walkxcode/dashboard-icons/png/sabnzbd.png
-      provider: !KeyOf provider-usenet
+      provider: !KeyOf provider-sabnzbd
       policy_engine_mode: any
   - model: authentik_policies.policybinding
     identifiers:
