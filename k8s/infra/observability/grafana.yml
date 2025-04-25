@@ -131,19 +131,11 @@ spec:
           - grafana-worldmap-panel
           - marcusolsson-treemap-panel
 
-        ingress:
-          enabled: true
-          pathType: Prefix
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-            nginx.ingress.kubernetes.io/affinity: cookie
-            nginx.ingress.kubernetes.io/affinity-mode: persistent
-          hosts:
-            - grafana.as212024.net
-          tls:
-            - hosts:
-                - grafana.as212024.net
-              secretName: grafana-tls
+        route:
+          main:
+            enabled: true
+            hostnames:
+              - grafana.as212024.net
   ignoreDifferences:
     - group: apps
       kind: Deployment
