@@ -15,6 +15,11 @@ entries:
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       mode: forward_single
       external_host: https://alertmanager.k3s.fsn.as212024.net

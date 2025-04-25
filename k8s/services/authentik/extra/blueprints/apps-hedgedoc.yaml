@@ -20,12 +20,16 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
       redirect_uris:
         - url: https://md.lama-corp.space/auth/oauth2/callback
           matching_mode: strict
-      sub_mode: user_email
 
       access_code_validity: minutes=1
       access_token_validity: minutes=5

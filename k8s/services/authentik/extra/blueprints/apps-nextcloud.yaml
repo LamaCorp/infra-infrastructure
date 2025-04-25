@@ -35,6 +35,11 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
       redirect_uris:

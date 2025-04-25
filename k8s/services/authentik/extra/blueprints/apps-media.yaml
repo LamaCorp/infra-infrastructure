@@ -20,6 +20,11 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
       client_id: bazarr
@@ -74,9 +79,14 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
-      client_id: bazarr
+      client_id: lidarr
       redirect_uris:
         - url: https://lidarr.lama-corp.space/oauth2/callback
           matching_mode: strict
@@ -128,9 +138,14 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
-      client_id: bazarr
+      client_id: prowlarr
       redirect_uris:
         - url: https://prowlarr.lama-corp.space/oauth2/callback
           matching_mode: strict
@@ -182,9 +197,14 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
-      client_id: bazarr
+      client_id: radarr
       redirect_uris:
         - url: https://radarr.lama-corp.space/oauth2/callback
           matching_mode: strict
@@ -236,9 +256,14 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
-      client_id: bazarr
+      client_id: readarr
       redirect_uris:
         - url: https://readarr.lama-corp.space/oauth2/callback
           matching_mode: strict
@@ -290,9 +315,14 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
-      client_id: bazarr
+      client_id: sonarr
       redirect_uris:
         - url: https://sonarr.lama-corp.space/oauth2/callback
           matching_mode: strict
@@ -343,6 +373,11 @@ entries:
         !Find [
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
+        ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
         ]
 
       client_type: confidential
@@ -398,6 +433,11 @@ entries:
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
         ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
+        ]
 
       client_type: confidential
       client_id: sabnzbd
@@ -451,6 +491,11 @@ entries:
         !Find [
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
+        ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
         ]
 
       client_type: confidential
@@ -517,6 +562,11 @@ entries:
         !Find [
           authentik_crypto.certificatekeypair,
           [name, "authentik Self-signed Certificate"],
+        ]
+      invalidation_flow:
+        !Find [
+          authentik_flows.flow,
+          [slug, "default-provider-invalidation-flow"],
         ]
 
       client_type: confidential
