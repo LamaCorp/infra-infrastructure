@@ -4,10 +4,23 @@ kind: Service
 metadata:
   name: zigbee2mqtt
 spec:
-  type: ExternalName
-  externalName: homeassistant.bar.risson.net
   ports:
     - name: http
       protocol: TCP
-      port: 80
+      port: 8080
       targetPort: 8080
+---
+apiVersion: discovery.k8s.io/v1
+kind: EndpointSlice
+metadata:
+  name: zigbee2mqtt
+  labels:
+    kubernetes.io/service-name: zigbee2mqtt
+addressType: FQDN
+ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+endpoints:
+  - addresses:
+      - homeassistant.bar.risson.net

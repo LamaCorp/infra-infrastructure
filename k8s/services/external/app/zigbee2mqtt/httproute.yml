@@ -1,0 +1,38 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: zigbee2mqtt
+spec:
+  parentRefs:
+    - name: eg-http-public
+      namespace: core-eg
+      sectionName: https
+  hostnames:
+    - z2m.home.risson.space
+  rules:
+    - matches:
+        - path:
+            value: "/"
+      backendRefs:
+        - name: zigbee2mqtt
+          port: 8080
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: zigbee2mqtt
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: zigbee2mqtt
+  oidc:
+    provider:
+      issuer: https://auth.lama-corp.space/application/o/zigbee2mqtt/
+    clientID: zigbee2mqtt
+    clientSecret:
+      name: zigbee2mqtt-oidc-credentials
+    scopes:
+      - offline_access
+    refreshToken: true

@@ -25,20 +25,41 @@ entries:
       order: 1
 
   - id: provider-zigbee2mqtt
-    model: authentik_providers_proxy.proxyprovider
+    model: authentik_providers_oauth2.oauth2provider
     identifiers:
-      name: zigbee2mqtt
+      name: k8s/k3s.fsn.as212024.net/services-external/zigbee2mqtt
     attrs:
       authorization_flow:
         !Find [
           authentik_flows.flow,
           [slug, "default-provider-authorization-implicit-consent"],
         ]
+      signing_key:
+        !Find [
+          authentik_crypto.certificatekeypair,
+          [name, "authentik Self-signed Certificate"],
+        ]
 
-      mode: forward_single
-      external_host: https://z2m.home.risson.space
+      client_type: confidential
+      client_id: zigbee2mqtt
+      redirect_uris:
+        - url: https://z2m.home.risson.space/oauth2/callback
+          matching_mode: strict
 
-      access_token_validity: hours=1
+      access_code_validity: minutes=1
+      access_token_validity: minutes=5
+      refresh_token_validity: days=30
+
+      sub_mode: hashed_user_id
+      property_mappings:
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'openid'"],
+          ]
+        - !Find [
+            authentik_core.propertymapping,
+            [name, "authentik default OAuth Mapping: OpenID 'offline_access'"],
+          ]
 
   - id: application-zigbee2mqtt
     model: authentik_core.application

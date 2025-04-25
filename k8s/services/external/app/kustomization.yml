@@ -2,6 +2,8 @@
 kind: Kustomization
 
 resources:
+  - secrets.yml
+
   - home-assistant
   - v-core-3
   - zigbee2mqtt
