@@ -47,6 +47,8 @@ spec:
             compliance:
               fips:
                 enabled: true
+            outposts:
+              container_image_base: ghcr.io/goauthentik/%(type)s:2025.4.0-rc2
 
           blueprints:
             configMaps:
