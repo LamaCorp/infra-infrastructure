@@ -8,7 +8,7 @@ entries:
   - id: provider-bucketweb
     model: authentik_providers_oauth2.oauth2provider
     identifiers:
-      name: k8s/k3s.fsn.as212024/infra-observability/thanos-bucketweb
+      name: k8s/k3s.fsn.as212024.net/infra-observability/thanos-bucketweb
     attrs:
       authorization_flow:
         !Find [
