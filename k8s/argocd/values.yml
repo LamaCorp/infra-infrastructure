@@ -72,6 +72,8 @@ controller:
 
 server:
   replicas: 1
+  extraArgs:
+    - --insecure
   extensions:
     enabled: true
   metrics:
