@@ -27,6 +27,7 @@ configs:
 
   params:
     applicationsetcontroller.enable.progressive.syncs: true
+    server.insecure: true
 
   rbac:
     policy.default: role:readonly
@@ -72,8 +73,6 @@ controller:
 
 server:
   replicas: 1
-  extraArgs:
-    - --insecure
   extensions:
     enabled: true
   metrics:
