@@ -17,13 +17,16 @@ spec:
     namespace: infra-observability
   source:
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 5.48.0
+    targetRevision: 6.29.0
     chart: loki
     helm:
       releaseName: loki
       values: |
         global:
           clusterDomain: c.k3s.fsn.as212024.net
+
+        deploymentMode: SingleBinary
+
         loki:
           analytics:
             reporting_enabled: false
@@ -105,6 +108,7 @@ spec:
           enabled: false
 
         monitoring:
+          enabled: true
           serviceMonitor:
             metricsInstance:
               enabled: false
@@ -117,5 +121,9 @@ spec:
           lokiCanary:
             enabled: false
 
+        chunksCache:
+          enabled: false
+        resultsCache:
+          enabled: false
         test:
           enabled: false
