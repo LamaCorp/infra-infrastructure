@@ -98,7 +98,6 @@ spec:
                 access: proxy
                 url: http://vmsingle-vm.infra-observability:8429/
                 editable: false
-                isDefault: true
               - name: Loki
                 type: loki
                 access: proxy
