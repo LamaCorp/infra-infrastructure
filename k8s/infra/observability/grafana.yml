@@ -85,11 +85,18 @@ spec:
         datasources:
           datasources.yaml:
             apiVersion: 1
+            deleteDatasources:
+              - name: Loki
             datasources:
-              - name: Thanos
+              - name: VMetrics
+                type: victoriametrics-metrics-datasource
+                access: proxy
+                url: http://vmsingle-vm.infra-observability:8429/
+                isDefault: true
+              - name: VProm
                 type: prometheus
                 access: proxy
-                url: http://thanos-query-frontend.infra-observability:9090/
+                url: http://vmsingle-vm.infra-observability:8429/
                 editable: false
                 isDefault: true
               - name: Loki
@@ -101,13 +108,6 @@ spec:
                   httpHeaderName1: X-Scope-OrgID
                 secureJsonData:
                   httpHeaderValue1: infra
-              - name: Alertmanager k3s.fsn.as212024.net
-                type: alertmanager
-                access: proxy
-                url: http://kube-prometheus-stack-alertmanager.core-observability:9093/
-                editable: false
-                jsonData:
-                  implementation: prometheus
 
         sidecar:
           dashboards:
@@ -130,6 +130,7 @@ spec:
           - grafana-polystat-panel
           - grafana-worldmap-panel
           - marcusolsson-treemap-panel
+          - victoriametrics-metrics-datasource
 
         route:
           main:
