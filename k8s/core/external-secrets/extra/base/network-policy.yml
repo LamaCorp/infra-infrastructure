@@ -32,5 +32,5 @@ metadata:
 spec:
   endpointSelector: {}
   egress:
-    - toEndpoints:
+    - toEntities:
         - all
