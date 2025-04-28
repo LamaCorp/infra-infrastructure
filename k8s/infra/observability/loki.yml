@@ -144,23 +144,11 @@ spec:
         gateway:
           enabled: false
 
-        monitoring:
-          enabled: true
-          serviceMonitor:
-            metricsInstance:
-              enabled: false
-          rules:
-            alerting: true
-          selfMonitoring:
-            enabled: false
-            grafanaAgent:
-              installOperator: false
-          lokiCanary:
-            enabled: false
-
         chunksCache:
           enabled: false
         resultsCache:
           enabled: false
         test:
+          enabled: false
+        lokiCanary:
           enabled: false
