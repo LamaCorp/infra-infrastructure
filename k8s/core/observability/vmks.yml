@@ -48,6 +48,8 @@ spec:
 
             defaultDashboards:
               enabled: true
+              labels:
+                grafana_dashboard: "1"
               annotations:
                 argocd.argoproj.io/sync-options: ServerSideApply=true
 
