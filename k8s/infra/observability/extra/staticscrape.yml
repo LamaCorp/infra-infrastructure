@@ -1,0 +1,149 @@
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: node
+spec:
+  jobName: node
+  targetEndpoints:
+    - targets:
+        - edge-1.pvl.as212024.net:9100
+        - edge-2.fra.as212024.net:9100
+        - gate-1.bar.as212024.net:9100
+        - homeassistant.bar.risson.net:9100
+        - k3s-1.bar.as212024.net:9100
+        - k3s-1.fsn.as212024.net:9100
+        - k3s-2.bar.as212024.net:9100
+        - nas-1.bar.as212024.net:9100
+        - nas-2.bar.as212024.net:9100
+        - nucleus.fsn.as212024.net:9100
+        - pine.fsn.as212024.net:9100
+        - postgresql.fsn.as212024.net:9100
+        - recorder.bar.risson.net:9100
+        - redis.fsn.as212024.net:9100
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: nftables
+spec:
+  jobName: nftables
+  targetEndpoints:
+    - targets:
+        - edge-1.pvl.as212024.net:9630
+        - edge-2.fra.as212024.net:9630
+        - gate-1.bar.as212024.net:9630
+        - homeassistant.bar.risson.net:9630
+        - k3s-1.bar.as212024.net:9630
+        - k3s-1.fsn.as212024.net:9630
+        - k3s-2.bar.as212024.net:9630
+        - nas-1.bar.as212024.net:9630
+        - nas-2.bar.as212024.net:9630
+        - nucleus.fsn.as212024.net:9630
+        - pine.fsn.as212024.net:9630
+        - postgresql.fsn.as212024.net:9630
+        - recorder.bar.risson.net:9630
+        - redis.fsn.as212024.net:9630
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: kresd
+spec:
+  jobName: kresd
+  targetEndpoints:
+    - targets:
+        - edge-1.pvl.as212024.net:8453
+        - edge-2.fra.as212024.net:8453
+        - gate-1.bar.as212024.net:8453
+        - nucleus.fsn.as212024.net:8453
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: bird
+spec:
+  jobName: bird
+  targetEndpoints:
+    - targets:
+        - edge-1.pvl.as212024.net:9324
+        - edge-2.fra.as212024.net:9324
+        - gate-1.bar.as212024.net:9324
+        - nucleus.fsn.as212024.net:9324
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: docker
+spec:
+  jobName: docker
+  targetEndpoints:
+    - targets:
+        - gate-1.bar.as212024.net:9323
+        - homeassistant.bar.risson.net:9323
+        - pine.fsn.as212024.net:9323
+        - recorder.bar.risson.net:9323
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: postgres
+spec:
+  jobName: postgres
+  targetEndpoints:
+    - targets:
+        - postgresql.fsn.as212024.net:9187
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: redis
+spec:
+  jobName: redis
+  targetEndpoints:
+    - path: /scrape
+      relabelConfigs:
+        - sourceLabels:
+            - __address__
+          regex: "([^;]*);.*"
+          targetLabel: redis_instance
+        - sourceLabels:
+            - __address__
+          regex: "[^;]*;(.*)"
+          targetLabel: __param_target
+        - sourceLabels:
+            - __param_target
+          targetLabel: instance
+        - replacement: redis.fsn.as212024.net:9121
+          targetLabel: __address__
+      targets:
+        - stalwart;redis://redis.fsn.as212024.net:6379
+        - authentik;redis://redis.fsn.as212024.net:6380
+        - nextcloud;redis://redis.fsn.as212024.net:6382
+        - paperless_risson;redis://redis.fsn.as212024.net:6383
+        - matrix_synapse;redis://redis.fsn.as212024.net:6384
+        - netbox;redis://redis.fsn.as212024.net:6385
+        - immich;redis://redis.fsn.as212024.net:6386
+        - mastodon;redis://redis.fsn.as212024.net:6388
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: redis-exporter
+spec:
+  jobName: redis_exporter
+  targetEndpoints:
+    - targets:
+        - redis.fsn.as212024.net:9121
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: bgptools
+spec:
+  jobName: bgptools
+  targetEndpoints:
+    - path: /prom/495364bc-abd8-4204-a622-2471db82481d
+      scheme: https
+      targets:
+        - bgp.tools:443
