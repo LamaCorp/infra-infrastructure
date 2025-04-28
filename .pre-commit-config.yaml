@@ -24,7 +24,7 @@ repos:
         types_or: [python, pyi, jupyter]
         require_serial: true
   - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.28
+    rev: v0.1.29
     hooks:
       - id: terraform-fmt
       - id: shellcheck
