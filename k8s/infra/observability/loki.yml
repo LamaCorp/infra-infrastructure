@@ -25,8 +25,6 @@ spec:
         global:
           clusterDomain: c.k3s.fsn.as212024.net
 
-        deploymentMode: SingleBinary
-
         loki:
           analytics:
             reporting_enabled: false
@@ -42,14 +40,18 @@ spec:
               ruler: loki
               admin: loki
           limits_config:
+            allow_structured_metadata: true
             enforce_metric_name: false
             ingestion_rate_mb: 10
             ingestion_burst_size_mb: 20
             reject_old_samples: false
             reject_old_samples_max_age: 168h
+            volume_enabled: true
           ingester:
             chunk_idle_period: 5m
             chunk_retain_period: 1m
+          pattern_ingester:
+            enabled: true
 
           commonConfig:
             replication_factor: 1
@@ -70,6 +72,13 @@ spec:
                 index:
                   period: 24h
                   prefix: index_
+              - from: 2025-04-29
+                store: tsdb
+                schema: v13
+                object_store: s3
+                index:
+                  period: 24h
+                  prefix: index_
 
         tableManager:
           retention_deletes_enabled: true
@@ -78,6 +87,8 @@ spec:
         memberlist:
           service:
             publishNotReadyAddresses: true
+
+        deploymentMode: SingleBinary
 
         singleBinary:
           replicas: 1
@@ -88,6 +99,32 @@ spec:
           extraEnvFrom:
             - secretRef:
                 name: loki-s3-credentials
+
+        # Zero out replica counts of other deployment modes
+        backend:
+          replicas: 0
+        read:
+          replicas: 0
+        write:
+          replicas: 0
+        ingester:
+          replicas: 0
+        querier:
+          replicas: 0
+        queryFrontend:
+          replicas: 0
+        queryScheduler:
+          replicas: 0
+        distributor:
+          replicas: 0
+        compactor:
+          replicas: 0
+        indexGateway:
+          replicas: 0
+        bloomCompactor:
+          replicas: 0
+        bloomGateway:
+          replicas: 0
 
         ingress:
           enabled: true
