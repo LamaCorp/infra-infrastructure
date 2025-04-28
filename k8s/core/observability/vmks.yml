@@ -1,0 +1,88 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-vmks
+  labels:
+    app: core-vmks
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-vmks-{{ .name }}
+      labels:
+        app: core-vmks
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - RespectIgnoreDifferences=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-observability
+      source:
+        repoURL: https://victoriametrics.github.io/helm-charts
+        targetRevision: 0.44.0
+        chart: victoria-metrics-k8s-stack
+        helm:
+          releaseName: vmks
+          values: |
+            fullnameOverride: vmks
+
+            global:
+              clusterLabel: "{{ .name }}"
+              cluster:
+                dnsDomain: "c.{{ .name }}."
+
+            victoria-metrics-operator:
+              fullnameOverride: vm-operator
+              operator:
+                disable_prometheus_converter: false
+                prometheus_converter_add_argocd_ignore_annotations: false
+                enable_converter_ownership: true
+
+            defaultDashboards:
+              enabled: true
+              annotations:
+                argocd.argoproj.io/sync-options: ServerSideApply=true
+
+            vmagent:
+              enabled: true
+              spec:
+                remoteWrite:
+                  - url: http://vmsingle-vm.infra-observability.svc:8429/api/v1/write
+                extraArgs:
+                  enableTCP6: "true"
+
+            vmsingle:
+              enabled: false
+            vmcluster:
+              enabled: false
+            alertmanager:
+              enabled: false
+            vmalert:
+              enabled: false
+            vmauth:
+              enabled: false
+
+            prometheus-node-exporter:
+              enabled: false
+            grafana:
+              enabled: false
+      ignoreDifferences:
+        - group: ""
+          kind: Secret
+          name: vm-operator-validation
+          namespace: core-observability
+          jsonPointers:
+            - /data
+        - group: admissionregistration.k8s.io
+          kind: ValidatingWebhookConfiguration
+          name: vm-operator-admission
+          jqPathExpressions:
+            - ".webhooks[]?.clientConfig.caBundle"

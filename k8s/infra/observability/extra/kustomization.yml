@@ -6,3 +6,4 @@ resources:
   - secrets.yml
   - loki-httproute.yml
   - thanos-httproute.yml
+  - vmcluster.yml

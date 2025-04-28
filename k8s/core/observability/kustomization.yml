@@ -6,3 +6,4 @@ resources:
   - extra.yml
   - kube-prometheus-stack.yml
   - promtail.yml
+  - vmks.yml
