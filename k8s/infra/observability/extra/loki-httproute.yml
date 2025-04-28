@@ -1,0 +1,84 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: loki
+spec:
+  parentRefs:
+    - name: eg-http-public
+      namespace: core-eg
+      sectionName: https
+  hostnames:
+    - loki.as212024.net
+  rules:
+    - matches:
+        - path:
+            value: /api/prom/push
+        - path:
+            value: /loki/api/v1/push
+        - path:
+            value: /otlp/v1/logs
+        - path:
+            value: /api/prom/query
+        - path:
+            value: /api/prom/label
+        - path:
+            value: /api/prom/series
+        - path:
+            value: /api/prom/tail
+        - path:
+            value: /loki/api/v1/query
+        - path:
+            value: /loki/api/v1/query_range
+        - path:
+            value: /loki/api/v1/tail
+        - path:
+            value: /loki/api/v1/label
+        - path:
+            value: /loki/api/v1/labels
+        - path:
+            value: /loki/api/v1/series
+        - path:
+            value: /loki/api/v1/index/stats
+        - path:
+            value: /loki/api/v1/index/volume
+        - path:
+            value: /loki/api/v1/index/volume_range
+        - path:
+            value: /loki/api/v1/format_query
+        - path:
+            value: /loki/api/v1/detected_field
+        - path:
+            value: /loki/api/v1/detected_fields
+        - path:
+            value: /loki/api/v1/detected_labels
+        - path:
+            value: /loki/api/v1/patterns
+        - path:
+            value: /api/prom/rules
+        - path:
+            value: /api/prom/api/v1/rules
+        - path:
+            value: /api/prom/api/v1/alerts
+        - path:
+            value: /loki/api/v1/rules
+        - path:
+            value: /prometheus/api/v1/rules
+        - path:
+            value: /prometheus/api/v1/alerts
+      backendRefs:
+        - name: loki
+          port: 3100
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: loki
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: loki
+  basicAuth:
+    users:
+      name: loki-auth-map

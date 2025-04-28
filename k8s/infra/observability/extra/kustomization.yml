@@ -4,4 +4,5 @@ kind: Kustomization
 resources:
   - network-policy.yml
   - secrets.yml
-  - httproute.yml
+  - loki-httproute.yml
+  - thanos-httproute.yml

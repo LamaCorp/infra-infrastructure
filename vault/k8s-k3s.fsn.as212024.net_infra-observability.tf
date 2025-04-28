@@ -20,7 +20,10 @@ resource "htpasswd_password" "k8s-k3s-fsn-as212024-net_infra-observability_loki-
 resource "vault_generic_secret" "k8s-k3s-fsn-as212024-net_infra-observability_loki-auth-map" {
   path = "${vault_mount.k8s-clusters["k3s.fsn.as212024.net"].path}/infra-observability/loki-auth-map"
   data_json = jsonencode({
-    for u in local.k8s-k3s-fsn-as212024-net_infra-observability_loki-auth-map-users :
-    u => htpasswd_password.k8s-k3s-fsn-as212024-net_infra-observability_loki-auth-map[u].bcrypt
+    ".htpasswd" = <<-EOF
+      %{for username in local.k8s-k3s-fsn-as212024-net_infra-observability_loki-auth-map-users}
+      ${username}=${htpasswd_password.k8s-k3s-fsn-as212024-net_infra-observability_loki-auth-map[username].bcrypt}
+      %{endfor}
+    EOF
   })
 }

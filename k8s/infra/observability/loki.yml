@@ -124,21 +124,6 @@ spec:
         bloomGateway:
           replicas: 0
 
-        ingress:
-          enabled: true
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-            nginx.ingress.kubernetes.io/proxy-body-size: 20m
-            nginx.ingress.kubernetes.io/auth-type: basic
-            nginx.ingress.kubernetes.io/auth-secret: loki-auth-map
-            nginx.ingress.kubernetes.io/auth-secret-type: auth-map
-          hosts:
-            - loki.as212024.net
-          tls:
-            - hosts:
-                - loki.as212024.net
-              secretName: loki-tls
-
         gateway:
           enabled: false
 
