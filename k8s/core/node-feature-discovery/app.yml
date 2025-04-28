@@ -24,7 +24,7 @@ spec:
         namespace: kube-system
       source:
         repoURL: https://kubernetes-sigs.github.io/node-feature-discovery/charts
-        targetRevision: 0.17.2
+        targetRevision: 0.17.3
         chart: node-feature-discovery
         helm:
           releaseName: node-feature-discovery
