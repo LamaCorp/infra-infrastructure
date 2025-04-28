@@ -4,6 +4,7 @@ namespace: argocd
 
 resources:
   - extra.yml
-  - kube-prometheus-stack.yml
   - promtail.yml
+
+  - prometheus-operator-crds.yml
   - vmks.yml

@@ -1,0 +1,33 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-prometheus-operator-crds
+  labels:
+    app: core-prometheus-operator-crds
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-prometheus-operator-crds-{{ .name }}
+      labels:
+        app: core-prometheus-operator-crds
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+          - Replace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-observability
+      source:
+        repoURL: https://prometheus-community.github.io/helm-charts
+        targetRevision: 19.1.0
+        chart: prometheus-operator-crds
+        helm:
+          releaseName: prometheus-operator-crds
