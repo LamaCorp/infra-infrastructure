@@ -5,5 +5,4 @@ resources:
   - network-policy.yml
   - secrets.yml
   - loki-httproute.yml
-  - thanos-httproute.yml
-  - vmcluster.yml
+  - vm.yml
