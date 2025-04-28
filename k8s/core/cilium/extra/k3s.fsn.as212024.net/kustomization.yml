@@ -6,3 +6,4 @@ resources:
   - cilium-bgp.yml
   - cilium-egress-gateway-policy.yml
   - cilium-load-balancer-ip-pool.yml
+  - httproute.yml

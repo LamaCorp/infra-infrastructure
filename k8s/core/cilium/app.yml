@@ -147,13 +147,3 @@ spec:
                       enabled: true
                 ui:
                   enabled: true
-                  ingress:
-                    enabled: true
-                    annotations:
-                      cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-                    hosts:
-                      - "hubble.{{ .name }}"
-                    tls:
-                      - secretName: cilium-hubble-tls
-                        hosts:
-                          - "hubble.{{ .name }}"
