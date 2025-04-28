@@ -85,10 +85,6 @@ spec:
         datasources:
           datasources.yaml:
             apiVersion: 1
-            deleteDatasources:
-              - name: Alertmanager k3s.fsn.as212024.net
-              - name: Thanos
-              - name: postgresql.fsn.lama.tel csdm
             datasources:
               - name: VMetrics
                 type: victoriametrics-metrics-datasource
