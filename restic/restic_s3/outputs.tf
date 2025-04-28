@@ -1,5 +1,5 @@
 output "bucket_name" {
-  value = minio_s3_bucket.this.bucket
+  value = aws_s3_bucket.this.id
 }
 
 output "backup_user_key" {

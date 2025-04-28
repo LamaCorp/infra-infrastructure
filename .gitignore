@@ -4,7 +4,6 @@ __pycache__
 
 .terraform
 
-/restic/secrets/minio.env
 /secrets/vars
 /gitlab/secrets/vars
 /vault/secrets/vault.json

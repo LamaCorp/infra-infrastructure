@@ -1,10 +1,19 @@
 # Create bucket
 # This will be changed to use the aws provider once a compatibily bug between
 # aws provider and Wasabi is resolved
-resource "minio_s3_bucket" "this" {
+resource "aws_s3_bucket" "this" {
   bucket        = var.bucket_name
-  acl           = "private"
   force_destroy = false
+}
+resource "aws_s3_bucket_acl" "this" {
+  bucket = aws_s3_bucket.this.id
+  acl    = "private"
+}
+resource "aws_s3_bucket_versioning" "this" {
+  bucket = aws_s3_bucket.this.id
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 # Backup user

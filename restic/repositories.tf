@@ -1,133 +1,55 @@
 locals {
   repositories = {
-    "auth.fsn.lama.tel" = [
+    "nucleus.fsn.as212024.net" = [
+      "archives",
+      "user_root",
+    ]
+    "gate-1.bar.as212024.net" = [
+      "user_root",
+    ]
+    "edge-1.pvl.as212024.net" = [
+      "user_root",
+    ]
+    "edge-2.fra.as212024.net" = [
       "user_root",
     ]
 
-    "dl.avh.lama.tel" = [
-      "qbittorrent",
+    "postgresql.fsn.as212024.net" = [
+      "postgresql",
+      "user_root",
+    ]
+    "redis.fsn.as212024.net" = [
+      "redis",
       "user_root",
     ]
 
-    "dl.psw.lama.tel" = [
-      "qbittorrent",
-      "user_root",
-    ]
-
-    "edge-1.pvl.lama.tel" = [
-      "user_root",
-    ]
-
-    "edge-2.fra.lama.tel" = [
-      "user_root",
-    ]
-
-    "games.fsn.lama.tel" = [
-      "factorio_2022_zarak",
-      "user_root",
-    ]
-
-    "gate-1.bar.lama.tel" = [
-      "user_root",
-    ]
-
-    "gitlab-runner.fsn.lama.tel" = [
-      "user_root",
-    ]
-
-    "homeassistant.iot.bar.lama.tel" = [
-      "homeassistant",
-      "user_root",
-    ]
-
-    "k3s-1.fsn.lama.tel" = [
-      "eos",
+    "k3s-1.fsn.as212024.net" = [
       "local_path_provisioner",
       "rancher",
       "user_root",
       "weed",
     ]
-
-    "k3s-1.bar.lama.tel" = [
+    "k3s-1.bar.as212024.net" = [
       "local_path_provisioner",
-      "rancher",
       "user_root",
     ]
-    "k3s-2.bar.lama.tel" = [
+    "k3s-2.bar.as212024.net" = [
       "local_path_provisioner",
-      "rancher",
-      "user_root",
-    ]
-    "k3s-3.bar.lama.tel" = [
-      "local_path_provisioner",
-      "rancher",
       "user_root",
     ]
 
-    "mail.fsn.lama.tel" = [
-      "mail",
-      "user_root",
-    ]
-
-    "nas-1.bar.lama.tel" = [
-      "afs",
-      "user_root",
-    ]
-
-    "nas-2.bar.lama.tel" = [
-      "user_root",
-    ]
-
-    "nucleus.fsn.lama.tel" = [
-      "archives",
-      "user_root",
-    ]
-
-    "pine.fsn.lama.tel" = [
+    "pine.fsn.as212024.net" = [
       "srv",
       "user_root",
     ]
 
-    "postgresql.fsn.lama.tel" = [
-      "postgresql",
+    "homeassistant.bar.risson.net" = [
+      "homeassistant",
       "user_root",
     ]
-
-    "redis.fsn.lama.tel" = [
-      "redis",
+    "recorder.bar.risson.net" = [
+      "frigate",
       "user_root",
-    ]
-
-    "restic-prune.bar.lama.tel" = [
-      "user_root",
-    ]
-
-    "s3.fsn.lama.tel" = [
-      "cloudserver",
-      "user_root",
-    ]
-
-    "secure-services.fsn.lama.tel" = [
-      "acme",
-      "user_root",
-      "vault",
-    ]
-
-    "services.fsn.lama.tel" = [
-      "cloudserver",
-      "jellyfin",
-      "mattermost",
-      "matrix",
-      "netbox",
-      "nextcloud",
-      "paperless_risson",
-      "pastebin",
-      "servarr",
-      "static",
-      "traefik",
-      "user_root",
-      "vaultwarden",
-      "your_spotify",
     ]
   }
 
