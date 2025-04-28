@@ -34,13 +34,15 @@ entries:
       config:
         log_level: info
         authentik_host: https://auth.lama-corp.space
-        kubernetes_ingress_annotations:
-          cert-manager.io/cluster-issuer: letsencrypt-prod-http01
         object_naming_template: ak-outpost-%(name)s
-        kubernetes_ingress_secret_name: authentik-outpost-tls
         kubernetes_disabled_components:
           - deployment
           - secret
+          - ingress
+        kubernetes_httproute_parent_refs:
+          - name: eg-http-public
+            namespace: core-eg
+            sectionName: https
 
   - model: authentik_outposts.outpost
     identifiers:

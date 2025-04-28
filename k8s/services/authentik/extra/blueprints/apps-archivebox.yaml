@@ -21,7 +21,8 @@ entries:
           [slug, "default-provider-invalidation-flow"],
         ]
 
-      mode: forward_single
+      mode: proxy
+      internal_host: http://archivebox.services-archivebox.svc
       external_host: https://archive.lama-corp.space
 
       access_token_validity: hours=24

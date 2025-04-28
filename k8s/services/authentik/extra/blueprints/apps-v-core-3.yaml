@@ -21,7 +21,8 @@ entries:
           [slug, "default-provider-invalidation-flow"],
         ]
 
-      mode: forward_single
+      mode: proxy
+      internal_host: http://v-core-3.client.bar.risson.net:80
       external_host: https://v-core-3.workshop.risson.space
 
       access_token_validity: minutes=15
