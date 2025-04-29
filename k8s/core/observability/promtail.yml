@@ -34,7 +34,7 @@ spec:
             config:
               clients:
                 {{- if eq .name "k3s.fsn.as212024.net" }}
-                - url: http://vmlogs-vm.infra-observability:9428/insert/loki/api/v1/push
+                - url: http://vmlogs-vm.infra-observability.svc:9428/insert/loki/api/v1/push
                 {{- else }}
                 - url: https://logs.as212024.net/insert/loki/api/v1/push
                 {{- end }}
