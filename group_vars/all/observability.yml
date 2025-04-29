@@ -1,13 +1,9 @@
 ---
-promtail_loki_server_url: loki.as212024.net
+promtail_loki_server_url: logs.as212024.net
 promtail_system_user: root
 
 promtail_config_clients:
-  - url: "https://{{ promtail_loki_server_url }}/loki/api/v1/push"
-    tenant_id: infra
-    basic_auth:
-      username: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-global/data/core-observability/loki-auth')['username'] }}"
-      password: "{{ lookup('community.hashi_vault.hashi_vault', 'k8s-global/data/core-observability/loki-auth')['password'] }}"
+  - url: "https://{{ promtail_loki_server_url }}/insert/loki/api/v1/push"
     external_labels:
       hostname: "{{ inventory_hostname }}"
 
