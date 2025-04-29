@@ -33,20 +33,9 @@ spec:
           values: |
             config:
               clients:
-                - url: https://loki.as212024.net/loki/api/v1/push
-                  tenant_id: infra
-                  basic_auth:
-                    username: "${LOKI_USERNAME}"
-                    password: "${LOKI_PASSWORD}"
+                - url: https://logs.as212024.net/insert/loki/api/v1/push
                   external_labels:
                     cluster: {{ .name }}
-
-            extraArgs:
-              - -config.expand-env=true
-
-            extraEnvFrom:
-              - secretRef:
-                  name: loki-credentials
 
             serviceMonitor:
               enabled: true
