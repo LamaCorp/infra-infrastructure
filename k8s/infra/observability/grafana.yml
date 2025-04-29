@@ -85,6 +85,8 @@ spec:
         datasources:
           datasources.yaml:
             apiVersion: 1
+            deleteDatasources:
+              - name: Loki
             datasources:
               - name: VMetrics
                 type: victoriametrics-metrics-datasource
@@ -96,15 +98,11 @@ spec:
                 access: proxy
                 url: http://vmsingle-vm.infra-observability:8429/
                 editable: false
-              - name: Loki
-                type: loki
+              - name: VLogs
+                type: victoriametrics-logs-datasource
                 access: proxy
-                url: http://loki.infra-observability:3100/
+                url: http://vlogs-vm.infra-observability:9428/
                 editable: false
-                jsonData:
-                  httpHeaderName1: X-Scope-OrgID
-                secureJsonData:
-                  httpHeaderValue1: infra
 
         sidecar:
           dashboards:
@@ -128,6 +126,7 @@ spec:
           - grafana-worldmap-panel
           - marcusolsson-treemap-panel
           - victoriametrics-metrics-datasource
+          - victoriametrics-logs-datasourcee
 
         route:
           main:
