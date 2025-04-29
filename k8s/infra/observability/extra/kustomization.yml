@@ -5,6 +5,3 @@ resources:
   - network-policy.yml
   - secrets.yml
   - loki-httproute.yml
-  - vm.yml
-  - staticscrape.yml
-  - vlogs.yml
