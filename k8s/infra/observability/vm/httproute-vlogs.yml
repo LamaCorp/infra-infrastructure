@@ -7,9 +7,6 @@ spec:
   parentRefs:
     - name: eg-http-public
       namespace: core-eg
-      sectionName: http
-    - name: eg-http-public
-      namespace: core-eg
       sectionName: https
   hostnames:
     - logs.as212024.net
