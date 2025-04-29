@@ -85,6 +85,8 @@ spec:
         datasources:
           datasources.yaml:
             apiVersion: 1
+            deleteDatasources:
+              - name: Loki
             datasources:
               - name: VMetrics
                 type: victoriametrics-metrics-datasource
@@ -124,7 +126,7 @@ spec:
           - grafana-worldmap-panel
           - marcusolsson-treemap-panel
           - victoriametrics-metrics-datasource
-          - victoriametrics-logs-datasourcee
+          - victoriametrics-logs-datasource
 
         route:
           main:
