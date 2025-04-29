@@ -6,3 +6,4 @@ resources:
   - extra.yml
   - grafana.yml
   - loki.yml
+  - vm.yml
