@@ -3,6 +3,6 @@ kind: Kustomization
 namespace: argocd
 
 resources:
-  - extra.yml
-  - grafana.yml
   - vm.yml
+  - grafana.yml
+  - extra.yml

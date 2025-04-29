@@ -33,8 +33,6 @@ configMapGenerator:
       - PICTRS__STORE__USE_PATH_STYLE=false
       - PICTRS__STORE__BUCKET_NAME=lemmy-pictrs
       - PICTRS__STORE__REGION=us-east-1
-      - PICTRS__TRACING__LOGGING__TARGETS=debug
-      - RUST_BACKTRACE=full
   - name: lemmy-ui-config
     literals:
       - LEMMY_UI_LEMMY_INTERNAL_HOST=lemmy:80
