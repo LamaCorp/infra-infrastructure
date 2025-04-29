@@ -3,8 +3,7 @@ kind: Kustomization
 namespace: argocd
 
 resources:
-  - extra.yml
-  - promtail.yml
-
   - prometheus-operator-crds.yml
   - vmks.yml
+  - promtail.yml
+  - extra.yml
