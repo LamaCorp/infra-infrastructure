@@ -1,0 +1,42 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vlogs
+spec:
+  parentRefs:
+    - name: eg-http-public
+      namespace: core-eg
+      sectionName: https
+  hostnames:
+    - logs.as212024.net
+  rules:
+    - matches:
+        - path:
+            value: "/"
+      backendRefs:
+        - name: vlogs-vm
+          port: 9428
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: SecurityPolicy
+metadata:
+  name: vlogs
+spec:
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      name: vlogs
+  authorization:
+    defaultAction: Deny
+    rules:
+      - action: Allow
+        principal:
+          clientCIDRs:
+            # internal subnets
+            - 172.28.0.0/16
+            - 209.112.97.240/28
+            - 2001:67c:17fc::/48
+            # bar-cc
+            - 172.29.1.0/26
+            - 2a06:e881:7701:1::/64
