@@ -21,16 +21,3 @@ spec:
   egress:
     - toEntities:
         - all
----
-apiVersion: cilium.io/v2
-kind: CiliumClusterwideNetworkPolicy
-metadata:
-  name: allow-ingress-observability
-spec:
-  endpointSelector: {}
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            k8s:io.kubernetes.pod.namespace: core-observability
-            app.kubernetes.io/instance: vmks
-            app.kubernetes.io/name: vmagent

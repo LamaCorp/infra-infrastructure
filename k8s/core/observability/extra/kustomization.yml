@@ -2,4 +2,5 @@
 kind: Kustomization
 
 resources:
+  - cluster-network-policy.yml
   - network-policy.yml
