@@ -33,9 +33,16 @@ spec:
           values: |
             config:
               clients:
+                {{- if eq .name "k3s.fsn.as212024.net" }}
+                - url: http://vmlogs-vm.infra-observability:9428/insert/loki/api/v1/push
+                {{- else }}
                 - url: https://logs.as212024.net/insert/loki/api/v1/push
+                {{- end }}
                   external_labels:
                     cluster: {{ .name }}
+
+            tolerations:
+              - operator: Exists
 
             serviceMonitor:
               enabled: true
