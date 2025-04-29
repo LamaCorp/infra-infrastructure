@@ -85,8 +85,6 @@ spec:
         datasources:
           datasources.yaml:
             apiVersion: 1
-            deleteDatasources:
-              - name: Loki
             datasources:
               - name: VMetrics
                 type: victoriametrics-metrics-datasource
