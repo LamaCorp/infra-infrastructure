@@ -3,7 +3,7 @@ promtail_loki_server_url: logs.as212024.net
 promtail_system_user: root
 
 promtail_config_clients:
-  - url: "https://{{ promtail_loki_server_url }}/insert/loki/api/v1/push"
+  - url: "https://{{ promtail_loki_server_url }}/insert/loki/api/v1/push?_msg_field=MESSAGE"
     external_labels:
       hostname: "{{ inventory_hostname }}"
 
