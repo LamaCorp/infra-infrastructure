@@ -4,7 +4,7 @@ kind: ApplicationSet
 metadata:
   name: core-observability-extra
   labels:
-    app: core-observability-extra
+    app: core-observability
 spec:
   goTemplate: true
   generators:
@@ -13,7 +13,7 @@ spec:
     metadata:
       name: core-observability-extra-{{ .name }}
       labels:
-        app: core-observability-extra
+        app: core-observability
     spec:
       project: default
       syncPolicy:

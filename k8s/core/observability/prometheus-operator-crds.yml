@@ -4,7 +4,7 @@ kind: ApplicationSet
 metadata:
   name: core-prometheus-operator-crds
   labels:
-    app: core-prometheus-operator-crds
+    app: core-observability
 spec:
   goTemplate: true
   generators:
@@ -13,7 +13,7 @@ spec:
     metadata:
       name: core-prometheus-operator-crds-{{ .name }}
       labels:
-        app: core-prometheus-operator-crds
+        app: core-observability
     spec:
       project: default
       syncPolicy:
