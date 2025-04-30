@@ -90,18 +90,16 @@ spec:
               secret.reloader.stakater.com/reload: authentik-secrets,authentik-postgres-credentials
 
           server:
-            ingress:
-              enabled: true
-              annotations:
-                cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-              hosts:
-                - auth.lama-corp.space
-                - auth.as212024.net
-              tls:
-                - hosts:
-                    - auth.lama-corp.space
-                    - auth.as212024.net
-                  secretName: authentik-tls
+            route:
+              main:
+                enabled: true
+                parentRefs:
+                  - name: eg-http-public
+                    namespace: core-eg
+                    sectionName: https
+                hostnames:
+                  - auth.lama-corp.space
+                  - auth.as212024.net
             metrics:
               serviceMonitor:
                 enabled: true
