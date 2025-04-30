@@ -295,11 +295,11 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: eg-http-public-cats-acdc-epita-fr-ecdsa
+  name: eg-http-public-cats-acdc-epita-fr-rsa
 spec:
-  secretName: eg-http-public-cats-acdc-epita-fr-ecdsa-tls
+  secretName: eg-http-public-cats-acdc-epita-fr-rsa-tls
   privateKey:
-    algorithm: ECDSA
+    algorithm: RSA
     rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
