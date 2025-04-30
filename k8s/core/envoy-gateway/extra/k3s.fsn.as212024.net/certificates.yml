@@ -198,6 +198,7 @@ spec:
   dnsNames:
     - "risson.me"
     - "*.risson.me"
+    - "*.acdc.risson.me"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
