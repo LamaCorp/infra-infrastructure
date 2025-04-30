@@ -19,7 +19,6 @@ configMapGenerator:
       - ./blueprints/apps-hedgedoc.yaml
       - ./blueprints/apps-home-assistant.yaml
       - ./blueprints/apps-immich.yaml
-      - ./blueprints/apps-k3s.fsn.as212024.net-observability.yaml
       - ./blueprints/apps-mastodon.yaml
       - ./blueprints/apps-matrix.yaml
       - ./blueprints/apps-mattermost.yaml
@@ -28,7 +27,6 @@ configMapGenerator:
       - ./blueprints/apps-nextcloud.yaml
       - ./blueprints/apps-paperless-ngx-risson.yaml
       - ./blueprints/apps-stirling-pdf.yaml
-      - ./blueprints/apps-thanos.yaml
       - ./blueprints/apps-v-core-3.yaml
       - ./blueprints/apps-vault.yaml
       - ./blueprints/brands.yaml
