@@ -38,4 +38,4 @@ configMapGenerator:
 
 images:
   - name: mattermost/mattermost-team-edition
-    newTag: 9.11.12
+    newTag: 9.11.13
