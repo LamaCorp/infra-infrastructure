@@ -35,7 +35,6 @@ spec:
             fullnameOverride: vmks
 
             global:
-              clusterLabel: "{{ .name }}"
               cluster:
                 dnsDomain: "c.{{ .name }}."
 
