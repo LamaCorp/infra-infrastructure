@@ -99,6 +99,9 @@ spec:
 
           persistence:
             enabled: false
+
+          ingress:
+            enabled: false
     - repoURL: https://ananace.gitlab.io/charts
       targetRevision: 1.4.9
       chart: element-web
