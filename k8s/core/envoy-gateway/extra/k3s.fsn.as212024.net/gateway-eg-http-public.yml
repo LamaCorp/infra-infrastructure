@@ -45,3 +45,5 @@ spec:
           - name: eg-http-public-risson-space-rsa-tls
           - name: eg-http-public-rplace-space-ecdsa-tls
           - name: eg-http-public-rplace-space-rsa-tls
+          - name: eg-http-public-cats-acdc-epita-fr-ecdsa-tls
+          - name: eg-http-public-cats-acdc-epita-fr-rsa-tls
