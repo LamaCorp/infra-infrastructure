@@ -13,8 +13,10 @@ spec:
   rules:
     - matches:
         - path:
+            type: PathPrefix
             value: /hookshot/gitlab
         - path:
+            type: PathPrefix
             value: /hookshot/webhook
       filters:
         - type: URLRewrite
@@ -27,6 +29,7 @@ spec:
           port: 9000
     - matches:
         - path:
+            type: PathPrefix
             value: /hookshot/widgetapi
       filters:
         - type: URLRewrite
