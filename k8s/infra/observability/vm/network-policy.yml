@@ -5,8 +5,9 @@ metadata:
   name: allow-ingress-vmagent
 spec:
   endpointSelector:
-    app.kubernetes.io/name: vmsingle
-    app.kubernetes.io/instance: vm
+    matchLabels:
+      app.kubernetes.io/name: vmsingle
+      app.kubernetes.io/instance: vm
   ingress:
     - fromEndpoints:
         - matchLabels:
@@ -20,8 +21,9 @@ metadata:
   name: allow-ingress-promtail
 spec:
   endpointSelector:
-    app.kubernetes.io/name: vlogs
-    app.kubernetes.io/instance: vm
+    matchLabels:
+      app.kubernetes.io/name: vlogs
+      app.kubernetes.io/instance: vm
   ingress:
     - fromEndpoints:
         - matchLabels:
