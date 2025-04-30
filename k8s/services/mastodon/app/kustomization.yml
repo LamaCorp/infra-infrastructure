@@ -12,7 +12,7 @@ resources:
   # - chewy-upgrade
   - assets-precompile
   - media-remove
-  - ingress.yml
+  - httproute.yml
   - network-policy.yml
   - secrets.yml
 

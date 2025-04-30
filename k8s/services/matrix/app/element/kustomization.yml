@@ -2,8 +2,7 @@
 kind: Kustomization
 
 commonLabels:
-  app.kubernetes.io/component: synapse
+  app.kubernetes.io/component: element
 
 resources:
   - httproute.yml
-  - secrets.yml

@@ -1,0 +1,19 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: element
+spec:
+  parentRefs:
+    - name: eg-http-public
+      namespace: core-eg
+      sectionName: https
+  hostnames:
+    - element.lama-corp.space
+  rules:
+    - matches:
+        - path:
+            value: /
+      backendRefs:
+        - name: element
+          port: 80

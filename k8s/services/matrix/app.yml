@@ -99,21 +99,6 @@ spec:
 
           persistence:
             enabled: false
-
-          ingress:
-            enabled: true
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-              nginx.ingress.kubernetes.io/proxy-body-size: 50m
-            includeServerName: false
-            csHosts:
-              - matrix.lama-corp.space
-            hosts:
-              - matrix.lama-corp.space
-            tls:
-              - hosts:
-                  - matrix.lama-corp.space
-                secretName: synapse-tls
     - repoURL: https://ananace.gitlab.io/charts
       targetRevision: 1.4.9
       chart: element-web
@@ -138,14 +123,3 @@ spec:
                 - nixos.org
             jitsi:
               preferred_domain: meet.jit.si
-
-          ingress:
-            enabled: true
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-            hosts:
-              - element.lama-corp.space
-            tls:
-              - hosts:
-                  - element.lama-corp.space
-                secretName: element-tls
