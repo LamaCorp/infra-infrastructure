@@ -3,7 +3,5 @@ kind: Kustomization
 
 resources:
   - vm.yml
-  - staticscrape.yml
-
   - vlogs.yml
   - httproute-vlogs.yml

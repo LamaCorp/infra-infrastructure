@@ -1,0 +1,7 @@
+---
+kind: Kustomization
+
+resources:
+  - ../base
+
+  - staticscrape.yml
