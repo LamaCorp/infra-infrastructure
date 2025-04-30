@@ -53,21 +53,42 @@ spec:
               annotations:
                 argocd.argoproj.io/sync-options: ServerSideApply=true
 
-            vmagent:
+            vmsingle:
               enabled: true
               spec:
-                remoteWrite:
-                  - url: http://vmsingle-vm.infra-observability.svc:8429/api/v1/write
+                retentionPeriod: 7d
+                replicaCount: 1
+                useStrictSecurity: true
+                extraArgs:
+                  enableTCP6: "true"
+                  maxLabelsPerTimeseries: "100"
+                storage:
+                  accessModes:
+                    - ReadWriteOnce
+                  resources:
+                    requests:
+                      storage: 10Gi
+            vmagent:
+              enabled: true
+              additionalRemoteWrites:
+                - url: http://vmsingle-vm.infra-observability.svc:8429/api/v1/write
+              spec:
                 extraArgs:
                   enableTCP6: "true"
 
-            vmsingle:
-              enabled: false
-            vmcluster:
-              enabled: false
-            alertmanager:
-              enabled: false
             vmalert:
+              enabled: true
+              remoteWriteVMAgent: true
+              spec:
+                extraArgs:
+                  enableTCP6: "true"
+
+            alertmanager:
+              enabled: true
+              spec:
+                replicaCount: 1
+
+            vmcluster:
               enabled: false
             vmauth:
               enabled: false
