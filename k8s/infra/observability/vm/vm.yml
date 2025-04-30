@@ -16,16 +16,3 @@ spec:
     resources:
       requests:
         storage: 20Gi
----
-apiVersion: cilium.io/v2
-kind: CiliumNetworkPolicy
-metadata:
-  name: allow-ingress-vmagent
-spec:
-  endpointSelector: {}
-  ingress:
-    - fromEndpoints:
-        - matchLabels:
-            app.kubernetes.io/instance: vmks
-            app.kubernetes.io/name: vmagent
-            k8s:io.kubernetes.pod.namespace: core-observability

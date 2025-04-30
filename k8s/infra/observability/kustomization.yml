@@ -5,4 +5,3 @@ namespace: argocd
 resources:
   - vm.yml
   - grafana.yml
-  - extra.yml

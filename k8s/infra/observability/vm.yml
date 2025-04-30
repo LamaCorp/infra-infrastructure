@@ -4,7 +4,7 @@ kind: Application
 metadata:
   name: infra-observability-vm
   labels:
-    app: infra-observability-vm
+    app: infra-observability
 spec:
   project: infra
   syncPolicy:

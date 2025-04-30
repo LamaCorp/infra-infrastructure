@@ -1,0 +1,43 @@
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-vmagent
+spec:
+  endpointSelector:
+    app.kubernetes.io/name: vmsingle
+    app.kubernetes.io/instance: vm
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            app.kubernetes.io/instance: vmks
+            app.kubernetes.io/name: vmagent
+            k8s:io.kubernetes.pod.namespace: core-observability
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-promtail
+spec:
+  endpointSelector:
+    app.kubernetes.io/name: vlogs
+    app.kubernetes.io/instance: vm
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: core-observability
+            app.kubernetes.io/name: promtail
+            app.kubernetes.io/instance: promtail
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-egress-namespace
+spec:
+  endpointSelector: {}
+  ingress:
+    - fromEndpoints:
+        - {}
+  egress:
+    - toEndpoints:
+        - {}
