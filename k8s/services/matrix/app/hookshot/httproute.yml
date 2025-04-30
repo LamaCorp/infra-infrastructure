@@ -15,6 +15,16 @@ spec:
         - path:
             type: PathPrefix
             value: /hookshot/gitlab
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+      backendRefs:
+        - name: hookshot
+          port: 9000
+    - matches:
         - path:
             type: PathPrefix
             value: /hookshot/webhook
