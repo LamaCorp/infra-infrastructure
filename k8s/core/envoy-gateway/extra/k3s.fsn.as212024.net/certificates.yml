@@ -180,6 +180,7 @@ spec:
   dnsNames:
     - "marcerisson.space"
     - "*.marcerisson.space"
+    - "*.acdc.marcerisson.space"
 ---
 apiVersion: cert-manager.io/v1
 kind: Certificate
