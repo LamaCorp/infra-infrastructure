@@ -19,12 +19,12 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
-  name: allow-ingress-vector
+  name: allow-ingress-promtail
 spec:
   endpointSelector: {}
   ingress:
     - fromEndpoints:
         - matchLabels:
             k8s:io.kubernetes.pod.namespace: core-observability
-            app.kubernetes.io/name: vector
-            app.kubernetes.io/instance: vector
+            app.kubernetes.io/name: promtail
+            app.kubernetes.io/instance: promtail
