@@ -81,6 +81,8 @@ spec:
               additionalRemoteWrites:
                 - url: http://vmsingle-vm.infra-observability.svc:8429/api/v1/write
               spec:
+                externalLabels:
+                  cluster: "{{ .name }}"
                 useStrictSecurity: true
                 extraArgs:
                   enableTCP6: "true"
