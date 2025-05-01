@@ -106,7 +106,7 @@ spec:
                   group_by:
                     - namespace
                     - alertname
-                receiver: "null"
+                receiver: blackhole
                 routes:
                   - matchers:
                       - severity =~ "info|warning"
@@ -121,7 +121,7 @@ spec:
                     repeat_interval: 1h
                     receiver: discord-infra-critical-alerts
                 receivers:
-                  - name: "null"
+                  - name: blackhole
                   - name: discord-infra-alerts
                     slack_configs:
                       - api_url_file: /etc/vm/secrets/alertmanager-discord-webhooks/infra-alerts
