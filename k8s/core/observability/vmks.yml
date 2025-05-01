@@ -54,6 +54,10 @@ spec:
             defaultRules:
               create: true
               groups:
+                kubernetesSystemControllerManager:
+                  create: false
+                kubernetesSystemScheduler:
+                  create: false
                 vmcluster:
                   create: false
 
