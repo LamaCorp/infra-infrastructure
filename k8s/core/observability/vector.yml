@@ -51,6 +51,7 @@ spec:
                   inputs: [k8s]
                   source: |
                     .log = parse_json(.message) ?? .message
+                    .cluster = "{{ .name }}"
               sinks:
                 exporter:
                   type: prometheus_exporter
