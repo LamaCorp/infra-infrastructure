@@ -1,0 +1,88 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: core-vector
+  labels:
+    app: core-observability
+spec:
+  goTemplate: true
+  generators:
+    - clusters: {}
+  template:
+    metadata:
+      name: core-vector-{{ .name }}
+      labels:
+        app: core-observability
+    spec:
+      project: default
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+      destination:
+        name: "{{ .name }}"
+        namespace: core-observability
+      source:
+        repoURL: https://helm.vector.dev
+        targetRevision: 0.42.1
+        chart: vector
+        helm:
+          releaseName: vector
+          values: |
+            role: Agent
+            service:
+              enabled: false
+            customConfig:
+              data_dir: /vector-data-dir
+              api:
+                enabled: false
+              sources:
+                k8s:
+                  type: kubernetes_logs
+                internal_metrics:
+                  type: internal_metrics
+              transforms:
+                parser:
+                  type: remap
+                  inputs: [k8s]
+                  source: |
+                    .log = parse_json(.message) ?? .message
+              sinks:
+                exporter:
+                  type: prometheus_exporter
+                  address: 0.0.0.0:9000
+                  inputs: [internal_metrics]
+                vlogs:
+                  type: elasticsearch
+                  inputs: [parser]
+                  endpoints:
+                    {{- if eq .name "k3s.fsn.as212024.net" }}
+                    - http://vlogs-vm.infra-observability.svc:9428/insert/elasticsearch
+                    {{- else }}
+                    - https://logs.as212024.net/insert/elasticsearch
+                    {{- end }}
+                  mode: bulk
+                  api_version: v8
+                  compression: gzip
+                  healthcheck:
+                    enabled: false
+                  request:
+                    headers:
+                      VL-Time-Field: timestamp
+                      VL-Stream-Fields: stream,kubernetes.pod_name,kubernetes.container_name,kubernetes.pod_namespace
+                      VL-Msg-Field: log.msg,log.message,message,msg,_msg
+                      AccountID: "0"
+                      ProjectID: "0"
+
+            # See https://github.com/vectordotdev/vector/issues/17679
+            env:
+              - name: KUBERNETES_SERVICE_HOST
+                value: kubernetes.default.svc
+
+            tolerations:
+              - operator: Exists
+
+            podMonitor:
+              enabled: true
