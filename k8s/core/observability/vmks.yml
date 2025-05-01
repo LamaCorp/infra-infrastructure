@@ -113,6 +113,19 @@ spec:
                     - alertgroup
                     - alertname
                     - job
+                  routes:
+                    - matchers:
+                        - severity =~ "info|warning"
+                      repeat_interval: 7d
+                      receiver: discord-infra-alerts
+                    - matchers:
+                        - severity =~ "critical"
+                      repeat_interval: 6h
+                      receiver: discord-infra-critical-alerts
+                    - matchers:
+                        - severity =~ "disaster"
+                      repeat_interval: 1h
+                      receiver: discord-infra-critical-alerts
                 inhibit_rules:
                   - target_matchers:
                       - severity=~"warning|info"
@@ -138,19 +151,6 @@ spec:
                       - cluster
                       - namespace
                 receiver: blackhole
-                routes:
-                  - matchers:
-                      - severity =~ "info|warning"
-                    repeat_interval: 7d
-                    receiver: discord-infra-alerts
-                  - matchers:
-                      - severity =~ "critical"
-                    repeat_interval: 6h
-                    receiver: discord-infra-critical-alerts
-                  - matchers:
-                      - severity =~ "disaster"
-                    repeat_interval: 1h
-                    receiver: discord-infra-critical-alerts
                 receivers:
                   - name: blackhole
                   - name: discord-infra-alerts
