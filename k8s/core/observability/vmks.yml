@@ -105,7 +105,33 @@ spec:
                 route:
                   group_by:
                     - namespace
+                    - alertgroup
                     - alertname
+                    - job
+                inhibit_rules:
+                  - target_matchers:
+                      - severity=~"warning|info"
+                    source_matchers:
+                      - severity=critical
+                    equal:
+                      - cluster
+                      - namespace
+                      - alertname
+                  - target_matchers:
+                      - severity=info
+                    source_matchers:
+                      - severity=warning
+                    equal:
+                      - cluster
+                      - namespace
+                      - alertname
+                  - target_matchers:
+                      - severity=info
+                    source_matchers:
+                      - alertname=InfoInhibitor
+                    equal:
+                      - cluster
+                      - namespace
                 receiver: blackhole
                 routes:
                   - matchers:
