@@ -51,6 +51,11 @@ spec:
                 grafana_dashboard: "1"
               annotations:
                 argocd.argoproj.io/sync-options: ServerSideApply=true
+            defaultRules:
+              create: true
+              groups:
+                vmcluster:
+                  create: false
 
             vmsingle:
               enabled: {{ ne .name "k3s.fsn.as212024.net" }}
