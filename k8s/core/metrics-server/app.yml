@@ -28,3 +28,8 @@ spec:
         chart: metrics-server
         helm:
           releaseName: metrics-server
+          values: |
+            metrics:
+              enabled: true
+            serviceMonitor:
+              enabled: true
