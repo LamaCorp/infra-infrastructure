@@ -72,19 +72,22 @@ spec:
               additionalRemoteWrites:
                 - url: http://vmsingle-vm.infra-observability.svc:8429/api/v1/write
               spec:
+                useStrictSecurity: true
                 extraArgs:
                   enableTCP6: "true"
 
             vmalert:
               enabled: true
-              remoteWriteVMAgent: true
               spec:
                 {{- if eq .name "k3s.fsn.as212024.net" }}
                 remoteRead:
                   url: http://vmsingle-vm.infra-observability.svc:8429
+                remoteWrite:
+                  url: http://vmsingle-vm.infra-observability.svc:8429/api/v1/write
                 datasource:
                   url: http://vmsingle-vm.infra-observability.svc:8429
                 {{- end }}
+                useStrictSecurity: true
                 extraArgs:
                   enableTCP6: "true"
 
@@ -92,6 +95,7 @@ spec:
               enabled: true
               spec:
                 replicaCount: 1
+                useStrictSecurity: true
 
             vmcluster:
               enabled: false
