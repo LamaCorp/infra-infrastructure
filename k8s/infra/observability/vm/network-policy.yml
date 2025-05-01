@@ -11,9 +11,25 @@ spec:
   ingress:
     - fromEndpoints:
         - matchLabels:
-            app.kubernetes.io/instance: vmks
-            app.kubernetes.io/name: vmagent
             k8s:io.kubernetes.pod.namespace: core-observability
+            app.kubernetes.io/name: vmagent
+            app.kubernetes.io/instance: vmks
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
+  name: allow-ingress-vmalert
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vmsingle
+      app.kubernetes.io/instance: vm
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: core-observability
+            app.kubernetes.io/name: vmalert
+            app.kubernetes.io/instance: vmks
 ---
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
