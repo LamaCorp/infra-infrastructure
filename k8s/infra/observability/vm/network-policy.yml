@@ -34,6 +34,22 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: allow-ingress-vector
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vlogs
+      app.kubernetes.io/instance: vm
+  ingress:
+    - fromEndpoints:
+        - matchLabels:
+            k8s:io.kubernetes.pod.namespace: core-observability
+            app.kubernetes.io/name: vector
+            app.kubernetes.io/instance: vector
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: allow-ingress-egress-namespace
 spec:
   endpointSelector: {}
