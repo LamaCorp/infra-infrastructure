@@ -53,7 +53,7 @@ spec:
                 argocd.argoproj.io/sync-options: ServerSideApply=true
 
             vmsingle:
-              enabled: true
+              enabled: {{ ne .name "k3s.fsn.as212024.net" }}
               spec:
                 retentionPeriod: 7d
                 replicaCount: 1
@@ -79,6 +79,12 @@ spec:
               enabled: true
               remoteWriteVMAgent: true
               spec:
+                {{- if eq .name "k3s.fsn.as212024.net" }}
+                remoteRead:
+                  url: http://vmsingle-vm.infra-observability.svc:8429
+                datasource:
+                  url: http://vmsingle-vm.infra-observability.svc:8429
+                {{- end }}
                 extraArgs:
                   enableTCP6: "true"
 
