@@ -13,7 +13,7 @@ dependencies = [
     "pre-commit==4.2.0",
     "ruff==0.11.7",
     "xmltodict==0.14.2",
-    "yamllint==1.37.0",
+    "yamllint==1.37.1",
 ]
 
 [tool.uv]
