@@ -7,6 +7,7 @@ spec:
   retentionPeriod: "13" # 13 months
   replicaCount: 1
   useStrictSecurity: true
+  useDefaultResources: false
   extraArgs:
     enableTCP6: "true"
     maxLabelsPerTimeseries: "100"
