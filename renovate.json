@@ -18,8 +18,9 @@
       "^k8s/.+/kustomization\\.ya?ml$"
     ]
   },
-  "regexManagers": [
+  "customManagers": [
     {
+      "customType": "regex",
       "datasourceTemplate": "docker",
       "fileMatch": [
         ".*ya?ml$"
@@ -29,6 +30,7 @@
       ]
     },
     {
+      "customType": "regex",
       "datasourceTemplate": "docker",
       "fileMatch": [
         "^k8s/.+\\.ya?ml$"
@@ -39,6 +41,7 @@
       ]
     },
     {
+      "customType": "regex",
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "k3s-io/k3s",
       "fileMatch": [
