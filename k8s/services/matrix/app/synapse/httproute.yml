@@ -13,6 +13,8 @@ spec:
   rules:
     - matches:
         - path:
+            value: "/health"
+        - path:
             value: "/_matrix"
         - path:
             value: "/_synapse"
