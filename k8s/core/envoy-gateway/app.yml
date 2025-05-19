@@ -24,17 +24,13 @@ spec:
         namespace: core-eg
       source:
         repoURL: docker.io/envoyproxy
-        targetRevision: 1.3.2
+        targetRevision: 1.4.0
         chart: gateway-helm
         helm:
           releaseName: envoy-gateway
           skipCrds: true
           values: |
             kubernetesClusterDomain: "c.{{ .name }}"
-            global:
-              images:
-                envoyGateway:
-                  image: registry.gitlab.com/lama-corp/infra/infrastructure/envoyproxy/gateway:v1.3.2-patch5671
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -63,7 +59,7 @@ spec:
         namespace: core-eg
       source:
         repoURL: https://github.com/envoyproxy/gateway.git
-        targetRevision: v1.3.2
+        targetRevision: v1.4.0
         path: charts/gateway-helm/crds/generated
 ---
 apiVersion: argoproj.io/v1alpha1
