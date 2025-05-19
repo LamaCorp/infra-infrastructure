@@ -31,6 +31,8 @@ spec:
         certificateRefs:
           - name: eg-http-public-as212024-net-ecdsa-tls
           - name: eg-http-public-as212024-net-rsa-tls
+          - name: eg-http-public-devou-ps-ecdsa-tls
+          - name: eg-http-public-devou-ps-rsa-tls
           - name: eg-http-public-doyouhavegoodbackups-com-ecdsa-tls
           - name: eg-http-public-doyouhavegoodbackups-com-rsa-tls
           - name: eg-http-public-lama-corp-space-ecdsa-tls
