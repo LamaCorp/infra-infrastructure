@@ -125,6 +125,10 @@ spec:
         helm:
           releaseName: external-dns-svc
           values: |
+            image:
+              repository: registry.gitlab.com/lama-corp/infra/infrastructure/external-dns/external-dns-9036f6870f30cbdefa42a10f30bada63
+              tag: 0.17.0-patch-0f7f2602
+
             interval: 1m
             triggerLoopOnEvent: true
 
