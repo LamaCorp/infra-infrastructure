@@ -60,6 +60,23 @@ spec:
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
+  name: eg-http-public-devou-ps-ecdsa
+spec:
+  secretName: eg-http-public-devou-ps-ecdsa-tls
+  privateKey:
+    algorithm: ECDSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-dns01
+  dnsNames:
+    - "devou.ps"
+    - "*.devou.ps"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
   name: eg-http-public-doyouhavegoodbackups-com-rsa
 spec:
   secretName: eg-http-public-doyouhavegoodbackups-com-rsa-tls
