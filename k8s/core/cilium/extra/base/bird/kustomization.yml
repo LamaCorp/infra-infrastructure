@@ -15,4 +15,4 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/akafeng/bird
-    newTag: "2.15"
+    newTag: "3.0"
