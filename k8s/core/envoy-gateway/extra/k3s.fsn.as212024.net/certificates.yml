@@ -389,3 +389,19 @@ spec:
     name: letsencrypt-prod-http01-eg
   dnsNames:
     - "status.prologin.org"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: eg-http-public-oup-si-rsa
+spec:
+  secretName: eg-http-public-oup-si-rsa-tls
+  privateKey:
+    algorithm: RSA
+    rotationPolicy: Always
+  issuerRef:
+    group: cert-manager.io
+    kind: ClusterIssuer
+    name: letsencrypt-prod-http01-eg
+  dnsNames:
+    - "oup.si"
