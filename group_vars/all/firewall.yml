@@ -36,6 +36,8 @@ nft_global_rules:
   006 invalid: []
 
 nft_input_rules:
+  006 invalid:
+    - ct state invalid counter drop
   013 icmpv6 should: "{{ nft_templates.icmpv6_in_should_allow }}"
   013 icmpv6 redirects: "{{ nft_templates.icmpv6_in_allow_redirect }}"
   013 icmpv6 nodeinfo: "{{ nft_templates.icmpv6_in_allow_nodeinfo }}"
@@ -62,7 +64,8 @@ nft_output_default_rules:
     - type filter hook output priority 0; policy accept;
   005 global:
     - jump global
-  006 invalid: "{{ nft_templates.drop_invalid_log_no_rst }}"
+  006 invalid:
+    - ct state invalid counter drop
 
 nft_forward_rules:
   013 icmpv6 ping: "{{ nft_templates.icmpv6_allow_ping }}"
