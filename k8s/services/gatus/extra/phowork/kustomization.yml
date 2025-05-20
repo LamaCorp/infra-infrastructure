@@ -3,5 +3,7 @@ kind: Kustomization
 
 resources:
   - ../base
-  - httproute.yml
   - secrets.yml
+
+patches:
+  - path: httproute.yml
