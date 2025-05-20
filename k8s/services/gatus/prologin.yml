@@ -83,3 +83,8 @@ spec:
                 <<: *https-endpoint
                 group: critical
                 url: https://prologin.org
+
+              - name: GirlsCanCode.fr
+                <<: *https-endpoint
+                group: critical
+                url: https://girlscancode.fr
