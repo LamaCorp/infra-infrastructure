@@ -13,7 +13,7 @@ spec:
           - cluster: k3s.fsn.as212024.net
             name: public
             default: true
-            lbIpamIps: 2001:67c:17fc:130::82,209.112.97.166
+            lbIpamIps: 2001:67c:17fc:130::80,209.112.97.161
   template:
     metadata:
       name: core-ingress-nginx-{{ .cluster }}-{{ .name }}
