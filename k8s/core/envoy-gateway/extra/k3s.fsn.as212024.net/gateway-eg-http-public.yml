@@ -49,3 +49,5 @@ spec:
           - name: eg-http-public-rplace-space-rsa-tls
           - name: eg-http-public-cats-acdc-epita-fr-ecdsa-tls
           - name: eg-http-public-cats-acdc-epita-fr-rsa-tls
+          - name: eg-http-public-status-prologin-org-ecdsa-tls
+          - name: eg-http-public-status-prologin-org-rsa-tls
