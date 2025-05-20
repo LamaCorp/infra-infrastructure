@@ -36,7 +36,6 @@ nft_global_rules:
   006 invalid: []
 
 nft_input_rules:
-  006 invalid: "{{ nft_templates.drop_invalid_log_no_rst }}"
   013 icmpv6 should: "{{ nft_templates.icmpv6_in_should_allow }}"
   013 icmpv6 redirects: "{{ nft_templates.icmpv6_in_allow_redirect }}"
   013 icmpv6 nodeinfo: "{{ nft_templates.icmpv6_in_allow_nodeinfo }}"
