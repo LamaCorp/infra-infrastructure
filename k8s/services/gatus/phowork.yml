@@ -34,18 +34,6 @@ spec:
           # Does envFrom secret named gatus
           secrets: true
 
-          ingress:
-            enabled: true
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-              external-dns.alpha.kubernetes.io/controller: ignored
-            hosts:
-              - oup.si
-            tls:
-              - hosts:
-                  - oup.si
-                secretName: gatus-tls
-
           serviceMonitor:
             enabled: true
 

@@ -34,17 +34,6 @@ spec:
           # Does envFrom secret named gatus
           secrets: true
 
-          ingress:
-            enabled: true
-            annotations:
-              cert-manager.io/cluster-issuer: letsencrypt-prod-http01
-            hosts:
-              - zarak.devou.ps
-            tls:
-              - hosts:
-                  - zarak.devou.ps
-                secretName: gatus-tls
-
           serviceMonitor:
             enabled: true
 
