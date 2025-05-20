@@ -43,6 +43,6 @@ images:
   - name: dessalines/lemmy
     newTag: 0.19.11
   - name: asonix/pictrs
-    newTag: 0.5.17
+    newTag: 0.5.19
   - name: dessalines/lemmy-ui
     newTag: 0.19.11
