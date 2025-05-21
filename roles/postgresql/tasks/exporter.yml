@@ -1,5 +1,4 @@
 ---
-
 - name: Download and extract PostgreSQL exporter
   ansible.builtin.unarchive:
     src: "{{ postgresql_exporter_url }}"
@@ -29,15 +28,6 @@
     mode: 0640
   notify: Restart postgresql exporter
 
-- name: Ensure queries.yaml file is up-to-date
-  ansible.builtin.copy:
-    content: "{{ postgresql_exporter_queries | to_nice_yaml }}"
-    dest: "{{ postgresql_config_dir }}/queries.yml"
-    owner: postgres
-    group: postgres
-    mode: 0440
-  notify: Restart postgresql exporter
-
 - name: Install PostgreSQL exporter service
   ansible.builtin.template:
     src: postgres_exporter.service
@@ -49,11 +39,11 @@
   notify: Restart postgresql exporter
 
 - name: Reload systemd
-  ansible.builtin.systemd:  # noqa no-handler
+  ansible.builtin.systemd: # noqa no-handler
     daemon_reload: true
   when: copy_postgresql_exporter_service.changed
 
 - name: Enable PostgreSQL exporter service
-  ansible.builtin.service:  # noqa no-handler
+  ansible.builtin.service: # noqa no-handler
     name: postgres_exporter
     enabled: true
