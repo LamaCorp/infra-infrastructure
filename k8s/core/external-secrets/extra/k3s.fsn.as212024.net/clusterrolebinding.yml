@@ -28,6 +28,9 @@ subjects:
     namespace: core-velero
     name: default
   - kind: ServiceAccount
+    namespace: infra-akvorado
+    name: default
+  - kind: ServiceAccount
     namespace: infra-happydomain
     name: default
   - kind: ServiceAccount
