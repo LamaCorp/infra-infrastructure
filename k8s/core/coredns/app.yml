@@ -41,9 +41,9 @@ spec:
               servers:
                 - zones:
                     - zone: .
+                      scheme: dns://
+                      use_tcp: true
                   port: 53
-                  scheme: dns://
-                  use_tcp: true
                   plugins:
                     - name: errors
                     - name: health
@@ -71,8 +71,6 @@ spec:
                     - zone: {{ .metadata.annotations.svcSubnet6 }}
                     - zone: {{ .metadata.annotations.extraPodSubnet4 }}
                   port: 53
-                  scheme: dns://
-                  use_tcp: true
                   plugins:
                     - name: errors
                     - name: ready
