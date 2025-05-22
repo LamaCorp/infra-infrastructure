@@ -33,4 +33,4 @@ images:
   - name: dock.mau.dev/mautrix/slack
     newTag: v0.1.4
   - name: dock.mau.dev/maubot/maubot
-    newTag: v0.5.1
+    newTag: v0.5.2
