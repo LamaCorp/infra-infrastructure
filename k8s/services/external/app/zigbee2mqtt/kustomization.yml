@@ -3,5 +3,5 @@ kind: Kustomization
 
 resources:
   - service.yml
-  - httproute.yml
+  # - httproute.yml
   - secrets.yml
