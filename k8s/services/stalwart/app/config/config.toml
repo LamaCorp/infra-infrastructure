@@ -2,6 +2,7 @@
 local-keys = [
   "server.*",
   "!server.blocked-ip.*",
+  "http.*",
   "storage.*",
   "store.*",
   "directory.*",
@@ -60,7 +61,7 @@ domains = [
   "mail.lama-corp.space",
   "mta-sts.lama-corp.space",
 ]
-cache = "/opt/stalwart-mail/etc/acme"
+cache = "/opt/stalwart/etc/acme"
 default = true
 
 [acme.letsencrypt-as212024-net]
@@ -68,52 +69,52 @@ directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
 domains = ["mail.as212024.net", "mta-sts.as212024.net"]
-cache = "/opt/stalwart-mail/etc/acme"
+cache = "/opt/stalwart/etc/acme"
 default = false
 [acme.letsencrypt-lama-tel]
 directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
 domains = ["mail.lama.tel", "mta-sts.lama.tel"]
-cache = "/opt/stalwart-mail/etc/acme"
+cache = "/opt/stalwart/etc/acme"
 default = false
 [acme.letsencrypt-marcerisson-space]
 directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
 domains = ["mail.marcerisson.space", "mta-sts.marcerisson.space"]
-cache = "/opt/stalwart-mail/etc/acme"
+cache = "/opt/stalwart/etc/acme"
 default = false
 [acme.letsencrypt-risson-me]
 directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
 domains = ["mail.risson.me", "mta-sts.risson.me"]
-cache = "/opt/stalwart-mail/etc/acme"
+cache = "/opt/stalwart/etc/acme"
 default = false
 [acme.letsencrypt-risson-net]
 directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
 domains = ["mail.risson.net", "mta-sts.risson.net"]
-cache = "/opt/stalwart-mail/etc/acme"
+cache = "/opt/stalwart/etc/acme"
 default = false
 [acme.letsencrypt-risson-space]
 directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
 domains = ["mail.risson.space", "mta-sts.risson.space"]
-cache = "/opt/stalwart-mail/etc/acme"
+cache = "/opt/stalwart/etc/acme"
 default = false
 [acme.letsencrypt-thefractal-space]
 directory = "https://acme-v02.api.letsencrypt.org/directory"
 challenge = "tls-alpn-01"
 contact = ["root@lama-corp.space"]
 domains = ["mail.thefractal.space", "mta-sts.thefractal.space"]
-cache = "/opt/stalwart-mail/etc/acme"
+cache = "/opt/stalwart/etc/acme"
 default = false
 
-[server.http]
+[http]
 hsts = true
 permissive-cors = true
 
@@ -170,7 +171,7 @@ groups = "memberOf"
 email = "mailPrimaryAddress"
 email-alias = "mailAlias"
 
-[storage.encryption]
+[email.encryption]
 enable = false
 
 [session.extensions]

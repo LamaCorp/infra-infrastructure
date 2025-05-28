@@ -11,9 +11,9 @@ spec:
     spec:
       containers:
         - name: stalwart
-          image: ghcr.io/stalwartlabs/mail-server
+          image: ghcr.io/stalwartlabs/stalwart
           command:
-            - /usr/local/bin/stalwart-mail
+            - /usr/local/bin/stalwart
             - --config
             - /config/config.toml
           ports:
@@ -43,7 +43,7 @@ spec:
               protocol: TCP
           volumeMounts:
             - name: data
-              mountPath: /opt/stalwart-mail
+              mountPath: /opt/stalwart
             - name: config
               mountPath: /config
             - name: secrets

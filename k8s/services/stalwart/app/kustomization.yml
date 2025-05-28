@@ -18,5 +18,5 @@ configMapGenerator:
       - config/config.toml
 
 images:
-  - name: ghcr.io/stalwartlabs/mail-server
-    newTag: v0.11.8
+  - name: ghcr.io/stalwartlabs/stalwart
+    newTag: v0.12.2
