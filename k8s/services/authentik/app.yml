@@ -47,12 +47,16 @@ spec:
             compliance:
               fips:
                 enabled: true
+            outposts:
+              container_image_base: ghcr.io/goauthentik/%(type)s:2025.6.0-rc1
 
           blueprints:
             configMaps:
               - authentik-blueprints
 
           global:
+            image:
+              tag: 2025.6.0-rc1
             env:
               - name: AUTHENTIK_BOOTSTRAP_EMAIL
                 value: root@lama-corp.space
