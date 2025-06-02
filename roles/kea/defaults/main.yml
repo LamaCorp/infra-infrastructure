@@ -7,13 +7,13 @@ kea_ctrl_agent_default_config:
     control-sockets:
       dhcp4:
         socket-type: unix
-        socket-name: /tmp/kea4-ctrl-socket
+        socket-name: /var/run/kea/kea4-ctrl-socket
       dhcp6:
         socket-type: unix
-        socket-name: /tmp/kea6-ctrl-socket
+        socket-name: /var/run/kea/kea6-ctrl-socket
       d2:
         socket-type: unix
-        socket-name: /tmp/kea4-ddns-ctrl-socket
+        socket-name: /var/run/kea/kea4-ddns-ctrl-socket
     loggers:
       - name: kea-ctrl-agent
         output_options:
@@ -29,7 +29,7 @@ kea_dhcp4_default_config:
   Dhcp4:
     control-socket:
       socket-type: unix
-      socket-name: /tmp/kea4-ctrl-socket
+      socket-name: /var/run/kea/kea4-ctrl-socket
     lease-database:
       type: memfile
       lfc-interval: 3600
@@ -55,7 +55,7 @@ kea_dhcp6_default_config:
   Dhcp6:
     control-socket:
       socket-type: unix
-      socket-name: /tmp/kea6-ctrl-socket
+      socket-name: /var/run/kea/kea6-ctrl-socket
     lease-database:
       type: memfile
       lfc-interval: 3600
@@ -83,7 +83,7 @@ kea_dhcp_ddns_default_config:
     port: 53001
     control-socket:
       socket-type: unix
-      socket-name: /tmp/kea-ddns-ctrl-socket
+      socket-name: /var/run/kea/kea-ddns-ctrl-socket
     loggers:
       - name: kea-dhcp-ddns
         output_options:
