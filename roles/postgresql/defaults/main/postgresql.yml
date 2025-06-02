@@ -1,6 +1,5 @@
 ---
-
-postgresql_version: 15
+postgresql_version: 17
 
 # Set this to `restarted` to restart PostgreSQL instead of just reloading
 postgresql_state: reloaded
@@ -46,24 +45,24 @@ postgresql_users: {}
 
 postgresql_default_config:
   # You probably don't want to edit these four files, otherwise it will conflict with the service file
-  data_directory: "'{{ postgresql_data_dir }}'"  # change requires restart
-  hba_file: "'{{ postgresql_config_dir }}/pg_hba.conf'"  # change requires restart
-  ident_file: "'{{ postgresql_config_dir }}/pg_ident.conf'"  # change requires restart
-  external_pid_file: "'/run/postgresql/{{ postgresql_version }}-main.pid'"  # change requires restart
+  data_directory: "'{{ postgresql_data_dir }}'" # change requires restart
+  hba_file: "'{{ postgresql_config_dir }}/pg_hba.conf'" # change requires restart
+  ident_file: "'{{ postgresql_config_dir }}/pg_ident.conf'" # change requires restart
+  external_pid_file: "'/run/postgresql/{{ postgresql_version }}-main.pid'" # change requires restart
   unix_socket_directories: "'/var/run/postgresql'"
 
   listen_addresses: "'0.0.0.0,::'"
-  port: 5432  # change requires restart
-  max_connections: 100  # change requires restart
+  port: 5432 # change requires restart
+  max_connections: 100 # change requires restart
 
   # SSL
   ssl: "on"
   ssl_cert_file: "'/etc/ssl/certs/ssl-cert-snakeoil.pem'"
   ssl_key_file: "'/etc/ssl/certs/ssl-cert-snakeoil.key'"
 
-  shared_buffers: 128MB  # change requires restart
+  shared_buffers: 128MB # change requires restart
 
-  dynamic_shared_memory_type: posix  # change requires restart
+  dynamic_shared_memory_type: posix # change requires restart
 
   max_wal_size: 1GB
   min_wal_size: 80MB
@@ -83,7 +82,6 @@ postgresql_default_config:
 
 postgresql_config: {}
 postgresql_computed_config: "{{ postgresql_default_config | combine(postgresql_config) }}"
-
 
 postgresql_superuser_authentication_policy:
   type: local
