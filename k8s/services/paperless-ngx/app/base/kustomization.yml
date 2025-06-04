@@ -64,7 +64,7 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/paperless-ngx/paperless-ngx
-    newTag: 2.16.1
+    newTag: 2.16.2
   - name: gotenberg/gotenberg
     newTag: 8.21.0
   - name: apache/tika
