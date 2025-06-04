@@ -68,4 +68,4 @@ images:
   - name: gotenberg/gotenberg
     newTag: 8.21.0
   - name: apache/tika
-    newTag: 3.1.0.0-full
+    newTag: 3.2.0.0-full
