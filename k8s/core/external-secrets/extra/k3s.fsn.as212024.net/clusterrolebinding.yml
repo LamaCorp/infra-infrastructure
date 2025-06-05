@@ -25,9 +25,6 @@ subjects:
     namespace: core-observability
     name: default
   - kind: ServiceAccount
-    namespace: core-velero
-    name: default
-  - kind: ServiceAccount
     namespace: infra-akvorado
     name: default
   - kind: ServiceAccount
