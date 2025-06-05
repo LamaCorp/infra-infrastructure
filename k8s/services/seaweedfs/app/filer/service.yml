@@ -32,3 +32,7 @@ spec:
       port: 8888
       targetPort: http
       protocol: TCP
+    - name: grpc
+      port: 18888
+      targetPort: grpc
+      protocol: TCP
