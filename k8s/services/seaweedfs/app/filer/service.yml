@@ -20,3 +20,15 @@ spec:
       port: 9327
       targetPort: metrics
       protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: seaweedfs-filer-ready
+spec:
+  ipFamilyPolicy: RequireDualStack
+  ports:
+    - name: http
+      port: 8888
+      targetPort: http
+      protocol: TCP
