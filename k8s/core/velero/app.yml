@@ -29,7 +29,7 @@ spec:
           targetRevision: HEAD
           path: k8s/core/velero/extra/{{ .name }}
         - repoURL: https://vmware-tanzu.github.io/helm-charts
-          targetRevision: 10.0.1
+          targetRevision: 10.0.2
           chart: velero
           helm:
             releaseName: velero
