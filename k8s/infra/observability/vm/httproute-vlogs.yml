@@ -15,7 +15,7 @@ spec:
         - path:
             value: "/"
       backendRefs:
-        - name: vlogs-vm
+        - name: vlsingle-vm
           port: 9428
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1

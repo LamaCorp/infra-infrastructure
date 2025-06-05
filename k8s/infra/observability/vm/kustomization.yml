@@ -5,5 +5,4 @@ resources:
   - network-policy.yml
   - vm.yml
   - vl.yml
-  - vlogs.yml
   - httproute-vlogs.yml
