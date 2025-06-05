@@ -40,6 +40,8 @@ spec:
 
             victoria-metrics-operator:
               fullnameOverride: vm-operator
+              admissionWebhooks:
+                enabled: false
               operator:
                 disable_prometheus_converter: false
                 prometheus_converter_add_argocd_ignore_annotations: false
@@ -183,15 +185,3 @@ spec:
               enabled: false
             grafana:
               enabled: false
-      ignoreDifferences:
-        - group: ""
-          kind: Secret
-          name: vm-operator-validation
-          namespace: core-observability
-          jsonPointers:
-            - /data
-        - group: admissionregistration.k8s.io
-          kind: ValidatingWebhookConfiguration
-          name: vm-operator-admission
-          jqPathExpressions:
-            - ".webhooks[]?.clientConfig.caBundle"
