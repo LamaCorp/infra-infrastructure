@@ -12,7 +12,6 @@ spec:
   secretName: eg-http-public-as212024-net-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -30,7 +29,6 @@ spec:
   secretName: eg-http-public-as212024-net-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -48,7 +46,6 @@ spec:
   secretName: eg-http-public-devou-ps-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -65,7 +62,6 @@ spec:
   secretName: eg-http-public-devou-ps-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -82,7 +78,6 @@ spec:
   secretName: eg-http-public-doyouhavegoodbackups-com-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -99,7 +94,6 @@ spec:
   secretName: eg-http-public-doyouhavegoodbackups-com-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -116,7 +110,6 @@ spec:
   secretName: eg-http-public-lama-corp-space-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -135,7 +128,6 @@ spec:
   secretName: eg-http-public-lama-corp-space-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -154,7 +146,6 @@ spec:
   secretName: eg-http-public-lama-tel-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -171,7 +162,6 @@ spec:
   secretName: eg-http-public-lama-tel-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -188,7 +178,6 @@ spec:
   secretName: eg-http-public-marcerisson-space-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -206,7 +195,6 @@ spec:
   secretName: eg-http-public-marcerisson-space-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -224,7 +212,6 @@ spec:
   secretName: eg-http-public-risson-me-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -242,7 +229,6 @@ spec:
   secretName: eg-http-public-risson-me-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -260,7 +246,6 @@ spec:
   secretName: eg-http-public-risson-space-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -280,7 +265,6 @@ spec:
   secretName: eg-http-public-risson-space-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -300,7 +284,6 @@ spec:
   secretName: eg-http-public-rplace-space-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -317,7 +300,6 @@ spec:
   secretName: eg-http-public-rplace-space-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -334,7 +316,6 @@ spec:
   secretName: eg-http-public-cats-acdc-epita-fr-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -350,7 +331,6 @@ spec:
   secretName: eg-http-public-cats-acdc-epita-fr-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -366,7 +346,6 @@ spec:
   secretName: eg-http-public-oup-si-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -382,7 +361,6 @@ spec:
   secretName: eg-http-public-oup-si-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -398,7 +376,6 @@ spec:
   secretName: eg-http-public-status-prologin-org-rsa-tls
   privateKey:
     algorithm: RSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
@@ -414,7 +391,6 @@ spec:
   secretName: eg-http-public-status-prologin-org-ecdsa-tls
   privateKey:
     algorithm: ECDSA
-    rotationPolicy: Always
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer
