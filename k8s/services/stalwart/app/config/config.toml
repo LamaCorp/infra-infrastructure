@@ -158,7 +158,7 @@ dn = "cn=%{file:/ldap-creds/username}%,ou=users,dc=stalwart,dc=lama-corp,dc=spac
 secret = "%{file:/ldap-creds/key}%"
 [directory.ldap.bind.auth]
 method = "template"
-dn = "cn={local},ou=users,dc=stalwart,dc=lama-corp,dc=space"
+dn = "cn={username},ou=users,dc=stalwart,dc=lama-corp,dc=space"
 search = false
 [directory.ldap.filter]
 name = "(&(cn=?)(mailPrimaryAddress=*))"
