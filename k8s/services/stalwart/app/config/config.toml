@@ -157,9 +157,7 @@ base-dn = "dc=stalwart,dc=lama-corp,dc=space"
 dn = "cn=%{file:/ldap-creds/username}%,ou=users,dc=stalwart,dc=lama-corp,dc=space"
 secret = "%{file:/ldap-creds/key}%"
 [directory.ldap.bind.auth]
-method = "template"
-dn = "cn={username},ou=users,dc=stalwart,dc=lama-corp,dc=space"
-search = false
+method = "lookup"
 [directory.ldap.filter]
 name = "(&(cn=?)(mailPrimaryAddress=*))"
 email = "(|(mailPrimaryAddress=?)(mailAlias=?))"
