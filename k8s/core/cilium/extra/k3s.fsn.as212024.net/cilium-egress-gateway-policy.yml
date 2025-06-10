@@ -14,5 +14,5 @@ spec:
   egressGateway:
     nodeSelector:
       matchLabels:
-        kubernetes.io/hostname: k3s-1.fsn.as212024.net
+        role.k8s.as212024.net/mail-egress: "true"
     egressIP: 148.251.148.232
