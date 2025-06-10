@@ -8,11 +8,10 @@ spec:
     - podSelector:
         matchLabels:
           io.kubernetes.pod.namespace: services-stalwart
-          app.kubernetes.io/name: stalwart
   destinationCIDRs:
     - "0.0.0.0/0"
   egressGateway:
     nodeSelector:
       matchLabels:
-        role.k8s.as212024.net/mail-egress: "true"
+        kubernetes.io/hostname: k3s-1.fsn.as212024.net
     egressIP: 148.251.148.232
