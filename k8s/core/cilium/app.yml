@@ -27,7 +27,7 @@ spec:
           targetRevision: HEAD
           path: k8s/core/cilium/extra/{{ .name }}
         - repoURL: https://helm.cilium.io/
-          targetRevision: 1.17.4
+          targetRevision: 1.18.0-pre3
           chart: cilium
           helm:
             releaseName: cilium
@@ -41,19 +41,7 @@ spec:
                 enabled: true
               ipv6:
                 enabled: true
-
-              enableIPv4Masquerade: true
-              ipv4NativeRoutingCIDR: "172.28.0.0/15"
-              enableIPv6Masquerade: false
-              ipMasqAgent:
-                enabled: true
-                config:
-                  nonMasqueradeCIDRs:
-                    - 10.0.0.0/8
-                    - 172.16.0.0/12
-                    - 192.168.0.0/16
-                    - 209.112.97.0/24
-                  masqLinkLocal: false
+              underlayProtocol: IPv6
 
               routingMode: native
               endpointRoutes:
