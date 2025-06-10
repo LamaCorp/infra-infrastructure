@@ -41,7 +41,8 @@ spec:
                 enabled: true
               ipv6:
                 enabled: true
-              underlayProtocol: IPv6
+              ipv4NativeRoutingCIDR: "172.28.0.0/16"
+              ipv6NativeRoutingCIDR: "2001:67c:17fc::/48"
 
               routingMode: native
               endpointRoutes:
