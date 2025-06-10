@@ -8,6 +8,7 @@ spec:
     - podSelector:
         matchLabels:
           io.kubernetes.pod.namespace: services-stalwart
+          app.kubernetes.io/name: stalwart
   destinationCIDRs:
     - "0.0.0.0/0"
   egressGateway:
