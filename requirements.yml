@@ -5,7 +5,7 @@ collections:
   - name: community.docker
     version: 4.6.1
   - name: community.general
-    version: 10.7.0
+    version: 11.0.0
   - name: community.hashi_vault
     version: 6.2.0
   - name: prometheus.prometheus
