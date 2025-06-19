@@ -38,4 +38,4 @@ configMapGenerator:
 
 images:
   - name: mattermost/mattermost-team-edition
-    newTag: 10.9.1
+    newTag: 10.9.2
