@@ -40,6 +40,7 @@ spec:
               image:
                 repository: quay.io/cilium/cilium-ci
                 tag: 4086624256f8185949e7f47bda555bd5f429b0e3
+                useDigest: false
 
               ipv4:
                 enabled: true
