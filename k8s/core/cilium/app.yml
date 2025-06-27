@@ -37,6 +37,10 @@ spec:
                 name: "c-{{ .name | replace "." "-" }}"
                 id: 1
 
+              image:
+                repository: quay.io/cilium/cilium-ci
+                tag: 4086624256f8185949e7f47bda555bd5f429b0e3
+
               ipv4:
                 enabled: true
               ipv6:
