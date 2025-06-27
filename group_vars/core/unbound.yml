@@ -1,0 +1,50 @@
+---
+network_nameservers:
+  - ::1
+  - 127.0.0.1
+
+unbound_pre_includes:
+  - /etc/unbound/unbound.conf.d/root-auto-trust-anchor-file.conf
+
+unbound_control_enable: "yes"
+unbound_control_interface:
+  - /run/unbound.ctl
+
+unbound_module_config: "validator iterator"
+
+unbound_num_threads: "{{ ansible_processor_vcpus }}"
+
+unbound_interfaces: []
+unbound_interface_automatic: "yes"
+
+unbound_incoming_num_tcp: 100
+unbound_outgoing_num_tcp: 100
+
+unbound_cache_min_ttl: 60
+
+unbound_prefetch: "yes"
+unbound_serve_expired: "yes"
+unbound_serve_expired_ttl: 86400
+unbound_serve_expired_client_timeout: 1800
+
+unbound_access_control:
+  - 172.28.0.0/16 allow
+  - 209.112.97.0/24 allow
+  - 2001:67c:17fc::/48 allow
+  - 172.29.0.0/16 allow
+  - 2a06:e881:7700::/40 allow
+
+unbound_local_zones_core:
+  - as212024.net typetransparent
+unbound_local_zones: "{{ unbound_local_zones_core }}"
+
+unbound_local_datas_core:
+  - "'nucleus.fsn.as212024.net.   A       209.112.97.241'"
+  - "'gate-1.bar.as212024.net.    A       209.112.97.242'"
+  - "'edge-1.pvl.as212024.net.    A       209.112.97.243'"
+  - "'edge-2.fra.as212024.net.    A       209.112.97.244'"
+  - "'nucleus.fsn.as212024.net.   AAAA    2001:67c:17fc:ffff::1'"
+  - "'gate-1.bar.as212024.net.    AAAA    2001:67c:17fc:ffff::2'"
+  - "'edge-1.pvl.as212024.net.    AAAA    2001:67c:17fc:ffff::3'"
+  - "'edge-2.fra.as212024.net.    AAAA    2001:67c:17fc:ffff::4'"
+unbound_local_datas: "{{ unbound_local_datas_core }}"

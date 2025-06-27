@@ -48,19 +48,6 @@ spec:
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMStaticScrape
 metadata:
-  name: kresd
-spec:
-  jobName: kresd
-  targetEndpoints:
-    - targets:
-        - edge-1.pvl.as212024.net:8453
-        - edge-2.fra.as212024.net:8453
-        - gate-1.bar.as212024.net:8453
-        - nucleus.fsn.as212024.net:8453
----
-apiVersion: operator.victoriametrics.com/v1beta1
-kind: VMStaticScrape
-metadata:
   name: bird
 spec:
   jobName: bird

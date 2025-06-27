@@ -17,9 +17,6 @@ nft_define_group:
   prometheus exporter bird:
     name: prometheus_exporter_bird
     value: 9324
-  prometheus exporter kresd:
-    name: prometheus_exporter_kresd
-    value: 8453
 
 
 nft_input_group_rules:
@@ -44,9 +41,6 @@ nft_input_group_rules:
   220 prometheus exporter bird:
     - ip saddr $subnet_internal_4 tcp dport {$prometheus_exporter_bird} accept
     - ip6 saddr $subnet_internal_6 tcp dport {$prometheus_exporter_bird} accept
-  220 prometheus exporter kresd:
-    - ip saddr $subnet_internal_4 tcp dport {$prometheus_exporter_kresd} accept
-    - ip6 saddr $subnet_internal_6 tcp dport {$prometheus_exporter_kresd} accept
 
   350 dns resolver:
     - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 53 accept

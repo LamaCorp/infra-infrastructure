@@ -3,12 +3,13 @@
 - name: Base
   import_playbook: base.yml
 
-- name: Kresd
+- name: Unbound
   hosts: core
   roles:
-    - kresd
+    - aruhier.unbound
   tags:
-    - kresd
+    - dns
+    - unbound
 
 - name: Network
   hosts: all
@@ -25,9 +26,13 @@
         owner: root
         group: root
         mode: 0644
+      tags:
+        - dns
     - name: Ensure hostname is up-to-date
       ansible.builtin.hostname:
         name: "{{ inventory_hostname }}"
+      tags:
+        - dns
 
     - name: Ensure /etc/whois.conf is up-to-date
       ansible.builtin.copy:
@@ -37,6 +42,8 @@
         owner: root
         group: root
         mode: 0644
+      tags:
+        - dns
 
     - name: Ensure /etc/network/interfaces is empty
       ansible.builtin.copy:

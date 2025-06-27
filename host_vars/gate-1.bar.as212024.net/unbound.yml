@@ -1,0 +1,12 @@
+---
+unbound_local_zones_homeassistant:
+  - local typetransparent
+unbound_local_zones_unifi:
+  - unifi typetransparent
+unbound_local_zones: "{{ unbound_local_zones_core + unbound_local_zones_homeassistant + unbound_local_zones_unifi }}"
+
+unbound_local_datas_homeassistant:
+  - "'homeassistant.local.   A   172.28.192.1'"
+unbound_local_datas_unifi:
+  - "'unifi.    A   172.28.2.254'"
+unbound_local_datas: "{{ unbound_local_datas_core + unbound_local_datas_homeassistant + unbound_local_datas_unifi }}"

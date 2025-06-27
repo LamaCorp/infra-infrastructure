@@ -15,6 +15,9 @@ collections:
     version: 0.5.0
 
 roles:
+  - name: aruhier.unbound
+    src: git+https://github.com/aruhier/ansible-role-unbound.git
+    version: 8c0781a9a014a4abca24cdd3ffb83871c0b15c79
   - name: cri.restic
     src: git+https://gitlab.com/byh0ki-org/infra/ansible/roles/restic.git
     version: 3.1.0
