@@ -19,4 +19,4 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/stalwartlabs/stalwart
-    newTag: v0.12.4
+    newTag: v0.12.5
