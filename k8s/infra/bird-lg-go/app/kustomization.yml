@@ -22,4 +22,4 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/xddxdd/bird-lg-go
-    newTag: frontend-develop-0fdde8afc7a63cc7e1d928b024ac8e2256e1fa74
+    newTag: frontend-v1.3.10
