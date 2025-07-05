@@ -5,7 +5,7 @@ metadata:
   name: home-assistant
 spec:
   parentRefs:
-    - name: eg-http-public
+    - name: eg-http-bar
       namespace: core-eg
       sectionName: https
   hostnames:
