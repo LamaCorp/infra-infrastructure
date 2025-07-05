@@ -31,3 +31,5 @@ spec:
         certificateRefs:
           - name: eg-http-public-lama-corp-space-ecdsa-tls
           - name: eg-http-public-lama-corp-space-rsa-tls
+          - name: eg-http-public-risson-space-ecdsa-tls
+          - name: eg-http-public-risson-space-rsa-tls
