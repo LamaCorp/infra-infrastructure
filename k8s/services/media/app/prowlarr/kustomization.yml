@@ -8,5 +8,5 @@ resources:
   - deployment.yml
   - service.yml
   - secrets.yml
-  # - httproute.yml
+  - httproute.yml
   - pvc.yml
