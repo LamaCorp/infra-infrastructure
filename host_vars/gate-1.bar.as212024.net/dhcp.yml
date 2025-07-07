@@ -59,9 +59,10 @@ kea_dhcp4_config:
         encapsulate: ""
     subnet4:
       - id: 1
-        subnet: 172.28.2.0/24
+        subnet: 172.28.2.224/27
+        valid-lifetime: 600
         pools:
-          - pool: 172.28.2.100 - 172.28.2.199
+          - pool: 172.28.2.226 - 172.28.2.229
         option-data:
           - name: routers
             data: 172.28.2.254
@@ -72,12 +73,27 @@ kea_dhcp4_config:
           - name: ntp-servers
             data: 172.28.2.254
         reservations:
+          - hw-address: 84:78:48:b6:f1:60
+            ip-address: 172.28.2.239
+            hostname: udb-bureau
           - hw-address: e4:38:83:e7:22:d8
             ip-address: 172.28.2.240
             hostname: wifi-1
           - hw-address: e4:38:83:e7:21:38
             ip-address: 172.28.2.241
             hostname: wifi0
+          - hw-address: 28:70:4e:d2:d0:64
+            ip-address: 172.28.2.248
+            hostname: sw-bureau
+          - hw-address: a8:52:d4:93:0f:4d
+            ip-address: 172.28.2.250
+            hostname: sw-1
+          - hw-address: a8:52:d4:94:15:9c
+            ip-address: 172.28.2.251
+            hostname: sw0
+          - hw-address: a0:a0:01:a1:06:10
+            ip-address: 172.28.2.252
+            hostname: sw-piscine
       - id: 2050
         subnet: 172.29.2.0/24
         pools:
