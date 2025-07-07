@@ -187,3 +187,17 @@ kea_dhcp4_config:
           - hw-address: ec:71:db:34:00:ea
             ip-address: 172.29.194.14
             hostname: terrasse-bas
+      - id: 2099
+        subnet: 192.168.0.0/24
+        pools:
+          - pool: 192.168.0.100 - 192.168.0.199
+        option-data:
+          - name: routers
+            data: 192.168.0.254
+          - name: domain-name-servers
+            data: 192.168.0.254
+          - name: domain-name
+            data: pharma.bar.risson.net
+          - name: ntp-servers
+            data: 192.168.0.254
+        reservations: []

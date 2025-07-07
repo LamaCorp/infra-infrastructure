@@ -6,6 +6,7 @@ chrony_allow_hosts:
   - 2001:67c:17fc::/48
   - 172.29.0.0/16
   - 2a06:e881:7700::/40
+  - 192.168.0.0/24
 
 chrony_ntp_servers_core:
   - server: 0.pool.ntp.org

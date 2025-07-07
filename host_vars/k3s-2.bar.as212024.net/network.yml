@@ -6,10 +6,10 @@ netplan_configuration:
       eno1:
         accept-ra: false
         addresses:
-          - 172.28.2.12/24
-          - 2001:67c:17fc:201::12/64
+          - 172.28.2.12/27
+          - 2001:67c:17fc:202::12/64
         routes:
           - to: 0.0.0.0/0
-            via: 172.28.2.254
+            via: 172.28.2.30
           - to: ::/0
-            via: 2001:67c:17fc:201::1
+            via: 2001:67c:17fc:202::1

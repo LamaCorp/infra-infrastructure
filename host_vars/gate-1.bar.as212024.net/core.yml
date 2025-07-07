@@ -10,6 +10,7 @@ bird2_static_routes:
     - 209.112.97.235/32 unreachable
     - 209.112.97.236/32 unreachable
     - 209.112.97.237/32 unreachable
+    - 209.112.97.238/32 unreachable
 
 bird2_bgp_sessions:
   cores:
@@ -66,6 +67,8 @@ bird2_radv_sessions:
       bar-music:
         mtu: 1500
       bar-cctv:
+        mtu: 1500
+      bar-pharma:
         mtu: 1500
     rdnss:
       - ns:

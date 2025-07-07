@@ -33,6 +33,7 @@ unbound_access_control:
   - 2001:67c:17fc::/48 allow
   - 172.29.0.0/16 allow
   - 2a06:e881:7700::/40 allow
+  - 192.168.0.0/24 allow
 
 unbound_local_zones_core:
   - as212024.net typetransparent

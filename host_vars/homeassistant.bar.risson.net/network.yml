@@ -6,8 +6,8 @@ netplan_configuration:
       eth0:
         accept-ra: false
         addresses:
-          - 172.28.2.192/24
-          - 2001:67c:17fc:201::192/64
+          - 172.28.2.192/27
+          - 2001:67c:17fc:207::192/64
     vlans:
       bar-iot:
         id: 2092
