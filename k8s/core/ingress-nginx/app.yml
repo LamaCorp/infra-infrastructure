@@ -29,7 +29,7 @@ spec:
         namespace: core-ingress-nginx
       source:
         repoURL: https://kubernetes.github.io/ingress-nginx
-        targetRevision: 4.13.0
+        targetRevision: 4.12.3
         chart: ingress-nginx
         helm:
           releaseName: ingress-nginx-{{ .name }}
