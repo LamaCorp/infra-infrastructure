@@ -9,12 +9,6 @@ spec:
     type: Recreate
   template:
     spec:
-      # securityContext:
-      #   sysctls:
-      #     - name: net.ipv4.conf.all.src_valid_mark
-      #       value: "1"
-      #     - name: net.ipv6.conf.all.disable_ipv6
-      #       value: "1"
       containers:
         - name: sabnzbd
           image: ghcr.io/hotio/sabnzbd
@@ -31,38 +25,7 @@ spec:
               mountPath: /config
             - name: media
               mountPath: /media
-        # - name: gluetun
-        #   image: ghcr.io/qdm12/gluetun
-        #   imagePullPolicy: IfNotPresent
-        #   env:
-        #     - name: VPN_SERVICE_PROVIDER
-        #       value: custom
-        #     - name: VPN_TYPE
-        #       value: wireguard
-        #     - name: VPN_PORT_FORWARDING
-        #       value: "on"
-        #     - name: VPN_PORT_FORWARDING_PROVIDER
-        #       value: "protonvpn"
-        #     - name: TZ
-        #       value: Europe/Paris
-        #     - name: DNS_KEEP_NAMESERVER
-        #       value: "on"
-        #     - name: FIREWALL_OUTBOUND_SUBNETS
-        #       value: "172.28.132.0/22,172.28.128.0/22"
-        #     - name: FIREWALL_INPUT_PORTS
-        #       value: "8080"
-        #   securityContext:
-        #     capabilities:
-        #       add:
-        #         - NET_ADMIN
-        #   volumeMounts:
-        #     - name: vpn-creds
-        #       mountPath: /gluetun/wireguard/wg0.conf
-        #       subPath: wg0.conf
       volumes:
-        - name: vpn-creds
-          secret:
-            secretName: sabnzbd-vpn-credentials
         - name: data
           persistentVolumeClaim:
             claimName: sabnzbd-data
