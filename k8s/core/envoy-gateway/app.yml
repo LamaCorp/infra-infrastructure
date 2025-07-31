@@ -24,7 +24,7 @@ spec:
         namespace: core-eg
       source:
         repoURL: docker.io/envoyproxy
-        targetRevision: 1.4.2
+        targetRevision: 1.5.0-rc.1
         chart: gateway-helm
         helm:
           releaseName: envoy-gateway
@@ -59,7 +59,7 @@ spec:
         namespace: core-eg
       source:
         repoURL: https://github.com/envoyproxy/gateway.git
-        targetRevision: v1.4.2
+        targetRevision: v1.5.0-rc.1
         path: charts/gateway-helm/crds/generated
 ---
 apiVersion: argoproj.io/v1alpha1
