@@ -1,6 +1,7 @@
 [config]
 local-keys = [
   "server.*",
+  "!server.allowed-ip.*",
   "!server.blocked-ip.*",
   "http.*",
   "storage.*",
