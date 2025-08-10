@@ -45,16 +45,16 @@ spec:
             successThreshold: 1
             failureThreshold: 3
           volumeMounts:
-            - name: library
+            - name: data
               mountPath: /data
             - name: postgres-creds
               mountPath: /postgres-creds
             - name: config
               mountPath: /config
       volumes:
-        - name: library
+        - name: data
           persistentVolumeClaim:
-            claimName: immich-library
+            claimName: immich-data
         - name: postgres-creds
           secret:
             secretName: immich-postgres-credentials
