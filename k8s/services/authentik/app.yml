@@ -55,8 +55,8 @@ spec:
               - authentik-blueprints
 
           global:
-            # image:
-            #   tag: 2025.6.0-rc1
+            image:
+              tag: 2025.8.0-rc5
             env:
               - name: AUTHENTIK_BOOTSTRAP_EMAIL
                 value: root@lama-corp.space
