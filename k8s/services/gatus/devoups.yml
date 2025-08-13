@@ -208,7 +208,7 @@ spec:
                   query-name: ns.cri.epita.fr
                   query-type: A
                 conditions:
-                  - "[BODY] == 91.243.117.210"
+                  - "[BODY] == 91.243.117.10"
                   - "[DNS_RCODE] == NOERROR"
 
               - name: OpenStack DNS
@@ -219,7 +219,7 @@ spec:
                   query-name: ns.cri.epita.fr
                   query-type: A
                 conditions:
-                  - "[BODY] == 91.243.117.210"
+                  - "[BODY] == 91.243.117.10"
                   - "[DNS_RCODE] == NOERROR"
 
               - name: S3
