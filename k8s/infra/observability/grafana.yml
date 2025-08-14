@@ -102,7 +102,7 @@ spec:
                 - name: VLogs
                   type: victoriametrics-logs-datasource
                   access: proxy
-                  url: http://vlogs-vm.infra-observability:9428/
+                  url: http://vlsingle-vm.infra-observability:9428/
                   editable: false
 
           sidecar:
