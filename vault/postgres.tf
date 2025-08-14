@@ -80,15 +80,9 @@ locals {
       for role_name, role in try(cluster.static_roles, {}) : "${cluster_name}_${role_name}" => merge(role, {
         cluster_name = cluster_name
         role_name    = role_name
-
       })
     }
   ]...)
-}
-
-resource "vault_mount" "postgresql" {
-  path = "postgresql"
-  type = "kv-v2"
 }
 
 resource "random_password" "postgres" {
@@ -99,7 +93,7 @@ resource "random_password" "postgres" {
 
 resource "vault_generic_secret" "postgres" {
   for_each = local.postgres_clusters
-  path     = "${vault_mount.postgresql.path}/${each.key}/postgres"
+  path     = "${vault_mount.databases.path}/postgres/${each.key}/postgres"
   data_json = jsonencode({
     password = random_password.postgres[each.key].result
   })

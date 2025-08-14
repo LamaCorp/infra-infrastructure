@@ -1,0 +1,5 @@
+---
+mongodb_version: "7.0"
+
+mongodb_repository_apt_key_url: "https://pgp.mongodb.com/server-{{ mongodb_version }}.asc"
+mongodb_repository_apt_repo: "deb [signed-by=/etc/apt/keyrings/mongodb.asc] https://repo.mongodb.org/apt/{{ ansible_facts.distribution | lower }} {{ ansible_facts.distribution_release }}/mongodb-org/{{ mongodb_version }} {{ 'multiverse' if ansible_facts.distribution == 'Ubuntu' else 'main' }}"

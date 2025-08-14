@@ -3,7 +3,7 @@ postgresql_version: 15
 
 postgresql_users:
   postgres:
-    password: "{{ lookup('community.hashi_vault.hashi_vault', 'postgresql/data/postgresql.fsn.as212024.net/postgres')['password'] }}"
+    password: "{{ lookup('community.hashi_vault.hashi_vault', 'databases/data/postgres/postgresql.fsn.as212024.net/postgres')['password'] }}"
 
   atuin: {}
   authentik: {}

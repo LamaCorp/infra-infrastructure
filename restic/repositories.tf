@@ -14,6 +14,10 @@ locals {
       "user_root",
     ]
 
+    "mongodb.fsn.as212024.net" = [
+      "postgresql",
+      "user_root",
+    ]
     "postgresql.fsn.as212024.net" = [
       "postgresql",
       "user_root",

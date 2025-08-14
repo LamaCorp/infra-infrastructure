@@ -41,3 +41,8 @@ node_exporter_textfile_collector_scripts_to_install:
   - chrony.py
   - deleted_libraries.py
   - smartmon.py
+
+# Fix for debian trixie. Doesn't break bookworm
+
+netplan_packages:
+  - netplan.io

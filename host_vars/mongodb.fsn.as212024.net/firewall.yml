@@ -1,0 +1,5 @@
+---
+nft_input_host_rules:
+  500 mongodb:
+    - ip saddr {$subnet_internal_4} tcp dport 27017 accept
+    - ip6 saddr {$subnet_internal_6} tcp dport 27017 accept

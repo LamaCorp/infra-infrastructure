@@ -24,6 +24,12 @@ libvirt_host_pools:
     mode: 755
     owner: root
     group: root
+  - name: mongodb
+    type: dir
+    path: /vms/mongodb
+    mode: 755
+    owner: root
+    group: root
   - name: postgresql
     type: dir
     path: /vms/postgresql
@@ -46,14 +52,10 @@ libvirt_vms:
     volumes:
       - pool: k3s-1
         name: os
-        capacity: 100G
+        capacity: 200G
         discard: unmap
       - pool: k3s-1
         name: storage
-        capacity: 1024G
-        discard: unmap
-      - pool: k3s-1
-        name: fst-fsn-default-0
         capacity: 1024G
         discard: unmap
       - pool: k3s-1-etcd
@@ -88,6 +90,29 @@ libvirt_vms:
         source:
           dev: br-cc
         mac: 52:54:00:e0:d1:60
+    boot_firmware: efi
+    start: true
+    autostart: true
+
+  - state: present
+    name: mongodb
+    vcpus: 4
+    memory_mb: 4096
+    enable_spice: true
+    volumes:
+      - pool: mongodb
+        name: os
+        capacity: 20G
+        discard: unmap
+      - pool: mongodb
+        name: storage
+        capacity: 50G
+        discard: unmap
+    interfaces:
+      - type: bridge
+        source:
+          dev: br-mdw
+        mac: 52:54:00:bd:be:87
     boot_firmware: efi
     start: true
     autostart: true

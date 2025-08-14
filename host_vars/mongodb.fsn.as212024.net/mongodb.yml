@@ -1,0 +1,4 @@
+---
+mongodb_version: "8.0"
+mongodb_admin_user: "admin"
+mongodb_admin_pwd: "{{ lookup('community.hashi_vault.hashi_vault', 'databases/data/mongodb/mongodb.fsn.as212024.net/admin')['password'] }}"

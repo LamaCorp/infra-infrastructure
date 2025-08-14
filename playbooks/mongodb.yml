@@ -1,0 +1,28 @@
+#!/usr/bin/env ansible-playbook
+---
+- name: Base
+  import_playbook: base.yml
+
+- name: MongoDB
+  hosts: mongodb
+  pre_tasks:
+    - name: Install dependencies
+      ansible.builtin.apt:
+        name: python3-pymongo
+  roles:
+    # - mongodb_repository
+    - community.mongodb.mongodb_install
+    - role: community.mongodb.mongodb_mongod
+      vars:
+        bind_ip_all: true
+        skip_restart: false
+        mongodb_systemd_service_override: |
+          [Service]
+          ExecStart=
+          ExecStart=/usr/bin/mongod --ipv6 --config /etc/mongod.conf
+    - role: community.mongodb.mongodb_auth
+      vars:
+        mongodb_force_update_password: false
+        mongodb_create_for_localhost_exception: /var/lib/mongodb/mongodb_admin.success
+  tags:
+    - mongodb

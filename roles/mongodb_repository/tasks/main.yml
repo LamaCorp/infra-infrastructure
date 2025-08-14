@@ -1,0 +1,20 @@
+---
+- name: Install required packages
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - curl
+      - gnupg
+
+- name: Install apt key
+  ansible.builtin.get_url:
+    url: "{{ mongodb_repository_apt_key_url }}"
+    dest: /etc/apt/keyrings/mongodb.asc
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Add apt repo
+  ansible.builtin.apt_repository:
+    repo: "{{ mongodb_repository_apt_repo }}"
+    filename: mongodb
