@@ -20,7 +20,7 @@ spec:
       targetRevision: HEAD
       path: k8s/services/authentik/extra
     - repoURL: https://charts.goauthentik.io
-      targetRevision: 2025.6.4
+      targetRevision: 2025.8.0
       chart: authentik
       helm:
         releaseName: authentik
@@ -55,8 +55,8 @@ spec:
               - authentik-blueprints
 
           global:
-            image:
-              tag: 2025.8.0-rc7
+            # image:
+            #   tag: 2025.10.0-rc1
             env:
               - name: AUTHENTIK_BOOTSTRAP_EMAIL
                 value: root@lama-corp.space
@@ -105,6 +105,13 @@ spec:
                   - auth.lama-corp.space
                   - auth.as212024.net
             metrics:
+              enabled: true
+              serviceMonitor:
+                enabled: true
+
+          worker:
+            metrics:
+              enabled: true
               serviceMonitor:
                 enabled: true
 
