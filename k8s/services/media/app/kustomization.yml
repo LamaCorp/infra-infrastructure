@@ -31,27 +31,27 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/hotio/bazarr
-    newTag: release-1.4.4
+    newTag: release-1.5.2
   - name: ghcr.io/hotio/jellyfin
-    newTag: release-10.10.6
+    newTag: release-10.10.7
   - name: ghcr.io/hotio/jellyseerr
     newName: fallenbagel/jellyseerr
     newTag: preview-OIDC
   - name: ghcr.io/hotio/lidarr
-    newTag: release-2.5.3.4341
+    newTag: release-2.12.4.4658
   - name: ghcr.io/hotio/prowlarr
-    newTag: release-1.23.1.4708
+    newTag: release-1.37.0.5076
   - name: ghcr.io/hotio/qbittorrent
-    newTag: release-4.6.7
+    newTag: release-5.1.2
   - name: ghcr.io/hotio/radarr
-    newTag: release-5.9.1.9070
+    newTag: release-5.26.2.10099
   - name: ghcr.io/hotio/readarr
-    newTag: testing-0.3.32.2587
+    newTag: testing-0.2.32.2587
   - name: ghcr.io/recyclarr/recyclarr
     newTag: 7.4.1
   - name: ghcr.io/hotio/sabnzbd
-    newTag: release-4.3.3
+    newTag: release-4.5.2
   - name: ghcr.io/hotio/sonarr
-    newTag: release-4.0.9.2244
+    newTag: release-4.0.15.2941
   - name: ghcr.io/qdm12/gluetun
     newTag: v3.37.0
