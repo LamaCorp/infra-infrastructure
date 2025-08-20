@@ -34,6 +34,6 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/immich-app/immich-server
-    newTag: v1.137.3
+    newTag: v1.138.1
   - name: ghcr.io/immich-app/immich-machine-learning
     newTag: v1.138.1
