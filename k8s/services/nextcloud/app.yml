@@ -145,10 +145,10 @@ spec:
             extraVolumes:
               - name: group
                 persistentVolumeClaim:
-                  claimName: nextcloud-data-group
+                  claimName: nextcloud-group
               - name: user
                 persistentVolumeClaim:
-                  claimName: nextcloud-data
+                  claimName: nextcloud-user
 
           deploymentAnnotations:
             reloader.stakater.com/auto: "true"

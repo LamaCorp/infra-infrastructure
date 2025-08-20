@@ -1,64 +1,22 @@
 ---
 apiVersion: v1
-kind: PersistentVolume
+kind: PersistentVolumeClaim
 metadata:
-  name: seaweedfs-user-services-nextcloud-nextcloud-data
+  name: nextcloud-user
 spec:
   accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 16Ti
-  csi:
-    driver: seaweedfs-csi-driver
-    volumeHandle: seaweedfs-user-services-nextcloud-nextcloud-data
-    volumeAttributes:
-      collection: default
-      path: /user
-  persistentVolumeReclaimPolicy: Retain
-  volumeMode: Filesystem
-  storageClassName: seaweedfs
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Ti
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: nextcloud-data
+  name: nextcloud-group
 spec:
-  storageClassName: seaweedfs
-  volumeName: seaweedfs-user-services-nextcloud-nextcloud-data
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   resources:
     requests:
-      storage: 16Ti
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: seaweedfs-group-services-nextcloud-nextcloud-data-group
-spec:
-  accessModes:
-    - ReadWriteMany
-  capacity:
-    storage: 16Ti
-  csi:
-    driver: seaweedfs-csi-driver
-    volumeHandle: seaweedfs-group-services-nextcloud-nextcloud-data-group
-    volumeAttributes:
-      collection: default
-      path: /group
-  persistentVolumeReclaimPolicy: Retain
-  volumeMode: Filesystem
-  storageClassName: seaweedfs
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: nextcloud-data-group
-spec:
-  storageClassName: seaweedfs
-  volumeName: seaweedfs-group-services-nextcloud-nextcloud-data-group
-  accessModes:
-    - ReadWriteMany
-  resources:
-    requests:
-      storage: 16Ti
+      storage: 1Ti
