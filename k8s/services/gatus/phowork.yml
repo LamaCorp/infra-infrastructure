@@ -26,7 +26,8 @@ spec:
         releaseName: gatus
         values: |
           image:
-            tag: v5.16.0
+            repository: twinproduction/gatus
+            tag: v5.23.2
 
           annotations:
             reloader.stakater.com/auto: "true"
