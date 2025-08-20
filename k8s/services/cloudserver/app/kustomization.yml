@@ -19,4 +19,4 @@ configMapGenerator:
 
 images:
   - name: ghcr.io/scality/cloudserver
-    newTag: 7.70.76
+    newTag: 7.70.77
