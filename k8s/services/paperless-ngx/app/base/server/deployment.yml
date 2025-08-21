@@ -40,9 +40,6 @@ spec:
             - name: data
               mountPath: /data
       volumes:
-        - name: user
-          persistentVolumeClaim:
-            claimName: paperless-ngx-user
         - name: data
           persistentVolumeClaim:
             claimName: paperless-ngx-data

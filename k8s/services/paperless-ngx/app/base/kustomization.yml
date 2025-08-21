@@ -45,10 +45,10 @@ configMapGenerator:
       - PAPERLESS_OCR_LANGUAGE=fra+eng+deu
       - PAPERLESS_TIME_ZONE=Europe/Paris
 
-      # - PAPERLESS_CONSUMPTION_DIR=/user/FIXME/paperless/consume
-      - PAPERLESS_DATA_DIR=/data
-      # - PAPERLESS_TRASH_DIR=/user/FIXME/paperless/media/trash
-      # - PAPERLESS_MEDIA_ROOT=/user/FIXME/paperless/media
+      - PAPERLESS_DATA_DIR=/data/data
+      - PAPERLESS_CONSUMPTION_DIR=/data/consume
+      - PAPERLESS_MEDIA_ROOT=/data/media
+      - PAPERLESS_TRASH_DIR=/data/media/trash
 
       - PAPERLESS_CONSUMER_DELETE_DUPLICATES=true
       - PAPERLESS_CONSUMER_RECURSIVE=true
