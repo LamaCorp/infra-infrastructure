@@ -35,8 +35,6 @@ spec:
               containerPort: 8000
               protocol: TCP
           volumeMounts:
-            - name: user
-              mountPath: /user
             - name: data
               mountPath: /data
       volumes:
