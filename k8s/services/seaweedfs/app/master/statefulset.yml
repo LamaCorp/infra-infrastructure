@@ -88,6 +88,12 @@ spec:
         - name: config
           configMap:
             name: seaweedfs-master-config
+      nodeSelector:
+        kubernetes.io/hostname: nas-1.bar.as212024.net
+      tolerations:
+        - key: "role.k8s.as212024.net/storage"
+          operator: "Exists"
+          effect: "NoExecute"
   volumeClaimTemplates:
     - metadata:
         name: seaweedfs-master-data
