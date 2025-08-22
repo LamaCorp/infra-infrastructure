@@ -4,5 +4,4 @@ kind: Kustomization
 resources:
   - bar-nas-1-1
   - bar-nas-1-2
-  - bar-nas-2-2
   - service-monitor.yml
