@@ -19,21 +19,3 @@ spec:
     - repoURL: https://gitlab.com/lama-corp/infra/infrastructure.git
       targetRevision: HEAD
       path: k8s/services/seaweedfs/app
-    - repoURL: https://seaweedfs.github.io/seaweedfs-csi-driver/helm
-      targetRevision: 0.2.2
-      chart: seaweedfs-csi-driver
-      helm:
-        releaseName: seaweedfs-csi-driver
-        values: |
-          seaweedfsFiler: seaweedfs-filer.services-seaweedfs:8888
-          storageClassName: seaweedfs
-          isDefaultStorageClass: false
-
-          seaweedfsCsiPlugin:
-            image: chrislusf/seaweedfs-csi-driver:v1.2.7
-
-          node:
-            updateStrategy:
-              type: OnDelete
-            tolerations:
-              - operator: Exists
