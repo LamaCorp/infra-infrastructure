@@ -15,7 +15,6 @@ spec:
         - k3s-1.fsn.as212024.net:9100
         - k3s-2.bar.as212024.net:9100
         - nas-1.bar.as212024.net:9100
-        - nas-2.bar.as212024.net:9100
         - nucleus.fsn.as212024.net:9100
         - pine.fsn.as212024.net:9100
         - postgresql.fsn.as212024.net:9100
@@ -38,7 +37,6 @@ spec:
         - k3s-1.fsn.as212024.net:9630
         - k3s-2.bar.as212024.net:9630
         - nas-1.bar.as212024.net:9630
-        - nas-2.bar.as212024.net:9630
         - nucleus.fsn.as212024.net:9630
         - pine.fsn.as212024.net:9630
         - postgresql.fsn.as212024.net:9630
