@@ -57,26 +57,6 @@ spec:
             - name: metrics
               containerPort: 9327
               protocol: TCP
-          readinessProbe:
-            httpGet:
-              port: http
-              scheme: HTTP
-              path: /
-            initialDelaySeconds: 10
-            periodSeconds: 15
-            successThreshold: 1
-            failureThreshold: 100
-            timeoutSeconds: 10
-          livenessProbe:
-            httpGet:
-              port: http
-              scheme: HTTP
-              path: /
-            initialDelaySeconds: 20
-            periodSeconds: 30
-            successThreshold: 1
-            failureThreshold: 5
-            timeoutSeconds: 10
       volumes:
         - name: config
           configMap:

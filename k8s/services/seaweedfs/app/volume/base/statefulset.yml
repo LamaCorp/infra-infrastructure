@@ -65,26 +65,6 @@ spec:
             - name: metrics
               containerPort: 9327
               protocol: TCP
-          readinessProbe:
-            httpGet:
-              port: http
-              scheme: HTTP
-              path: /status
-            initialDelaySeconds: 15
-            periodSeconds: 15
-            successThreshold: 1
-            failureThreshold: 100
-            timeoutSeconds: 30
-          livenessProbe:
-            httpGet:
-              port: http
-              scheme: HTTP
-              path: /status
-            initialDelaySeconds: 20
-            periodSeconds: 90
-            successThreshold: 1
-            failureThreshold: 4
-            timeoutSeconds: 30
       volumes:
         - name: data
           hostPath:
