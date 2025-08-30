@@ -6,7 +6,7 @@ metadata:
   annotations:
     configmap.reloader.stakater.com/reload: "recyclarr-config"
 spec:
-  replicas: 0
+  replicas: 1
   strategy:
     type: Recreate
   template:

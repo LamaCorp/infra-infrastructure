@@ -38,9 +38,9 @@ images:
     newName: fallenbagel/jellyseerr
     newTag: preview-OIDC
   - name: ghcr.io/hotio/lidarr
-    newTag: release-2.12.4.4658
+    newTag: release-2.13.3.4711
   - name: ghcr.io/hotio/prowlarr
-    newTag: release-1.37.0.5076
+    newTag: release-2.0.5.5160
   - name: ghcr.io/hotio/qbittorrent
     newTag: release-5.1.2
   - name: ghcr.io/hotio/radarr
@@ -50,7 +50,7 @@ images:
   - name: ghcr.io/recyclarr/recyclarr
     newTag: 7.4.1
   - name: ghcr.io/hotio/sabnzbd
-    newTag: release-4.5.2
+    newTag: release-4.5.3
   - name: ghcr.io/hotio/sonarr
     newTag: release-4.0.15.2941
   - name: ghcr.io/qdm12/gluetun
