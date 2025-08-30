@@ -21,17 +21,12 @@ spec:
               template:
                 spec:
                   nodeSelector:
-                    kubernetes.io/hostname: nas-1.bar.as212024.net
+                    k8s.as212024.net/role: storage
                   tolerations:
-                    - key: "role.k8s.as212024.net/storage"
-                      operator: "Exists"
-                      effect: "NoExecute"
-                    - key: "role.k8s.as212024.net/media"
-                      operator: "Exists"
-                      effect: "NoExecute"
-                    - key: nvidia.com/gpu
-                      operator: Exists
-                      effect: NoSchedule
+                    - key: k8s.as212024.net/role
+                      operator: Equal
+                      value: storage
+                      effect: NoExecute
       envoyService:
         externalTrafficPolicy: Local
       envoyPDB:

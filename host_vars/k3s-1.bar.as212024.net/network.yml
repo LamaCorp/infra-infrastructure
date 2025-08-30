@@ -3,7 +3,17 @@ netplan_configuration:
   network:
     version: 2
     ethernets:
-      eno1:
+      enp1s0: {}
+      enp2s0: {}
+    bonds:
+      bond0:
+        interfaces:
+          - enp1s0
+          - enp2s0
+        parameters:
+          mode: 802.3ad
+          lacp-rate: fast
+          transmit-hash-policy: layer3+4
         accept-ra: false
         addresses:
           - 172.28.2.11/27
