@@ -61,6 +61,10 @@ spec:
               value: "/bin/sh -c 'wget -O- --retry-connrefused --post-data \"json={\\\"listen_port\\\":{{PORTS}}}\" http://127.0.0.1:8080/api/v2/app/setPreferences 2>&1'"
             - name: TZ
               value: Europe/Paris
+            - name: DNS_KEEP_NAMESERVER
+              value: "on"
+            - name: DOT
+              value: "off"
             - name: FIREWALL_OUTBOUND_SUBNETS
               value: "172.28.128.0/22,172.28.132.0/22"
             - name: FIREWALL_INPUT_PORTS
