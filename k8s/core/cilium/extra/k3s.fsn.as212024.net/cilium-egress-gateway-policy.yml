@@ -26,6 +26,11 @@ spec:
         matchLabels:
           io.kubernetes.pod.namespace: services-media
           app.kubernetes.io/name: media
+          app.kubernetes.io/component: flaresolverr
+    - podSelector:
+        matchLabels:
+          io.kubernetes.pod.namespace: services-media
+          app.kubernetes.io/name: media
           app.kubernetes.io/component: qbittorrent
     - podSelector:
         matchLabels:

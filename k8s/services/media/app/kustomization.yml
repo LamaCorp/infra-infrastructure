@@ -10,6 +10,7 @@ resources:
   - secrets.yml
 
   - bazarr
+  - flaresolverr
   - jellyfin
   - jellyseerr
   - lidarr
@@ -32,6 +33,8 @@ configMapGenerator:
 images:
   - name: ghcr.io/hotio/bazarr
     newTag: release-1.5.2
+  - name: ghcr.io/flaresolverr/flaresolverr
+    newTag: v3.4.0
   - name: ghcr.io/hotio/jellyfin
     newTag: release-10.10.7
   - name: ghcr.io/hotio/jellyseerr

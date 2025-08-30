@@ -1,0 +1,37 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaresolverr
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      securityContext:
+        sysctls:
+          - name: net.ipv4.conf.all.src_valid_mark
+            value: "1"
+          - name: net.ipv6.conf.all.disable_ipv6
+            value: "1"
+      containers:
+        - name: flaresolverr
+          image: ghcr.io/flaresolverr/flaresolverr
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: TZ
+              value: Europe/Paris
+            - name: LANG
+              value: fr_FR
+          ports:
+            - name: http
+              containerPort: 8191
+              protocol: TCP
+      nodeSelector:
+        k8s.as212024.net/role: media
+      tolerations:
+        - key: k8s.as212024.net/role
+          operator: Equal
+          value: media
+          effect: NoExecute
