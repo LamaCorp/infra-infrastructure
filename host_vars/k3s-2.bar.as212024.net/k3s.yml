@@ -6,8 +6,9 @@ k3s_agent:
   node-label:
     - topology.kubernetes.io/region=bar
     - topology.kubernetes.io/zone=rack3
+    - k8s.as212024.net/role=media
   node-taint:
-    - role.k8s.as212024.net/media=true:NoExecute
+    - k8s.as212024.net/role=media:NoExecute
   kubelet-arg:
     - allowed-unsafe-sysctls=net.ipv4.conf.all.src_valid_mark
     - allowed-unsafe-sysctls=net.ipv6.conf.all.disable_ipv6

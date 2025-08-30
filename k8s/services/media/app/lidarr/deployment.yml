@@ -33,12 +33,9 @@ spec:
           persistentVolumeClaim:
             claimName: media
       nodeSelector:
-        kubernetes.io/hostname: k3s-1.bar.as212024.net
+        k8s.as212024.net/role: media
       tolerations:
-        - key: "role.k8s.as212024.net/media"
-          operator: "Exists"
-          effect: "NoExecute"
-      dnsConfig:
-        options:
-          - name: ndots
-            value: "1"
+        - key: k8s.as212024.net/role
+          operator: Equal
+          value: media
+          effect: NoExecute

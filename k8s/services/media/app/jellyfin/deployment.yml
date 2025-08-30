@@ -39,15 +39,12 @@ spec:
           persistentVolumeClaim:
             claimName: media
       nodeSelector:
-        kubernetes.io/hostname: k3s-2.bar.as212024.net
+        k8s.as212024.net/role: media
       tolerations:
-        - key: "role.k8s.as212024.net/media"
-          operator: "Exists"
-          effect: "NoExecute"
+        - key: k8s.as212024.net/role
+          operator: Equal
+          value: media
+          effect: NoExecute
         - key: nvidia.com/gpu
           operator: Exists
           effect: NoSchedule
-      dnsConfig:
-        options:
-          - name: ndots
-            value: "1"
