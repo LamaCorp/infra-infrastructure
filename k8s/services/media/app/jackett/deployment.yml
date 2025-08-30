@@ -1,0 +1,36 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jackett
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+        - name: jackett
+          image: ghcr.io/hotio/jackett
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: media-config-env
+          ports:
+            - name: http
+              containerPort: 9117
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /config
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: jackett-data
+      nodeSelector:
+        k8s.as212024.net/role: media
+      tolerations:
+        - key: k8s.as212024.net/role
+          operator: Equal
+          value: media
+          effect: NoExecute
