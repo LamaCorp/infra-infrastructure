@@ -54,7 +54,9 @@ spec:
             - name: VPN_PORT_FORWARDING
               value: "on"
             - name: VPN_PORT_FORWARDING_PROVIDER
-              value: "protonvpn"
+              value: protonvpn
+            - name: PORT_FORWARD_ONLY
+              value: "on"
             - name: TZ
               value: Europe/Paris
             - name: FIREWALL_OUTBOUND_SUBNETS
