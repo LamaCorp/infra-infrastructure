@@ -13,3 +13,7 @@ netplan_configuration:
             via: 172.28.2.30
           - to: ::/0
             via: 2001:67c:17fc:202::1
+    bridges:
+      media:
+        addresses:
+          - 172.28.192.12/32
