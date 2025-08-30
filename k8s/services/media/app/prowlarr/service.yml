@@ -4,7 +4,9 @@ kind: Service
 metadata:
   name: prowlarr
 spec:
-  ipFamilyPolicy: RequireDualStack
+  ipFamilyPolicy: SingleStack
+  ipFamilies:
+    - IPv4
   ports:
     - name: http
       port: 80
