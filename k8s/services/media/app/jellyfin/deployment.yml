@@ -10,15 +10,14 @@ spec:
   template:
     spec:
       securityContext:
+        runAsUser: 10095
+        runAsGroup: 10095
         supplementalGroups:
           - 105 # render
       containers:
         - name: jellyfin
-          image: ghcr.io/hotio/jellyfin
+          image: ghcr.io/jellyfin/jellyfin
           imagePullPolicy: IfNotPresent
-          envFrom:
-            - configMapRef:
-                name: media-config-env
           env:
             - name: NVIDIA_DRIVER_CAPABILITIES
               value: video,compute,utility
@@ -29,6 +28,8 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /config
+            - name: cache
+              mountPath: /cache
             - name: media
               mountPath: /media
             - name: render
@@ -42,6 +43,9 @@ spec:
         - name: data
           persistentVolumeClaim:
             claimName: jellyfin-data
+        - name: cache
+          persistentVolumeClaim:
+            claimName: jellyfin-cache
         - name: media
           persistentVolumeClaim:
             claimName: media
