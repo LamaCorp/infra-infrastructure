@@ -36,9 +36,6 @@ spec:
               mountPath: /dev/dri/renderD128
           securityContext:
             privileged: true
-          resources:
-            limits:
-              nvidia.com/gpu: 1
       volumes:
         - name: data
           persistentVolumeClaim:
@@ -59,6 +56,3 @@ spec:
           operator: Equal
           value: media
           effect: NoExecute
-        - key: nvidia.com/gpu
-          operator: Exists
-          effect: NoSchedule
