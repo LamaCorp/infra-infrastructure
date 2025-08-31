@@ -630,7 +630,9 @@ entries:
 
       client_type: confidential
       redirect_uris:
-        - url: https://jellyseerr.lama-corp.space/login/provider/lama-corp-connect/callback
+        - url: https://jellyseerr.lama-corp.space/login?provider=lama-corp-connect&callback=true
+          matching_mode: strict
+        - url: http://jellyseerr.lama-corp.space/login?provider=lama-corp-connect&callback=true
           matching_mode: strict
 
       access_code_validity: minutes=1
