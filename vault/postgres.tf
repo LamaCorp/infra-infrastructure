@@ -102,8 +102,8 @@ resource "vault_generic_secret" "postgres" {
 resource "vault_database_secrets_mount" "postgres" {
   path = "postgres"
 
-  default_lease_ttl_seconds = 24 * 60 * 60 # 24h
-  max_lease_ttl_seconds     = 24 * 60 * 60 # 24h
+  default_lease_ttl_seconds = 24 * 60 * 60 * 30 # 30 days
+  max_lease_ttl_seconds     = 24 * 60 * 60 * 30 # 30 days
 
   lifecycle {
     ignore_changes = [
@@ -131,5 +131,5 @@ resource "vault_database_secret_backend_static_role" "postgres" {
   db_name         = each.value.cluster_name
   name            = each.key
   username        = each.value.postgres_role
-  rotation_period = try(each.value.rotation_period, 24 * 60 * 60) # 1 day
+  rotation_period = try(each.value.rotation_period, 24 * 60 * 60 * 30) # 30 days
 }
