@@ -9,6 +9,11 @@ spec:
     type: Recreate
   template:
     spec:
+      securityContext:
+        runAsUser: 10095
+        runAsGroup: 10095
+        supplementalGroups:
+          - 105 # render
       containers:
         - name: jellyfin
           image: ghcr.io/hotio/jellyfin
@@ -28,6 +33,10 @@ spec:
               mountPath: /config
             - name: media
               mountPath: /media
+            - name: render
+              mountPath: /dev/dri/renderD128
+          securityContext:
+            privileged: true
           resources:
             limits:
               nvidia.com/gpu: 1
@@ -38,6 +47,9 @@ spec:
         - name: media
           persistentVolumeClaim:
             claimName: media
+        - name: render
+          hostPath:
+            path: /dev/dri/renderD128
       nodeSelector:
         k8s.as212024.net/role: media
       tolerations:
