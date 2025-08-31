@@ -17,6 +17,8 @@ spec:
       backendRefs:
         - name: qbittorrent
           port: 80
+      timeouts:
+        request: 60s
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy

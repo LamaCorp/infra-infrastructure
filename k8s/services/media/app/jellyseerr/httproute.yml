@@ -17,3 +17,5 @@ spec:
       backendRefs:
         - name: jellyseerr
           port: 80
+      timeouts:
+        request: 60s

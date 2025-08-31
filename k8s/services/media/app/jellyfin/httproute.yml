@@ -17,3 +17,5 @@ spec:
       backendRefs:
         - name: jellyfin
           port: 80
+      timeouts:
+        request: 60s
