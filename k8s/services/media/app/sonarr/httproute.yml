@@ -19,6 +19,7 @@ spec:
           port: 80
       timeouts:
         request: 60s
+        backendRequest: 60s
 ---
 apiVersion: gateway.envoyproxy.io/v1alpha1
 kind: SecurityPolicy
