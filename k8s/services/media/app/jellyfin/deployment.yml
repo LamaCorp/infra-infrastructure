@@ -10,10 +10,8 @@ spec:
   template:
     spec:
       securityContext:
-        runAsUser: 10095
-        runAsGroup: 10095
-        supplementalGroups:
-          - 105 # render
+        runAsUser: 0
+        runAsGroup: 0
       containers:
         - name: jellyfin
           image: ghcr.io/jellyfin/jellyfin
