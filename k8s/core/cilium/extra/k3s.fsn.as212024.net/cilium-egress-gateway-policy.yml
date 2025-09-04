@@ -53,4 +53,4 @@ spec:
     nodeSelector:
       matchLabels:
         kubernetes.io/hostname: k3s-2.bar.as212024.net
-    egressIP: 172.28.192.12
+    egressIP: 172.29.2.12
