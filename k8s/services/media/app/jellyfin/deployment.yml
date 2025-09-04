@@ -12,7 +12,7 @@ spec:
       securityContext:
         runAsUser: 10095
         runAsGroup: 10095
-        supplementaryGroups:
+        supplementalGroups:
           - 105 # render
       containers:
         - name: jellyfin
