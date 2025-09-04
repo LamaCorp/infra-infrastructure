@@ -10,8 +10,10 @@ spec:
   template:
     spec:
       securityContext:
-        runAsUser: 0
-        runAsGroup: 0
+        runAsUser: 10095
+        runAsGroup: 10095
+        supplementaryGroups:
+          - 105 # render
       containers:
         - name: jellyfin
           image: ghcr.io/jellyfin/jellyfin
@@ -31,7 +33,7 @@ spec:
             - name: media
               mountPath: /media
             - name: render
-              mountPath: /dev/dri/renderD128
+              mountPath: /dev/dri/renderD129
           securityContext:
             privileged: true
       volumes:
@@ -46,7 +48,7 @@ spec:
             claimName: media
         - name: render
           hostPath:
-            path: /dev/dri/renderD128
+            path: /dev/dri/renderD129
       nodeSelector:
         k8s.as212024.net/role: media
       tolerations:
