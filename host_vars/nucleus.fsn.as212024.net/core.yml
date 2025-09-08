@@ -52,11 +52,3 @@ bird2_ospf_sessions:
             stub: true
           br-cc:
             stub: true
-
-bird2_radv_sessions:
-  - alias: radv6
-    interfaces:
-      "br*": {}
-    rdnss:
-      - ns:
-          - 2001:67c:17fc:ffff::1
