@@ -1,0 +1,10 @@
+---
+snapcast_server_config:
+  stream:
+    source:
+      - pipe:///tmp/snapfifo?name=default
+      - spotify:///usr/local/bin/librespot?name=Spotify%201&devicename=Maison%201&bitrate=320&volume=10&cache=%2Fvar%2Fcache%2Fsnapserver%2F1&params=--zeroconf-port%2037301%20--zeroconf-backend%20avahi
+      - spotify:///usr/local/bin/librespot?name=Spotify%202&devicename=Maison%202&bitrate=320&volume=10&cache=%2Fvar%2Fcache%2Fsnapserver%2F2&params=--zeroconf-port%2037302%20--zeroconf-backend%20avahi
+    send_to_muted: true
+  streaming_client:
+    initial_volume: 50

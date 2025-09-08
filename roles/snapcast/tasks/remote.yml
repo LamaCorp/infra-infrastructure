@@ -1,0 +1,50 @@
+---
+- name: Install dependencies
+  ansible.builtin.apt:
+    name:
+      - python3-gpiozero
+      - python3-requests
+
+- name: Install snapremote
+  ansible.builtin.template:
+    src: remote.py
+    dest: /usr/bin/snapremote
+    owner: root
+    group: root
+    mode: 0755
+  notify: Restart snapremote
+
+- name: Ensure systemd service is up-to-date
+  ansible.builtin.copy:
+    content: |
+      [Unit]
+      After=snapclient.service
+      Description=Snapcast remote control
+      Wants=snapclient.service
+
+      [Service]
+      ExecStart=/usr/bin/snapremote
+      Type=simple
+      User=root
+      Group=root
+      Restart=on-failure
+      RestartSec=5s
+
+      [Install]
+      WantedBy=multi-user.target
+    dest: /etc/systemd/system/snapremote.service
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - Reload systemd
+    - Restart snapremote
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure systemd service is enabled and started
+  ansible.builtin.service:
+    name: snapremote
+    enabled: true
+    state: started

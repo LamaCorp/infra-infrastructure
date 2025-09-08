@@ -1,0 +1,17 @@
+---
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Restart snapserver
+  ansible.builtin.service:
+    name: snapserver
+    state: restarted
+- name: Restart snapclient
+  ansible.builtin.service:
+    name: snapclient
+    state: restarted
+- name: Restart snapremote
+  ansible.builtin.service:
+    name: snapremote
+    state: restarted

@@ -1,0 +1,22 @@
+---
+nft_input_host_rules:
+  # Allow broadcast and multicast
+  010 drop unwanted: []
+  011 drop unwanted ipv6: []
+
+  500 snapserver protocol:
+    - ip saddr {172.29.193.0/24} tcp dport 1704 accept
+    - ip6 saddr {2a06:e881:7701:193::/64} tcp dport 1704 accept
+  501 snapserver control:
+    - ip saddr {172.29.193.0/24} tcp dport 1705 accept
+    - ip6 saddr {2a06:e881:7701:193::/64} tcp dport 1705 accept
+    - ip saddr {$subnet_internal_4} tcp dport 1705 accept
+    - ip6 saddr {$subnet_internal_6} tcp dport 1705 accept
+  # TODO: remove customer
+  502 snapserver web:
+    - ip saddr {$subnet_internal_4, $subnet_customer_4} tcp dport 1780 accept
+    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} tcp dport 1780 accept
+  503 mdns:
+    - meta iif bar-client udp dport 5353 accept
+  504 spotify zeroconf:
+    - meta iif bar-client tcp dport 37301-37302 accept

@@ -1,0 +1,47 @@
+---
+# Snapcast version
+# valid values: every version available as a release on github
+snapcast_version: "v0.31.0"
+
+snapcast_server_install: false
+snapcast_client_install: false
+snapcast_remote_install: false
+
+snapcast_host_arch_map:
+  aarch64: "arm64"
+  armv6l: "armhf"
+  armv7l: "armhf"
+  x86_64: "amd64"
+
+snapcast_host_arch: "{{ snapcast_host_arch_map[ansible_architecture] | default(ansible_architecture) }}"
+
+snapcast_client_with_pulse: false
+
+snapcast_server_download_url: "https://github.com/badaix/snapcast/releases/download/{{ snapcast_version }}/snapserver_{{ snapcast_version | regex_replace('^v(.*)$', '\\1') }}-1_{{ snapcast_host_arch }}_{{ ansible_distribution_release }}.deb"
+snapcast_client_download_url: "https://github.com/badaix/snapcast/releases/download/{{ snapcast_version }}/snapclient_{{ snapcast_version | regex_replace('^v(.*)$', '\\1') }}-1_{{ snapcast_host_arch }}_{{ ansible_distribution_release }}{{ snapcast_client_with_pulse | ternary('_with-pulse', '') }}.deb"
+
+snapcast_client_args: []
+
+snapcast_server_default_config:
+  server:
+    threads: -1
+  ssl: {}
+  tcp:
+    enabled: true
+    bind_to_address: "::"
+    port: 1705
+  http:
+    enabled: true
+    bind_to_address: "::"
+    port: 1780
+    doc_root: /usr/share/snapserver/snapweb
+  stream:
+    bind_to_address: "::"
+    port: 1704
+    sources:
+      - pipe:///tmp/snapfifo?name=default
+  streaming_client: {}
+  logging: {}
+
+snapcast_server_config: {}
+snapcast_server_config_computed: "{{ snapcast_server_default_config | combine(snapcast_server_config, recursive=True) }}"

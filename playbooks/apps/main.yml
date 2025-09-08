@@ -5,3 +5,6 @@
 
 - name: Home assistant
   import_playbook: homeassistant.yml
+
+- name: Snapcast
+  import_playbook: snapcast.yml

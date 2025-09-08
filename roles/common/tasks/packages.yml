@@ -26,6 +26,7 @@
       - iperf3
       - jq
       - ldnsutils
+      - lldpd
       - lm-sensors
       - lsof
       - man

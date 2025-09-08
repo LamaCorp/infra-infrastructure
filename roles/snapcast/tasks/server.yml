@@ -1,0 +1,26 @@
+---
+- name: Install snapserver
+  ansible.builtin.apt:
+    deb: "{{ snapcast_server_download_url }}"
+  notify: Restart snapserver
+
+- name: Install cargo
+  ansible.builtin.apt:
+    name:
+      - cargo
+
+- name: Install librespot
+  community.general.cargo:
+    name: librespot
+    path: /usr/local
+
+- name: Ensure configuration is up-to-date
+  ansible.builtin.copy:
+    content: "{{ snapcast_server_config_computed | community.general.to_ini }}"
+    dest: /etc/snapserver.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: Restart snapserver
+  # TODO: properly render lists
+  when: false

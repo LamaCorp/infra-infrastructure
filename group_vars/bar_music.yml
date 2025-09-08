@@ -1,0 +1,28 @@
+---
+network_nameservers:
+  - 172.29.193.254
+  - 2a06:e881:7701:193::53
+
+netplan_configuration:
+  network:
+    version: 2
+    ethernets:
+      eth0:
+        accept-ra: false # somehow messes up with snapcast
+        addresses:
+          - "172.29.193.{{ netplan_node_id }}/24"
+          - "2a06:e881:7701:193::{{ netplan_node_id }}/64"
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.29.193.254
+          - to: "::/0"
+            via: 2a06:e881:7701:193::1
+
+backup_restic_list: []
+
+snapcast_client_args:
+  - --host=caster.music.bar.risson.net
+  - "--hostID={{ ansible_hostname }}"
+
+snapcast_remote_host: "caster.music.bar.risson.net"
+snapcast_remote_client_id: "{{ ansible_hostname }}"

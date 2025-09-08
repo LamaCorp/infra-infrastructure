@@ -1,0 +1,17 @@
+---
+- name: Check variables
+  ansible.builtin.assert:
+    that: "snapcast_client_install"
+  when: snapcast_remote_install
+
+- name: Install and configure server
+  ansible.builtin.import_tasks: server.yml
+  when: snapcast_server_install
+
+- name: Install and configure client
+  ansible.builtin.import_tasks: client.yml
+  when: snapcast_client_install
+
+- name: Install and configure remote
+  ansible.builtin.import_tasks: remote.yml
+  when: snapcast_remote_install
