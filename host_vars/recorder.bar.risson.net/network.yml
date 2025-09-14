@@ -4,16 +4,22 @@ netplan_configuration:
     version: 2
     ethernets:
       eno1:
+        mtu: 5600
         addresses:
-          - 172.28.2.194/24
-          - 2001:67c:17fc:201::194/64
+          - 172.28.2.194/27
+          - 2001:67c:17fc:207::194/64
         routes:
           - to: 0.0.0.0/0
-            via: 172.28.2.254
+            via: 172.28.2.222
+            mtu: 1500
+          - to: ::/0
+            via: 2001:67c:17fc:207::1
+            mtu: 1500
     vlans:
       bar-cctv:
         id: 2094
         link: eno1
+        mtu: 1500
         accept-ra: false
         addresses:
           - 172.29.194.1/24

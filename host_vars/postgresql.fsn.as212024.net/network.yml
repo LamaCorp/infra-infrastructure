@@ -1,13 +1,17 @@
 ---
-
 netplan_configuration:
   network:
     version: 2
     ethernets:
       ens3:
+        mtu: 5600
         addresses:
           - 172.28.1.100/26
           - 2001:67c:17fc:102::100/64
         routes:
           - to: 0.0.0.0/0
             via: 172.28.1.126
+            mtu: 1500
+          - to: ::/0
+            via: 2001:67c:17fc:102::1
+            mtu: 1500

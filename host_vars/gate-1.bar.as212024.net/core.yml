@@ -1,18 +1,18 @@
 ---
-bird2_router_id: 209.112.97.242
+bird_router_id: 209.112.97.242
 
-bird2_bgp_preferred_source:
+bird_bgp_preferred_source:
   v4: 209.112.97.242
   v6: 2001:67c:17fc:ffff::2
 
-bird2_static_routes:
+bird_static_routes:
   v4:
     - 209.112.97.235/32 unreachable
     - 209.112.97.236/32 unreachable
     - 209.112.97.237/32 unreachable
     - 209.112.97.238/32 unreachable
 
-bird2_bgp_sessions:
+bird_bgp_sessions:
   cores:
     defaults:
       local:
@@ -39,7 +39,7 @@ bird2_bgp_sessions:
           v4: 209.112.97.244
           v6: 2001:67c:17fc:ffff::4
 
-bird2_ospf_sessions:
+bird_ospf_sessions:
   - alias: ospf
     export_static_routes: true
     areas:
@@ -52,23 +52,31 @@ bird2_ospf_sessions:
         interfaces:
           zt-lama:
             cost: 50
-          eno1:
+          bar-srv:
             cost: 1
-          "bar-*":
+          bond0:
+            stub: true
+          bar-music:
+            stub: true
+          bar-client:
+            stub: true
+          bar-iot:
+            stub: true
+          bar-cctv:
+            stub: true
+          bar-pharma:
+            stub: true
+          bar-svc:
             stub: true
 
-bird2_radv_sessions:
+bird_radv_sessions:
   - alias: radv6
     interfaces:
-      eno1:
-        mtu: 1500
+      bond0:
+        mtu: 5600
       bar-iot:
         mtu: 1500
-      bar-music:
-        mtu: 1500
       bar-cctv:
-        mtu: 1500
-      bar-pharma:
         mtu: 1500
     rdnss:
       - ns:

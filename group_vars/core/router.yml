@@ -1,10 +1,27 @@
 ---
-bird2_kernel:
+bird_kernel:
   defaults:
     merge_paths: true
     persist: true
     static_export: false
+  v4:
+    export_filter_pre: |
+      krt_mtu = 1500;
 
-bird2_bgp_rpki:
+      if source = RTS_BGP then {
+        krt_mtu = 1500;
+      }
+  v6:
+    export_filter_pre: |
+      krt_mtu = 1500;
+
+      if net = 2001:67c:17fc:fc41::/64 then {
+        krt_mtu = 1420;
+      }
+      else if source = RTS_BGP then {
+        krt_mtu = 1500;
+      }
+
+bird_bgp_rpki:
   host: rpki.as212024.net
   port: 323

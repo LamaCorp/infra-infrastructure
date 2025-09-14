@@ -47,7 +47,6 @@ nft_forward_host_rules:
     - meta iifname bar-iot ether saddr ac:48:2d:13:f2:6e ip6 daddr != {$subnet_internal_6, $subnet_customer_6} accept
   310 allow pharma internet access:
     - meta iifname bar-pharma ip daddr != {$subnet_internal_4, $subnet_customer_4} accept
-    - meta iifname bar-pharma ip6 daddr != {$subnet_internal_6, $subnet_customer_6} accept
   399 bar-* drop:
     - meta iifname bar-iot drop
     - meta iifname bar-cctv drop
@@ -58,7 +57,7 @@ nft_forward_host_rules:
   410 allow to outside:
     - meta oifname bar-client accept
   420 allow to servers:
-    - meta oifname eno1 accept
+    - meta oifname bond0 accept
     - meta oifname bar-srv accept
     - meta oifname bar-svc accept
   430 allow from servers:
@@ -67,10 +66,10 @@ nft_forward_host_rules:
 
 nft__nat_host_postrouting_rules:
   100 external connectivity:
+    - meta iif bar-pharma meta oif bar-client ip saddr != 172.29.2.0/24 ip daddr != {172.29.2.0/24} counter snat to 172.29.2.99
     - meta oif bar-client ip daddr != { 172.29.2.0/24 } counter masquerade
-    - meta iif {eno1,bar-srv,bar-svc} oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter snat to 209.112.97.235
+    - meta iif {bond0,bar-srv,bar-svc} oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter snat to 209.112.97.235
     - meta iif bar-music oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter snat to 209.112.97.236
     - meta iif {bar-iot,bar-cctv} oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter snat to 209.112.97.237
-    - meta iif bar-pharma oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter snat to 209.112.97.238
     # TODO: drop these
     - meta oifname zt-lama ip saddr != 209.112.97.0/24 ip daddr != {209.112.97.0/24, 172.28.0.0/16, 172.29.0.0/16} counter masquerade

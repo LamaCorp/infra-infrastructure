@@ -11,7 +11,6 @@ setopt HIST_EXPIRE_DUPS_FIRST
 setopt SHARE_HISTORY
 unsetopt EXTENDED_HISTORY
 
-
 alias ls="ls --color=auto -F -h"
 alias ll="ls -l"
 alias l="ll"
@@ -20,7 +19,7 @@ alias lla="ls -la"
 alias upgradable="apt update && apt list --upgradable"
 alias ip="ip -c"
 alias d="docker"
-alias dc="docker-compose"
+alias dc="docker compose"
 
 autoload -U compinit colors && compinit && colors
 
@@ -29,13 +28,13 @@ zstyle ':completion:*:default' list-colors ""
 PROMPT="[%n@%m %~] # "
 RPROMPT=""
 
-
 # Fix keyboard
 
 bindkey -e
-case $TERM in (rxvt*) #urxvt
-  bindkey "\e[7~"  beginning-of-line
-  bindkey "\e[8~"  end-of-line
+case $TERM in rxvt*) #urxvt
+  bindkey "\e[7~" beginning-of-line
+  bindkey "\e[8~" end-of-line
+  ;;
 esac
 bindkey "^A" beginning-of-line
 bindkey "^E" end-of-line

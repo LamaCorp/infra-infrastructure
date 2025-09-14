@@ -1,44 +1,45 @@
 ---
-bird2_router_id: 209.112.97.244
+bird_router_id: 209.112.97.244
 
-bird2_static_routes:
+bird_static_routes:
   v4:
     - 209.112.97.0/24 unreachable
   v6:
     - 2001:67c:17fc::/48 unreachable
     - 2a06:e881:7700::/40 unreachable
 
-bird2_bgp_region_id: 276 # Germany
-bird2_bgp_site_id: 4
+bird_bgp_region_id: 276 # Germany
+bird_bgp_site_id: 4
 
-bird2_bgp_preferred_source:
+bird_bgp_preferred_source:
   v4: 209.112.97.244
   v6: 2001:67c:17fc:ffff::4
 
-bird2_bgp_originations:
+bird_bgp_originations:
   v4:
     - 209.112.97.0/24
   v6:
     - 2001:67c:17fc::/48
     - 2a06:e881:7700::/40
 
-bird2_bgp_blacklist:
+bird_bgp_blacklist:
   v4:
-    - 194.50.92.0/24 # Local prefix
+    - 194.50.92.0/24- # Local prefix
     - 5.196.188.0/25- # SBIX
     - 80.81.192.0/21- # DE-CIX
   v6:
-    - 2a09:4c0:303:c232::/64 # Local prefix
+    - 2a09:4c0:303:c232::/64- # Local prefix
     - 2001:7f8:d9:3::/64- # SBIX
     - 2001:7f8::/64- # DE-CIX
 
-bird2_bgp_sessions:
+bird_bgp_sessions:
   upstreams:
     sessions:
       - description: Securebit AG
         alias: sbag
         asn: 58057
         md5: "2faf060a6c794c5fbbff6b93c64e6a94"
+        multihop: 3
         local:
           v4: 194.50.92.165
           v6: 2a09:4c0:303:c232::5ca5
@@ -253,7 +254,7 @@ bird2_bgp_sessions:
           v4: 216.218.233.13
           v6: 2600:7000:1000::9
 
-bird2_ospf_sessions:
+bird_ospf_sessions:
   - alias: ospf
     areas:
       0.0.0.0:

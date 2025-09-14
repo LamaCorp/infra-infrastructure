@@ -4,16 +4,29 @@ netplan_configuration:
     version: 2
     ethernets:
       eno1:
-        accept-ra: false
+        mtu: 5600
         addresses:
           - 172.28.2.12/27
           - 2001:67c:17fc:202::12/64
         routes:
           - to: 0.0.0.0/0
             via: 172.28.2.30
+            mtu: 1500
           - to: ::/0
             via: 2001:67c:17fc:202::1
-    bridges:
-      media:
+            mtu: 1500
+    vlans:
+      bar-client:
+        id: 2050
+        link: eno1
+        mtu: 1500
+        accept-ra: false
         addresses:
-          - 172.28.192.12/32
+          - 172.29.2.12/24
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.29.2.1
+            table: 101
+        routing-policy:
+          - from: 172.29.2.12/32
+            table: 101

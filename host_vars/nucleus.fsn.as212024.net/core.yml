@@ -1,17 +1,17 @@
 ---
-bird2_router_id: 209.112.97.241
+bird_router_id: 209.112.97.241
 
-bird2_bgp_preferred_source:
+bird_bgp_preferred_source:
   v4: 209.112.97.241
   v6: 2001:67c:17fc:ffff::1
 
-bird2_static_routes:
+bird_static_routes:
   v4:
     - 209.112.97.232/32 unreachable
     - 209.112.97.233/32 unreachable
     - 209.112.97.234/32 unreachable
 
-bird2_bgp_sessions:
+bird_bgp_sessions:
   cores:
     defaults:
       local:
@@ -38,7 +38,7 @@ bird2_bgp_sessions:
           v4: 209.112.97.244
           v6: 2001:67c:17fc:ffff::4
 
-bird2_ospf_sessions:
+bird_ospf_sessions:
   - alias: ospf
     export_static_routes: true
     areas:

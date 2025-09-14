@@ -4,13 +4,19 @@ netplan_configuration:
     version: 2
     ethernets:
       ens3:
+        mtu: 5600
         addresses:
           - 172.29.1.20/26
           - 2a06:e881:7701:1::20/64
         routes:
           - to: 0.0.0.0/0
             via: 172.29.1.62
+            mtu: 1500
+          - to: ::/0
+            via: 2a06:e881:7701:1::1
+            mtu: 1500
     bridges:
       public:
+        mtu: 5600
         addresses:
           - 148.251.148.233/32

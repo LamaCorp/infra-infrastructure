@@ -1,0 +1,10 @@
+---
+nft__custom_content: |
+  table inet mangle {
+    chain forward {
+      type filter hook forward priority mangle; policy accept;
+
+      # Alter TCP MSS to MTU size
+      tcp flags syn tcp option maxseg size set rt mtu
+    }
+  }

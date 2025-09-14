@@ -4,16 +4,19 @@ netplan_configuration:
     version: 2
     ethernets:
       ens3:
-        accept-ra: false
+        mtu: 5600
         addresses:
           - 172.28.1.11/26
           - 2001:67c:17fc:101::11/64
         routes:
           - to: 0.0.0.0/0
             via: 172.28.1.62
+            mtu: 1500
           - to: ::/0
             via: 2001:67c:17fc:101::1
+            mtu: 1500
     bridges:
       stalwart:
+        mtu: 5600
         addresses:
           - 148.251.148.232/32

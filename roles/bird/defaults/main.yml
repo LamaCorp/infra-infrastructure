@@ -41,13 +41,13 @@
 
 # The public Autonomous System Number of the border router that this
 # configuration is running on.
-# bird2_asn: 65536
+# bird_asn: 65536
 
 # A unique identifer of this router, known as the "router ID". This is often an
 # IP address of the border router, as it's thought to be unique.
-# bird2_router_id: '198.51.100.1'
+# bird_router_id: '198.51.100.1'
 
-bird2_kernel:
+bird_kernel:
   defaults:
     learn: false
     static_export: true
@@ -64,7 +64,7 @@ bird2_kernel:
 # If you're originating routes on this BIRD instance that aren't learned
 # elsewhere, you'll need to add "unreachable" static routes in order for them
 # to be originated.
-bird2_static_routes:
+bird_static_routes:
   {}
   # v4:
   #   - '198.51.100.0/24 unreachable'
@@ -73,23 +73,23 @@ bird2_static_routes:
 
 # The ISO 3166-1 country code of where the border router is operating. This is
 # used for BGP community support.
-# bird2_bgp_region_id: 840  # USA
+# bird_bgp_region_id: 840  # USA
 
 # A unique identifer of which physical site of the ASN the border router is
 # operating in. This is used for BGP community support.
-# bird2_bgp_site_id: 1
+# bird_bgp_site_id: 1
 
 # The preferred source address of prefixes learned on export from the Kernel.
 # Used in source address selection for outgoing packets. Has to be one of the IP
 # addresses of the router. More information can be found in:
 # https://bird.network.cz/?get_doc&v=20&f=bird-6.html
-bird2_bgp_preferred_source:
+bird_bgp_preferred_source:
   {}
   # v4: '198.51.100.1'
   # v6: '2001:db8::200:5eff:fe15:429e'
 
 # The prefixes being originated by this router
-bird2_bgp_originations:
+bird_bgp_originations:
   {}
   # v4:
   #   - '198.51.100.0/24'
@@ -100,14 +100,14 @@ bird2_bgp_originations:
 # more specific prefixes of originations (perhaps for customers who have a sub
 # allocation of an origination, and you want them to announce them on their
 # own).
-bird2_bgp_whitelist:
+bird_bgp_whitelist:
   {}
   # v6:
   #   - '2001:db8:fff::/48'
 
 # Prefixes that should never be announced. Often IXP ranges should be placed
 # here to avoid leaking them to the world.
-bird2_bgp_blacklist:
+bird_bgp_blacklist:
   {}
   # v4:
   #   - '203.0.113.0/23+'   # DE-CIX New York in this example
@@ -115,11 +115,11 @@ bird2_bgp_blacklist:
   #   - 'fd00:504:36::/64+' # DE-CIX New York in this example
 
 # The RPKI RTR address and port for dropping RPKI invalids.
-# bird2_bgp_rpki:
+# bird_bgp_rpki:
 #   host: 'rpki.fqdn.example'
 #   port: 8282
 
-bird2_bgp_sessions: {}
+bird_bgp_sessions: {}
 # # Upstreams are BGP sessions that give you a full table and you want to
 # # announce your own originations and customer prefixes to.
 # upstreams:
@@ -235,7 +235,7 @@ bird2_bgp_sessions: {}
 #         v6:
 #           decrease: 50  # Or decrease the existing bgp_local_pref
 
-bird2_ospf_sessions: []
+bird_ospf_sessions: []
 # - alias: internal
 #   v4: false  # defaults to true
 #   v6: true  # defaults to true
@@ -267,7 +267,7 @@ bird2_ospf_sessions: []
 #           neighbors:
 #             - 192.0.2.1 eligible
 
-bird2_radv_sessions: []
+bird_radv_sessions: []
 # - alias: internal
 #   interfaces:
 #     eth0: {}

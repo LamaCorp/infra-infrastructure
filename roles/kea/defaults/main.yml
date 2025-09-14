@@ -4,16 +4,24 @@ kea_ctrl_agent_default_config:
   Control-agent:
     http-host: 127.0.0.1
     http-port: 8000
+    authentication:
+      type: basic
+      realm: Kea Control Agent
+      directory: /etc/kea
+      clients:
+        - user: kea-api
+          password-file: kea-api-password
     control-sockets:
       dhcp4:
         socket-type: unix
-        socket-name: /var/run/kea/kea4-ctrl-socket
+        socket-name: kea4-ctrl-socket
       dhcp6:
         socket-type: unix
-        socket-name: /var/run/kea/kea6-ctrl-socket
+        socket-name: kea6-ctrl-socket
       d2:
         socket-type: unix
-        socket-name: /var/run/kea/kea4-ddns-ctrl-socket
+        socket-name: kea4-ddns-ctrl-socket
+    hooks-libraries: []
     loggers:
       - name: kea-ctrl-agent
         output_options:
@@ -29,10 +37,13 @@ kea_dhcp4_default_config:
   Dhcp4:
     control-socket:
       socket-type: unix
-      socket-name: /var/run/kea/kea4-ctrl-socket
+      socket-name: kea4-ctrl-socket
     lease-database:
       type: memfile
       lfc-interval: 3600
+    renew-timer: 900
+    rebind-timer: 1800
+    valid-lifetime: 3600
     expired-leases-processing:
       reclaim-timer-wait-time: 10
       flush-reclaimed-timer-wait-time: 25
@@ -55,7 +66,7 @@ kea_dhcp6_default_config:
   Dhcp6:
     control-socket:
       socket-type: unix
-      socket-name: /var/run/kea/kea6-ctrl-socket
+      socket-name: kea6-ctrl-socket
     lease-database:
       type: memfile
       lfc-interval: 3600
@@ -66,6 +77,10 @@ kea_dhcp6_default_config:
       max-reclaim-leases: 100
       max-reclaim-time: 250
       unwarned-reclaim-cycles: 5
+    renew-timer: 1000
+    rebind-timer: 2000
+    preferred-lifetime: 3000
+    valid-lifetime: 4000
     loggers:
       - name: kea-dhcp6
         output_options:
@@ -83,7 +98,7 @@ kea_dhcp_ddns_default_config:
     port: 53001
     control-socket:
       socket-type: unix
-      socket-name: /var/run/kea/kea-ddns-ctrl-socket
+      socket-name: kea-ddns-ctrl-socket
     loggers:
       - name: kea-dhcp-ddns
         output_options:

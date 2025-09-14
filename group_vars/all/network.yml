@@ -15,4 +15,4 @@ netplan_renderer: networkd
 
 whois_server: whois.as212024.net
 
-bird2_asn: 212024
+bird_asn: 212024

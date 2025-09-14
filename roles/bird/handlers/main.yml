@@ -13,6 +13,6 @@
   ansible.builtin.service:
     name: "bird-prefixes-filter-gen-{{ irr.formatted }}-{{ irr.protocol_number }}.timer"
     state: restarted
-  loop: "{{ bird2_bgp_prefixes_filter_gen_timers_to_restart }}"
+  loop: "{{ bird_bgp_prefixes_filter_gen_timers_to_restart }}"
   loop_control:
     loop_var: irr

@@ -1,7 +1,6 @@
 ---
 backup_restic_creds_local_path_provisioner: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/local_path_provisioner') }}"
 backup_restic_creds_rancher: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/rancher') }}"
-backup_restic_creds_weed: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/weed') }}"
 
 backup_restic_list_raw:
   - name: local_path_provisioner
@@ -41,28 +40,3 @@ backup_restic_list_raw:
     prune_systemd_timers:
       minute: 12
       hour: 17
-  - name: weed
-    enabled: true
-    repo_password: "{{ backup_restic_creds_weed['repo_password'] }}"
-    backend:
-      type: wasabi
-      s3_bucket_name: "{{ backup_restic_creds_weed['bucket_name'] }}"
-      s3_access_key: "{{ backup_restic_creds_weed['backup_access_key'] }}"
-      s3_secret_key: "{{ backup_restic_creds_weed['backup_secret_key'] }}"
-      s3_prune_access_key: "{{ backup_restic_creds_weed['prune_access_key'] }}"
-      s3_prune_secret_key: "{{ backup_restic_creds_weed['prune_secret_key'] }}"
-    # backup_cmd: "cri_backup --ignore-inode"
-    to_include:
-      - /weed/group
-      - /weed/service
-      - /weed/user
-    to_exclude:
-      - /weed/service/immich/backups
-      - /weed/service/immich/encoded-video
-      - /weed/service/immich/thumbs
-    backup_systemd_timers:
-      minute: 40
-      hour: 03
-    prune_systemd_timers:
-      minute: 49
-      hour: 14

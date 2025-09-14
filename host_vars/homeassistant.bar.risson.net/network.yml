@@ -4,17 +4,23 @@ netplan_configuration:
     version: 2
     ethernets:
       eth0:
-        accept-ra: false
+        mtu: 5600
         addresses:
           - 172.28.2.192/27
           - 2001:67c:17fc:207::192/64
+        routes:
+          - to: 0.0.0.0/0
+            via: 172.28.2.222
+            mtu: 1500
+          - to: ::/0
+            via: 2001:67c:17fc:207::1
+            mtu: 1500
     vlans:
       bar-iot:
         id: 2092
         link: eth0
+        mtu: 1500
+        accept-ra: false
         addresses:
           - 172.29.192.1/24
           - 2a06:e881:7701:192::8123/64
-        routes:
-          - to: 0.0.0.0/0
-            via: 172.29.192.254

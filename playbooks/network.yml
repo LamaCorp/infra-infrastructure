@@ -122,7 +122,7 @@
 - name: Routers
   hosts: core
   roles:
-    - role: bird2
+    - role: bird
       tags:
         - bird
     - role: bird_lg_go_proxy

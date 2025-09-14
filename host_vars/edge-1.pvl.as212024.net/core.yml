@@ -1,7 +1,7 @@
 ---
-bird2_router_id: 209.112.97.243
+bird_router_id: 209.112.97.243
 
-bird2_static_routes:
+bird_static_routes:
   v4:
     - 209.112.97.0/24 unreachable
     - 169.254.169.254/32 via 108.61.208.1 %enp1s0 # needed because multihop to vultr
@@ -10,28 +10,28 @@ bird2_static_routes:
     - 2a06:e881:7700::/40 unreachable
     - 2001:19f0:ffff::1/128 via fe80::fc00:3ff:fe21:2eeb %enp1s0 # needed because multihop to vultr
 
-bird2_bgp_region_id: 250 # France
-bird2_bgp_site_id: 3
+bird_bgp_region_id: 250 # France
+bird_bgp_site_id: 3
 
-bird2_bgp_preferred_source:
+bird_bgp_preferred_source:
   v4: 209.112.97.243
   v6: 2001:67c:17fc:ffff::3
 
-bird2_bgp_originations:
+bird_bgp_originations:
   v4:
     - 209.112.97.0/24
   v6:
     - 2001:67c:17fc::/48
     - 2a06:e881:7700::/40
 
-bird2_bgp_blacklist:
+bird_bgp_blacklist:
   v4:
     - 108.61.208.0/23 # Local prefix
   v6:
     - 2a05:f480:1c00:9ee::/64 # Local prefix
     - 2001:19f0:ffff::1/128- # Vultr router
 
-bird2_bgp_sessions:
+bird_bgp_sessions:
   upstreams:
     sessions:
       - description: Vultr
@@ -113,7 +113,7 @@ bird2_bgp_sessions:
           v4: 216.218.233.15
           v6: 2600:7000:1000::3
 
-bird2_ospf_sessions:
+bird_ospf_sessions:
   - alias: ospf
     areas:
       0.0.0.0:

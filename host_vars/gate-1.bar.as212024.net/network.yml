@@ -7,17 +7,29 @@ netplan_configuration:
   network:
     version: 2
     ethernets:
-      eno1:
+      enp1s0f0: {}
+      enp1s0f1: {}
+    bonds:
+      bond0:
+        interfaces:
+          - enp1s0f0
+          - enp1s0f1
+        parameters:
+          mode: 802.3ad
+          lacp-rate: fast
+          transmit-hash-policy: layer3+4
+        mtu: 5600
+        accept-ra: false
         addresses:
           - 172.28.2.254/27
           - 2001:67c:17fc:201::1/64
           - 2001:67c:17fc:201::53/64
           - 2001:67c:17fc:201::123/64
-      wlp3s0: {}
     vlans:
       bar-srv:
         id: 2
-        link: eno1
+        link: bond0
+        mtu: 5600
         accept-ra: false
         addresses:
           - 172.28.2.30/27
@@ -26,7 +38,8 @@ netplan_configuration:
           - 2001:67c:17fc:202::123/64
       bar-svc:
         id: 7
-        link: eno1
+        link: bond0
+        mtu: 5600
         accept-ra: false
         addresses:
           - 172.28.2.222/27
@@ -35,19 +48,28 @@ netplan_configuration:
           - 2001:67c:17fc:207::123/64
       bar-client:
         id: 2050
-        link: eno1
+        link: bond0
+        mtu: 1500
         accept-ra: false
         addresses:
           - 172.29.2.254/24
+          - 172.29.2.99/24
           # - 2001:67c:17fc:202::1/64
           # - 2001:67c:17fc:202::53/64
           # - 2001:67c:17fc:202::123/64
         routes:
           - to: 0.0.0.0/0
             via: 172.29.2.1
+          - to: 0.0.0.0/0
+            via: 172.29.2.1
+            table: 101
+        routing-policy:
+          - from: 192.168.0.0/24
+            table: 101
       bar-iot:
         id: 2092
-        link: eno1
+        link: bond0
+        mtu: 1500
         accept-ra: false
         addresses:
           - 172.29.192.254/24
@@ -56,7 +78,8 @@ netplan_configuration:
           - 2a06:e881:7701:192::123/64
       bar-music:
         id: 2093
-        link: eno1
+        link: bond0
+        mtu: 1500
         accept-ra: false
         addresses:
           - 172.29.193.254/24
@@ -65,7 +88,8 @@ netplan_configuration:
           - 2a06:e881:7701:193::123/64
       bar-cctv:
         id: 2094
-        link: eno1
+        link: bond0
+        mtu: 1500
         accept-ra: false
         addresses:
           - 172.29.194.254/24
@@ -74,7 +98,8 @@ netplan_configuration:
           - 2a06:e881:7701:194::123/64
       bar-pharma:
         id: 2099
-        link: eno1
+        link: bond0
+        mtu: 1500
         accept-ra: false
         addresses:
           - 192.168.0.200/24

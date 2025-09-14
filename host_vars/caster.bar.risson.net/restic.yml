@@ -1,0 +1,4 @@
+---
+backup_restic_list_user_root_to_include:
+  - /etc/snapserver.conf
+  - /root

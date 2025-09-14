@@ -14,6 +14,8 @@ backup_restic_prune_alerting_node_default: true
 backup_restic_alerting_node_default_dir: "{{ node_exporter_textfile_dir }}"
 
 backup_restic_creds_user_root: "{{ lookup('community.hashi_vault.hashi_vault', 'restic/data/repositories/' + inventory_hostname + '/user_root') }}"
+backup_restic_list_user_root_to_include:
+  - /root
 backup_restic_list_user_root:
   - name: user_root
     enabled: true
@@ -25,8 +27,7 @@ backup_restic_list_user_root:
       s3_secret_key: "{{ backup_restic_creds_user_root['backup_secret_key'] }}"
       s3_prune_access_key: "{{ backup_restic_creds_user_root['prune_access_key'] }}"
       s3_prune_secret_key: "{{ backup_restic_creds_user_root['prune_secret_key'] }}"
-    to_include:
-      - /root
+    to_include: "{{ backup_restic_list_user_root_to_include }}"
     backup_systemd_timers:
       minute: 20
       hour: 02

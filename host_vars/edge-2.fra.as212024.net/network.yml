@@ -30,6 +30,7 @@ netplan_configuration:
         match:
           macaddress: c0:03:c2:32:5c:a5
         set-name: enp19s0
+        accept-ra: false
         addresses:
           - 80.81.194.242/21
           - 2001:7f8::3:3c3:0:1/64
@@ -37,6 +38,7 @@ netplan_configuration:
         match:
           macaddress: 00:50:56:9e:01:7a
         set-name: enp27s0
+        accept-ra: false
         addresses:
           - 5.196.188.52/25
           - 2001:7f8:d9:3::0003:3c38:4/64

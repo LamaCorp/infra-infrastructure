@@ -38,6 +38,7 @@ netplan_configuration:
             table: 101
     bridges:
       br-svc:
+        mtu: 5600
         addresses:
           - 172.28.1.62/26
           - 2001:67c:17fc:101::1/64
@@ -47,12 +48,14 @@ netplan_configuration:
           - to: 148.251.148.232/32
             via: 172.28.1.11 # k3s-1.fsn.as212024.net
       br-mdw:
+        mtu: 5600
         addresses:
           - 172.28.1.126/26
           - 2001:67c:17fc:102::1/64
           - 2001:67c:17fc:102::53/64
           - 2001:67c:17fc:102::123/64
       br-cc:
+        mtu: 5600
         addresses:
           - 172.29.1.62/26
           - 2a06:e881:7701:1::1/64

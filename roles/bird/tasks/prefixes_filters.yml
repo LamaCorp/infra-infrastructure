@@ -11,7 +11,7 @@
   vars:
     config_file: "/etc/bird/filters/prefixes/{{ irr.formatted }}_{{ irr.protocol_number }}.conf"
   ansible.builtin.set_fact:
-    bird2_bgp_prefixes_filter_gen_configs_to_keep: "{{ bird2_bgp_prefixes_filter_gen_configs_to_keep | default({}) | combine({config_file: true}) }}"
+    bird_bgp_prefixes_filter_gen_configs_to_keep: "{{ bird_bgp_prefixes_filter_gen_configs_to_keep | default({}) | combine({config_file: true}) }}"
 
 - name: Install bird BGP prefixes filter generation service
   ansible.builtin.template:
@@ -26,7 +26,7 @@
   vars:
     service_file: "/etc/systemd/system/bird-prefixes-filter-gen-{{ irr.formatted }}-{{ irr.protocol_number }}.service"
   ansible.builtin.set_fact:
-    bird2_bgp_prefixes_filter_gen_units_to_keep: "{{ bird2_bgp_prefixes_filter_gen_units_to_keep | default({}) | combine({service_file: true}) }}"
+    bird_bgp_prefixes_filter_gen_units_to_keep: "{{ bird_bgp_prefixes_filter_gen_units_to_keep | default({}) | combine({service_file: true}) }}"
 
 - name: Install bird BGP prefixes filter generation timer
   ansible.builtin.template:
@@ -42,7 +42,7 @@
   vars:
     service_file: "/etc/systemd/system/bird-prefixes-filter-gen-{{ irr.formatted }}-{{ irr.protocol_number }}.timer"
   ansible.builtin.set_fact:
-    bird2_bgp_prefixes_filter_gen_units_to_keep: "{{ bird2_bgp_prefixes_filter_gen_units_to_keep | default({}) | combine({service_file: true}) }}"
+    bird_bgp_prefixes_filter_gen_units_to_keep: "{{ bird_bgp_prefixes_filter_gen_units_to_keep | default({}) | combine({service_file: true}) }}"
 
 - name: Reload systemd
   ansible.builtin.systemd: # noqa no-handler
@@ -63,5 +63,5 @@
 
 - name: Add this timer to the list of timers to be restarted
   ansible.builtin.set_fact: # noqa no-handler
-    bird2_bgp_prefixes_filter_gen_timers_to_restart: "{{ (bird2_bgp_prefixes_filter_gen_timers_to_restart | d([])) + [irr] }}"
+    bird_bgp_prefixes_filter_gen_timers_to_restart: "{{ (bird_bgp_prefixes_filter_gen_timers_to_restart | d([])) + [irr] }}"
   when: copy_timer.changed

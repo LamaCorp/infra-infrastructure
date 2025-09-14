@@ -15,7 +15,7 @@ locals {
     ]
 
     "mongodb.fsn.as212024.net" = [
-      "postgresql",
+      "mongodb",
       "user_root",
     ]
     "postgresql.fsn.as212024.net" = [
@@ -31,7 +31,6 @@ locals {
       "local_path_provisioner",
       "rancher",
       "user_root",
-      "weed",
     ]
     "k3s-1.bar.as212024.net" = [
       "local_path_provisioner",
@@ -47,6 +46,9 @@ locals {
       "user_root",
     ]
 
+    "caster.bar.risson.net" = [
+      "user_root",
+    ]
     "homeassistant.bar.risson.net" = [
       "homeassistant",
       "user_root",
