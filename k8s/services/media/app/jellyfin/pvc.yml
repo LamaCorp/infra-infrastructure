@@ -12,13 +12,38 @@ spec:
       storage: 1Gi
 ---
 apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: k3s-2-bar-jellyfin-cache
+spec:
+  capacity:
+    storage: 200Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: local-storage
+  local:
+    path: /srv/jellyfin-cache
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - k3s-2.bar.as212024.net
+---
+apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: jellyfin-cache
 spec:
+  storageClassName: local-storage
+  volumeName: k3s-2-bar-jellyfin-cache
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
   resources:
     requests:
-      storage: 1Gi
+      storage: 200Gi
