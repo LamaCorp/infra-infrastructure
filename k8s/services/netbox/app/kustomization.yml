@@ -7,7 +7,6 @@ commonLabels:
 resources:
   - server
   - worker
-  - housekeeping
   - network-policy.yml
   - pvc.yml
   - secrets.yml
