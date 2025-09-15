@@ -4,10 +4,10 @@ nftables_exporter_host_arch_map:
   x86_64: amd64
 nftables_exporter_host_arch: "{{ nftables_exporter_host_arch_map[ansible_architecture] }}"
 
-nftables_exporter_version: v0.4.0
+nftables_exporter_version: v0.4.3
 nftables_exporter_checksum_map:
-  arm64: 81dcfa1822a39d166784cae6e83c9d934961ed2becdaffcfbccecc6711775b57
-  amd64: b4a75744f97e7c1ee9ead1e8f11c9092597558b8cbe4f1a563149efc98b0b9ef
+  amd64: 42491d6d7f6b569a9a2e928b17201c5e63aeeb08a202ea5ea8a22e83c4ba67ee
+  arm64: 77d5e5e991c08ca6fcc5f806c617c3893c4c06b10237761f2bd07dc3b642d374
 nftables_exporter_checksum: "{{ nftables_exporter_checksum_map[nftables_exporter_host_arch] }}"
 
 nftables_exporter_default_config:
