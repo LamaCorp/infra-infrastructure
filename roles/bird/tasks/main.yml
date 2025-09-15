@@ -11,6 +11,10 @@
   ansible.posix.sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
+    state: present
+    reload: true
+    sysctl_set: true
+    sysctl_file: /etc/sysctl.d/81-bird.conf
   loop:
     - name: net.ipv6.route.max_size
       value: "1073741824"

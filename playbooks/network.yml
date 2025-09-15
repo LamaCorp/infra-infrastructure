@@ -86,6 +86,7 @@
         state: present
         reload: true
         sysctl_set: true
+        sysctl_file: /etc/sysctl.d/80-network.conf
       loop:
         - key: net.ipv4.conf.all.rp_filter
           value: 0

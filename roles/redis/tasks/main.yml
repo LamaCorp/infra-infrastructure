@@ -1,5 +1,4 @@
 ---
-
 - name: Install Redis
   ansible.builtin.include_tasks: install.yml
 
@@ -23,6 +22,9 @@
     name: vm.overcommit_memory
     value: "1"
     state: present
+    reload: true
+    sysctl_set: true
+    sysctl_file: /etc/sysctl.d/89-redis.conf
   when: redis_enable_vm_overcommit
 
 - name: Configure Redis instances

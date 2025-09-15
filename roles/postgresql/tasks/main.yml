@@ -21,6 +21,7 @@
     state: present
     reload: true
     sysctl_set: true
+    sysctl_file: /etc/sysctl.d/89-postgresql.conf
 
 - name: Template PostgreSQL configuration
   ansible.builtin.template:
