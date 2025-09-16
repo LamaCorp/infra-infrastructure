@@ -9,6 +9,12 @@ backup_restic_default_backup_data_integrity_check: "simple"
 # Means that all of our data gets checked every month
 backup_restic_default_prune_data_integrity_check: "1/30"
 
+backup_restic_default_extra_vars:
+  - name: RESTIC_CACHE_DIR
+    value: /srv/restic/cache
+    export: true
+backup_restic_default_extra_vars_prune: "{{ backup_restic_default_extra_vars }}"
+
 backup_restic_alerting_node_default: true
 backup_restic_prune_alerting_node_default: true
 backup_restic_alerting_node_default_dir: "{{ node_exporter_textfile_dir }}"

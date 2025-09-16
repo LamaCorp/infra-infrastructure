@@ -15,6 +15,7 @@ backup_restic_list_raw:
       s3_prune_secret_key: "{{ backup_restic_creds_local_path_provisioner['prune_secret_key'] }}"
     to_include:
       - /srv/local-path-provisioner
+    backup_data_integrity_check: ""
     backup_systemd_timers:
       minute: 40
       hour: 05
