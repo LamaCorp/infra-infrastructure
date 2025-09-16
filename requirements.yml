@@ -27,7 +27,7 @@ roles:
     version: 7.5.3
   - name: ipr-cnrs.nftables
     src: git+https://github.com/ipr-cnrs/nftables.git
-    version: bd11aac65b9c77bbcbbb5d4f9b5d24e74f456b67
+    version: 68932eed012b9f5d05578f9d52733b633144e022
   - name: mrlesmithjr.chrony
     version: v0.1.6
   - name: mrlesmithjr.netplan

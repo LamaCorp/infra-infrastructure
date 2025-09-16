@@ -15,7 +15,9 @@ nft_input_host_rules:
   350 dns autoritative:
     - udp dport 53 accept
     - tcp dport 53 accept
+  360 ntp:
+    - udp dport 123 accept
 
 nft__nat_host_postrouting_rules:
   100 external connectivity:
-    - meta oif enp11s0 ip saddr != 194.50.92.165 snat to 194.50.92.165
+    - meta oif enp11s0 ip saddr != {194.50.92.165, 209.112.97.0/24} snat to 194.50.92.165

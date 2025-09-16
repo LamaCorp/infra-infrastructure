@@ -50,9 +50,7 @@ nft_input_group_rules:
 
   360 ntp:
     - ip saddr {$subnet_internal_4, $subnet_customer_4} udp dport 123 accept
-    - ip saddr {$subnet_internal_4, $subnet_customer_4} tcp dport 123 accept
     - ip6 saddr {$subnet_internal_6, $subnet_customer_6} udp dport 123 accept
-    - ip6 saddr {$subnet_internal_6, $subnet_customer_6} tcp dport 123 accept
 
 
 nft_forward_group_rules:
