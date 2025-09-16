@@ -10,5 +10,3 @@ chrony_ntp_servers:
   - server: nucleus.fsn.as212024.net
     options:
       - option: iburst
-      - option: minpoll
-        val: 8

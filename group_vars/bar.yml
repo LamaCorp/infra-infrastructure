@@ -8,5 +8,3 @@ chrony_ntp_servers:
   - server: gate-1.bar.as212024.net
     options:
       - option: iburst
-      - option: minpoll
-        val: 8

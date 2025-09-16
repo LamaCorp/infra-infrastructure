@@ -1,4 +1,5 @@
 ---
+# https://support.ntp.org/Servers/PublicTimeServer001915
 chrony_allow_hosts:
   - ""
 
