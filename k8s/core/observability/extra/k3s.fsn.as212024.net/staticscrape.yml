@@ -129,4 +129,4 @@ spec:
     - path: /prom/495364bc-abd8-4204-a622-2471db82481d
       scheme: https
       targets:
-        - bgp.tools:443
+        - prometheus.bgp.tools:443
