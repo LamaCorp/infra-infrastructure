@@ -12,6 +12,9 @@ nft_define:
   prometheus exporter node:
     name: prometheus_exporter_node
     value: 9100
+  prometheus exporter chrony:
+    name: prometheus_exporter_chrony
+    value: 9123
   prometheus exporter nftables:
     name: prometheus_exporter_nftables
     value: 9630
@@ -47,8 +50,8 @@ nft_input_rules:
   014 icmp ping: "{{ nft_templates.icmp_allow_ping }}"
 
   220 prometheus exporters:
-    - ip saddr $subnet_internal_4 tcp dport { $prometheus_exporter_node, $prometheus_exporter_nftables } accept
-    - ip6 saddr $subnet_internal_6 tcp dport { $prometheus_exporter_node, $prometheus_exporter_nftables } accept
+    - ip saddr $subnet_internal_4 tcp dport { $prometheus_exporter_node, $prometheus_exporter_chrony, $prometheus_exporter_nftables } accept
+    - ip6 saddr $subnet_internal_6 tcp dport { $prometheus_exporter_node, $prometheus_exporter_chrony, $prometheus_exporter_nftables } accept
 
   230 iperf3:
     - ip saddr {$subnet_internal_4, $subnet_customer_4} tcp dport 5201 accept

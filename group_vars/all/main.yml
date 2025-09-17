@@ -15,6 +15,13 @@ chrony_config:
   makestep: 0.1 3
   dscp: 46
 
+chrony_exporter_enabled_collectors:
+  - tracking
+  - sources
+  - serverstats
+chrony_exporter_disabled_collectors:
+  - dns-lookups
+
 # nftables
 
 nft_filter_input_policy: drop
@@ -44,7 +51,6 @@ vault_version: 1.13.0
 
 node_exporter_textfile_collector_scripts_to_install:
   - apt_info.py
-  - chrony.py
   - deleted_libraries.py
   - smartmon.py
 

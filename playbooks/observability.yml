@@ -6,9 +6,17 @@
 - name: Common prometheus exporters
   hosts: all
   roles:
-    - prometheus.prometheus.node_exporter
-    - node_exporter_textfile_collector_scripts
-    - nftables_exporter
+    - name: prometheus.prometheus.node_exporter
+      tags:
+        - node_exporter
+    - name: node_exporter_textfile_collector_scripts
+      tags:
+        - node_exporter
+    - name: nftables_exporter
+      tags: nftables_exporter
+    - name: prometheus.prometheus.chrony_exporter
+      tags:
+        - chrony_exporter
   tags:
     - observability
     - exporters

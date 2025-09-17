@@ -7,18 +7,65 @@ spec:
   jobName: node
   targetEndpoints:
     - targets:
+        - nucleus.fsn.as212024.net:9100
+        - gate-1.bar.as212024.net:9100
         - edge-1.pvl.as212024.net:9100
         - edge-2.fra.as212024.net:9100
-        - gate-1.bar.as212024.net:9100
-        - homeassistant.bar.risson.net:9100
-        - k3s-1.bar.as212024.net:9100
-        - k3s-1.fsn.as212024.net:9100
-        - k3s-2.bar.as212024.net:9100
-        - nucleus.fsn.as212024.net:9100
-        - pine.fsn.as212024.net:9100
+
+        - mongodb.fsn.as212024.net:9100
         - postgresql.fsn.as212024.net:9100
-        - recorder.bar.risson.net:9100
         - redis.fsn.as212024.net:9100
+
+        - k3s-1.fsn.as212024.net:9100
+        - k3s-1.bar.as212024.net:9100
+        - k3s-2.bar.as212024.net:9100
+
+        - pine.fsn.as212024.net:9100
+
+        - homeassistant.bar.risson.net:9100
+        - recorder.bar.risson.net:9100
+        - caster.bar.risson.net:9100
+        - ext-1.music.bar.risson.net:9100
+        - ext-2.music.bar.risson.net:9100
+        - cuisine.music.bar.risson.net:9100
+        - salle-a-manger.music.bar.risson.net:9100
+        - sport.music.bar.risson.net:9100
+        - entree.music.bar.risson.net:9100
+        - salon.music.bar.risson.net:9100
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMStaticScrape
+metadata:
+  name: chrony
+spec:
+  jobName: chrony
+  targetEndpoints:
+    - targets:
+        - nucleus.fsn.as212024.net:9123
+        - gate-1.bar.as212024.net:9123
+        - edge-1.pvl.as212024.net:9123
+        - edge-2.fra.as212024.net:9123
+
+        - mongodb.fsn.as212024.net:9123
+        - postgresql.fsn.as212024.net:9123
+        - redis.fsn.as212024.net:9123
+
+        - k3s-1.fsn.as212024.net:9123
+        - k3s-1.bar.as212024.net:9123
+        - k3s-2.bar.as212024.net:9123
+
+        - pine.fsn.as212024.net:9123
+
+        - homeassistant.bar.risson.net:9123
+        - recorder.bar.risson.net:9123
+        - caster.bar.risson.net:9123
+        - ext-1.music.bar.risson.net:9123
+        - ext-2.music.bar.risson.net:9123
+        - cuisine.music.bar.risson.net:9123
+        - salle-a-manger.music.bar.risson.net:9123
+        - sport.music.bar.risson.net:9123
+        - entree.music.bar.risson.net:9123
+        - salon.music.bar.risson.net:9123
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMStaticScrape
@@ -28,18 +75,31 @@ spec:
   jobName: nftables
   targetEndpoints:
     - targets:
+        - nucleus.fsn.as212024.net:9630
+        - gate-1.bar.as212024.net:9630
         - edge-1.pvl.as212024.net:9630
         - edge-2.fra.as212024.net:9630
-        - gate-1.bar.as212024.net:9630
-        - homeassistant.bar.risson.net:9630
-        - k3s-1.bar.as212024.net:9630
-        - k3s-1.fsn.as212024.net:9630
-        - k3s-2.bar.as212024.net:9630
-        - nucleus.fsn.as212024.net:9630
-        - pine.fsn.as212024.net:9630
+
+        - mongodb.fsn.as212024.net:9630
         - postgresql.fsn.as212024.net:9630
-        - recorder.bar.risson.net:9630
         - redis.fsn.as212024.net:9630
+
+        - k3s-1.fsn.as212024.net:9630
+        - k3s-1.bar.as212024.net:9630
+        - k3s-2.bar.as212024.net:9630
+
+        - pine.fsn.as212024.net:9630
+
+        - homeassistant.bar.risson.net:9630
+        - recorder.bar.risson.net:9630
+        - caster.bar.risson.net:9630
+        - ext-1.music.bar.risson.net:9630
+        - ext-2.music.bar.risson.net:9630
+        - cuisine.music.bar.risson.net:9630
+        - salle-a-manger.music.bar.risson.net:9630
+        - sport.music.bar.risson.net:9630
+        - entree.music.bar.risson.net:9630
+        - salon.music.bar.risson.net:9630
 ---
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMStaticScrape
