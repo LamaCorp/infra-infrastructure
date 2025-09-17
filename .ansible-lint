@@ -11,8 +11,6 @@ exclude_paths:
   - roles/cri.restic
   - roles/geerlingguy.docker
   - roles/ipr-cnrs.nftables
-  - roles/matrix-docker-ansible-deploy
-  - roles/mrlesmithjr.chrony
   - roles/mrlesmithjr.netplan
   - roles/ome.haproxy
   - roles/patrickjahns.promtail

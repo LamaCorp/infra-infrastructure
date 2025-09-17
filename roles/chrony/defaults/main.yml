@@ -1,0 +1,41 @@
+---
+# Default chrony configuration
+chrony_default_config:
+  confdir:
+    - /etc/chrony/chrony.d
+
+  keyfile: /etc/chrony/chrony.keys
+
+  dumpdir: /var/lib/chrony
+  ntsdumpdir: /var/lib/chrony
+  dumponexit: true
+
+  driftfile: /var/lib/chrony/chrony.drift
+
+  logdir: /var/log/chrony
+  log: measurements statistics selection tracking
+  logchange: 0.5
+
+  allow:
+    - 127.0.0.0/8
+    - ::1/128
+
+  rtcsync: true
+  rtconutc: true
+
+# Chrony config to apply to all hosts
+chrony_config: {}
+
+# Enable or disable the ability to merge multiple chrony groups configurations
+chrony_merged_groups: false
+# The directory to read the group chrony config from
+# Relative to the playbook directory
+chrony_merged_groups_dir: vars/
+
+# Chrony config to apply for hosts in a specific Ansible inventory group
+chrony_group_config: {}
+# Chrony config to apply to a specific host
+chrony_host_config: {}
+
+# Custom content to append to the chrony configuration
+chrony__custom_content: ""

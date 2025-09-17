@@ -1,8 +1,0 @@
----
-chrony_ntp_servers:
-  - server: ntp1.as212024.net
-    options:
-      - option: iburst
-  - server: ntp2.as212024.net
-    options:
-      - option: iburst

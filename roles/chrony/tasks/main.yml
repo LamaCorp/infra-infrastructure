@@ -1,0 +1,56 @@
+---
+- name: Check for group files
+  become: false
+  delegate_to: localhost
+  ansible.builtin.stat:
+    path: "{{ chrony_merged_groups_dir ~ groupname }}"
+  register: chrony_group_configs
+  loop: "{{ group_names }}"
+  loop_control:
+    loop_var: groupname
+
+- name: Import chrony variables if chrony_merged_groups is set
+  when: chrony_merged_groups and varfile.stat.exists
+  ansible.builtin.include_vars:
+    file: "{{ chrony_merged_groups_dir ~ varfile.groupname }}"
+    name: "{{ varfile.groupname }}"
+  loop: "{{ chrony_group_configs.results }}"
+  loop_control:
+    loop_var: varfile
+
+- name: Combine configs when chrony_merged_groups is set
+  when: chrony_merged_groups and
+    ((hostvars[inventory_hostname][varfile.groupname] is defined) and
+    (hostvars[inventory_hostname][varfile.groupname]|length > 0)) and
+    varfile.stat.exists
+  ansible.builtin.set_fact:
+    chrony_combined_config: "{{ chrony_combined_config | default({}) | combine(hostvars[inventory_hostname][varfile.groupname], recursive=True) }}"
+  loop: "{{ chrony_group_configs.results }}"
+  loop_control:
+    loop_var: varfile
+
+- name: Uninstall systemd-timesyncd and ntpd
+  ansible.builtin.apt:
+    name:
+      - ntpd
+      - systemd-timesyncd
+    state: absent
+
+- name: Install chrony
+  ansible.builtin.apt:
+    name: chrony
+    update_cache: true
+
+- name: Configure chrony
+  ansible.builtin.template:
+    src: chrony.conf
+    dest: /etc/chrony/chrony.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: "Restart chrony"
+
+- name: Make sure service is enabled
+  ansible.builtin.service:
+    name: chrony.service
+    enabled: true

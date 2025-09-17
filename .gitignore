@@ -13,7 +13,6 @@ __pycache__
 /roles/cri.restic
 /roles/geerlingguy.docker
 /roles/ipr-cnrs.nftables
-/roles/mrlesmithjr.chrony
 /roles/mrlesmithjr.netplan
 /roles/ome.haproxy
 /roles/patrickjahns.promtail

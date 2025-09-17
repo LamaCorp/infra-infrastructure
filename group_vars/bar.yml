@@ -3,8 +3,3 @@ network_nameservers:
   - 172.28.2.254
 bird_bgp_region_id: 250 # France
 bird_bgp_site_id: 2
-
-chrony_ntp_servers:
-  - server: gate-1.bar.as212024.net
-    options:
-      - option: iburst

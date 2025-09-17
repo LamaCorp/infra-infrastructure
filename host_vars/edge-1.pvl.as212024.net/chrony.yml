@@ -1,25 +1,17 @@
 ---
-# https://support.ntp.org/Servers/PublicTimeServer001915
-chrony_allow_hosts:
-  - ""
-
-chrony_ntp_servers:
-  # https://support.ntp.org/Servers/PublicTimeServer000222
-  # - server: ntp-p1.obspm.fr
-  #   options:
-  #     - option: iburst
-  # https://support.ntp.org/Servers/PublicTimeServer001841
-  - server: chronos.ntp.k3s.fr
-    options:
-      - option: iburst
-  # https://support.ntp.org/Servers/PublicTimeServer001703
-  - server: ntp.kuro-home.net
-    options:
-      - option: iburst
-  # https://support.ntp.org/Servers/PublicTimeServer001899
-  - server: time1.freewebworld.fr
-    options:
-      - option: iburst
-  - server: time2.freewebworld.fr
-    options:
-      - option: iburst
+# This is https://support.ntp.org/Servers/PublicTimeServer001915
+chrony_host_config:
+  allow:
+    - ""
+  server:
+    # https://support.ntp.org/Servers/PublicTimeServer000222
+    # - ntp-p1.obspm.fr iburst
+    # https://support.ntp.org/Servers/PublicTimeServer001841
+    - chronos.ntp.k3s.fr iburst
+    # https://support.ntp.org/Servers/PublicTimeServer001703
+    - ntp.kuro-home.net iburst
+    # https://support.ntp.org/Servers/PublicTimeServer001899
+    - time1.freewebworld.fr iburst
+    - time2.freewebworld.fr iburst
+  clientloglimit: 100000000
+  leapsectz: right/UTC

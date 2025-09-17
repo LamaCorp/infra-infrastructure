@@ -1,41 +1,23 @@
 ---
-# https://support.ntp.org/Servers/PublicTimeServer001914
-chrony_allow_hosts:
-  - ""
-
-chrony_ntp_servers:
-  # https://support.ntp.org/Servers/PublicTimeServer000209
-  - server: ntp0.fau.de
-    options:
-      - option: iburst
-  - server: ntp1.fau.de
-    options:
-      - option: iburst
-  - server: ntp2.fau.de
-    options:
-      - option: iburst
-  - server: ntp3.fau.de
-    options:
-      - option: iburst
-  # https://support.ntp.org/Servers/PublicTimeServer001724
-  - server: ntp01.sixtopia.net
-    options:
-      - option: iburst
-  # https://support.ntp.org/Servers/PublicTimeServer000217
-  - server: time1.uni-stuttgart.de
-    options:
-      - option: iburst
-  - server: time2.uni-stuttgart.de
-    options:
-      - option: iburst
-  - server: time3.uni-stuttgart.de
-    options:
-      - option: iburst
-  # https://support.ntp.org/Servers/PublicTimeServer001639
-  - server: ntp.uit.one
-    options:
-      - option: iburst
-  # https://support.ntp.org/Servers/PublicTimeServer001646
-  - server: ntp-by.dynu.net
-    options:
-      - option: iburst
+# This is https://support.ntp.org/Servers/PublicTimeServer001914
+chrony_host_config:
+  allow:
+    - ""
+  server:
+    # https://support.ntp.org/Servers/PublicTimeServer000209
+    - ntp0.fau.de iburst
+    - ntp1.fau.de iburst
+    - ntp2.fau.de iburst
+    - ntp3.fau.de iburst
+    # https://support.ntp.org/Servers/PublicTimeServer001724
+    - ntp01.sixtopia.net iburst
+    # https://support.ntp.org/Servers/PublicTimeServer000217
+    - time1.uni-stuttgart.de iburst
+    - time2.uni-stuttgart.de iburst
+    - time3.uni-stuttgart.de iburst
+    # https://support.ntp.org/Servers/PublicTimeServer001639
+    - ntp.uit.one iburst
+    # https://support.ntp.org/Servers/PublicTimeServer001646
+    - ntp-by.dynu.net iburst
+  clientloglimit: 100000000
+  leapsectz: right/UTC

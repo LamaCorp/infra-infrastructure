@@ -13,7 +13,7 @@
 - name: Chrony
   hosts: all
   roles:
-    - mrlesmithjr.chrony
+    - chrony
   tags:
     - chrony
     - ntp
