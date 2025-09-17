@@ -48,12 +48,15 @@ wheels = [
 
 [[package]]
 name = "ansible-lint"
-version = "25.8.2"
+version = "25.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "ansible-compat" },
     { name = "ansible-core" },
     { name = "black" },
+    { name = "cffi" },
+    { name = "cryptography" },
+    { name = "distro" },
     { name = "filelock" },
     { name = "importlib-metadata" },
     { name = "jsonschema" },
@@ -62,13 +65,14 @@ dependencies = [
     { name = "pyyaml" },
     { name = "referencing" },
     { name = "ruamel-yaml" },
+    { name = "ruamel-yaml-clib" },
     { name = "subprocess-tee" },
     { name = "wcmatch" },
     { name = "yamllint" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/60/93/2c344f3eeaf15fee5ee99a30ebe77f316a65f09d290034e4290fdb114cb4/ansible_lint-25.8.2.tar.gz", hash = "sha256:35dd3ddd12d8063876915bf2f06b9a1b80fd27a7cb1ca4ce51c8cebb84690922", size = 580055, upload-time = "2025-08-21T13:45:13.372Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/06/9e/8a86c0b05a05c3a2c8690eb5fcd4b3c248c821a45f595fa0e7565ac1e048/ansible_lint-25.9.0.tar.gz", hash = "sha256:b8fe138a1257c6e58a755febd726b3186820f6dcb23a5bb062538c939a7277bb", size = 699967, upload-time = "2025-09-16T10:38:40.971Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7b/d9/ec00c80dceff6cfdeb2dc437058800969da11b7d5b625f75104e32c2be26/ansible_lint-25.8.2-py3-none-any.whl", hash = "sha256:14de8c51650af33255a5ba14a01d798d64c2559eaec9d6a92927535b46d1d9ab", size = 328717, upload-time = "2025-08-21T13:45:11.603Z" },
+    { url = "https://files.pythonhosted.org/packages/98/ca/9b6136060c7f45c6f7af0e8806ef29a90655edee584fd495bba457cb70ac/ansible_lint-25.9.0-py3-none-any.whl", hash = "sha256:2d5a8a2b01c46966591a17769a129142181515aac19c27742ecb8c94e84bf692", size = 322342, upload-time = "2025-09-16T10:38:39.049Z" },
 ]
 
 [[package]]
@@ -237,6 +241,15 @@ wheels = [
 ]
 
 [[package]]
+name = "distro"
+version = "1.9.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3/distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed", size = 60722, upload-time = "2023-12-24T09:54:32.31Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2", size = 20277, upload-time = "2023-12-24T09:54:30.421Z" },
+]
+
+[[package]]
 name = "filelock"
 version = "3.18.0"
 source = { registry = "https://pypi.org/simple" }
@@ -277,14 +290,14 @@ wheels = [
 
 [[package]]
 name = "importlib-metadata"
-version = "8.6.1"
+version = "8.7.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "zipp" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/33/08/c1395a292bb23fd03bdf572a1357c5a733d3eecbab877641ceacab23db6e/importlib_metadata-8.6.1.tar.gz", hash = "sha256:310b41d755445d74569f993ccfc22838295d9fe005425094fad953d7f15c8580", size = 55767, upload-time = "2025-01-20T22:21:30.429Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/76/66/650a33bd90f786193e4de4b3ad86ea60b53c89b669a5c7be931fac31cdb0/importlib_metadata-8.7.0.tar.gz", hash = "sha256:d13b81ad223b890aa16c5471f2ac3056cf76c5f10f82d6f9292f0b415f389000", size = 56641, upload-time = "2025-04-27T15:29:01.736Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/79/9d/0fb148dc4d6fa4a7dd1d8378168d9b4cd8d4560a6fbf6f0121c5fc34eb68/importlib_metadata-8.6.1-py3-none-any.whl", hash = "sha256:02a89390c1e15fdfdc0d7c6b25cb3e62650d0494005c97d6f148bf5b9787525e", size = 26971, upload-time = "2025-01-20T22:21:29.177Z" },
+    { url = "https://files.pythonhosted.org/packages/20/b0/36bd937216ec521246249be3bf9855081de4c5e06a0c9b4219dbeda50373/importlib_metadata-8.7.0-py3-none-any.whl", hash = "sha256:e5dd1551894c77868a30651cef00984d50e1002d06942a7101d34870c5f02afd", size = 27656, upload-time = "2025-04-27T15:29:00.214Z" },
 ]
 
 [[package]]
@@ -306,7 +319,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "ansible", specifier = "==12.0.0" },
-    { name = "ansible-lint", specifier = "==25.8.2" },
+    { name = "ansible-lint", specifier = "==25.9.0" },
     { name = "black", specifier = "==25.1.0" },
     { name = "hvac", specifier = "==2.3.0" },
     { name = "jmespath", specifier = "==1.0.1" },
