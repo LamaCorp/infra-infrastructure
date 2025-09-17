@@ -12,7 +12,7 @@ dependencies = [
     "jmespath==1.0.1",
     "pre-commit==4.3.0",
     "ruff==0.13.0",
-    "xmltodict==0.15.1",
+    "xmltodict==1.0.1",
     "yamllint==1.37.1",
 ]
 
