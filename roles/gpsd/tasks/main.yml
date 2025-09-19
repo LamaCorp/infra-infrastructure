@@ -1,0 +1,35 @@
+---
+- name: Install gpsd
+  ansible.builtin.apt:
+    name:
+      - gpsd
+      - pps-tools
+      - python3-gps
+    update_cache: true
+
+- name: Configure gpsd
+  ansible.builtin.copy:
+    content: |
+      DEVICES="{{ gpsd_devices | join(' ') }}"
+      USBAUTO="{{ gpsd_usbauto | ternary('true', 'false') }}"
+      GPSD_OPTIONS="{{ gpsd_options | join(' ') }}"
+    dest: /etc/default/gpsd
+    owner: root
+    group: root
+    mode: 0644
+  notify: "Restart gpsd"
+
+- name: Make sure service is enabled
+  ansible.builtin.service:
+    name: gpsd.service
+    enabled: "{{ gpsd_enable }}"
+    state: started
+
+- name: Disable and stop services
+  ansible.builtin.service:
+    name: "{{ service }}"
+    enabled: false
+    state: stopped
+  loop: "{{ gpsd_services_to_disable }}"
+  loop_control:
+    loop_var: service

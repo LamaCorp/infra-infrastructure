@@ -1,0 +1,8 @@
+---
+gpsd_devices:
+  - /dev/ttyAMA0
+  - /dev/pps
+
+gpsd_services_to_disable:
+  - serial-getty@ttyAMA0.service
+  - hciuart.service

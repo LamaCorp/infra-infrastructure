@@ -30,6 +30,9 @@
 - name: DHCP
   import_playbook: dhcp.yml
 
+- name: GPS
+  import_playbook: gps.yml
+
 - name: Observability
   import_playbook: observability.yml
 

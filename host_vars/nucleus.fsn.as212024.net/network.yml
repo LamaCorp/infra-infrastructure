@@ -42,25 +42,29 @@ netplan_configuration:
         addresses:
           - 172.28.1.62/26
           - 2001:67c:17fc:101::1/64
-          - 2001:67c:17fc:101::53/64
-          - 2001:67c:17fc:101::123/64
         routes:
-          - to: 148.251.148.232/32
+          - to: 148.251.148.232/32 # mail.lama-corp.space
             via: 172.28.1.11 # k3s-1.fsn.as212024.net
+          - to: 209.112.97.232/32 # nat-svc
+            via: 0.0.0.0
+            type: unreachable
       br-mdw:
         mtu: 5600
         addresses:
           - 172.28.1.126/26
           - 2001:67c:17fc:102::1/64
-          - 2001:67c:17fc:102::53/64
-          - 2001:67c:17fc:102::123/64
+        routes:
+          - to: 209.112.97.233/32 # nat-mdw
+            via: 0.0.0.0
+            type: unreachable
       br-cc:
         mtu: 5600
         addresses:
           - 172.29.1.62/26
           - 2a06:e881:7701:1::1/64
-          - 2a06:e881:7701:1::53/64
-          - 2a06:e881:7701:1::123/64
         routes:
-          - to: 148.251.148.233/32
+          - to: 148.251.148.233/32 # pine.lama-corp.space
             via: 172.29.1.20 # pine.fsn.as212024.net
+          - to: 209.112.97.234/32 # nat-cust
+            via: 0.0.0.0
+            type: unreachable

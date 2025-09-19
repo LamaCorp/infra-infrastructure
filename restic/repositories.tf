@@ -46,6 +46,10 @@ locals {
       "user_root",
     ]
 
+    "ntp-1.bar.as212024.net" = [
+      "user_root",
+    ]
+
     "caster.bar.risson.net" = [
       "user_root",
     ]

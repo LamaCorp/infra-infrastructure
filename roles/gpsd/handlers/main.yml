@@ -1,0 +1,5 @@
+---
+- name: Restart gpsd
+  ansible.builtin.service:
+    name: gpsd.service
+    state: restarted

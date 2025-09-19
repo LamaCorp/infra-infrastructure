@@ -7,9 +7,10 @@ bird_bgp_preferred_source:
 
 bird_static_routes:
   v4:
-    - 209.112.97.232/32 unreachable
-    - 209.112.97.233/32 unreachable
-    - 209.112.97.234/32 unreachable
+    - 148.251.148.232/29 unreachable
+    - 209.112.97.232/32 unreachable # nat-svc
+    - 209.112.97.233/32 unreachable # nat-mdw
+    - 209.112.97.234/32 unreachable # nat-cust
 
 bird_bgp_sessions:
   cores:

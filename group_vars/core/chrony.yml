@@ -10,9 +10,7 @@ chrony_group_config:
     - 192.168.0.0/24
     - 2a06:e881:7700::/40
   server:
-    - 172.28.2.227 iburst xleave extfield F323
+    - ntp0.as212024.net iburst xleave extfield F323
     - ntp1.as212024.net iburst xleave extfield F323
     - ntp2.as212024.net iburst xleave extfield F323
-  pool:
-    - pool.ntp.org iburst noselect
   lock_all: true

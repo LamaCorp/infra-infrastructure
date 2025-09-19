@@ -22,6 +22,8 @@ spec:
 
         - pine.fsn.as212024.net:9100
 
+        - ntp-1.bar.risson.net:9100
+
         - homeassistant.bar.risson.net:9100
         - recorder.bar.risson.net:9100
         - caster.bar.risson.net:9100
@@ -56,6 +58,8 @@ spec:
 
         - pine.fsn.as212024.net:9123
 
+        - ntp-1.bar.risson.net:9123
+
         - homeassistant.bar.risson.net:9123
         - recorder.bar.risson.net:9123
         - caster.bar.risson.net:9123
@@ -89,6 +93,8 @@ spec:
         - k3s-2.bar.as212024.net:9630
 
         - pine.fsn.as212024.net:9630
+
+        - ntp-1.bar.risson.net:9630
 
         - homeassistant.bar.risson.net:9630
         - recorder.bar.risson.net:9630

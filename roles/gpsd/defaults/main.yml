@@ -1,0 +1,11 @@
+---
+gpsd_devices: []
+
+gpsd_usbauto: false
+
+gpsd_options:
+  - -n
+
+gpsd_enable: true
+
+gpsd_services_to_disable: []

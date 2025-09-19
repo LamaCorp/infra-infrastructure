@@ -4,6 +4,8 @@ chrony_host_config:
   allow:
     - ""
   server:
+    - ntp0.as212024.net iburst xleave extfield F323
+    - ntp1.as212024.net iburst xleave extfield F323 noselect
     # https://support.ntp.org/Servers/PublicTimeServer000209
     - ntp0.fau.de iburst
     - ntp1.fau.de iburst

@@ -25,6 +25,15 @@ netplan_configuration:
           - to: ::/0
             via: fe80::fc00:3ff:fe21:2eeb
             table: 101
+          - to: 209.112.97.0/24
+            via: 0.0.0.0
+            type: unreachable
+          - to: 2001:67c:17fc::/48
+            via: ::/0
+            type: unreachable
+          - to: 2a06:e881:7700::/40
+            via: ::/0
+            type: unreachable
         routing-policy:
           - from: 108.61.208.236/32
             table: 101

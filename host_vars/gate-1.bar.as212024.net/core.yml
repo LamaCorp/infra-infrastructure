@@ -7,10 +7,13 @@ bird_bgp_preferred_source:
 
 bird_static_routes:
   v4:
-    - 209.112.97.235/32 unreachable
-    - 209.112.97.236/32 unreachable
-    - 209.112.97.237/32 unreachable
-    - 209.112.97.238/32 unreachable
+    - 209.112.97.123/32 unreachable # ntp0.as212024.net
+    - 209.112.97.235/32 unreachable # nat-svc
+    - 209.112.97.236/32 unreachable # nat-pb
+    - 209.112.97.237/32 unreachable # nat-music-iot-cctv
+    - 209.112.97.238/32 unreachable # nat-pharma
+  v6:
+    - 2001:67c:17fc::123/128 unreachable # ntp0.as212024.net
 
 bird_bgp_sessions:
   cores:
@@ -63,6 +66,8 @@ bird_ospf_sessions:
           bar-iot:
             stub: true
           bar-cctv:
+            stub: true
+          bar-pb:
             stub: true
           bar-pharma:
             stub: true
