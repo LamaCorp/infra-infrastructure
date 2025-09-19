@@ -1,7 +1,9 @@
 ---
-- name: Install aptitude
+- name: Install aptitude and python3-debian
   ansible.builtin.apt:
-    name: aptitude
+    name:
+      - aptitude
+      - python3-debian
     update_cache: true
     force_apt_get: true
   tags:

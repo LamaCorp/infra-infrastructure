@@ -58,7 +58,7 @@ netplan_configuration:
             via: 0.0.0.0
             type: unreachable
       br-cc:
-        mtu: 5600
+        mtu: 1500
         addresses:
           - 172.29.1.62/26
           - 2a06:e881:7701:1::1/64

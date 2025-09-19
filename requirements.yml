@@ -29,8 +29,8 @@ roles:
     src: git+https://github.com/ipr-cnrs/nftables.git
     version: 68932eed012b9f5d05578f9d52733b633144e022
   - name: mrlesmithjr.netplan
-    src: git+https://github.com/mrlesmithjr/ansible-netplan.git
-    version: 26a29593f0412b3d79bd9abeab661b435a19e4e9
+    src: git+https://github.com/rissson/ansible-netplan.git
+    version: 9aea84954d03c520496ad011290ebe95e7e82de3
   - name: ome.haproxy
     src: git+https://github.com/rissson/ansible-role-haproxy.git
     version: 2968ced132136ea061b4a74875522a97d7bf3f93
