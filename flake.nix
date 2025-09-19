@@ -38,13 +38,12 @@
                   "terraform"
                 ];
             };
-          })
-          .terraform
+          }).terraform
           cargo
           git
           jq
           openssl
-          python313Full
+          python313
           rustc
           shellcheck
           uv
