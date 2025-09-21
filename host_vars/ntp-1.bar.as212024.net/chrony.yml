@@ -8,5 +8,5 @@ chrony_host_config:
     - edge-1.pvl.as212024.net iburst xleave extfield F323 noselect
     - edge-2.fra.as212024.net iburst xleave extfield F323 noselect
   refclock:
-    - SHM 0 refid NMEA offset 0.000 precision 1e-3 poll 0 filter 3
-    - PPS /dev/pps0 refid PPS lock NMEA offset 0.0 poll 3 trust
+    - SHM 0 refid GNSS precision 1e-1 offset 0.188 delay 0.2 poll 0 filter 3 noselect
+    - PPS /dev/pps0 refid PPS lock GNSS poll 3 trust
