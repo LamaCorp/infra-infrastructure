@@ -13,9 +13,8 @@ docker_config_default:
   dns: "{{ network_nameservers }}"
 
   experimental: true # needed for metrics-addr
-  log-driver: json-file
+  log-driver: journald
   log-opts:
-    max-size: 10m
     labels-regex: "^.+"
   metrics-addr: 0.0.0.0:9323
 
