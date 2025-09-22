@@ -35,4 +35,3 @@ spec:
   selector:
     app.kubernetes.io/name: vlsingle
     app.kubernetes.io/instance: vm
-    app.kubernetes.io/component: monitoring
