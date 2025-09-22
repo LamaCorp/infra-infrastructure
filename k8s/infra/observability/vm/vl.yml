@@ -9,6 +9,12 @@ spec:
   useStrictSecurity: true
   extraArgs:
     enableTCP6: "true"
+  resources:
+    requests:
+      cpu: 150m
+      memory: 4Gi
+    limits:
+      memory: 4Gi
   storage:
     accessModes:
       - ReadWriteOnce
