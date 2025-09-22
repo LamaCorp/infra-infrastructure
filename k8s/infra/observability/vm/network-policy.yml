@@ -50,6 +50,23 @@ spec:
 apiVersion: cilium.io/v2
 kind: CiliumNetworkPolicy
 metadata:
+  name: allow-ingress-logs
+spec:
+  endpointSelector:
+    matchLabels:
+      app.kubernetes.io/name: vlogs
+      app.kubernetes.io/instance: vm
+  ingress:
+    - fromCIDR:
+        - 172.28.0.0/16
+        - 209.112.97.0/24
+        - 2001:67c:17fc::/48
+        - 172.29.1.20/32 # pine.fsn.as212024.net
+        - 172.29.193.0/24 # bar-music
+---
+apiVersion: cilium.io/v2
+kind: CiliumNetworkPolicy
+metadata:
   name: allow-ingress-egress-namespace
 spec:
   endpointSelector: {}
