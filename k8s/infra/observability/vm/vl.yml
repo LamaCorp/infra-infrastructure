@@ -15,3 +15,20 @@ spec:
     resources:
       requests:
         storage: 20Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vlsingle-vm-lb
+  annotations:
+    io.cilium/lb-ipam-ips: 209.112.97.166,2001:67c:17fc:130::9428
+    external-dns.alpha.kubernetes.io/hostname: vlogs.as212024.net
+spec:
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  ipFamilyPolicy: RequireDualStack
+  ports:
+    - name: http
+      port: 9428
+      targetPort: 9428
+      protocol: TCP
