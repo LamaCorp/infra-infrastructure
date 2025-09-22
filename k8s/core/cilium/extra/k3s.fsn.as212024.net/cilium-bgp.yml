@@ -85,7 +85,6 @@ spec:
     - advertisementType: "Service"
       service:
         addresses:
-          - ClusterIP
           - LoadBalancerIP
       selector:
         matchExpressions:
