@@ -15,7 +15,6 @@ __pycache__
 /roles/ipr-cnrs.nftables
 /roles/mrlesmithjr.netplan
 /roles/ome.haproxy
-/roles/patrickjahns.promtail
 /roles/stackhpc.libvirt-host
 /roles/stackhpc.libvirt-vm
 /roles/xanmanning.k3s

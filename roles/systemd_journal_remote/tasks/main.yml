@@ -1,0 +1,25 @@
+---
+- name: Ensure systemd-journal-remote package is installed
+  ansible.builtin.apt:
+    name: systemd-journal-remote
+
+- name: Ensure configuration is up-to-date
+  ansible.builtin.copy:
+    content: |
+      [Upload]
+      URL={{ systemd_journal_remote_upload_url }}
+      NetworkTimeoutSec=1h
+    dest: /etc/systemd/journal-upload.conf
+    owner: root
+    group: root
+    mode: 0644
+  when: systemd_journal_remote_upload_enabled
+  notify: Restart systemd-journal-upload
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers
+
+- name: Ensure systemd-journal-upload is enabled
+  ansible.builtin.service:
+    name: systemd-journal-upload
+    enabled: "{{ systemd_journal_remote_upload_enabled }}"

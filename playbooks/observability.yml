@@ -3,7 +3,7 @@
 - name: Base
   import_playbook: base.yml
 
-- name: Common prometheus exporters
+- name: Metrics
   hosts: all
   roles:
     - name: prometheus.prometheus.node_exporter
@@ -19,12 +19,14 @@
         - chrony_exporter
   tags:
     - observability
+    - metrics
     - exporters
 
-- name: Promtail
+- name: Logs
   hosts: all
   roles:
-    - patrickjahns.promtail
+    - systemd_journal_remote
   tags:
     - observability
-    - promtail
+    - logs
+    - journald
