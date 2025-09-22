@@ -1,5 +1,4 @@
 ---
-
 - name: Add Redis apt repo key
   ansible.builtin.apt_key:
     url: https://packages.redis.io/gpg
