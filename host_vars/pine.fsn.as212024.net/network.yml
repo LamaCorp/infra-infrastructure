@@ -13,7 +13,7 @@ netplan_configuration:
             via: 172.29.1.62
           - to: ::/0
             via: 2a06:e881:7701:1::1
-    bridges:
+    dummy-devices:
       public:
         mtu: 1500
         addresses:
