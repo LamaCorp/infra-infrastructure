@@ -61,11 +61,7 @@ spec:
                   type: elasticsearch
                   inputs: [parser]
                   endpoints:
-                    {{- if eq .name "k3s.fsn.as212024.net" }}
-                    - http://vlogs-vm.infra-observability.svc:9428/insert/elasticsearch
-                    {{- else }}
-                    - https://logs.as212024.net/insert/elasticsearch
-                    {{- end }}
+                    - http://vlogs.as212024.net:9428/insert/elasticsearch
                   mode: bulk
                   api_version: v8
                   compression: gzip
