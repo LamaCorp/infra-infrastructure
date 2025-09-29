@@ -66,6 +66,6 @@ images:
   - name: ghcr.io/paperless-ngx/paperless-ngx
     newTag: 2.18.4
   - name: gotenberg/gotenberg
-    newTag: 8.23.1
+    newTag: 8.23.2
   - name: apache/tika
     newTag: 3.2.3.0-full
