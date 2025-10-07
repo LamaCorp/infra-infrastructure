@@ -36,4 +36,4 @@ images:
   - name: ghcr.io/immich-app/immich-server
     newTag: v2.0.1
   - name: ghcr.io/immich-app/immich-machine-learning
-    newTag: v2.0.0
+    newTag: v2.0.1
