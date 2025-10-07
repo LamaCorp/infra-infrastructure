@@ -13,4 +13,4 @@ resources:
 
 images:
   - name: nlnetlabs/routinator
-    newTag: v0.15.0
+    newTag: v0.15.1
