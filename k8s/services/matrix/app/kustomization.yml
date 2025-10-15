@@ -27,7 +27,7 @@ images:
   - name: turt2live/matrix-media-repo
     newTag: v1.3.8
   - name: halfshot/matrix-hookshot
-    newTag: 7.1.0
+    newTag: 7.2.0
   - name: dock.mau.dev/mautrix/facebook
     newTag: v0.5.1
   - name: dock.mau.dev/mautrix/slack
