@@ -40,7 +40,7 @@ spec:
         namespace: services-minecraft
       source:
         repoURL: https://itzg.github.io/minecraft-server-charts/
-        targetRevision: 4.23.7
+        targetRevision: 5.0.0
         chart: minecraft
         helm:
           releaseName: "{{ .name }}"
