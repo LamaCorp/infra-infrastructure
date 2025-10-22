@@ -24,7 +24,7 @@ roles:
     src: git+https://gitlab.com/byh0ki-org/infra/ansible/roles/restic.git
     version: 3.2.0
   - name: geerlingguy.docker
-    version: 7.7.0
+    version: 7.8.0
   - name: ipr-cnrs.nftables
     src: git+https://github.com/ipr-cnrs/nftables.git
     version: 68932eed012b9f5d05578f9d52733b633144e022
