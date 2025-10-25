@@ -178,11 +178,6 @@ no-soliciting = "'abcdefu'"
 [session.rcpt]
 sub-addressing = true
 catch-all = true
-[session.auth]
-must-match-sender = [
-  { if = "authenticated_as = 'risson'", then = false },
-  { else = true },
-]
 [session.mta-sts]
 mode = "testing"
 max-age = "7d"
